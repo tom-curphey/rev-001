@@ -10,11 +10,12 @@ const auth = require('../../config/middleware/auth');
 router.get('/', auth, userController.getUser);
 
 // @router POST api/user
-// @desc register user
+// @desc register user & create profile
 // @access Public
 router.post(
   '/',
   [
+    check('firstName', 'Your First Name is required').exists(),
     check('email', 'Email is required').exists(),
     check('email', 'Email is not valid').isEmail(),
     check('password', 'Password is required').exists(),

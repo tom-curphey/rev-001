@@ -1,4 +1,5 @@
 const User = require('./user.model');
+const Profile = require('../profile/profile.model');
 const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -24,13 +25,20 @@ module.exports.registerUser = async (req, res) => {
 
     // Create a new instance of a user
     user = new User({
-      email,
-      password
+      email: email,
+      password: password
     });
 
     // Encrypt Password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
+
+    const profile = new Profile({
+      user: user._id,
+      firstName: req.body.firstName
+    });
+
+    await profile.save();
 
     // Save the user
     await user.save();
