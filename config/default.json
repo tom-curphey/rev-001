@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://tom:ps8dPh1olddWOWXe@rev001-sqokp.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb://tom:tom123456@ds231387.mlab.com:31387/rev-001",
+  "jwtToken": "recipeRev001jwtToken"
 }

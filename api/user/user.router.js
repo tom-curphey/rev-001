@@ -1,9 +1,42 @@
 const express = require('express');
 const router = express.Router();
+const { check } = require('express-validator/check');
+const userController = require('./user.controller');
+const auth = require('../../config/middleware/auth');
 
-// @router GET api/users
+// @router GET api/user
 // @desc test route
 // @access Public
-router.get('/', (req, res) => res.send('User route'));
+router.get('/', auth, userController.getUser);
+
+// @router POST api/user
+// @desc register user
+// @access Public
+router.post(
+  '/',
+  [
+    check('email', 'Email is required').exists(),
+    check('email', 'Email is not valid').isEmail(),
+    check('password', 'Password is required').exists(),
+    check(
+      'password',
+      'Password must be atleast 6 characters long'
+    ).isLength({ min: 6 })
+  ],
+  userController.registerUser
+);
+
+// @router POST api/user/login
+// @desc Authenticate user and get token
+// @access Public
+router.post(
+  '/login',
+  [
+    check('email', 'Email is required').exists(),
+    check('email', 'Email is not valid').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  userController.loginUser
+);
 
 module.exports = router;
