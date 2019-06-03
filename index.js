@@ -8,7 +8,7 @@ const app = express();
 
 connectDB();
 
-app.get('/', (req, res) => res.send('API Running...'));
+// app.get('/', (req, res) => res.send('API Running...'));
 
 // Define routes
 app.use('/api/user', require('./api/user/user.router'));
