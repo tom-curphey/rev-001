@@ -1,9 +1,29 @@
 // This is the serve.js page
 // Add all the serve configurations here
 const express = require('express');
+const path = require('path');
+const connectDB = require('./config/db');
+
 const app = express();
 
+connectDB();
+
 app.get('/', (req, res) => res.send('API Running...'));
+
+// Define routes
+app.use('/api/user', require('./api/user/user.router'));
+app.use('/api/recipe', require('./api/recipe/recipe.router'));
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React app
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  // The "catchall" handler: for any request that doesn't
+  // match one above, send back React's index.html file.
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
