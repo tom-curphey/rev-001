@@ -48,6 +48,10 @@ const VenueSchema = new Schema(
       type: Number,
       default: 0
     },
+    active: {
+      type: Boolean,
+      default: true
+    },
     costs: {
       chefCost: {
         type: Number,

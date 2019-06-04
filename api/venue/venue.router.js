@@ -27,4 +27,14 @@ router.post(
   venueController.addOrEditVenue
 );
 
+// @router POST api/venue/activate
+// @desc Activate venue
+// @access Public
+router.post('/activate', auth, venueController.activateVenue);
+
+// @router POST api/venue/deactivate
+// @desc Deactivate venue
+// @access Public
+router.post('/deactivate', auth, venueController.deactivateVenue);
+
 module.exports = router;

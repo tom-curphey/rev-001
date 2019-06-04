@@ -3,6 +3,8 @@ const User = require('../user/user.model');
 const { validationResult } = require('express-validator/check');
 
 module.exports.getProfile = async (req, res) => {
+  console.log('USER', req.user);
+
   try {
     const profile = await Profile.findOne({
       user: req.user.id
@@ -64,6 +66,12 @@ module.exports.deactivateProfile = async (req, res) => {
       { $set: profileData },
       { new: true }
     );
+    // Deactivate User
+    await User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $set: profileData },
+      { new: true }
+    );
     if (!profile) {
       return res
         .status(400)
@@ -83,6 +91,12 @@ module.exports.activateProfile = async (req, res) => {
     // Update
     let profile = await Profile.findOneAndUpdate(
       { user: req.user.id },
+      { $set: profileData },
+      { new: true }
+    );
+    // Activate User
+    await User.findOneAndUpdate(
+      { _id: req.user.id },
       { $set: profileData },
       { new: true }
     );

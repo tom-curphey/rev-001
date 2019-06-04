@@ -36,7 +36,19 @@ module.exports.addOrEditVenue = async (req, res) => {
     prepTime,
     prepTimeUnit,
     totalMenuItems,
-    costs
+    chefCost,
+    chefUnitCost,
+    rentCost,
+    rentUnitCost,
+    waterCost,
+    waterUnitCost,
+    powerCost,
+    powerUnitCost,
+    insuranceCost,
+    insuranceUnitCost,
+    councilCost,
+    councilUnitCost,
+    wastageCost
   } = req.body;
 
   // Create profile object
@@ -50,7 +62,6 @@ module.exports.addOrEditVenue = async (req, res) => {
       .replace(/\s+/g, '-')
       .toLowerCase();
   }
-
   if (email) venueData.email = email;
   if (type) venueData.type = type;
   if (phone) venueData.phone = phone;
@@ -60,7 +71,22 @@ module.exports.addOrEditVenue = async (req, res) => {
   if (prepTime) venueData.prepTime = prepTime;
   if (prepTimeUnit) venueData.prepTimeUnit = prepTimeUnit;
   if (totalMenuItems) venueData.totalMenuItems = totalMenuItems;
-  // if (costs) venueData.costs = costs;
+  venueData.costs = {};
+  if (chefCost) venueData.costs.chefCost = chefCost;
+  if (chefUnitCost) venueData.costs.chefUnitCost = chefUnitCost;
+  if (rentCost) venueData.costs.rentCost = rentCost;
+  if (rentUnitCost) venueData.costs.rentUnitCost = rentUnitCost;
+  if (waterCost) venueData.costs.waterCost = waterCost;
+  if (waterUnitCost) venueData.costs.waterUnitCost = waterUnitCost;
+  if (powerCost) venueData.costs.powerCost = powerCost;
+  if (powerUnitCost) venueData.costs.powerUnitCost = powerUnitCost;
+  if (insuranceCost) venueData.costs.insuranceCost = insuranceCost;
+  if (insuranceUnitCost)
+    venueData.costs.insuranceUnitCost = insuranceUnitCost;
+  if (councilCost) venueData.costs.councilCost = councilCost;
+  if (councilUnitCost)
+    venueData.costs.councilUnitCost = councilUnitCost;
+  if (wastageCost) venueData.costs.wastageCost = wastageCost;
 
   try {
     let venue = await Venue.findById(req.body.id);
@@ -78,21 +104,57 @@ module.exports.addOrEditVenue = async (req, res) => {
     // Add Venue
     venue = new Venue(venueData);
     await venue.save();
-
     const profileData = { venue: venue._id };
-
-    console.log(profileData);
-
-    // var John = people.findOne({ name: 'John' });
-    // John.friends.push({ firstName: 'Harry', lastName: 'Potter' });
-    // John.save();
-
     profile = await Profile.findOneAndUpdate(
       { user: req.user.id },
       { $push: { venues: profileData } },
       { new: true }
     );
     return res.status(200).json(venue);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Sever Error');
+  }
+};
+
+module.exports.deactivateVenue = async (req, res) => {
+  try {
+    const venueData = { active: false };
+
+    // Update
+    let venue = await Venue.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: venueData },
+      { new: true }
+    );
+    if (!venue) {
+      return res
+        .status(400)
+        .json({ msg: 'There is no venue for this user' });
+    }
+    return res.status(200).json({ msg: 'Venue Deactivated' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Sever Error');
+  }
+};
+
+module.exports.activateVenue = async (req, res) => {
+  try {
+    const venueData = { active: true };
+
+    // Update
+    let venue = await Venue.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: venueData },
+      { new: true }
+    );
+    if (!venue) {
+      return res
+        .status(400)
+        .json({ msg: 'There is no venue for this user' });
+    }
+    return res.status(200).json({ msg: 'Venue Activated' });
   } catch (err) {
     console.error(err);
     return res.status(500).send('Sever Error');

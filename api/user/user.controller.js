@@ -48,7 +48,8 @@ module.exports.registerUser = async (req, res) => {
     // This is why we need to return the JSON web token
     const payload = {
       user: {
-        id: user._id
+        id: user._id,
+        active: user.active
       }
     };
 
@@ -106,7 +107,8 @@ module.exports.loginUser = async (req, res) => {
     // Set the user payload to sign JWT token
     const payload = {
       user: {
-        id: user._id
+        id: user._id,
+        active: user.active
       }
     };
 
