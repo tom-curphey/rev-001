@@ -15,10 +15,16 @@ router.get('/', auth, userController.getUser);
 router.post(
   '/',
   [
-    check('firstName', 'Your First Name is required').exists(),
-    check('email', 'Email is required').exists(),
+    check('firstName', 'Your First Name is required')
+      .not()
+      .isEmpty(),
+    check('email', 'Email is required')
+      .not()
+      .isEmpty(),
     check('email', 'Email is not valid').isEmail(),
-    check('password', 'Password is required').exists(),
+    check('password', 'Password is required')
+      .not()
+      .isEmpty(),
     check(
       'password',
       'Password must be atleast 6 characters long'
@@ -33,9 +39,13 @@ router.post(
 router.post(
   '/login',
   [
-    check('email', 'Email is required').exists(),
+    check('email', 'Email is required')
+      .not()
+      .isEmpty(),
     check('email', 'Email is not valid').isEmail(),
-    check('password', 'Password is required').exists()
+    check('password', 'Password is required')
+      .not()
+      .isEmpty()
   ],
   userController.loginUser
 );
