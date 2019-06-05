@@ -1,4 +1,232 @@
 @import './colours.scss';
 
+/* 
+Font
+********************************/
+html {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* 
+App Layout
+********************************/
+html,
 body {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root,
+#root > div {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  @media (min-width: 800px) {
+    flex-direction: row;
+  }
+}
+
+main {
+  // flex: Grow | Shrink | Basis
+  flex: 1 1 100%;
+  flex-direction: row;
+  background-color: $cWhite;
+  @media (min-width: 800px) {
+    flex-direction: column;
+  }
+}
+
+/* 
+Main Menu
+********************************/
+
+section.mainMenu {
+  display: none;
+  background-color: $cFaded;
+  flex: 0 0 270px;
+  flex-direction: row;
+  padding: 10px;
+  transition: left 3s;
+
+  @media (min-width: 800px) {
+    display: block;
+    flex-direction: column;
+  }
+
+  nav.venueButton {
+    display: grid;
+    grid-template-columns: 50px auto 15px;
+    background-color: $cWhite;
+    border-radius: 50px;
+    align-items: center;
+    box-sizing: border-box;
+    height: 56px;
+    padding: 0 16px;
+    font-size: 16px;
+
+    cursor: pointer;
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    div:nth-child(2) {
+      font-weight: 600;
+    }
+  }
+
+  nav.menu {
+    margin-top: 20px;
+    border-bottom: 1px solid $cFadedDark;
+    padding-bottom: 20px;
+
+    a {
+      display: grid;
+      grid-template-columns: 30px auto;
+      height: 44px;
+      color: $cGrey;
+      text-decoration: none;
+      &:visited,
+      &:focus,
+      &:hover {
+        color: $cGreyDarK;
+      }
+      span {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+      }
+    }
+  }
+
+  nav.subMenu {
+    margin-top: 20px;
+    a {
+      display: block;
+      padding: 5px 0px;
+      text-decoration: none;
+      color: $cBlack;
+      font-size: 12px;
+
+      &:visited,
+      &:focus,
+      &:hover {
+        color: $cGreyDarK;
+      }
+    }
+  }
+}
+
+section.deviceMenu {
+  display: grid;
+  grid-template-columns: 270px auto 50px;
+  grid-template-areas: 'button ... toggle';
+  background-color: $cFaded;
+  flex: 0 0 50px;
+  flex-direction: row;
+  padding: 10px;
+  transition: left 3s;
+
+  @media (min-width: 800px) {
+    display: none;
+    flex-direction: column;
+  }
+
+  nav.venueButton {
+    display: grid;
+    grid-area: button;
+    grid-template-columns: 50px auto 15px;
+    background-color: $cWhite;
+    border-radius: 50px;
+    align-items: center;
+    box-sizing: border-box;
+    height: 56px;
+    padding: 0 16px;
+    font-size: 16px;
+
+    cursor: pointer;
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    div:nth-child(2) {
+      font-weight: 600;
+    }
+  }
+
+  nav.toggle {
+    grid-area: toggle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    span {
+      font-size: 40px;
+    }
+  }
+
+  nav.menu {
+    margin-top: 20px;
+    border-bottom: 1px solid $cFadedDark;
+    padding-bottom: 20px;
+
+    a {
+      display: grid;
+      grid-template-columns: 30px auto;
+      height: 44px;
+      color: $cGrey;
+      text-decoration: none;
+      &:visited,
+      &:focus,
+      &:hover {
+        color: $cGreyDarK;
+      }
+      span {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+      }
+    }
+  }
+
+  nav.subMenu {
+    margin-top: 20px;
+    a {
+      display: block;
+      padding: 5px 0px;
+      text-decoration: none;
+      color: $cBlack;
+      font-size: 12px;
+
+      &:visited,
+      &:focus,
+      &:hover {
+        color: $cGreyDarK;
+      }
+    }
+  }
+}
+
+section.deviceToggleMenu {
+  position: absolute;
+  width: 250px;
+  top: 76px;
+  right: -230px;
+  height: calc(100vh - 76px);
+  background-color: coral;
+  display: none;
+}
+
+section.deviceToggleMenu.active {
+  right: 0px;
+  display: block;
+  transition: 0.5s ease-in-out;
 }
