@@ -12,34 +12,45 @@ App Layout
 ********************************/
 html,
 body {
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body,
-#root,
-#root > div {
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-#root {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+body {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#screen {
+  // display: flex;
+  // flex: 1 1 100%;
+  // flex-direction: column;
+  // height: 100%;
 
   @media (min-width: 800px) {
+    display: flex;
     flex-direction: row;
+    height: 100%;
   }
 }
 
-main {
-  // flex: Grow | Shrink | Basis
-  flex: 1 1 100%;
-  flex-direction: row;
-  background-color: $cWhite;
+section.app {
+  // display: grid;
+  // grid-template-rows: auto auto;
+  width: 100%;
+}
+
+#main {
+  transition: margin-right 0.5s;
+  background-color: #666;
+  //flex: Grow | Shrink | Basis
+
   @media (min-width: 800px) {
+    display: flex;
     flex-direction: column;
+    width: 100%;
+    flex: 1;
   }
 }
 
@@ -50,14 +61,13 @@ Main Menu
 section.mainMenu {
   display: none;
   background-color: $cFaded;
-  flex: 0 0 270px;
-  flex-direction: row;
   padding: 10px;
-  transition: left 3s;
 
   @media (min-width: 800px) {
-    display: block;
+    display: flex;
     flex-direction: column;
+    width: 270px;
+    flex: 0 0 270px;
   }
 
   nav.venueButton {
@@ -86,6 +96,7 @@ section.mainMenu {
     margin-top: 20px;
     border-bottom: 1px solid $cFadedDark;
     padding-bottom: 20px;
+    flex-direction: column;
 
     a {
       display: grid;
@@ -172,45 +183,46 @@ section.deviceMenu {
       font-size: 40px;
     }
   }
+}
 
-  nav.menu {
-    margin-top: 20px;
-    border-bottom: 1px solid $cFadedDark;
-    padding-bottom: 20px;
+nav.menu {
+  margin-top: 20px;
+  border-bottom: 1px solid $cFadedDark;
+  padding-bottom: 20px;
 
-    a {
-      display: grid;
-      grid-template-columns: 30px auto;
-      height: 44px;
-      color: $cGrey;
-      text-decoration: none;
-      &:visited,
-      &:focus,
-      &:hover {
-        color: $cGreyDarK;
-      }
-      span {
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-      }
+  a {
+    display: grid;
+    grid-template-columns: 30px auto;
+    height: 44px;
+    color: $cGrey;
+    text-decoration: none;
+    &:visited,
+    &:focus,
+    &:hover {
+      color: $cGreyDarK;
+    }
+    span {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      padding-left: 20px;
     }
   }
+}
 
-  nav.subMenu {
-    margin-top: 20px;
-    a {
-      display: block;
-      padding: 5px 0px;
-      text-decoration: none;
-      color: $cBlack;
-      font-size: 12px;
+nav.subMenu {
+  margin-top: 20px;
+  a {
+    display: block;
+    padding: 5px 0px;
+    text-decoration: none;
+    color: $cBlack;
+    font-size: 12px;
 
-      &:visited,
-      &:focus,
-      &:hover {
-        color: $cGreyDarK;
-      }
+    &:visited,
+    &:focus,
+    &:hover {
+      color: $cGreyDarK;
     }
   }
 }
@@ -221,12 +233,81 @@ section.deviceToggleMenu {
   top: 76px;
   right: -230px;
   height: calc(100vh - 76px);
-  background-color: coral;
+  background-color: $cFaded;
   display: none;
+
+  nav.menu {
+    margin: 0px 10px 10px;
+    padding-top: 20px;
+    border-top: 1px solid $cFadedDark;
+    a {
+      grid-template-columns: auto 30px;
+      grid-template-areas: 'menuName ...';
+      span {
+        grid-area: menuName;
+        justify-content: flex-end;
+        padding-right: 20px;
+      }
+    }
+  }
+
+  nav.subMenu {
+    margin: 10px;
+    text-align: right;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
 }
 
 section.deviceToggleMenu.active {
+  width: 250px;
   right: 0px;
   display: block;
-  transition: 0.5s ease-in-out;
+  transition: 1s ease-in-out;
+
+  @media (min-width: 800px) {
+    display: none;
+  }
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 76px;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0px;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
 }
