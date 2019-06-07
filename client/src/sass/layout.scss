@@ -61,6 +61,16 @@ section.app {
   }
 }
 
+div.alert {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 200px;
+  background-color: orangered;
+  padding: 20px;
+  border-radius: 40px;
+}
+
 /* 
 Main Menu
 ********************************
@@ -145,8 +155,8 @@ section.mainMenu {
 
 section.deviceMenu {
   display: grid;
-  grid-template-columns: 270px auto 50px;
-  grid-template-areas: 'button ... toggle';
+  grid-template-columns: 270px auto;
+  grid-template-areas: 'button toggle';
   background-color: $cFaded;
   flex: 0 0 50px;
   flex-direction: row;
@@ -187,6 +197,8 @@ section.deviceMenu {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: absolute;
+    right: 20px;
     span {
       font-size: 40px;
     }

@@ -4,12 +4,13 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import MainMenu from './components/layout/MainMenu';
-import DeviceMenu from './components/layout/DeviceMenu';
-import DeviceSubMenu from './components/layout/DeviceSubMenu';
+import MainMenu from './components/layout/menu/MainMenu';
+import DeviceMenu from './components/layout/menu/DeviceMenu';
+import DeviceSubMenu from './components/layout/menu/DeviceSubMenu';
 import Home from './components/public/Home';
-import Login from './components/public/Login';
-import Register from './components/public/Register';
+import Login from './components/public/auth/Login';
+import Register from './components/public/auth/Register';
+import Alert from './components/layout/alert/Alert';
 
 // Redux
 import { Provider } from 'react-redux';

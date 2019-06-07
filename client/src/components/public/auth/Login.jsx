@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TextInput from '../layout/input/TextInput';
+import TextInput from '../../layout/input/TextInput';
 import { Link } from 'react-router-dom';
 
 const Login = () => {

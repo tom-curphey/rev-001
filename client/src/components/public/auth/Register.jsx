@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import TextInput from '../layout/input/TextInput';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import TextInput from '../../layout/input/TextInput';
+import Alert from '../../layout/alert/Alert';
+import { setAlert } from '../../layout/alert/alertActions';
+import PropTypes from 'prop-types';
+import { register } from './authActions';
 
-const Register = () => {
+const Register = ({ setAlert, register }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     email: '',
@@ -20,29 +24,22 @@ const Register = () => {
   const handleOnSubmit = async e => {
     e.preventDefault();
 
+    if (firstName === '') {
+      setAlert('First Name is required', 'error');
+    }
+
     const newUser = {
       firstName: firstName,
       email: email,
       password: password
     };
 
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-      const body = JSON.stringify(newUser);
-      const res = await axios.post('/api/user', body, config);
-
-      console.log(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    register(newUser);
   };
 
   return (
     <section className="register">
+      <Alert />
       <form onSubmit={e => handleOnSubmit(e)}>
         <TextInput
           placeholder="First Name"
@@ -69,4 +66,14 @@ const Register = () => {
   );
 };
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
+};
+
+const actions = { setAlert, register };
+
+export default connect(
+  null,
+  actions
+)(Register);
