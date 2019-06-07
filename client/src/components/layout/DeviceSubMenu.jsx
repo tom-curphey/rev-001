@@ -9,17 +9,12 @@ const DeviceSubMenu = () => {
 
   return (
     <div id="mySidenav" className="sidenav">
-      <a
-        href="javascript:void(0)"
-        className="closebtn"
-        onClick={closeNav}
-      >
+      <span className="closebtn" onClick={closeNav}>
         &times;
-      </a>
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      </span>
+      <Link to="!#">Recipes</Link>
+      <Link to="!#">Ingredients</Link>
+      <Link to="!#">Packaging</Link>
     </div>
   );
 };

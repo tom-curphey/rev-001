@@ -1,0 +1,26 @@
+section.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  form {
+    width: 400px;
+    background-color: lightcoral;
+  }
+}
+
+section.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  form {
+    width: 400px;
+    background-color: lightcoral;
+    display: grid;
+    grid-template-columns: 300px;
+    grid-template-rows: repeat(4, 40px);
+  }
+}
