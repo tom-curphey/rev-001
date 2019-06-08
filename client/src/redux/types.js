@@ -9,3 +9,6 @@ export const REGISTER_FAILED = 'REGISTER_FAILED';
 
 export const USER_LOADED = 'USER_LOADED';
 export const AUTH_ERROR = 'AUTH_ERROR';
+
+export const PROFILE_LOADED = 'PROFILE_LOADED';
+export const PROFILE_ERROR = 'PROFILE_ERROR';

@@ -6,8 +6,14 @@ import { setAlert } from '../../layout/alert/alertActions';
 import PropTypes from 'prop-types';
 import { register } from './authActions';
 import { Redirect } from 'react-router-dom';
+import PublicMenu from '../../layout/menu/PublicMenu';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({
+  setAlert,
+  register,
+  isAuthenticated,
+  profile
+}) => {
   const [formData, setFormData] = useState({
     firstName: '',
     email: '',
@@ -38,50 +44,69 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     register(newUser);
   };
 
+  const openNav = () => {
+    document.getElementById('mySidenav').style.width = '250px';
+    document.getElementById('main').style.marginRight = '250px';
+  };
+
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/recipes" />;
+    if (
+      profile.profile !== null &&
+      profile.profile.venues.length > 0
+    ) {
+      return <Redirect to="/recipes" />;
+    } else {
+      return <Redirect to="/landing" />;
+    }
   }
 
   return (
-    <section className="register">
-      <Alert />
-      <form onSubmit={e => handleOnSubmit(e)}>
-        <TextInput
-          placeholder="First Name"
-          value={firstName}
-          name="firstName"
-          onChange={e => onChange(e)}
-        />
-        <TextInput
-          placeholder="Email"
-          value={email}
-          name="email"
-          onChange={e => onChange(e)}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          name="password"
-          onChange={e => onChange(e)}
-          type="password"
-        />
-        <button>Get Started</button>
-      </form>
-    </section>
+    <PublicMenu>
+      <nav className="toggle publicMenu" onClick={openNav}>
+        <span>&#9776;</span>
+      </nav>
+      <section className="register">
+        <Alert />
+        <form onSubmit={e => handleOnSubmit(e)}>
+          <TextInput
+            placeholder="First Name"
+            value={firstName}
+            name="firstName"
+            onChange={e => onChange(e)}
+          />
+          <TextInput
+            placeholder="Email"
+            value={email}
+            name="email"
+            onChange={e => onChange(e)}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            name="password"
+            onChange={e => onChange(e)}
+            type="password"
+          />
+          <button>Get Started</button>
+        </form>
+      </section>
+    </PublicMenu>
   );
 };
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool,
+  profile: PropTypes.object.isRequired
 };
 
 const actions = { setAlert, register };
 
 const mapState = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  profile: state.profile
 });
 
 export default connect(

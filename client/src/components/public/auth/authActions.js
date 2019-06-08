@@ -9,6 +9,7 @@ import {
   LOGOUT
 } from '../../../redux/types';
 import setAuthToken from '../../utils/setAuthToken';
+import { loadProfile } from '../../private/profile/profileActions';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -49,6 +50,7 @@ export const register = ({
       payload: res.data
     });
     dispatch(loadUser());
+    dispatch(loadProfile());
   } catch (err) {
     console.log('Error', err);
 
@@ -76,6 +78,7 @@ export const login = ({ email, password }) => async dispatch => {
 
     // Caling load User so it fires off immediately
     dispatch(loadUser());
+    dispatch(loadProfile());
   } catch (err) {
     console.log('Error', err);
 

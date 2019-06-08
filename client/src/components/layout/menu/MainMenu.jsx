@@ -13,7 +13,7 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
         <div>></div>
       </nav>
       <nav className="menu">
-        <Link className="menuItem" to="#!">
+        <Link className="menuItem" to="recipes">
           <i />
           <span>Recipes</span>
         </Link>
@@ -33,9 +33,10 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Link className="menuItem" to="#!">
           Ask For Help
         </Link>
-        <a onClick={logout} href="#!">
-          Logout
-        </a>
+        <Link className="menuItem" to="/landing">
+          Landing
+        </Link>
+        <span onClick={logout}>Logout</span>
       </nav>
     </Fragment>
   );

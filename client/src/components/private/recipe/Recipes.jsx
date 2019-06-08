@@ -1,13 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import AuthMenu from '../../layout/menu/AuthMenu';
+// import { Link } from 'react-router-dom';
 
 const Recipes = () => {
   return (
-    <div>
-      Recipes
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
-    </div>
+    <AuthMenu>
+      <div>Recipes</div>
+    </AuthMenu>
   );
 };
 

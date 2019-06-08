@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 const DeviceMenu = () => {
   const openNav = () => {
@@ -6,7 +6,7 @@ const DeviceMenu = () => {
     document.getElementById('main').style.marginRight = '250px';
   };
   return (
-    <div>
+    <Fragment>
       <section className="deviceMenu">
         <nav className="venueButton">
           <div>Icon</div>
@@ -17,7 +17,7 @@ const DeviceMenu = () => {
           <span>&#9776;</span>
         </nav>
       </section>
-    </div>
+    </Fragment>
   );
 };
 

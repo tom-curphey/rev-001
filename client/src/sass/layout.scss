@@ -39,6 +39,14 @@ section.app {
   }
 }
 
+section.app.public {
+  grid-template-rows: auto;
+
+  div#mySidenav {
+    top: 0px;
+  }
+}
+
 #screen {
   height: 100%;
   display: flex;
@@ -136,12 +144,14 @@ section.mainMenu {
 
   nav.subMenu {
     margin-top: 20px;
-    a {
+    a,
+    span {
       display: block;
       padding: 5px 0px;
       text-decoration: none;
       color: $cGrey;
       font-size: 12px;
+      cursor: pointer;
 
       // &:visited,
       &:focus,
@@ -201,6 +211,19 @@ section.deviceMenu {
     span {
       font-size: 40px;
     }
+  }
+}
+
+nav.toggle.publicMenu {
+  grid-area: toggle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  span {
+    font-size: 40px;
   }
 }
 
