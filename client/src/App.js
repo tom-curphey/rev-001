@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -10,13 +10,26 @@ import DeviceSubMenu from './components/layout/menu/DeviceSubMenu';
 import Home from './components/public/Home';
 import Login from './components/public/auth/Login';
 import Register from './components/public/auth/Register';
-import Alert from './components/layout/alert/Alert';
+import Recipes from './components/private/recipe/Recipes';
 
 // Redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import { loadUser } from './components/public/auth/authActions';
+import setAuthToken from './components/utils/setAuthToken';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
+  // This will continue running..
+  // Adding [] will cause the lop to stop
+  // It tells react that the hook doesn't rely on props or state
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <Provider store={store}>
       <Router>
@@ -35,6 +48,8 @@ const App = () => {
                     component={Register}
                   />
                   <Route exact path="/login" component={Login} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/recipes" component={Recipes} />
                 </Switch>
               </main>
             </div>

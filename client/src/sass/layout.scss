@@ -17,11 +17,6 @@ body {
   margin: 0;
 }
 
-body {
-  // overflow: hidden;
-  // box-sizing: border-box;
-}
-
 #root {
   height: 100%;
   display: flex;
@@ -120,17 +115,21 @@ section.mainMenu {
       display: grid;
       grid-template-columns: 30px auto;
       height: 44px;
-      color: $cGrey;
+      // color: $cGrey;
       text-decoration: none;
-      &:visited,
-      &:focus,
-      &:hover {
-        color: $cGreyDarK;
-      }
       span {
         display: flex;
         align-items: center;
         font-size: 16px;
+        color: $cGrey;
+      }
+
+      // &:visited,
+      &:focus,
+      &:hover {
+        span {
+          color: $cGreyDarK;
+        }
       }
     }
   }
@@ -141,10 +140,10 @@ section.mainMenu {
       display: block;
       padding: 5px 0px;
       text-decoration: none;
-      color: $cBlack;
+      color: $cGrey;
       font-size: 12px;
 
-      &:visited,
+      // &:visited,
       &:focus,
       &:hover {
         color: $cGreyDarK;
@@ -339,20 +338,3 @@ section.deviceToggleMenu.active {
 // Test
 //
 // ============================
-
-div.container {
-  // height: 100%;
-  // display: flex;
-  // flex-direction: row;
-
-  // div:first-child {
-  //   display: flex;
-  //   width: 100px;
-  //   background-color: #818181;
-  // }
-
-  // div:last-child {
-  //   flex: 1;
-  //   background-color: rosybrown;
-  // }
-}

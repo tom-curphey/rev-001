@@ -1,5 +1,5 @@
 const Profile = require('./profile.model');
-const User = require('../user/user.model');
+const User = require('../auth/auth.model');
 const { validationResult } = require('express-validator/check');
 
 module.exports.getProfile = async (req, res) => {

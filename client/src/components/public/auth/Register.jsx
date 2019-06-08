@@ -5,8 +5,9 @@ import Alert from '../../layout/alert/Alert';
 import { setAlert } from '../../layout/alert/alertActions';
 import PropTypes from 'prop-types';
 import { register } from './authActions';
+import { Redirect } from 'react-router-dom';
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     email: '',
@@ -36,6 +37,11 @@ const Register = ({ setAlert, register }) => {
 
     register(newUser);
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/recipes" />;
+  }
 
   return (
     <section className="register">
@@ -68,12 +74,17 @@ const Register = ({ setAlert, register }) => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const actions = { setAlert, register };
 
+const mapState = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
 export default connect(
-  null,
+  mapState,
   actions
 )(Register);
