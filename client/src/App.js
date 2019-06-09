@@ -13,6 +13,8 @@ import Login from './components/public/auth/Login';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
+import OnboardingVenueNew from './components/private/onboarding/OnboardingVenueNew';
+import Test from './components/utils/Test';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -48,6 +50,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/test" component={Test} />
           <PrivateRoute
             exact
             path="/onboarding"
