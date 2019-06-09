@@ -76,7 +76,7 @@ export const login = ({ email, password }) => async dispatch => {
     });
     // Can dispatch an alert..
 
-    // Caling load User so it fires off immediately
+    // Calling load User so it fires off immediately
     dispatch(loadUser());
     dispatch(loadProfile());
   } catch (err) {

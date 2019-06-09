@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
+import Alert from '../../layout/alert/Alert';
 
 const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
   const userLinks = (
@@ -33,8 +34,8 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Link className="menuItem" to="#!">
           Ask For Help
         </Link>
-        <Link className="menuItem" to="/landing">
-          Landing
+        <Link className="menuItem" to="/onboarding">
+          Onboarding
         </Link>
         <span onClick={logout}>Logout</span>
       </nav>
@@ -55,7 +56,7 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
         </Link>
         <Link className="menuItem" to="login">
           <i />
-          <span>Login</span>
+          <span>Sign in</span>
         </Link>
         <Link className="menuItem" to="#!">
           <i />
@@ -67,6 +68,7 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
           Terms & Conditions
         </Link>
       </nav>
+      <Alert />
     </Fragment>
   );
 

@@ -1,9 +1,13 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
 
-const DeviceSubMenu = ({ auth: { isAuthenticated, loading } }) => {
+const DeviceSubMenu = ({
+  auth: { isAuthenticated, loading },
+  logout
+}) => {
   const closeNav = () => {
     document.getElementById('mySidenav').style.width = '0';
     document.getElementById('main').style.marginRight = '0';
@@ -16,7 +20,10 @@ const DeviceSubMenu = ({ auth: { isAuthenticated, loading } }) => {
       <Link to="/recipes">Recipes</Link>
       <Link to="!#">Ingredients</Link>
       <Link to="!#">Packaging</Link>
-      <Link to="/landing">Landing</Link>
+      <Link to="/onboarding">Onboarding</Link>
+      <span className="link" onClick={logout}>
+        Logout
+      </span>
     </Fragment>
   );
 
@@ -25,7 +32,7 @@ const DeviceSubMenu = ({ auth: { isAuthenticated, loading } }) => {
       <span className="closebtn" onClick={closeNav}>
         &times;
       </span>
-      <Link to="/login">Login</Link>
+      <Link to="/login">Sign in</Link>
       <Link to="/register">Register</Link>
       <Link to="/pricing">Pricing</Link>
     </Fragment>
@@ -42,12 +49,20 @@ const DeviceSubMenu = ({ auth: { isAuthenticated, loading } }) => {
   );
 };
 
+const actions = {
+  logout
+};
+
 DeviceSubMenu.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 const mapState = state => ({
   auth: state.auth
 });
 
-export default connect(mapState)(DeviceSubMenu);
+export default connect(
+  mapState,
+  actions
+)(DeviceSubMenu);

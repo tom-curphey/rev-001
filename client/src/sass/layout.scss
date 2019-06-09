@@ -55,7 +55,7 @@ section.app.public {
 
 #main {
   transition: margin-right 0.5s;
-  background-color: #666;
+  // background-color: #666;
   width: 100%;
   @media (min-width: 800px) {
     display: flex;
@@ -69,7 +69,7 @@ div.alert {
   bottom: 20px;
   left: 20px;
   width: 200px;
-  background-color: orangered;
+  background-color: $cOrange;
   padding: 20px;
   border-radius: 40px;
 }
@@ -136,7 +136,7 @@ section.mainMenu {
       &:focus,
       &:hover {
         span {
-          color: $cGreyDarK;
+          color: $cGreyDark;
         }
       }
     }
@@ -156,7 +156,7 @@ section.mainMenu {
       // &:visited,
       &:focus,
       &:hover {
-        color: $cGreyDarK;
+        color: $cGreyDark;
       }
     }
   }
@@ -241,7 +241,7 @@ nav.menu {
     &:visited,
     &:focus,
     &:hover {
-      color: $cGreyDarK;
+      color: $cGreyDark;
     }
     span {
       display: flex;
@@ -264,7 +264,7 @@ nav.subMenu {
     &:visited,
     &:focus,
     &:hover {
-      color: $cGreyDarK;
+      color: $cGreyDark;
     }
   }
 }
@@ -331,33 +331,87 @@ section.deviceToggleMenu.active {
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
+
+  a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+
+    &:hover {
+      color: #f1f1f1;
+    }
+  }
+  span.closebtn {
+    position: absolute;
+    top: 0px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: $cWhite;
+    cursor: pointer;
+  }
+  span.link {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      color: #f1f1f1;
+    }
+  }
 }
 
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
+/* 
+Form Inputs
+********************************
+********************************/
 
-.sidenav a:hover {
-  color: #f1f1f1;
-}
+form {
+  input[type='text'],
+  input[type='password'] {
+    box-sizing: border-box;
+  }
 
-.sidenav .closebtn {
-  position: absolute;
-  top: 0px;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-  color: $cWhite;
-  cursor: pointer;
-}
+  label.textInput {
+    input {
+      width: 100%;
+      padding: 10px;
+      outline: 0px;
+      border: 1px solid $cFadedDark;
+      border-radius: 5px;
+    }
+  }
 
-// ============================
-//
-// Test
-//
-// ============================
+  a {
+    font-size: 13px;
+    font-weight: bold;
+    color: $cGreyDark;
+    text-decoration: none;
+  }
+
+  button {
+    width: 100%;
+    height: 40px;
+    color: #fff;
+    border: 0;
+    border-radius: 25px;
+    font-weight: 400;
+    background-color: $cOrange;
+    outline: 0px;
+    cursor: pointer;
+    margin-top: 10px;
+
+    &.orange {
+      background-color: $cOrange;
+    }
+    &.green {
+      background-color: $cGreen;
+    }
+  }
+}

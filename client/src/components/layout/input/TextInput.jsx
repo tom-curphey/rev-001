@@ -12,25 +12,27 @@ const TextInput = ({
   onChange,
   disabled,
   id,
-  style,
-  labelClass
-}) => (
-  <label htmlFor={name} className={labelClass}>
-    {label}{' '}
-    <input
-      onChange={onChange}
-      type={type}
-      name={name}
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      id={id}
-      style={style}
-    />
-    {info && <small>{info}</small>}
-    {error && <span>{error}</span>}
-  </label>
-);
+  style
+  // labelClass
+}) => {
+  return (
+    <label htmlFor={name} className="textInput">
+      {label}{' '}
+      <input
+        onChange={onChange}
+        type={type}
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        disabled={disabled}
+        id={id}
+        style={style}
+      />
+      {info && <small>{info}</small>}
+      {error && <span>{error}</span>}
+    </label>
+  );
+};
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,

@@ -12,7 +12,7 @@ import Home from './components/public/Home';
 import Login from './components/public/auth/Login';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
-import Landing from './components/private/venue/Landing';
+import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -48,7 +48,11 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <PrivateRoute exact path="/landing" component={Landing} />
+          <PrivateRoute
+            exact
+            path="/onboarding"
+            component={OnboardingVenue}
+          />
           <PrivateRoute exact path="/recipes" component={Recipes} />
         </Switch>
       </Router>

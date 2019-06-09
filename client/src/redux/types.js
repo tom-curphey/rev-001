@@ -12,3 +12,6 @@ export const AUTH_ERROR = 'AUTH_ERROR';
 
 export const PROFILE_LOADED = 'PROFILE_LOADED';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
+
+export const VENUE_SUCCESS = 'VENUE_SUCCESS';
+export const VENUE_FAILED = 'VENUE_FAILED';
