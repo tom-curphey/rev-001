@@ -222,6 +222,7 @@ nav.toggle.publicMenu {
   cursor: pointer;
   position: absolute;
   right: 20px;
+  top: 20px;
   span {
     font-size: 40px;
   }
@@ -376,6 +377,15 @@ form {
   input[type='text'],
   input[type='password'] {
     box-sizing: border-box;
+  }
+
+  span.errorMsg {
+    font-size: 13px;
+    color: #fb8800;
+    display: block;
+    padding-top: 5px;
+    padding-left: 5px;
+    font-weight: bold;
   }
 
   label.textInput {

@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { VENUE_SUCCESS, VENUE_FAILED } from '../../../redux/types';
+import {
+  VENUE_SUCCESS,
+  VENUE_FAILED,
+  GET_ERRORS
+} from '../../../redux/types';
 import { loadProfile } from '../profile/profileActions';
 
 // Register User
@@ -18,9 +22,15 @@ export const addOrEditVenue = venueData => async dispatch => {
     });
     dispatch(loadProfile());
   } catch (err) {
-    console.log('Error', err);
+    var errObj = err.response.data.errors.reduce((obj, item) => {
+      return (obj[item.param] = item.msg), obj;
+    }, {});
     dispatch({
       type: VENUE_FAILED
+    });
+    dispatch({
+      type: GET_ERRORS,
+      payload: errObj
     });
   }
 };

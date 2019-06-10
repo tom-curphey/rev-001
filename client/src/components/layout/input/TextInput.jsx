@@ -29,7 +29,7 @@ const TextInput = ({
         style={style}
       />
       {info && <small>{info}</small>}
-      {error && <span>{error}</span>}
+      {error && <span className="errorMsg">{error}</span>}
     </label>
   );
 };

@@ -1,18 +1,30 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TextInput from '../../layout/input/TextInput';
 import { addOrEditVenue } from '../venue/venueActions';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import { Link, Redirect } from 'react-router-dom';
 import SelectInput from '../../layout/input/SelectInput';
-// import Select from 'react-select';
+import { isEmpty } from '../../../utils/utils';
 import PropTypes from 'prop-types';
 
-const OnboardingVenue = ({ addOrEditVenue, history, profile }) => {
+const OnboardingVenue = ({
+  addOrEditVenue,
+  history,
+  profile,
+  errors
+}) => {
   const [formData, setFormData] = useState({
     displayName: '',
     email: '',
     type: ''
+  });
+  const [errorData, setErrorData] = useState({});
+
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      setErrorData(() => errors);
+    }
   });
 
   const { displayName, email, type } = formData;
@@ -88,25 +100,22 @@ const OnboardingVenue = ({ addOrEditVenue, history, profile }) => {
                 value={displayName}
                 name="displayName"
                 onChange={e => onChange(e)}
+                error={errorData.displayName && errorData.displayName}
               />
               <TextInput
                 placeholder="Venue email address"
                 value={email}
                 name="email"
                 onChange={e => onChange(e)}
+                error={errorData.email && errorData.email}
               />
-              {/* <TextInput
-                placeholder="What type of venue do you have?"
-                value={type}
-                name="type"
-                onChange={e => onChange(e)}
-              /> */}
               <SelectInput
                 name="type"
                 placeholder="Select venue type..."
                 options={options}
                 getSelectedValue={getSelectedValue}
                 className="selectInput"
+                error={errorData.type && errorData.type}
               />
               <button type="submit" className="orange">
                 Let's Go!
@@ -120,13 +129,15 @@ const OnboardingVenue = ({ addOrEditVenue, history, profile }) => {
 };
 
 OnboardingVenue.propTypes = {
-  addOrEditVenue: PropTypes.func.isRequired
+  addOrEditVenue: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const actions = { addOrEditVenue };
 
 const mapState = state => ({
-  profile: state.profile
+  profile: state.profile,
+  errors: state.errors
 });
 
 export default connect(

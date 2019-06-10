@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TextInput from '../../layout/input/TextInput';
 import Alert from '../../layout/alert/Alert';
 import { setAlert } from '../../layout/alert/alertActions';
 import PropTypes from 'prop-types';
+import { isEmpty } from '../../../utils/utils';
 import { register } from './authActions';
 import { Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
@@ -12,12 +13,20 @@ const Register = ({
   setAlert,
   register,
   isAuthenticated,
-  profile
+  profile,
+  errors
 }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     email: '',
     password: ''
+  });
+  const [errorData, setErrorData] = useState({});
+
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      setErrorData(() => errors);
+    }
   });
 
   const { firstName, email, password } = formData;
@@ -84,12 +93,14 @@ const Register = ({
                 value={firstName}
                 name="firstName"
                 onChange={e => onChange(e)}
+                error={errorData.firstName && errorData.firstName}
               />
               <TextInput
                 placeholder="Email"
                 value={email}
                 name="email"
                 onChange={e => onChange(e)}
+                error={errorData.email && errorData.email}
               />
               <TextInput
                 placeholder="Password"
@@ -97,6 +108,7 @@ const Register = ({
                 name="password"
                 onChange={e => onChange(e)}
                 type="password"
+                error={errorData.password && errorData.password}
               />
               <button type="submit" className="orange">
                 Get Started
@@ -118,14 +130,16 @@ Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const actions = { setAlert, register };
 
 const mapState = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  profile: state.profile
+  profile: state.profile,
+  errors: state.errors
 });
 
 export default connect(

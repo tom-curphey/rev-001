@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 
@@ -6,7 +6,8 @@ const SelectInput = ({
   options,
   getSelectedValue,
   placeholder,
-  className
+  className,
+  error
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -39,22 +40,25 @@ const SelectInput = ({
   };
 
   return (
-    <Select
-      isClearable
-      placeholder={placeholder}
-      onChange={handleChange}
-      options={options}
-      className={className}
-      styles={customStyles}
-      theme={theme => ({
-        ...theme,
-        colors: {
-          ...theme.colors,
-          primary25: '#f1ede7',
-          primary: '#e8e1d7'
-        }
-      })}
-    />
+    <div>
+      <Select
+        isClearable
+        placeholder={placeholder}
+        onChange={handleChange}
+        options={options}
+        className={className}
+        styles={customStyles}
+        theme={theme => ({
+          ...theme,
+          colors: {
+            ...theme.colors,
+            primary25: '#f1ede7',
+            primary: '#e8e1d7'
+          }
+        })}
+      />
+      {error && <span className="errorMsg">{error}</span>}
+    </div>
   );
 };
 

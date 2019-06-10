@@ -6,9 +6,10 @@ import {
   LOGIN_FAILED,
   USER_LOADED,
   AUTH_ERROR,
-  LOGOUT
+  LOGOUT,
+  GET_ERRORS
 } from '../../../redux/types';
-import setAuthToken from '../../utils/setAuthToken';
+import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
 
 // Load User
@@ -52,10 +53,15 @@ export const register = ({
     dispatch(loadUser());
     dispatch(loadProfile());
   } catch (err) {
-    console.log('Error', err);
-
+    var errObj = err.response.data.errors.reduce((obj, item) => {
+      return (obj[item.param] = item.msg), obj;
+    }, {});
     dispatch({
       type: REGISTER_FAILED
+    });
+    dispatch({
+      type: GET_ERRORS,
+      payload: errObj
     });
   }
 };
@@ -80,12 +86,19 @@ export const login = ({ email, password }) => async dispatch => {
     dispatch(loadUser());
     dispatch(loadProfile());
   } catch (err) {
-    console.log('Error', err);
+    var errObj = err.response.data.errors.reduce((obj, item) => {
+      return (obj[item.param] = item.msg), obj;
+    }, {});
 
     dispatch({
       type: LOGIN_FAILED
     });
     // can dispatch an alert
+
+    dispatch({
+      type: GET_ERRORS,
+      payload: errObj
+    });
   }
 };
 

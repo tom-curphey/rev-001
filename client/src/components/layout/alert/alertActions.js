@@ -1,5 +1,5 @@
 import { SET_ALERT, REMOVE_ALERT } from '../../../redux/types';
-import { randomID } from '../../utils/utils';
+import { randomID } from '../../../utils/utils';
 
 export const setAlert = (
   msg,
