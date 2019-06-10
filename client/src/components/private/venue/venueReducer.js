@@ -1,7 +1,13 @@
-import { VENUE_SUCCESS, VENUE_FAILED } from '../../../redux/types';
+import {
+  VENUES_LOADED,
+  VENUES_ERROR,
+  SELECTED_VENUE_SUCCESS,
+  SELECTED_VENUE_FAILED
+} from '../../../redux/types';
 
 const initialState = {
-  venue: null,
+  venues: null,
+  selectedVenue: null,
   loading: true
 };
 
@@ -9,17 +15,30 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case VENUE_SUCCESS:
+    case VENUES_LOADED:
       return {
         ...state,
-        venue: payload,
+        venues: payload,
         loading: false
       };
 
-    case VENUE_FAILED:
+    case VENUES_ERROR:
       return {
         ...state,
-        venue: null,
+        venues: null,
+        loading: false
+      };
+    case SELECTED_VENUE_SUCCESS:
+      return {
+        ...state,
+        selectedVenue: payload,
+        loading: false
+      };
+
+    case SELECTED_VENUE_FAILED:
+      return {
+        ...state,
+        selectedVenue: null,
         loading: false
       };
 

@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { loadUser } from './components/public/auth/authActions';
 import { loadProfile } from './components/private/profile/profileActions';
+import { loadVenues } from './components/private/venue/venueActions';
 import setAuthToken from './utils/setAuthToken';
 import { AUTH_ERROR } from './redux/types';
 
@@ -32,6 +33,7 @@ const App = () => {
     if (localStorage.token) {
       store.dispatch(loadUser());
       store.dispatch(loadProfile());
+      store.dispatch(loadVenues());
     } else {
       store.dispatch({
         type: AUTH_ERROR

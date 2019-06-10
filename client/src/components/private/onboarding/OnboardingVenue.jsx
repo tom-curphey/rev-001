@@ -19,13 +19,13 @@ const OnboardingVenue = ({
     email: '',
     type: ''
   });
-  const [errorData, setErrorData] = useState({});
+  // const [errorData, setErrorData] = useState({});
 
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      setErrorData(() => errors);
-    }
-  });
+  // useEffect(() => {
+  //   if (!isEmpty(errors)) {
+  //     setErrorData(() => errors);
+  //   }
+  // });
 
   const { displayName, email, type } = formData;
 
@@ -36,7 +36,6 @@ const OnboardingVenue = ({
     });
 
   const getSelectedValue = selectedValue => {
-    console.log('sV: ', selectedValue.value);
     setFormData({
       ...formData,
       type: selectedValue.value
@@ -70,6 +69,8 @@ const OnboardingVenue = ({
     }
   }
 
+  console.log('errors', errors);
+
   const options = [
     { value: 'bar', label: 'Bar', className: 'optOpt' },
     { value: 'cafe', label: 'Cafe' },
@@ -100,14 +101,14 @@ const OnboardingVenue = ({
                 value={displayName}
                 name="displayName"
                 onChange={e => onChange(e)}
-                error={errorData.displayName && errorData.displayName}
+                error={errors.displayName && errors.displayName}
               />
               <TextInput
                 placeholder="Venue email address"
                 value={email}
                 name="email"
                 onChange={e => onChange(e)}
-                error={errorData.email && errorData.email}
+                error={errors.email && errors.email}
               />
               <SelectInput
                 name="type"
@@ -115,7 +116,7 @@ const OnboardingVenue = ({
                 options={options}
                 getSelectedValue={getSelectedValue}
                 className="selectInput"
-                error={errorData.type && errorData.type}
+                error={errors.type && errors.type}
               />
               <button type="submit" className="orange">
                 Let's Go!

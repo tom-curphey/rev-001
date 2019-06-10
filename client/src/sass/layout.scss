@@ -17,6 +17,31 @@ body {
   margin: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li,
+a,
+span {
+  font-size: 16px;
+  color: #000;
+  display: block;
+  text-decoration: none;
+  margin: 0px;
+  padding: 0px;
+  font-weight: 100;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
 #root {
   height: 100%;
   display: flex;
@@ -373,19 +398,26 @@ Form Inputs
 ********************************
 ********************************/
 
+span.errorMsg {
+  font-size: 13px;
+  color: #fb8800;
+  display: block;
+  padding-top: 5px;
+  padding-left: 5px;
+  font-weight: bold;
+}
+
+span.errorMsg.pageError {
+  text-align: center;
+  padding-left: 0px;
+  padding-top: 10px;
+  font-size: 16px;
+}
+
 form {
   input[type='text'],
   input[type='password'] {
     box-sizing: border-box;
-  }
-
-  span.errorMsg {
-    font-size: 13px;
-    color: #fb8800;
-    display: block;
-    padding-top: 5px;
-    padding-left: 5px;
-    font-weight: bold;
   }
 
   label.textInput {

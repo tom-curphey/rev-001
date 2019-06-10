@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TextInput from '../../layout/input/TextInput';
-import Alert from '../../layout/alert/Alert';
+// import Alert from '../../layout/alert/Alert';
 import { setAlert } from '../../layout/alert/alertActions';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
 import { register } from './authActions';
 import { Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
+import logo from '../../../images/recipeRevenuelogo.png';
 
 const Register = ({
   setAlert,
@@ -81,6 +82,11 @@ const Register = ({
           <section className="sideContent">
             <div>
               <h1>Join Today</h1>
+              {errors.register && (
+                <span className="errorMsg pageError">
+                  {errors.register}
+                </span>
+              )}
               <p>
                 Recipe Revenue helps chefs & eateries to optimise
                 their recipe profits while forcasting revenue.
@@ -115,10 +121,7 @@ const Register = ({
               </button>
             </form>
 
-            <img
-              src="https://lh3.googleusercontent.com/UVmz4Rr7bCyx93MHZrboetxqmthdW5K3vtLPq7uZsjebDBhc12Qrhfs_WVuCVH-U68VyX7Xyjg_3cWqnxYDDl8L5YxG3KwIRfllFl8yh70u1Jc6XjtmSZoDN4RFBLpsWSTPjtY9tFzwUgM1NrLuI5m1VhBXp5JpscU-EofBgRaVQhGXXyeJQELf-nDWYIteGbvnqJ6wYe6eRDiz49BqO18OG5lMp_Jw3d9g1rSFbsDlQye0Lefsfz1oDwkwto32Jwf1BkWi0i3z42AhKw063_mgtgxvk9OhROn1rsArUgmczdxwY-cuOgk_OHjhtt_ClLgFKwJM6hLnjKbCR8NXx0pr_7eoprI_f3pO57iv6F0z91cbo5ygUNLsGDaouP43GGYXHBEuXLzStxbTW9aLujujJnPfH8oTiiOaEXiY_Jgilml9ePnU7Sm7I0ScwIxAQdvBE8AL6SkljEWtprH4mQvAAcNGfdSQ5HdsnEvB93knMgPpcR5NXe8ca2pzbTFvkgV8zK39WwZ200ffce1wnVWvY2-IBTLFV2bz1mSDdRiD_jXQgB-ysVW9dqPv41Rd-gre7TQuDOJTon5Z6ksjZqy01XRFs5COt9Gw9ZklKnnVpBqKEshoULNjWYlsI5qD_Z63ImDCZcmIYaVG7Y-eYVDxHqcMOghT6=w714-h426-no"
-              alt="Recipe Revenue Logo"
-            />
+            <img src={logo} alt="Recipe Revenue Logo" />
           </section>
         </div>
       </section>

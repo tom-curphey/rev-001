@@ -22,7 +22,9 @@ module.exports.registerUser = async (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ errors: [{ msg: 'User already exits' }] });
+        .json({
+          errors: [{ param: 'register', msg: 'User already exits' }]
+        });
     }
 
     // Create a new instance of a user
@@ -94,18 +96,18 @@ module.exports.loginUser = async (req, res) => {
   try {
     let user = await User.findOne({ email: email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      return res.status(400).json({
+        errors: [{ param: 'signin', msg: 'Invalid Credentials' }]
+      });
     }
 
     // Compare if password entered matches users password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      return res.status(400).json({
+        errors: [{ param: 'signin', msg: 'Invalid Credentials' }]
+      });
     }
 
     // Set the user payload to sign JWT token

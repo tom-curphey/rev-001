@@ -13,13 +13,13 @@ const Login = ({ login, isAuthenticated, errors, profile }) => {
     email: '',
     password: ''
   });
-  const [errorData, setErrorData] = useState({});
+  // const [errorData, setErrorData] = useState({});
 
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      setErrorData(() => errors);
-    }
-  });
+  // useEffect(() => {
+  //   if (!isEmpty(errors)) {
+  //     setErrorData(() => errors);
+  //   }
+  // });
 
   const { email, password } = formData;
 
@@ -50,6 +50,8 @@ const Login = ({ login, isAuthenticated, errors, profile }) => {
     return <Redirect to="/recipes" />;
   }
 
+  // console.log('errData', errorData);
+
   return (
     <PublicMenu>
       <nav className="toggle publicMenu" onClick={openNav}>
@@ -58,13 +60,18 @@ const Login = ({ login, isAuthenticated, errors, profile }) => {
       <section className="login">
         <section className="sideContent">
           <h1>Sign in</h1>
+          {errors.signin && (
+            <span className="errorMsg pageError">
+              {errors.signin}
+            </span>
+          )}
           <form onSubmit={e => handleOnSubmit(e)}>
             <TextInput
               placeholder="Email"
               value={email}
               name="email"
               onChange={e => onChange(e)}
-              error={errorData.email && errorData.email}
+              error={errors.email && errors.email}
             />
             <TextInput
               placeholder="Password"
@@ -72,7 +79,7 @@ const Login = ({ login, isAuthenticated, errors, profile }) => {
               name="password"
               onChange={e => onChange(e)}
               type="password"
-              error={errorData.password && errorData.password}
+              error={errors.password && errors.password}
             />
             <Link to="/forgot">Forgot it?</Link>
             <button>Sign in</button>

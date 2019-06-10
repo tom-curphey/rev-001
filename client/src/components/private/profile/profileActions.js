@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PROFILE_LOADED, PROFILE_ERROR } from '../../../redux/types';
 
-// Load User
+// Load Profile
 export const loadProfile = () => async dispatch => {
   try {
     const res = await axios.get('/api/profile');

@@ -4,21 +4,23 @@ const { validationResult } = require('express-validator/check');
 
 module.exports.getVenue = async (req, res) => {
   try {
-    const venue = await Venue.findOne({
+    const venues = await Venue.find({
       user: req.user.id
     });
 
-    if (!venue) {
+    if (!venues) {
       return res
         .status(400)
         .json({ msg: 'There are no venues for this user' });
     }
-    return res.status(200).json(venue);
+    return res.status(200).json(venues);
   } catch (err) {
     console.error(err);
     return res.status(500).send('Sever Error');
   }
 };
+
+// @TODO Get Selected Venue
 
 module.exports.addOrEditVenue = async (req, res) => {
   const errors = validationResult(req);
@@ -55,6 +57,9 @@ module.exports.addOrEditVenue = async (req, res) => {
 
   // Create profile object
   const venueData = {};
+
+  console.log('REQ USER', req.user.id);
+
   venueData.user = req.user.id;
   if (displayName) venueData.displayName = displayName;
   if (displayName) {

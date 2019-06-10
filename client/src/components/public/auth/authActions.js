@@ -7,7 +7,8 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGOUT,
-  GET_ERRORS
+  GET_ERRORS,
+  REMOVE_ERRORS
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
@@ -52,6 +53,9 @@ export const register = ({
     });
     dispatch(loadUser());
     dispatch(loadProfile());
+    dispatch({
+      type: REMOVE_ERRORS
+    });
   } catch (err) {
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
