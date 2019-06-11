@@ -30,13 +30,17 @@ class OnboardingVenue extends Component {
       this.props.history.push('/recipes');
     }
 
-    if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
-      this.props.history.push('/recipes');
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
     }
+
+    // if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
+    //   this.props.history.push('/recipes');
+    // }
   }
 
   componentWillUnmount() {
-    console.log('Register Unmounted');
+    console.log('Onboarding Venue Unmounted');
     this.props.removeErrors();
   }
 
