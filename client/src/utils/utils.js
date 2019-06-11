@@ -14,3 +14,8 @@ export const isEmpty = value =>
   value === null ||
   (typeof value === 'object' && Object.keys(value).length === 0) ||
   (typeof value === 'string' && value.trim().length === 0);
+
+export const openNav = () => {
+  document.getElementById('mySidenav').style.width = '250px';
+  document.getElementById('main').style.marginRight = '250px';
+};

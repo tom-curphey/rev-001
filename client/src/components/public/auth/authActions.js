@@ -53,13 +53,13 @@ export const register = ({
     });
     dispatch(loadUser());
     dispatch(loadProfile());
-    dispatch({
-      type: REMOVE_ERRORS
-    });
   } catch (err) {
+    console.log('err', err);
+
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
     }, {});
+
     dispatch({
       type: REGISTER_FAILED
     });

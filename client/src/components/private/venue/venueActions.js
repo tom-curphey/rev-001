@@ -12,7 +12,7 @@ import { loadProfile } from '../profile/profileActions';
 // Load Venues
 export const loadVenues = () => async dispatch => {
   try {
-    const res = await axios.get('/api/profile');
+    const res = await axios.get('/api/venue');
     dispatch({
       type: VENUES_LOADED,
       payload: res.data
@@ -26,6 +26,8 @@ export const loadVenues = () => async dispatch => {
 
 // Add or Edit Venue
 export const addOrEditVenue = venueData => async dispatch => {
+  console.log('Yes');
+
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -39,13 +41,11 @@ export const addOrEditVenue = venueData => async dispatch => {
       payload: res.data
     });
     dispatch(loadProfile());
-    dispatch({
-      type: REMOVE_ERRORS
-    });
   } catch (err) {
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
     }, {});
+
     dispatch({
       type: SELECTED_VENUE_FAILED
     });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from './authActions';
@@ -6,90 +6,98 @@ import TextInput from '../../layout/input/TextInput';
 import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
-import { isEmpty } from '../../../utils/utils';
-
-const Login = ({ login, isAuthenticated, errors, profile }) => {
-  const [formData, setFormData] = useState({
+import { openNav } from '../../../utils/utils';
+import { removeErrors } from '../../../redux/errorActions';
+class Login extends Component {
+  state = {
     email: '',
-    password: ''
-  });
-  // const [errorData, setErrorData] = useState({});
+    password: '',
+    errors: {}
+  };
 
-  // useEffect(() => {
-  //   if (!isEmpty(errors)) {
-  //     setErrorData(() => errors);
-  //   }
-  // });
+  componentDidMount() {
+    // Redirect if logged in
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/recipes" />;
+    }
+  }
 
-  const { email, password } = formData;
+  componentDidUpdate(prevProps, state) {
+    if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
+      this.props.history.push('/recipes');
+    }
 
-  const onChange = e =>
-    setFormData({
-      ...formData,
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
+
+  componentWillUnmount() {
+    console.log('Login Unmounted');
+    this.props.removeErrors();
+  }
+
+  onChange = e =>
+    this.setState({
       [e.currentTarget.name]: e.currentTarget.value
     });
 
-  const handleOnSubmit = e => {
+  handleOnSubmit = e => {
     e.preventDefault();
+    const { email, password } = this.state;
 
     const user = {
       email: email,
       password: password
     };
 
-    login(user);
+    this.props.login(user);
   };
 
-  const openNav = () => {
-    document.getElementById('mySidenav').style.width = '250px';
-    document.getElementById('main').style.marginRight = '250px';
-  };
-
-  // Redirect if logged in
-  if (isAuthenticated) {
-    return <Redirect to="/recipes" />;
-  }
-
-  // console.log('errData', errorData);
-
-  return (
-    <PublicMenu>
-      <nav className="toggle publicMenu" onClick={openNav}>
-        <span>&#9776;</span>
-      </nav>
-      <section className="login">
-        <section className="sideContent">
-          <h1>Sign in</h1>
-          {errors.signin && (
-            <span className="errorMsg pageError">
-              {errors.signin}
-            </span>
-          )}
-          <form onSubmit={e => handleOnSubmit(e)}>
-            <TextInput
-              placeholder="Email"
-              value={email}
-              name="email"
-              onChange={e => onChange(e)}
-              error={errors.email && errors.email}
-            />
-            <TextInput
-              placeholder="Password"
-              value={password}
-              name="password"
-              onChange={e => onChange(e)}
-              type="password"
-              error={errors.password && errors.password}
-            />
-            <Link to="/forgot">Forgot it?</Link>
-            <button>Sign in</button>
-          </form>
-          <img src={logo} alt="Recipe Revenue Logo" />
+  render() {
+    const { email, password, errors } = this.state;
+    return (
+      <PublicMenu>
+        <nav className="toggle publicMenu" onClick={openNav}>
+          <span>&#9776;</span>
+        </nav>
+        <section className="login">
+          <section className="sideContent">
+            <h1>Sign in</h1>
+            {errors.signin && (
+              <span className="errorMsg pageError">
+                {errors.signin}
+              </span>
+            )}
+            <form onSubmit={this.handleOnSubmit}>
+              <TextInput
+                placeholder="Email"
+                value={email}
+                name="email"
+                onChange={this.onChange}
+                error={errors.email && errors.email}
+              />
+              <TextInput
+                placeholder="Password"
+                value={password}
+                name="password"
+                onChange={this.onChange}
+                type="password"
+                error={errors.password && errors.password}
+              />
+              <Link to="/forgot">Forgot it?</Link>
+              <button>Sign in</button>
+              <div>
+                <Link to="/forgot">Forgot it?</Link>
+              </div>
+            </form>
+            <img src={logo} alt="Recipe Revenue Logo" />
+          </section>
         </section>
-      </section>
-    </PublicMenu>
-  );
-};
+      </PublicMenu>
+    );
+  }
+}
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
@@ -99,7 +107,8 @@ Login.propTypes = {
 };
 
 const actions = {
-  login
+  login,
+  removeErrors
 };
 
 const mapState = state => ({
