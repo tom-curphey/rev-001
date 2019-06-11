@@ -4,9 +4,9 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import PrivateRoute from './utils/PrivateRoute';
 import Home from './components/public/Home';
 import Login from './components/public/auth/LoginHook';
+import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
