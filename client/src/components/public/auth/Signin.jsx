@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from './authActions';
+import { signin } from './authActions';
 import TextInput from '../../layout/input/TextInput';
 import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { openNav } from '../../../utils/utils';
 import { removeErrors } from '../../../redux/errorActions';
-class Login extends Component {
+
+class Signin extends Component {
   state = {
     email: '',
     password: '',
@@ -33,7 +34,7 @@ class Login extends Component {
   }
 
   componentWillUnmount() {
-    console.log('Login Unmounted');
+    console.log('signin Unmounted');
     this.props.removeErrors();
   }
 
@@ -51,7 +52,7 @@ class Login extends Component {
       password: password
     };
 
-    this.props.login(user);
+    this.props.signin(user);
   };
 
   render() {
@@ -61,7 +62,7 @@ class Login extends Component {
         <nav className="toggle publicMenu" onClick={openNav}>
           <span>&#9776;</span>
         </nav>
-        <section className="login">
+        <section className="signin">
           <section className="sideContent">
             <h1>Sign in</h1>
             {errors.signin && (
@@ -88,7 +89,7 @@ class Login extends Component {
               <Link to="/forgot">Forgot it?</Link>
               <button>Sign in</button>
               <div>
-                <Link to="/forgot">Forgot it?</Link>
+                <Link to="/signin">Forgot it?</Link>
               </div>
             </form>
             <img src={logo} alt="Recipe Revenue Logo" />
@@ -99,15 +100,15 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
+Signin.propTypes = {
+  signin: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const actions = {
-  login,
+  signin,
   removeErrors
 };
 
@@ -120,4 +121,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(Login);
+)(Signin);

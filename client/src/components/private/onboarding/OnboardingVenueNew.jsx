@@ -1,9 +1,9 @@
 import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from '../../public/auth/authActions';
+// import { signin } from '../../public/auth/authActions';
 import TextInput from '../../layout/input/TextInput';
-import { Link, Redirect } from 'react-router-dom';
+// import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import Select from 'react-select';
 
@@ -37,7 +37,7 @@ class OnboardingVenueNew extends Component {
       password: password
     };
 
-    this.props.login(user);
+    this.props.signin(user);
   };
 
   openNav = () => {
@@ -98,13 +98,13 @@ class OnboardingVenueNew extends Component {
 }
 
 OnboardingVenueNew.propTypes = {
-  login: PropTypes.func.isRequired,
+  signin: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   profile: PropTypes.object.isRequired
 };
 
 const actions = {
-  login
+  signin
 };
 
 const mapState = state => ({

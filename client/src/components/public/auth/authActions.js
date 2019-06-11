@@ -2,8 +2,8 @@ import axios from 'axios';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAILED,
-  LOGIN_SUCCESS,
-  LOGIN_FAILED,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAILED,
   USER_LOADED,
   AUTH_ERROR,
   LOGOUT,
@@ -70,8 +70,8 @@ export const register = ({
   }
 };
 
-// Login User
-export const login = ({ email, password }) => async dispatch => {
+// Signin User
+export const signin = ({ email, password }) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -79,9 +79,9 @@ export const login = ({ email, password }) => async dispatch => {
   };
   const body = JSON.stringify({ email, password });
   try {
-    const res = await axios.post('/api/auth/login', body, config);
+    const res = await axios.post('/api/auth/signin', body, config);
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: SIGNIN_SUCCESS,
       payload: res.data
     });
     // Can dispatch an alert..
@@ -95,7 +95,7 @@ export const login = ({ email, password }) => async dispatch => {
     }, {});
 
     dispatch({
-      type: LOGIN_FAILED
+      type: SIGNIN_FAILED
     });
     // can dispatch an alert
 

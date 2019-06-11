@@ -32,7 +32,7 @@ const DeviceSubMenu = ({
       <span className="closebtn" onClick={closeNav}>
         &times;
       </span>
-      <Link to="/login">Sign in</Link>
+      <Link to="/signin">Sign in</Link>
       <Link to="/register">Register</Link>
       <Link to="/pricing">Pricing</Link>
     </Fragment>

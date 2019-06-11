@@ -33,11 +33,11 @@ router.post(
   authController.registerUser
 );
 
-// @router POST api/auth/login
+// @router POST api/auth/signin
 // @desc Authenticate user and get token
 // @access Public
 router.post(
-  '/login',
+  '/signin',
   [
     check('email', 'Email is required')
       .not()
@@ -47,7 +47,7 @@ router.post(
       .not()
       .isEmpty()
   ],
-  authController.loginUser
+  authController.signinUser
 );
 
 module.exports = router;

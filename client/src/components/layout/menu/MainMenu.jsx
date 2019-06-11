@@ -54,7 +54,7 @@ const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
           <i />
           <span>Register</span>
         </Link>
-        <Link className="menuItem" to="login">
+        <Link className="menuItem" to="/signin">
           <i />
           <span>Sign in</span>
         </Link>

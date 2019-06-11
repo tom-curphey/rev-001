@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from './authActions';
+import { signin } from './authActions';
 import TextInput from '../../layout/input/TextInput';
 import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
@@ -9,8 +9,8 @@ import logo from '../../../images/recipeRevenuelogo.png';
 import { isEmpty } from '../../../utils/utils';
 import { removeErrors } from '../../../redux/errorActions';
 
-const Login = ({
-  login,
+const Signin = ({
+  signin,
   isAuthenticated,
   errors,
   profile,
@@ -48,7 +48,7 @@ const Login = ({
       password: password
     };
 
-    login(user);
+    signin(user);
   };
 
   const openNav = () => {
@@ -68,7 +68,7 @@ const Login = ({
       <nav className="toggle publicMenu" onClick={openNav}>
         <span>&#9776;</span>
       </nav>
-      <section className="login">
+      <section className="signin">
         <section className="sideContent">
           <h1>Sign in</h1>
           {errorData.signin && (
@@ -102,8 +102,8 @@ const Login = ({
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
+Signin.propTypes = {
+  signin: PropTypes.func.isRequired,
   removeErrors: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   profile: PropTypes.object.isRequired,
@@ -111,7 +111,7 @@ Login.propTypes = {
 };
 
 const actions = {
-  login,
+  signin,
   removeErrors
 };
 
@@ -124,4 +124,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(Login);
+)(Signin);

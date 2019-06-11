@@ -20,11 +20,9 @@ module.exports.registerUser = async (req, res) => {
     let user = await User.findOne({ email: email });
 
     if (user) {
-      return res
-        .status(400)
-        .json({
-          errors: [{ param: 'register', msg: 'User already exits' }]
-        });
+      return res.status(400).json({
+        errors: [{ param: 'register', msg: 'User already exits' }]
+      });
     }
 
     // Create a new instance of a user
@@ -83,7 +81,7 @@ module.exports.getUser = async (req, res) => {
   }
 };
 
-module.exports.loginUser = async (req, res) => {
+module.exports.signinUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res
