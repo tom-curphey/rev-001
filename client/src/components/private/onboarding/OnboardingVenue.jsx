@@ -119,6 +119,12 @@ class OnboardingVenue extends Component {
                   Let's Go!
                 </button>
               </form>
+              <Link className="subLink" to="/signin">
+                <span>
+                  Don't need to add a venue? Add one later..
+                </span>
+                <span>Create personal account</span>
+              </Link>
             </section>
           </div>
         </section>

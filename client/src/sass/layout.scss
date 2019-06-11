@@ -458,6 +458,23 @@ form {
   }
 }
 
+a.subLink {
+  text-align: center;
+  // margin-top: 60px;
+  span {
+    color: $cBlack;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  span:first-child {
+    font-weight: 100;
+  }
+  span:last-child {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+
 div.selectInput {
   cursor: pointer;
 }

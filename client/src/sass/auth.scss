@@ -8,9 +8,10 @@ section.signin {
   height: 100%;
 
   img {
-    width: 300px;
-    text-align: center;
+    width: 190px;
     margin: auto;
+    display: block;
+    margin-bottom: 60px;
   }
 
   h1 {
@@ -70,9 +71,10 @@ section.register {
     }
 
     img {
-      width: 300px;
-      text-align: center;
+      width: 190px;
       margin: auto;
+      display: block;
+      margin-bottom: 60px;
     }
 
     h1 {
@@ -83,7 +85,7 @@ section.register {
       text-align: center;
       font-weight: 100;
       margin: 40px 0px 0px;
-      font-size: 22px;
+      font-size: 19px;
       line-height: 32px;
     }
 
@@ -134,9 +136,10 @@ section.onboarding {
     }
 
     img {
-      width: 230px;
-      text-align: center;
+      width: 190px;
+      display: block;
       margin: auto;
+      margin-bottom: 70px;
     }
 
     h1 {
@@ -146,7 +149,7 @@ section.onboarding {
     p {
       text-align: center;
       font-weight: 100;
-      margin: 110px 0px 20px;
+      // margin: 110px 0px 20px;
       font-size: 27px;
       line-height: 32px;
     }

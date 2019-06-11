@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TextInput from '../../layout/input/TextInput';
-// import Alert from '../../layout/alert/Alert';
-// import { setAlert } from '../../layout/alert/alertActions';
 import PropTypes from 'prop-types';
 import { openNav } from '../../../utils/utils';
 import { register } from './authActions';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
@@ -70,6 +68,7 @@ class Register extends Component {
           <div className="sideImage" />
           <div>
             <section className="sideContent">
+              <img src={logo} alt="Recipe Revenue Logo" />
               <div>
                 <h1>Join Today</h1>
                 {errors.register && (
@@ -110,8 +109,10 @@ class Register extends Component {
                   Get Started
                 </button>
               </form>
-
-              <img src={logo} alt="Recipe Revenue Logo" />
+              <Link className="subLink" to="/signin">
+                <span>Have a Recipe Revenue account?</span>
+                <span>Sign in.</span>
+              </Link>
             </section>
           </div>
         </section>

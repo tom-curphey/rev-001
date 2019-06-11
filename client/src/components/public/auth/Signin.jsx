@@ -64,6 +64,7 @@ class Signin extends Component {
         </nav>
         <section className="signin">
           <section className="sideContent">
+            <img src={logo} alt="Recipe Revenue Logo" />
             <h1>Sign in</h1>
             {errors.signin && (
               <span className="errorMsg pageError">
@@ -88,11 +89,11 @@ class Signin extends Component {
               />
               <Link to="/forgot">Forgot it?</Link>
               <button>Sign in</button>
-              <div>
-                <Link to="/signin">Forgot it?</Link>
-              </div>
             </form>
-            <img src={logo} alt="Recipe Revenue Logo" />
+            <Link className="subLink" to="/register">
+              <span>Don't have a Recipe Revenue account yet?</span>
+              <span>Sign up now.</span>
+            </Link>
           </section>
         </section>
       </PublicMenu>
