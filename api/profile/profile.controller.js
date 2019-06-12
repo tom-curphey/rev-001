@@ -9,6 +9,7 @@ module.exports.getProfile = async (req, res) => {
     const profile = await Profile.findOne({
       user: req.user.id
     }).populate('user', ['email']);
+    // .populate('venues');
 
     if (!profile) {
       return res

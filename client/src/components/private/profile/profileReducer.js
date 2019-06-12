@@ -1,4 +1,8 @@
-import { PROFILE_LOADED, PROFILE_ERROR } from '../../../redux/types';
+import {
+  PROFILE_LOADED,
+  PROFILE_ERROR,
+  CLEAR_PROFILE
+} from '../../../redux/types';
 
 const initialState = {
   profile: null,
@@ -16,6 +20,7 @@ export default function(state = initialState, action) {
         loading: false
       };
 
+    case CLEAR_PROFILE:
     case PROFILE_ERROR:
       return {
         ...state,

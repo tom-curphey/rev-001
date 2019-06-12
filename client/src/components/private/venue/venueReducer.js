@@ -1,8 +1,10 @@
 import {
   VENUES_LOADED,
   VENUES_ERROR,
+  SET_SELECTED_VENUE,
   SELECTED_VENUE_SUCCESS,
-  SELECTED_VENUE_FAILED
+  SELECTED_VENUE_FAILED,
+  CLEAR_VENUES
 } from '../../../redux/types';
 
 const initialState = {
@@ -28,6 +30,8 @@ export default function(state = initialState, action) {
         venues: null,
         loading: false
       };
+
+    case SET_SELECTED_VENUE:
     case SELECTED_VENUE_SUCCESS:
       return {
         ...state,
@@ -38,6 +42,14 @@ export default function(state = initialState, action) {
     case SELECTED_VENUE_FAILED:
       return {
         ...state,
+        selectedVenue: null,
+        loading: false
+      };
+
+    case CLEAR_VENUES:
+      return {
+        ...state,
+        venues: null,
         selectedVenue: null,
         loading: false
       };

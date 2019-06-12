@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
 import Alert from '../../layout/alert/Alert';
+import MainVenueMenu from './MainVenueMenu';
 
-const MainMenu = ({ auth: { isAuthenticated, loading }, logout }) => {
+const MainMenu = ({
+  auth: { isAuthenticated, loading },
+  logout,
+  venues
+}) => {
   const userLinks = (
     <Fragment>
+      <MainVenueMenu />
       <nav className="venueButton">
         <div>Icon</div>
         <div>By Kalindi</div>
@@ -91,7 +97,8 @@ MainMenu.propTypes = {
 const actions = { logout };
 
 const mapState = state => ({
-  auth: state.auth
+  auth: state.auth,
+  venues: state.venue
 });
 
 export default connect(

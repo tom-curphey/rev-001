@@ -8,10 +8,13 @@ import {
   AUTH_ERROR,
   LOGOUT,
   GET_ERRORS,
-  REMOVE_ERRORS
+  REMOVE_ERRORS,
+  CLEAR_PROFILE,
+  CLEAR_VENUES
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
+import { loadVenues } from '../../private/venue/venueActions';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -89,6 +92,7 @@ export const signin = ({ email, password }) => async dispatch => {
     // Calling load User so it fires off immediately
     dispatch(loadUser());
     dispatch(loadProfile());
+    dispatch(loadVenues());
   } catch (err) {
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
@@ -109,4 +113,7 @@ export const signin = ({ email, password }) => async dispatch => {
 // Logout / Clear Profile
 export const logout = () => dispatch => {
   dispatch({ type: LOGOUT });
+  dispatch({ type: REMOVE_ERRORS });
+  dispatch({ type: CLEAR_PROFILE });
+  dispatch({ type: CLEAR_VENUES });
 };

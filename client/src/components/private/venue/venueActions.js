@@ -5,7 +5,8 @@ import {
   VENUES_LOADED,
   VENUES_ERROR,
   GET_ERRORS,
-  REMOVE_ERRORS
+  REMOVE_ERRORS,
+  SET_SELECTED_VENUE
 } from '../../../redux/types';
 import { loadProfile } from '../profile/profileActions';
 
@@ -17,11 +18,31 @@ export const loadVenues = () => async dispatch => {
       type: VENUES_LOADED,
       payload: res.data
     });
+
+    if (res.data.length !== 1) {
+      // Filter response to get selected venue
+      const selectedVenues = res.data.filter(venue => {
+        return venue.personal === false;
+      });
+      dispatch(setSelectedVenue(selectedVenues[0]));
+    } else {
+      dispatch(setSelectedVenue(res.data[0]));
+    }
   } catch (err) {
     dispatch({
       type: VENUES_ERROR
     });
   }
+};
+
+// Set Selected Venue
+export const setSelectedVenue = selectedVenue => async dispatch => {
+  // console.log('SV', selectedVenue);
+  // Pass selected venue object to reducer
+  dispatch({
+    type: SET_SELECTED_VENUE,
+    payload: selectedVenue
+  });
 };
 
 // Add or Edit Venue
