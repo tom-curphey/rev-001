@@ -15,6 +15,10 @@ const VenueSchema = new Schema(
       type: String,
       required: true
     },
+    personal: {
+      type: Boolean,
+      default: false
+    },
     email: {
       type: String,
       required: true

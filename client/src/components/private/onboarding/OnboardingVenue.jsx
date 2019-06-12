@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TextInput from '../../layout/input/TextInput';
-import { addOrEditVenue } from '../venue/venueActions';
+import {
+  addOrEditVenue,
+  addPersonalVenue
+} from '../venue/venueActions';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import { Link, Redirect } from 'react-router-dom';
 import SelectInput from '../../layout/input/SelectInput';
@@ -68,6 +71,14 @@ class OnboardingVenue extends Component {
     this.props.addOrEditVenue(newVenue);
   };
 
+  handlePersonalSubmit = e => {
+    e.preventDefault();
+
+    const userEmail = this.props.profile.profile.user.email;
+
+    this.props.addPersonalVenue(userEmail);
+  };
+
   render() {
     const { displayName, email, type, errors } = this.state;
 
@@ -119,12 +130,16 @@ class OnboardingVenue extends Component {
                   Let's Go!
                 </button>
               </form>
-              <Link className="subLink" to="/signin">
+              <div
+                className="subLink"
+                to="/signin"
+                onClick={this.handlePersonalSubmit}
+              >
                 <span>
                   Don't need to add a venue? Add one later..
                 </span>
                 <span>Create personal account</span>
-              </Link>
+              </div>
             </section>
           </div>
         </section>
@@ -135,11 +150,12 @@ class OnboardingVenue extends Component {
 
 OnboardingVenue.propTypes = {
   addOrEditVenue: PropTypes.func.isRequired,
+  addPersonalVenue: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   removeErrors: PropTypes.func.isRequired
 };
 
-const actions = { addOrEditVenue, removeErrors };
+const actions = { addOrEditVenue, addPersonalVenue, removeErrors };
 
 const mapState = state => ({
   profile: state.profile,

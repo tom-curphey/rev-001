@@ -31,6 +31,7 @@ module.exports.addOrEditVenue = async (req, res) => {
   }
   const {
     displayName,
+    personal,
     email,
     type,
     phone,
@@ -58,8 +59,6 @@ module.exports.addOrEditVenue = async (req, res) => {
   // Create profile object
   const venueData = {};
 
-  console.log('REQ USER', req.user.id);
-
   venueData.user = req.user.id;
   if (displayName) venueData.displayName = displayName;
   if (displayName) {
@@ -69,6 +68,7 @@ module.exports.addOrEditVenue = async (req, res) => {
       .replace(/\s+/g, '-')
       .toLowerCase();
   }
+  if (personal) venueData.personal = personal;
   if (email) venueData.email = email;
   if (type) venueData.type = type;
   if (phone) venueData.phone = phone;
@@ -96,28 +96,88 @@ module.exports.addOrEditVenue = async (req, res) => {
   if (wastageCost) venueData.costs.wastageCost = wastageCost;
 
   try {
-    let venue = await Venue.findById(req.body.id);
+    let venues = await Venue.find({ user: req.user.id });
+    console.log('Venues', venues);
 
-    if (venue) {
+    if (venues.length > 0) {
+      // Update Personal Venue
+      if (req.body.personal === true) {
+        let venue = await Venue.findOneAndUpdate(
+          { personal: true },
+          { $set: venueData },
+          { new: true }
+        );
+        return res.status(200).json(venue);
+      }
+
       // Update Venue
-      venue = await Venue.findOneAndUpdate(
+      if (req.body.id) {
+        let venue = await Venue.findOneAndUpdate(
+          { _id: req.body.id },
+          { $set: venueData },
+          { new: true }
+        );
+        return res.status(200).json(venue);
+      }
+
+      // Add New Venue
+      let venue = new Venue(venueData);
+      await venue.save();
+      const profileData = { venue: venue._id };
+      profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
-        { $set: venueData },
+        { $push: { venues: profileData } },
         { new: true }
       );
       return res.status(200).json(venue);
-    }
+    } else {
+      console.log('User Has no venues');
+      if (req.body.personal === true) {
+        let venue = new Venue(venueData);
+        await venue.save();
+        const profileData = { venue: venue._id };
+        await Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $push: { venues: profileData } },
+          { new: true }
+        );
+        return res.status(200).json(venue);
+      }
+      console.log('Need to add personal venue & account venue');
 
-    // Add Venue
-    venue = new Venue(venueData);
-    await venue.save();
-    const profileData = { venue: venue._id };
-    profile = await Profile.findOneAndUpdate(
-      { user: req.user.id },
-      { $push: { venues: profileData } },
-      { new: true }
-    );
-    return res.status(200).json(venue);
+      // Create Personal Venue data
+      const personalVenueData = {
+        user: req.user.id,
+        displayName: 'Personal',
+        urlName: 'personal',
+        personal: true,
+        email: req.user.email,
+        type: 'Personal'
+      };
+
+      const profileData = {};
+
+      // Save & add personal venue to profile
+      let personalVenue = new Venue(personalVenueData);
+      await personalVenue.save();
+      profileData.venue = personalVenue._id;
+      profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $push: { venues: profileData } },
+        { new: true }
+      );
+
+      let venue = new Venue(venueData);
+      await venue.save();
+      profileData.venue = venue._id;
+      profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $push: { venues: profileData } },
+        { new: true }
+      );
+
+      return res.status(200).json(venue);
+    }
   } catch (err) {
     console.error(err);
     return res.status(500).send('Sever Error');

@@ -51,6 +51,7 @@ module.exports.registerUser = async (req, res) => {
     const payload = {
       user: {
         id: user._id,
+        email: user.email,
         active: user.active
       }
     };
@@ -112,6 +113,7 @@ module.exports.signinUser = async (req, res) => {
     const payload = {
       user: {
         id: user._id,
+        email: user.email,
         active: user.active
       }
     };
