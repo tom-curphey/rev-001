@@ -1,21 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
 
-const MainVenueMenu = ({ venues }) => {
+const MainVenueMenu = ({ venues, setSelectedVenue }) => {
   const closeVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'none';
   };
 
+  const changeSelectedVenue = e => {
+    const selectedVenue = venues.venues.filter(venue => {
+      return venue._id === e.target.id;
+    });
+    setSelectedVenue(selectedVenue[0]);
+    closeVenueMenu();
+  };
+
   let venueList;
   if (venues && venues.venues !== null) {
-    console.log('venues', venues);
-    const selectedVenue = venues.selectedVenue;
-    console.log('selectedVenue', selectedVenue);
-
+    const { selectedVenue } = venues;
     venueList = venues.venues.map(function(venue, i) {
-      console.log('test', venue.displayName);
       if (
         selectedVenue !== null &&
         venue.displayName === selectedVenue.displayName
@@ -26,7 +31,15 @@ const MainVenueMenu = ({ venues }) => {
           </li>
         );
       } else {
-        return <li key={i}>{venue.displayName}</li>;
+        return (
+          <li
+            key={i}
+            id={venue._id}
+            onClick={e => changeSelectedVenue(e)}
+          >
+            {venue.displayName}
+          </li>
+        );
       }
     });
   }
@@ -68,12 +81,20 @@ const MainVenueMenu = ({ venues }) => {
   );
 };
 
+const actions = {
+  setSelectedVenue
+};
+
 const mapState = state => ({
   venues: state.venues
 });
 
 MainVenueMenu.propTypes = {
-  venues: PropTypes.object
+  venues: PropTypes.object,
+  setSelectedVenue: PropTypes.func.isRequired
 };
 
-export default connect(mapState)(MainVenueMenu);
+export default connect(
+  mapState,
+  actions
+)(MainVenueMenu);

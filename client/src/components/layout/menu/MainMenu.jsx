@@ -5,6 +5,7 @@ import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
 import Alert from '../../layout/alert/Alert';
 import MainVenueMenu from './MainVenueMenu';
+import icon from '../../../images/recipeRevenueIcon.png';
 
 const MainMenu = ({
   auth: { isAuthenticated, loading },
@@ -15,13 +16,22 @@ const MainMenu = ({
     document.getElementById('venueMenu').style.display = 'block';
   };
 
+  let venueName = '-';
+  if (venues && venues.selectedVenue !== null) {
+    venueName = venues.selectedVenue.displayName;
+  }
+
+  // console.log('Venues', venues);
+
   const userLinks = (
     <Fragment>
       <MainVenueMenu />
 
       <nav className="venueButton" onClick={openVenueMenu}>
-        <div>Icon</div>
-        <div>By Kalindi</div>
+        <div>
+          <img src={icon} alt="Recipe Revenue Icon" />
+        </div>
+        <div>{venueName}</div>
         <div>></div>
       </nav>
       <nav className="menu">
@@ -103,7 +113,7 @@ const actions = { logout };
 
 const mapState = state => ({
   auth: state.auth,
-  venues: state.venue
+  venues: state.venues
 });
 
 export default connect(

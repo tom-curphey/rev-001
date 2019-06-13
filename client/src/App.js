@@ -19,7 +19,7 @@ import { loadUser } from './components/public/auth/authActions';
 import { loadProfile } from './components/private/profile/profileActions';
 import { loadVenues } from './components/private/venue/venueActions';
 import setAuthToken from './utils/setAuthToken';
-import { AUTH_ERROR, REMOVE_ERRORS } from './redux/types';
+import { AUTH_ERROR } from './redux/types';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);

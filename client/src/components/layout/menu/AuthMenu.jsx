@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import MainMenu from './MainMenu';
 import DeviceMenu from './DeviceMenu';
 import DeviceSubMenu from './DeviceSubMenu';
