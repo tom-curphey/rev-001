@@ -49,14 +49,11 @@ const MainMenu = ({
         </Link>
       </nav>
       <nav className="subMenu">
-        <Link className="menuItem" to="#!">
-          Settings
+        <Link className="menuItem" to="/account/profile">
+          Account Settings
         </Link>
         <Link className="menuItem" to="#!">
           Ask For Help
-        </Link>
-        <Link className="menuItem" to="/onboarding">
-          Onboarding
         </Link>
         <span onClick={logout}>Logout</span>
       </nav>

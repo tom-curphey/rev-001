@@ -26,10 +26,25 @@ class OnboardingVenue extends Component {
     if (this.props.isAuthenticated) {
       return <Redirect to="/recipes" />;
     }
+
+    // console.log(
+    //   'this.props.profile.profile.venues.length',
+    //   this.props.profile.profile.venues.length
+    // );
+
+    if (this.props.profile.profile !== null) {
+      if (this.props.profile.profile.venues.length !== 0) {
+        this.props.history.push('/recipes');
+      }
+    }
   }
 
   componentDidUpdate(prevProps, state) {
     if (prevProps.profile !== this.props.profile) {
+      this.props.history.push('/recipes');
+    }
+
+    if (this.props.profile.profile.venues.length !== 0) {
       this.props.history.push('/recipes');
     }
 

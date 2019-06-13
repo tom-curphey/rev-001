@@ -9,6 +9,7 @@ import Signin from './components/public/auth/Signin';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
+import ProfileSettings from './components/private/profile/ProfileSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
 import Test from './utils/Test';
 
@@ -55,6 +56,11 @@ const App = () => {
             component={OnboardingVenue}
           />
           <PrivateRoute exact path="/recipes" component={Recipes} />
+          <PrivateRoute
+            exact
+            path="/account/profile"
+            component={ProfileSettings}
+          />
         </Switch>
       </Router>
     </Provider>
