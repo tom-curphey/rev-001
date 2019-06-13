@@ -94,6 +94,8 @@ export const signin = ({ email, password }) => async dispatch => {
     dispatch(loadProfile());
     dispatch(loadVenues());
   } catch (err) {
+    console.log(err);
+
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
     }, {});

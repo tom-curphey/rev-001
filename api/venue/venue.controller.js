@@ -2,11 +2,11 @@ const Venue = require('./venue.model');
 const Profile = require('../profile/profile.model');
 const { validationResult } = require('express-validator/check');
 
-module.exports.getVenue = async (req, res) => {
+module.exports.getVenues = async (req, res) => {
   try {
     const venues = await Venue.find({
       user: req.user.id
-    });
+    }).sort({ name: 'asc' });
 
     if (!venues) {
       return res

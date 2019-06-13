@@ -5,9 +5,9 @@ const auth = require('../../config/middleware/auth');
 const { check } = require('express-validator/check');
 
 // @router GET api/venue
-// @desc Get current users venue
+// @desc Get current users venues
 // @access Public
-router.get('/', auth, venueController.getVenue);
+router.get('/', auth, venueController.getVenues);
 
 router.post(
   '/',

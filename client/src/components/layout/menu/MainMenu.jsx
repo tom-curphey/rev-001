@@ -11,10 +11,15 @@ const MainMenu = ({
   logout,
   venues
 }) => {
+  const openVenueMenu = e => {
+    document.getElementById('venueMenu').style.display = 'block';
+  };
+
   const userLinks = (
     <Fragment>
       <MainVenueMenu />
-      <nav className="venueButton">
+
+      <nav className="venueButton" onClick={openVenueMenu}>
         <div>Icon</div>
         <div>By Kalindi</div>
         <div>></div>

@@ -19,3 +19,13 @@ export const openNav = () => {
   document.getElementById('mySidenav').style.width = '250px';
   document.getElementById('main').style.marginRight = '250px';
 };
+
+export const addSelectedNameToEndOfArray = (array, selectedName) => {
+  const filteredArray = array.filter(item => {
+    return item.urlName !== selectedName;
+  });
+  const selectedNameData = array.filter(item => {
+    return item.urlName === selectedName;
+  });
+  return filteredArray.concat(selectedNameData[0]);
+};

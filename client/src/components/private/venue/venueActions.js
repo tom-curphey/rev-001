@@ -9,14 +9,21 @@ import {
   SET_SELECTED_VENUE
 } from '../../../redux/types';
 import { loadProfile } from '../profile/profileActions';
+import { addSelectedNameToEndOfArray } from '../../../utils/utils';
 
 // Load Venues
 export const loadVenues = () => async dispatch => {
   try {
     const res = await axios.get('/api/venue');
+
+    const filteredVenues = addSelectedNameToEndOfArray(
+      res.data,
+      'personal'
+    );
+
     dispatch({
       type: VENUES_LOADED,
-      payload: res.data
+      payload: filteredVenues
     });
 
     if (res.data.length !== 1) {
