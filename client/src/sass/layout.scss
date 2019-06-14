@@ -126,8 +126,8 @@ section.mainMenu {
     height: 56px;
     padding: 0 16px;
     font-size: 16px;
-
     cursor: pointer;
+
     div {
       display: flex;
       align-items: center;
@@ -521,10 +521,17 @@ nav.mainVenueMenu {
   }
 
   ul.actionLinks {
-    li {
+    li:last-child,
+    a {
       display: grid;
       grid-template-columns: 40px auto;
-      margin-bottom: 15px;
+      grid-template-rows: 30px;
+      cursor: pointer;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
     }
   }
 

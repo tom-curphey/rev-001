@@ -3,8 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
+import { Link } from 'react-router-dom';
+import { logout } from '../../public/auth/authActions';
 
-const MainVenueMenu = ({ venues, setSelectedVenue }) => {
+const MainVenueMenu = ({
+  venues,
+  setSelectedVenue,
+  history,
+  profile
+}) => {
   const closeVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'none';
   };
@@ -15,6 +22,11 @@ const MainVenueMenu = ({ venues, setSelectedVenue }) => {
     });
     setSelectedVenue(selectedVenue[0]);
     closeVenueMenu();
+  };
+
+  const handleLogout = () => {
+    logout();
+    history.push('/signin');
   };
 
   let venueList;
@@ -60,15 +72,18 @@ const MainVenueMenu = ({ venues, setSelectedVenue }) => {
       <hr />
       <ul className="accountAddress">
         <li>
-          You are signed in as <span>mail@bykalindi.com</span>
+          You are signed in as{' '}
+          <span>{profile && profile.user.email}</span>
         </li>
       </ul>
       <ul className="actionLinks">
         <li>
-          <span>x</span>
-          <span className="actionLink">Manage your profile</span>
+          <Link to="/account/profile">
+            <span>x</span>
+            <span className="actionLink">Account Settings</span>
+          </Link>
         </li>
-        <li>
+        <li onClick={handleLogout}>
           <span>x</span>
           <span className="actionLink">Sign out</span>
         </li>
@@ -86,7 +101,8 @@ const actions = {
 };
 
 const mapState = state => ({
-  venues: state.venues
+  venues: state.venues,
+  profile: state.profile.profile
 });
 
 MainVenueMenu.propTypes = {
