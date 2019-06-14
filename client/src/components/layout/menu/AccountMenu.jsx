@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 function AccountMenu() {
   return (
-    <Fragment>
+    <section className="accountMenu">
       <h3>Profile</h3>
       <ul>
         <li>Venues</li>
@@ -10,7 +10,7 @@ function AccountMenu() {
         <li>Email Notifications</li>
         <li>Change Password</li>
       </ul>
-    </Fragment>
+    </section>
   );
 }
 

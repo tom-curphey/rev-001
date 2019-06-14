@@ -19,7 +19,16 @@ class Register extends Component {
 
   componentDidMount() {
     // Redirect if logged in
-    if (this.props.isAuthenticated) {
+
+    console.log(
+      'this.props.isAuthenticated',
+      this.props.isAuthenticated
+    );
+
+    if (
+      this.props.isAuthenticated !== null &&
+      this.props.isAuthenticated === true
+    ) {
       return <Redirect to="/onboarding" />;
     }
   }
@@ -29,7 +38,10 @@ class Register extends Component {
       this.setState({ errors: this.props.errors });
     }
 
-    if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
+    if (
+      prevProps.isAuthenticated !== this.props.isAuthenticated &&
+      this.props.isAuthenticated === true
+    ) {
       this.props.history.push('/onboarding');
     }
   }

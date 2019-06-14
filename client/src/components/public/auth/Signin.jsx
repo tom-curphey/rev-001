@@ -24,7 +24,10 @@ class Signin extends Component {
   }
 
   componentDidUpdate(prevProps, state) {
-    if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
+    if (
+      prevProps.isAuthenticated !== this.props.isAuthenticated &&
+      this.props.isAuthenticated
+    ) {
       this.props.history.push('/recipes');
     }
 

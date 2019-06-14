@@ -6,7 +6,7 @@ const ProfileSettings = () => {
   return (
     <AuthMenu>
       <AccountMenu />
-      Profile Settings
+      <div className="settings profile">Profile Settings</div>
     </AuthMenu>
   );
 };

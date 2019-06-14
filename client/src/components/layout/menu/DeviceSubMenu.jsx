@@ -1,16 +1,18 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
 
-const DeviceSubMenu = ({
-  auth: { isAuthenticated, loading },
-  logout
-}) => {
+const DeviceSubMenu = ({ logout, auth, history }) => {
   const closeNav = () => {
     document.getElementById('mySidenav').style.width = '0';
     document.getElementById('main').style.marginRight = '0';
+  };
+  const handleLogout = () => {
+    logout();
+    history.push('/signin');
   };
   const authLinks = (
     <Fragment>
@@ -21,7 +23,7 @@ const DeviceSubMenu = ({
       <Link to="!#">Ingredients</Link>
       <Link to="!#">Packaging</Link>
       <Link to="/onboarding">Onboarding</Link>
-      <span className="link" onClick={logout}>
+      <span className="link" onClick={handleLogout}>
         Logout
       </span>
     </Fragment>
@@ -40,9 +42,9 @@ const DeviceSubMenu = ({
 
   return (
     <div id="mySidenav" className="sidenav">
-      {!loading && (
+      {auth && !auth.loading && (
         <Fragment>
-          {isAuthenticated ? authLinks : publicLinks}
+          {auth.isAuthenticated ? authLinks : publicLinks}
         </Fragment>
       )}
     </div>
@@ -65,4 +67,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(DeviceSubMenu);
+)(withRouter(DeviceSubMenu));

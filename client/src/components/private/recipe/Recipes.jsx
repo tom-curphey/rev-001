@@ -4,7 +4,11 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthMenu from '../../layout/menu/AuthMenu';
 
-const Recipes = ({ profile }) => {
+const Recipes = ({ profile, isAuthenticated }) => {
+  if (isAuthenticated === null || isAuthenticated === false) {
+    return <Redirect to="/signin" />;
+  }
+
   if (profile) {
     // console.log('profile', profile);
     if (profile.profile !== null && profile.loading === false) {
@@ -23,7 +27,8 @@ const Recipes = ({ profile }) => {
 };
 
 const mapState = state => ({
-  profile: state.profile
+  profile: state.profile,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapState)(Recipes);

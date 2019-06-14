@@ -7,6 +7,7 @@ import {
 } from '../venue/venueActions';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import { Link, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import SelectInput from '../../layout/input/SelectInput';
 import { openNav } from '../../../utils/utils';
 import logo from '../../../images/recipeRevenuelogo.png';
@@ -24,13 +25,16 @@ class OnboardingVenue extends Component {
   componentDidMount() {
     // Redirect if logged in
     if (this.props.isAuthenticated) {
-      return <Redirect to="/recipes" />;
+      this.props.history.push('/register');
     }
 
-    // console.log(
-    //   'this.props.profile.profile.venues.length',
-    //   this.props.profile.profile.venues.length
-    // );
+    if (
+      this.props.auth.isAuthenticated === null ||
+      this.props.auth.isAuthenticated === false
+    ) {
+      console.log('Props', this.props);
+      this.props.history.push('/register');
+    }
 
     if (this.props.profile.profile !== null) {
       if (this.props.profile.profile.venues.length !== 0) {
@@ -44,17 +48,29 @@ class OnboardingVenue extends Component {
       this.props.history.push('/recipes');
     }
 
-    if (this.props.profile.profile.venues.length !== 0) {
+    if (this.props.profile.profile !== null) {
+      if (this.props.profile.profile.venues.length !== 0) {
+        this.props.history.push('/recipes');
+      }
+    }
+
+    if (
+      prevProps.auth.isAuthenticated !==
+      this.props.auth.isAuthenticated
+    ) {
       this.props.history.push('/recipes');
+    }
+
+    if (
+      this.props.auth.isAuthenticated === null ||
+      this.props.auth.isAuthenticated === false
+    ) {
+      this.props.history.push('/register');
     }
 
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
     }
-
-    // if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
-    //   this.props.history.push('/recipes');
-    // }
   }
 
   componentWillUnmount() {
@@ -173,6 +189,7 @@ OnboardingVenue.propTypes = {
 const actions = { addOrEditVenue, addPersonalVenue, removeErrors };
 
 const mapState = state => ({
+  auth: state.auth,
   profile: state.profile,
   errors: state.errors
 });
@@ -180,4 +197,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(OnboardingVenue);
+)(withRouter(OnboardingVenue));

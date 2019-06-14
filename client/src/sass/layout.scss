@@ -100,7 +100,7 @@ div.alert {
 }
 
 /* 
-Main Menu
+Menus
 ********************************
 ********************************/
 
@@ -134,7 +134,7 @@ section.mainMenu {
     }
 
     div:nth-child(2) {
-      font-weight: 600;
+      font-weight: 400;
       padding-left: 8px;
     }
 
@@ -153,20 +153,20 @@ section.mainMenu {
       display: grid;
       grid-template-columns: 30px auto;
       height: 44px;
-      // color: $cGrey;
       text-decoration: none;
       span {
         display: flex;
         align-items: center;
         font-size: 16px;
-        color: $cGrey;
+        color: $cGreyDark;
+        font-weight: 400;
       }
 
       // &:visited,
       &:focus,
       &:hover {
         span {
-          color: $cGreyDark;
+          color: $cBlack;
         }
       }
     }
@@ -179,14 +179,15 @@ section.mainMenu {
       display: block;
       padding: 5px 0px;
       text-decoration: none;
-      color: $cGrey;
+      color: $cGreyDark;
       font-size: 12px;
       cursor: pointer;
+      font-weight: 400;
 
       // &:visited,
       &:focus,
       &:hover {
-        color: $cGreyDark;
+        color: $cBlack;
       }
     }
   }
@@ -272,7 +273,7 @@ nav.menu {
     &:visited,
     &:focus,
     &:hover {
-      color: $cGreyDark;
+      color: $cGreyDarker;
     }
     span {
       display: flex;
@@ -295,7 +296,7 @@ nav.subMenu {
     &:visited,
     &:focus,
     &:hover {
-      color: $cGreyDark;
+      color: $cGreyDarker;
     }
   }
 }
@@ -538,6 +539,41 @@ nav.mainVenueMenu {
   }
 }
 
+section.accountMenu {
+  width: 200px;
+  padding: 0px 20px;
+  margin-top: 30px;
+  border-right: 1px solid $cFaded;
+  max-height: 400px;
+
+  h3 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  ul {
+    margin-top: 20px;
+
+    li {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      padding-left: 15px;
+      margin-bottom: 2px;
+      font-weight: 400;
+      cursor: pointer;
+      color: $cGreyDark;
+
+      &:hover {
+        background-color: $cFaded;
+        font-weight: 400;
+        color: $cBlack;
+      }
+    }
+  }
+}
+
 /* 
 Form Inputs
 ********************************
@@ -578,7 +614,7 @@ form {
   a {
     font-size: 13px;
     font-weight: bold;
-    color: $cGreyDark;
+    color: $cGreyDarker;
     text-decoration: none;
   }
 

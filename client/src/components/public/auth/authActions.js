@@ -58,6 +58,7 @@ export const register = ({
     dispatch(loadProfile());
   } catch (err) {
     console.log('err', err);
+    console.log('err.response.data.errors', err.response.data.errors);
 
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;

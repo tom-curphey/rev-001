@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
@@ -10,18 +11,22 @@ import icon from '../../../images/recipeRevenueIcon.png';
 const MainMenu = ({
   auth: { isAuthenticated, loading },
   logout,
-  venues
+  venues,
+  history
 }) => {
   const openVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'block';
+  };
+
+  const handleLogout = () => {
+    logout();
+    history.push('/signin');
   };
 
   let venueName = '-';
   if (venues && venues.selectedVenue !== null) {
     venueName = venues.selectedVenue.displayName;
   }
-
-  // console.log('Venues', venues);
 
   const userLinks = (
     <Fragment>
@@ -55,7 +60,7 @@ const MainMenu = ({
         <Link className="menuItem" to="#!">
           Ask For Help
         </Link>
-        <span onClick={logout}>Logout</span>
+        <span onClick={handleLogout}>Logout</span>
       </nav>
     </Fragment>
   );
@@ -116,4 +121,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(MainMenu);
+)(withRouter(MainMenu));
