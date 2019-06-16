@@ -91,7 +91,6 @@ module.exports.updateUser = async (req, res) => {
       .status(400)
       .json({ errors: errors.array({ onlyFirstError: true }) });
   }
-  console.log('REQ USER', req.body);
 
   const updatedUser = {
     email: req.body.email

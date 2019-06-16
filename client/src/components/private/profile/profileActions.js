@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {
+  SET_PROFILE_LOADING,
   PROFILE_LOADED,
+  UPDATE_PROFILE,
   PROFILE_ERROR,
   GET_ERRORS
 } from '../../../redux/types';
@@ -23,7 +25,10 @@ export const loadProfile = () => async dispatch => {
 export const updateProfile = profileData => async dispatch => {
   try {
     const res = await axios.post('/api/profile', profileData);
-    console.log('res', res);
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data
+    });
   } catch (err) {
     console.log('err', err);
     // console.log('err.response.data.errors', err.response.data.errors);
@@ -40,4 +45,10 @@ export const updateProfile = profileData => async dispatch => {
       payload: errObj
     });
   }
+};
+
+export const setProfileLoading = () => async dispatch => {
+  dispatch({
+    type: SET_PROFILE_LOADING
+  });
 };

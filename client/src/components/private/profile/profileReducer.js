@@ -1,4 +1,6 @@
 import {
+  UPDATE_PROFILE,
+  SET_PROFILE_LOADING,
   PROFILE_LOADED,
   PROFILE_ERROR,
   CLEAR_PROFILE
@@ -13,6 +15,7 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case UPDATE_PROFILE:
     case PROFILE_LOADED:
       return {
         ...state,
@@ -26,6 +29,12 @@ export default function(state = initialState, action) {
         ...state,
         profile: null,
         loading: false
+      };
+
+    case SET_PROFILE_LOADING:
+      return {
+        ...state,
+        loading: true
       };
 
     default:
