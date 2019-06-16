@@ -37,3 +37,18 @@ export const addSelectedNameToEndOfArray = (array, selectedName) => {
   });
   return filteredArray.concat(selectedNameData[0]);
 };
+
+export const displayErrors = (err, dispatch, type) => {
+  if (err.response.data.errors) {
+    var errObj = err.response.data.errors.reduce((obj, item) => {
+      return (obj[item.param] = item.msg), obj;
+    }, {});
+
+    dispatch({
+      type: type,
+      payload: errObj
+    });
+  } else {
+    console.log('ERR: ', err);
+  }
+};

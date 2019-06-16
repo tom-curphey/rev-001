@@ -16,6 +16,7 @@ import {
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
+import { displayErrors } from '../../../utils/utils';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -34,6 +35,7 @@ export const loadUser = () => async dispatch => {
     dispatch({
       type: AUTH_ERROR
     });
+    displayErrors(err, dispatch, GET_ERRORS);
   }
 };
 
@@ -58,20 +60,10 @@ export const register = ({
     dispatch(loadUser());
     dispatch(loadProfile());
   } catch (err) {
-    console.log('err', err);
-    // console.log('err.response.data.errors', err.response.data.errors);
-
-    var errObj = err.response.data.errors.reduce((obj, item) => {
-      return (obj[item.param] = item.msg), obj;
-    }, {});
-
     dispatch({
       type: REGISTER_FAILED
     });
-    dispatch({
-      type: GET_ERRORS,
-      payload: errObj
-    });
+    displayErrors(err, dispatch, GET_ERRORS);
   }
 };
 
@@ -96,17 +88,8 @@ export const updateUser = updatedUser => async dispatch => {
     dispatch(loadProfile());
     dispatch(loadVenues());
   } catch (err) {
+    displayErrors(err, dispatch, GET_ERRORS);
     console.log('err', err);
-    // console.log('err.response.data.errors', err.response.data.errors);
-
-    var errObj = err.response.data.errors.reduce((obj, item) => {
-      return (obj[item.param] = item.msg), obj;
-    }, {});
-
-    dispatch({
-      type: GET_ERRORS,
-      payload: errObj
-    });
   }
 };
 
@@ -131,21 +114,11 @@ export const signin = ({ email, password }) => async dispatch => {
     dispatch(loadProfile());
     dispatch(loadVenues());
   } catch (err) {
-    var errObj = err.response.data.errors.reduce((obj, item) => {
-      return (obj[item.param] = item.msg), obj;
-    }, {});
-
-    console.log('err: ', err);
-
     dispatch({
       type: SIGNIN_FAILED
     });
+    displayErrors(err, dispatch, GET_ERRORS);
     // can dispatch an alert
-
-    dispatch({
-      type: GET_ERRORS,
-      payload: errObj
-    });
   }
 };
 
