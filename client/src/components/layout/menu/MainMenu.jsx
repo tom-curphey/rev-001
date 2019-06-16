@@ -40,7 +40,7 @@ const MainMenu = ({
         <div>></div>
       </nav>
       <nav className="menu">
-        <Link className="menuItem" to="recipes">
+        <Link className="menuItem" to="/recipes">
           <i />
           <span>Recipes</span>
         </Link>

@@ -1,12 +1,18 @@
 import React, { Fragment } from 'react';
+import { withRouter } from 'react-router';
 
-function AccountMenu() {
+function AccountMenu({ match }) {
+  let selected = match.params.account_section;
+  console.log('account_section:', selected);
+
   return (
     <section className="accountMenu">
       <h3>Profile</h3>
       <ul>
         <li>Venues</li>
-        <li>Personal Information</li>
+        <li className={selected === 'profile' ? 'selected' : ''}>
+          Personal Information
+        </li>
         <li>Email Notifications</li>
         <li>Change Password</li>
       </ul>
@@ -14,4 +20,4 @@ function AccountMenu() {
   );
 }
 
-export default AccountMenu;
+export default withRouter(AccountMenu);

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  UPDATE_USER_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAILED,
   SIGNIN_SUCCESS,
@@ -58,7 +59,7 @@ export const register = ({
     dispatch(loadProfile());
   } catch (err) {
     console.log('err', err);
-    console.log('err.response.data.errors', err.response.data.errors);
+    // console.log('err.response.data.errors', err.response.data.errors);
 
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
@@ -67,6 +68,41 @@ export const register = ({
     dispatch({
       type: REGISTER_FAILED
     });
+    dispatch({
+      type: GET_ERRORS,
+      payload: errObj
+    });
+  }
+};
+
+export const updateUser = updatedUser => async dispatch => {
+  console.log('updatedUser ', updatedUser);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  const body = JSON.stringify(updatedUser);
+  try {
+    const res = await axios.post('/api/auth/update', body, config);
+    console.log('RES', res);
+
+    dispatch({
+      type: UPDATE_USER_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+    dispatch(loadProfile());
+    dispatch(loadVenues());
+  } catch (err) {
+    console.log('err', err);
+    // console.log('err.response.data.errors', err.response.data.errors);
+
+    var errObj = err.response.data.errors.reduce((obj, item) => {
+      return (obj[item.param] = item.msg), obj;
+    }, {});
+
     dispatch({
       type: GET_ERRORS,
       payload: errObj
@@ -98,6 +134,8 @@ export const signin = ({ email, password }) => async dispatch => {
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;
     }, {});
+
+    console.log('err: ', err);
 
     dispatch({
       type: SIGNIN_FAILED

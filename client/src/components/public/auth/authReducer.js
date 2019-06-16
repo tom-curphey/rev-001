@@ -5,6 +5,7 @@ import {
   SIGNIN_FAILED,
   REGISTER_SUCCESS,
   REGISTER_FAILED,
+  UPDATE_USER_SUCCESS,
   LOGOUT
 } from '../../../redux/types';
 
@@ -27,6 +28,7 @@ export default function(state = initialState, action) {
         user: payload
       };
 
+    case UPDATE_USER_SUCCESS:
     case SIGNIN_SUCCESS:
     case REGISTER_SUCCESS:
       localStorage.setItem('token', payload.token);

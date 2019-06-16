@@ -11,6 +11,7 @@ export const SIGNIN_FAILED = 'SIGNIN_FAILED';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILED = 'REGISTER_FAILED';
+export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
 
 export const USER_LOADED = 'USER_LOADED';
 export const AUTH_ERROR = 'AUTH_ERROR';

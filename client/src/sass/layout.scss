@@ -127,6 +127,7 @@ section.mainMenu {
     padding: 0 16px;
     font-size: 16px;
     cursor: pointer;
+    width: 270px;
 
     div {
       display: flex;
@@ -547,13 +548,13 @@ nav.mainVenueMenu {
 }
 
 section.accountMenu {
-  width: 200px;
   padding: 0px 20px;
   margin-top: 30px;
   border-right: 1px solid $cFaded;
   max-height: 400px;
 
   h3 {
+    width: 200px;
     font-size: 20px;
     font-weight: bold;
   }
@@ -577,6 +578,11 @@ section.accountMenu {
         font-weight: 400;
         color: $cBlack;
       }
+    }
+
+    li.selected {
+      background-color: $cFaded;
+      color: #000;
     }
   }
 }
@@ -615,6 +621,30 @@ form {
       outline: 0px;
       border: 1px solid $cFadedDark;
       border-radius: 5px;
+    }
+  }
+
+  label.textInputHorizontal {
+    display: grid;
+    grid-template-areas: 'label input' '... message';
+    grid-template-columns: 120px auto;
+    margin-bottom: 10px;
+
+    span.label {
+      grid-area: label;
+    }
+
+    input {
+      grid-area: input;
+      width: 100%;
+      padding: 10px;
+      outline: 0px;
+      border: 1px solid $cFadedDark;
+      border-radius: 5px;
+    }
+
+    span.message {
+      grid-area: message;
     }
   }
 

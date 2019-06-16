@@ -58,7 +58,7 @@ const App = () => {
           <PrivateRoute exact path="/recipes" component={Recipes} />
           <PrivateRoute
             exact
-            path="/account/profile"
+            path="/account/:account_section"
             component={ProfileSettings}
           />
         </Switch>

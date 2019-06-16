@@ -98,6 +98,7 @@ module.exports.addOrEditVenue = async (req, res) => {
   try {
     let venues = await Venue.find({ user: req.user.id });
     console.log('Venues', venues);
+    console.log('REQ USER......', req.user);
 
     if (venues.length > 0) {
       // Update Personal Venue

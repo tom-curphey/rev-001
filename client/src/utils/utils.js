@@ -15,6 +15,14 @@ export const isEmpty = value =>
   (typeof value === 'object' && Object.keys(value).length === 0) ||
   (typeof value === 'string' && value.trim().length === 0);
 
+export const isEmptyString = value => {
+  if (isEmpty(value)) {
+    return '';
+  } else {
+    return value;
+  }
+};
+
 export const openNav = () => {
   document.getElementById('mySidenav').style.width = '250px';
   document.getElementById('main').style.marginRight = '250px';

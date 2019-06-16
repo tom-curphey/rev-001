@@ -50,4 +50,19 @@ router.post(
   authController.signinUser
 );
 
+// @router POST api/auth/update
+// @desc update user
+// @access Private
+router.post(
+  '/update',
+  auth,
+  [
+    check('email', 'Email is required')
+      .not()
+      .isEmpty(),
+    check('email', 'Email is not valid').isEmail()
+  ],
+  authController.updateUser
+);
+
 module.exports = router;

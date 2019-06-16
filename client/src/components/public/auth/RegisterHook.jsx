@@ -9,13 +9,15 @@ import { register } from './authActions';
 import { Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
+import { removeErrors } from '../../../redux/errorActions';
 
 const Register = ({
   setAlert,
   register,
   isAuthenticated,
   profile,
-  errors
+  errors,
+  removeErrors
 }) => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -28,7 +30,13 @@ const Register = ({
     if (!isEmpty(errors)) {
       setErrorData(() => errors);
     }
-  });
+    console.log('Use effect runs after render.');
+
+    return () => {
+      console.log('This runs when the component unmounts.');
+      // removeErrors();
+    };
+  }, [errors]);
 
   const { firstName, email, password } = formData;
 
@@ -131,13 +139,14 @@ const Register = ({
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  removeErrors: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
-const actions = { setAlert, register };
+const actions = { setAlert, register, removeErrors };
 
 const mapState = state => ({
   isAuthenticated: state.auth.isAuthenticated,

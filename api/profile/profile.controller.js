@@ -3,7 +3,7 @@ const User = require('../auth/auth.model');
 const { validationResult } = require('express-validator/check');
 
 module.exports.getProfile = async (req, res) => {
-  console.log('USER', req.user);
+  // console.log('USER', req.user);
 
   try {
     const profile = await Profile.findOne({
@@ -24,6 +24,8 @@ module.exports.getProfile = async (req, res) => {
 };
 
 module.exports.updateProfile = async (req, res) => {
+  console.log('REQ PROFILE :', req.user);
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

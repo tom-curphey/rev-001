@@ -73,6 +73,8 @@ module.exports.registerUser = async (req, res) => {
 };
 
 module.exports.getUser = async (req, res) => {
+  console.log('GET REQ USER :', req.user);
+
   try {
     const user = await User.findById(req.user.id).select('-password');
     return res.status(200).json(user);
@@ -80,6 +82,47 @@ module.exports.getUser = async (req, res) => {
     // console.error(err);
     return res.status(500).send('Server Error');
   }
+};
+
+module.exports.updateUser = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res
+      .status(400)
+      .json({ errors: errors.array({ onlyFirstError: true }) });
+  }
+  console.log('REQ USER', req.body);
+
+  const updatedUser = {
+    email: req.body.email
+  };
+
+  let user = await User.findOneAndUpdate(
+    { _id: req.user.id },
+    { $set: updatedUser },
+    { new: true }
+  );
+  // return res.status(200).json(user);
+
+  // Set the user payload to sign JWT token
+  const payload = {
+    user: {
+      id: user._id,
+      email: user.email,
+      active: user.active
+    }
+  };
+
+  // Sign the JWT token
+  jwt.sign(
+    payload,
+    config.get('jwtToken'),
+    { expiresIn: 64800 },
+    (err, token) => {
+      if (err) throw err;
+      return res.status(200).json({ token });
+    }
+  );
 };
 
 module.exports.signinUser = async (req, res) => {
