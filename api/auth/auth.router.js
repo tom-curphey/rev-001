@@ -65,4 +65,18 @@ router.post(
   authController.updateUser
 );
 
+// @router POST api/auth/password
+// @desc update password
+// @access Private
+router.post(
+  '/password',
+  auth,
+  [
+    check('password', 'Password is required')
+      .not()
+      .isEmpty()
+  ],
+  authController.updatePassword
+);
+
 module.exports = router;

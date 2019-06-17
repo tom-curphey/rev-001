@@ -11,7 +11,9 @@ import {
   GET_ERRORS,
   REMOVE_ERRORS,
   CLEAR_PROFILE,
-  CLEAR_VENUES
+  CLEAR_VENUES,
+  UPDATE_PASSWORD_SUCCESS,
+  PASSWORD_FAILED
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
@@ -88,6 +90,35 @@ export const updateUser = updatedUser => async dispatch => {
     dispatch(loadProfile());
     dispatch(loadVenues());
   } catch (err) {
+    displayErrors(err, dispatch, GET_ERRORS);
+    console.log('err', err);
+  }
+};
+
+export const updatePassword = updatedPassword => async dispatch => {
+  console.log('updatedPassword ', updatedPassword);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  const body = JSON.stringify(updatedPassword);
+  try {
+    const res = await axios.post('/api/auth/password', body, config);
+    console.log('RES', res);
+
+    dispatch({
+      type: UPDATE_PASSWORD_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+    dispatch(loadProfile());
+    dispatch(loadVenues());
+  } catch (err) {
+    dispatch({
+      type: PASSWORD_FAILED
+    });
     displayErrors(err, dispatch, GET_ERRORS);
     console.log('err', err);
   }

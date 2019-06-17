@@ -9,7 +9,7 @@ import Signin from './components/public/auth/Signin';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
-import ProfileSettings from './components/private/profile/ProfileSettings';
+import AccountSettings from './components/private/profile/AccountSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
 import Test from './utils/Test';
 
@@ -59,7 +59,7 @@ const App = () => {
           <PrivateRoute
             exact
             path="/account/:account_section"
-            component={ProfileSettings}
+            component={AccountSettings}
           />
         </Switch>
       </Router>

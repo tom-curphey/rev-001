@@ -27,3 +27,28 @@ section.settings {
     }
   }
 }
+
+section.venues {
+  li {
+    display: grid;
+    grid-template-columns: 30px auto 70px 30px;
+    grid-template-rows: 40px;
+    grid-gap: 5px;
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    div:nth-child(2) {
+      padding-right: 30px;
+    }
+  }
+
+  li.header {
+    border-bottom: 1px solid $cFaded;
+    div {
+      font-weight: 400;
+    }
+  }
+}

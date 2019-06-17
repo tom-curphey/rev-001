@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import AuthMenu from '../../layout/menu/AuthMenu';
 import AccountMenu from '../../layout/menu/AccountMenu';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import { isEmptyString } from '../../../utils/utils';
 import Spinner from '../../../utils/Spinner';
 import PropTypes from 'prop-types';
 
-class ProfileSettings extends Component {
+class ProfileForm extends Component {
   state = {
     firstName: '',
     lastName: '',
@@ -186,8 +186,7 @@ class ProfileSettings extends Component {
     }
 
     return (
-      <AuthMenu>
-        <AccountMenu />
+      <Fragment>
         <section className="settings profile">
           <h1>Profile Settings</h1>
           <p>
@@ -196,14 +195,15 @@ class ProfileSettings extends Component {
             Recipe Revenue will never share or sell individual
             personal information or personally identifiable details.
           </p>
+
           {formContent}
         </section>
-      </AuthMenu>
+      </Fragment>
     );
   }
 }
 
-ProfileSettings.propTypes = {
+ProfileForm.propTypes = {
   user: PropTypes.object,
   profile: PropTypes.object,
   removeErrors: PropTypes.func.isRequired,
@@ -228,4 +228,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(ProfileSettings);
+)(ProfileForm);
