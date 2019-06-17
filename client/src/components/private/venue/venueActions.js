@@ -8,11 +8,14 @@ import {
   REMOVE_ERRORS,
   SET_SELECTED_VENUE
 } from '../../../redux/types';
+import { isEmpty } from '../../../utils/utils';
 import { loadProfile } from '../profile/profileActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
 
 // Load Venues
-export const loadVenues = () => async dispatch => {
+export const loadVenues = selectedVenue => async dispatch => {
+  console.log('SV: ', selectedVenue);
+
   try {
     const res = await axios.get('/api/venue');
 
@@ -26,14 +29,18 @@ export const loadVenues = () => async dispatch => {
       payload: filteredVenues
     });
 
-    if (res.data.length !== 1) {
-      // Filter response to get selected venue
-      const selectedVenues = res.data.filter(venue => {
-        return venue.personal === false;
-      });
-      dispatch(setSelectedVenue(selectedVenues[0]));
+    if (!isEmpty(selectedVenue)) {
+      dispatch(setSelectedVenue(selectedVenue));
     } else {
-      dispatch(setSelectedVenue(res.data[0]));
+      if (res.data.length !== 1) {
+        // Filter response to get selected venue
+        const selectedVenues = res.data.filter(venue => {
+          return venue.personal === false;
+        });
+        dispatch(setSelectedVenue(selectedVenues[0]));
+      } else {
+        dispatch(setSelectedVenue(res.data[0]));
+      }
     }
   } catch (err) {
     dispatch({
@@ -68,8 +75,11 @@ export const addOrEditVenue = venueData => async dispatch => {
       type: SELECTED_VENUE_SUCCESS,
       payload: res.data
     });
-    dispatch(loadProfile());
-    dispatch(loadVenues());
+
+    console.log('res.data', res.data);
+
+    await dispatch(loadProfile());
+    await dispatch(loadVenues(res.data));
   } catch (err) {
     var errObj = err.response.data.errors.reduce((obj, item) => {
       return (obj[item.param] = item.msg), obj;

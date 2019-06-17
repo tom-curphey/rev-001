@@ -49,6 +49,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/signin" component={Signin} />
+          vvvvvv
           <Route exact path="/test" component={Test} />
           <PrivateRoute
             exact
@@ -59,6 +60,11 @@ const App = () => {
           <PrivateRoute
             exact
             path="/account/:account_section"
+            component={AccountSettings}
+          />
+          <PrivateRoute
+            exact
+            path="/account/:account_section/edit/:venue_name"
             component={AccountSettings}
           />
         </Switch>

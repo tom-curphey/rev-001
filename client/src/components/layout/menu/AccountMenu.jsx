@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function AccountMenu({ match }) {
   let selected = match.params.account_section;
-  console.log('account_section:', selected);
+  // console.log('account_section:', selected);
 
   return (
     <section className="accountMenu">

@@ -1,15 +1,27 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { setSelectedVenue } from './venueActions';
+import PropTypes from 'prop-types';
 
-function Venues({ venues, loading }) {
+function Venues({ venues, loading, history, setSelectedVenue }) {
   let venuesList = '';
 
-  console.log('venues', venues);
+  console.log('history', history);
+
+  const selectVenue = e => {
+    const selectedVenue = venues.venues.filter(
+      venue => venue._id === e.target.parentNode.id
+    );
+
+    setSelectedVenue(selectedVenue[0]);
+    history.push(`/account/venues/edit/${selectedVenue[0].urlName}`);
+  };
 
   if (venues.venues !== null) {
     venuesList = venues.venues.map((venue, i) => {
       return (
-        <li key={i}>
+        <li key={i} onClick={e => selectVenue(e)} id={venue._id}>
           <div />
           <div>{venue.displayName}</div>
           <div>-</div>
@@ -37,8 +49,19 @@ function Venues({ venues, loading }) {
   );
 }
 
+Venues.propTypes = {
+  setSelectedVenue: PropTypes.func.isRequired
+};
+
+const actions = {
+  setSelectedVenue
+};
+
 const mapState = state => ({
   venues: state.venues
 });
 
-export default connect(mapState)(Venues);
+export default connect(
+  mapState,
+  actions
+)(withRouter(Venues));

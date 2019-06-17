@@ -90,7 +90,7 @@ class PasswordForm extends Component {
 
     return (
       <Fragment>
-        <section className="settings profile">
+        <section className="settings password">
           <h1>Update Password</h1>
           <p>
             Provide as much or as little information as you’d like.{' '}

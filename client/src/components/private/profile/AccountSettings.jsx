@@ -5,9 +5,10 @@ import AccountMenu from '../../layout/menu/AccountMenu';
 import ProfileForm from './ProfileForm';
 import PasswordForm from './PasswordForm';
 import Venues from '../venue/Venues';
+import VenueForm from '../venue/VenueForm';
 
 const AccountSettings = ({ match }) => {
-  const { account_section } = match.params;
+  const { account_section, venue_name } = match.params;
   let formContent;
 
   switch (account_section) {
@@ -18,7 +19,13 @@ const AccountSettings = ({ match }) => {
       formContent = <PasswordForm />;
       break;
     case 'venues':
-      formContent = <Venues />;
+      if (venue_name) {
+        // console.log('match: ', match);
+        formContent = <VenueForm />;
+      } else {
+        formContent = <Venues />;
+      }
+
       break;
 
     default:

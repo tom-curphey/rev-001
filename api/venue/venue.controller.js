@@ -98,7 +98,7 @@ module.exports.addOrEditVenue = async (req, res) => {
   try {
     let venues = await Venue.find({ user: req.user.id });
     console.log('Venues', venues);
-    console.log('REQ USER......', req.user);
+    console.log('REQ BODY......', req.body);
 
     if (venues.length > 0) {
       // Update Personal Venue
@@ -112,9 +112,9 @@ module.exports.addOrEditVenue = async (req, res) => {
       }
 
       // Update Venue
-      if (req.body.id) {
+      if (req.body._id) {
         let venue = await Venue.findOneAndUpdate(
-          { _id: req.body.id },
+          { _id: req.body._id },
           { $set: venueData },
           { new: true }
         );
