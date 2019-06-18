@@ -12,11 +12,14 @@ const TextInputHorizontal = ({
   onChange,
   disabled,
   id,
-  style
-  // labelClass
+  style,
+  labelClass
 }) => {
   return (
-    <label htmlFor={name} className="textInputHorizontal">
+    <label
+      htmlFor={name}
+      className={`textInputHorizontal ${labelClass}`}
+    >
       <span className="label">{label} </span>
       <input
         onChange={onChange}

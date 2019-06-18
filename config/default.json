@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb://tom:tom123456@ds231387.mlab.com:31387/rev-001",
+  "mongoURI": "mongodb://tom:tom123456@ds139427.mlab.com:39427/rev-001",
   "jwtToken": "recipeRev001jwtToken"
 }

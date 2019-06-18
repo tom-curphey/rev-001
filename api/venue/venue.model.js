@@ -48,7 +48,7 @@ const VenueSchema = new Schema(
       type: String,
       default: 'week'
     },
-    totalMenuItems: {
+    totalItemsOnMenu: {
       type: Number,
       default: 0
     },

@@ -1,5 +1,12 @@
 @import './colours.scss';
 
+section.profile,
+section.password,
+section.venues,
+section.venue {
+  max-width: 600px;
+}
+
 section.settings {
   padding: 30px;
   width: 100%;
@@ -57,9 +64,8 @@ section.venues {
   }
 }
 
-section.profile,
-section.password,
-section.venues,
 section.venue {
-  max-width: 600px;
+  label.inputGap {
+    margin-bottom: 50px;
+  }
 }

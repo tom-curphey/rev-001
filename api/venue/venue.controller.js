@@ -7,6 +7,7 @@ module.exports.getVenues = async (req, res) => {
     const venues = await Venue.find({
       user: req.user.id
     }).sort({ name: 'asc' });
+    console.log('VENUES: ', venues);
 
     if (!venues) {
       return res
@@ -97,8 +98,10 @@ module.exports.addOrEditVenue = async (req, res) => {
 
   try {
     let venues = await Venue.find({ user: req.user.id });
-    console.log('Venues', venues);
-    console.log('REQ BODY......', req.body);
+    // console.log('Venues', venues);
+    // console.log('REQ BODY......', req.body);
+    // console.log('chefCost ->', chefCost);
+    // console.log('venueData ->', venueData);
 
     if (venues.length > 0) {
       // Update Personal Venue
@@ -118,6 +121,7 @@ module.exports.addOrEditVenue = async (req, res) => {
           { $set: venueData },
           { new: true }
         );
+        console.log('venue ->', venue);
         return res.status(200).json(venue);
       }
 
