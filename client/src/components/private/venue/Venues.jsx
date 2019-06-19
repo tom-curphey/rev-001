@@ -39,7 +39,6 @@ function Venues({ venues, history, setSelectedVenue }) {
   }
 
   let venuesContent;
-  console.log('LOading: ', venues.loading);
 
   if (venues.loading) {
     venuesContent = (

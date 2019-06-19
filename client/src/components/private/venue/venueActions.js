@@ -98,10 +98,10 @@ export const addOrEditVenue = venueData => async dispatch => {
     await dispatch(loadProfile());
     await dispatch(loadVenues(res.data));
   } catch (err) {
+    displayErrors(err, dispatch, GET_ERRORS);
     dispatch({
       type: STOP_VENUE_LOADING
     });
-    displayErrors(err, dispatch, GET_ERRORS);
   }
 };
 

@@ -50,17 +50,16 @@ class VenueForm extends Component {
   };
 
   componentDidMount() {
-    // console.log('Venues', this.props.venues);
+    // if (prevProps.errors !== this.props.errors) {
+    //   this.setState({ errors: this.props.errors });
+    // } else {
 
     if (
       this.props.venues !== null &&
       this.props.venues.selectedVenue !== null
     ) {
       if (this.props.match.params.venue_action === 'edit') {
-        // console.log(
-        //   'this.props',
-        //   this.props.match.params.venue_action
-        // );
+        console.log('this.props', this.props.venues);
 
         const venueData = setVenueData(
           this.props.venues.selectedVenue
@@ -68,10 +67,6 @@ class VenueForm extends Component {
         this.setState({
           updatedVenue: venueData
         });
-      } else {
-        console.log('ID', this.props.venues.selectedVenue._id);
-        if (!isEmpty(this.props.venues.selectedVenue._id)) {
-        }
       }
     } else {
       // console.log(this.props.match);
@@ -83,25 +78,27 @@ class VenueForm extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
-    }
-
-    if (
-      prevProps.venues !== this.props.venues &&
-      this.props.venues.selectedVenue !== null
-    ) {
-      const { match, venues, history } = this.props;
+    } else {
       if (
-        match.params.venue_action !== 'edit' &&
-        !isEmpty(venues.selectedVenue._id)
+        prevProps.venues !== this.props.venues &&
+        this.props.venues.selectedVenue !== null
       ) {
-        history.push(
-          `/account/venues/edit/${venues.selectedVenue.urlName}`
-        );
-      } else {
-        const venueData = setVenueData(venues.selectedVenue);
-        this.setState({
-          updatedVenue: venueData
-        });
+        const { match, venues, history } = this.props;
+        if (
+          match.params.venue_action !== 'edit' &&
+          !isEmpty(venues.selectedVenue._id)
+        ) {
+          history.push(
+            `/account/venues/edit/${venues.selectedVenue.urlName}`
+          );
+        } else {
+          if (isEmpty(this.props.errors)) {
+            const venueData = setVenueData(venues.selectedVenue);
+            this.setState({
+              updatedVenue: venueData
+            });
+          }
+        }
       }
     }
   }
