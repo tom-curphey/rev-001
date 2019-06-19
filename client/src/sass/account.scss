@@ -10,6 +10,8 @@ section.venue {
 section.settings {
   padding: 30px;
   width: 100%;
+  height: fit-content;
+  margin-bottom: 100px;
 
   h1 {
     padding-bottom: 18px;
@@ -67,5 +69,9 @@ section.venues {
 section.venue {
   label.inputGap {
     margin-bottom: 50px;
+  }
+
+  div.inlineFormField.largeSelect {
+    grid-template-columns: auto 170px;
   }
 }

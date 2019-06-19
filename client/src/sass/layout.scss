@@ -89,6 +89,12 @@ section.app.public {
   }
 }
 
+.screenData {
+  margin-left: 290px;
+  display: flex;
+  width: 100%;
+}
+
 div.alert {
   position: absolute;
   bottom: 20px;
@@ -114,6 +120,8 @@ section.mainMenu {
     display: flex;
     flex-direction: column;
     width: 270px;
+    height: 100%;
+    position: fixed;
   }
 
   nav.venueButton {
@@ -631,6 +639,7 @@ form {
     display: grid;
     grid-template-areas: 'label input' '... message';
     grid-template-columns: 160px auto;
+    grid-template-rows: 40px;
     margin-bottom: 10px;
 
     span.label {
@@ -644,6 +653,11 @@ form {
       outline: 0px;
       border: 1px solid $cFadedDark;
       border-radius: 5px;
+    }
+
+    input::placeholder {
+      color: $cFadedExtraDark;
+      font-size: 14px;
     }
 
     span.message {
@@ -668,7 +682,7 @@ form {
     background-color: $cOrange;
     outline: 0px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 40px;
 
     &.orange {
       background-color: $cOrange;
@@ -699,4 +713,14 @@ a.subLink {
 
 div.selectInput {
   cursor: pointer;
+  height: 40px;
+  display: grid;
+}
+
+div.inlineFormField {
+  display: grid;
+  grid-template-columns: auto 110px;
+  grid-template-rows: 40px;
+  margin-bottom: 10px;
+  grid-gap: 15px;
 }

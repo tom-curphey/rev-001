@@ -1,40 +1,33 @@
 import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
-import { capitalizeFirstLetter, isEmpty } from '../../../utils/utils';
+import { capitalizeFirstLetter } from '../../../utils/utils';
 
-const SelectInput = ({
+const SelectInputHorizontal = ({
   options,
   getSelectedValue,
   placeholder,
   className,
   error,
+  labelClass,
+  label,
+  info,
   name,
   value
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
+      console.log('newValue: ', newValue);
+
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, name);
+      getSelectedValue(newValue);
     }
   };
 
   let selectedValue;
   if (value) {
-    let selectedOption = options.filter(option => {
-      return option.value === value;
-    });
-
-    if (isEmpty(selectedOption)) {
-      console.log('Name', name);
-
-      console.log('selectedOption: ', selectedOption);
-    } else {
-      selectedValue = {
-        value: value,
-        label: selectedOption[0].label
-      };
-    }
+    let label = capitalizeFirstLetter(value);
+    selectedValue = { value: value, label: label };
   }
 
   // What to do when input is being typed
@@ -47,54 +40,57 @@ const SelectInput = ({
       ...provided,
       borderBottom: 'none',
       color: state.isSelected ? '#000' : '#343434',
-      padding: 12,
-      fontSize: '14px'
+      padding: 12
     }),
     control: (base, state) => ({
       ...base,
-      fontSize: '14px',
-      // color: state.isSelected ? 'red' : '#343434',
+      color: '#000',
       boxShadow: state.isFocused ? 0 : 0,
-      // borderColor: '#cdc0b2',
-      borderColor: '#fff',
+      borderColor: '#cdc0b2',
       '&:hover': {
-        backgroundColor: '#f1ede7'
-        // borderColor: '#fff'
+        borderColor: '#cdc0b2'
       }
     })
   };
 
   return (
-    <div>
+    <label
+      htmlFor={name}
+      className={`textInputHorizontal ${labelClass}`}
+    >
+      <span className="label">{label} </span>
       <Select
-        // isClearable
         name={name}
+        // isClearable
         placeholder={placeholder}
         onChange={handleChange}
         options={options}
-        className={`selectInput ${className}`}
-        value={selectedValue}
+        className={className}
         styles={customStyles}
+        value={selectedValue}
         theme={theme => ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#666',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
         })}
       />
       {error && <span className="errorMsg">{error}</span>}
-    </div>
+      <span className="message">
+        {info && <small>{info}</small>}
+        {error && <span className="errorMsg">{error}</span>}
+      </span>
+    </label>
   );
 };
 
-SelectInput.propTypes = {
+SelectInputHorizontal.propTypes = {
   options: PropTypes.array.isRequired,
-  getSelectedValue: PropTypes.func.isRequired
-  // placeholder: PropTypes.string.isRequired,
-  // className: PropTypes.string.isRequired
+  getSelectedValue: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired
 };
 
-export default SelectInput;
+export default SelectInputHorizontal;

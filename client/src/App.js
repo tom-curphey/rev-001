@@ -49,7 +49,6 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/signin" component={Signin} />
-          vvvvvv
           <Route exact path="/test" component={Test} />
           <PrivateRoute
             exact

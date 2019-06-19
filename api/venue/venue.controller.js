@@ -38,22 +38,23 @@ module.exports.addOrEditVenue = async (req, res) => {
     phone,
     website,
     address,
-    weeksOpenPerYear,
+    weeksOpen,
+    weeksOpenUnit,
     prepTime,
     prepTimeUnit,
     totalMenuItems,
     chefCost,
-    chefUnitCost,
+    chefCostUnit,
     rentCost,
-    rentUnitCost,
+    rentCostUnit,
     waterCost,
-    waterUnitCost,
+    waterCostUnit,
     powerCost,
-    powerUnitCost,
+    powerCostUnit,
     insuranceCost,
-    insuranceUnitCost,
+    insuranceCostUnit,
     councilCost,
-    councilUnitCost,
+    councilCostUnit,
     wastageCost
   } = req.body;
 
@@ -75,25 +76,26 @@ module.exports.addOrEditVenue = async (req, res) => {
   if (phone) venueData.phone = phone;
   if (website) venueData.website = website;
   if (address) venueData.address = address;
-  if (weeksOpenPerYear) venueData.weeksOpenPerYear = weeksOpenPerYear;
+  if (weeksOpen) venueData.weeksOpen = weeksOpen;
+  if (weeksOpenUnit) venueData.weeksOpenUnit = weeksOpenUnit;
   if (prepTime) venueData.prepTime = prepTime;
   if (prepTimeUnit) venueData.prepTimeUnit = prepTimeUnit;
   if (totalMenuItems) venueData.totalMenuItems = totalMenuItems;
   venueData.costs = {};
   if (chefCost) venueData.costs.chefCost = chefCost;
-  if (chefUnitCost) venueData.costs.chefUnitCost = chefUnitCost;
+  if (chefCostUnit) venueData.costs.chefCostUnit = chefCostUnit;
   if (rentCost) venueData.costs.rentCost = rentCost;
-  if (rentUnitCost) venueData.costs.rentUnitCost = rentUnitCost;
+  if (rentCostUnit) venueData.costs.rentCostUnit = rentCostUnit;
   if (waterCost) venueData.costs.waterCost = waterCost;
-  if (waterUnitCost) venueData.costs.waterUnitCost = waterUnitCost;
+  if (waterCostUnit) venueData.costs.waterCostUnit = waterCostUnit;
   if (powerCost) venueData.costs.powerCost = powerCost;
-  if (powerUnitCost) venueData.costs.powerUnitCost = powerUnitCost;
+  if (powerCostUnit) venueData.costs.powerCostUnit = powerCostUnit;
   if (insuranceCost) venueData.costs.insuranceCost = insuranceCost;
-  if (insuranceUnitCost)
-    venueData.costs.insuranceUnitCost = insuranceUnitCost;
+  if (insuranceCostUnit)
+    venueData.costs.insuranceCostUnit = insuranceCostUnit;
   if (councilCost) venueData.costs.councilCost = councilCost;
-  if (councilUnitCost)
-    venueData.costs.councilUnitCost = councilUnitCost;
+  if (councilCostUnit)
+    venueData.costs.councilCostUnit = councilCostUnit;
   if (wastageCost) venueData.costs.wastageCost = wastageCost;
 
   try {

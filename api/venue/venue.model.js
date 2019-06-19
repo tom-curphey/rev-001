@@ -36,9 +36,13 @@ const VenueSchema = new Schema(
     address: {
       type: String
     },
-    weeksOpenPerYear: {
+    weeksOpen: {
       type: Number,
       default: 52
+    },
+    weeksOpenUnit: {
+      type: String,
+      default: 'year'
     },
     prepTime: {
       type: Number,
@@ -48,7 +52,7 @@ const VenueSchema = new Schema(
       type: String,
       default: 'week'
     },
-    totalItemsOnMenu: {
+    totalMenuItems: {
       type: Number,
       default: 0
     },
@@ -61,7 +65,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      chefUnitCost: {
+      chefCostUnit: {
         type: String,
         default: 'hour'
       },
@@ -69,7 +73,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      rentUnitCost: {
+      rentCostUnit: {
         type: String,
         default: 'month'
       },
@@ -77,7 +81,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      waterUnitCost: {
+      waterCostUnit: {
         type: String,
         default: 'month'
       },
@@ -85,7 +89,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      powerUnitCost: {
+      powerCostUnit: {
         type: String,
         default: 'month'
       },
@@ -93,7 +97,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      insuranceUnitCost: {
+      insuranceCostUnit: {
         type: String,
         default: 'year'
       },
@@ -101,7 +105,7 @@ const VenueSchema = new Schema(
         type: Number,
         default: 0
       },
-      councilUnitCost: {
+      councilCostUnit: {
         type: String,
         default: 'year'
       },

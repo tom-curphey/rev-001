@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+import SelectInputHorizontal from '../../layout/input/SelectInputHorizontal';
+import SelectInput from '../../layout/input/SelectInput';
 import { removeErrors } from '../../../redux/errorActions';
 // import { setProfileLoading } from './profileActions';
 import {
-  isEmpty,
-  isEmptyString,
   calcCostToSeconds,
-  calcCostPerSecondToCostPerUnit,
   setVenueData
 } from '../../../utils/utils';
 import { addOrEditVenue, loadVenues } from './venueActions';
@@ -21,9 +20,10 @@ class VenueForm extends Component {
       type: '',
       prepTime: '',
       prepTimeUnit: 'week',
-      totalItemsOnMenu: '',
+      totalMenuItems: '',
 
-      weeksOpenPerYear: '',
+      weeksOpen: '',
+      weeksOpenUnit: 'year',
       email: '',
       phone: '',
       address: '',
@@ -31,17 +31,17 @@ class VenueForm extends Component {
 
       costs: {
         chefCost: '',
-        chefUnitCost: '',
+        chefCostUnit: '',
         rentCost: '',
-        rentUnitCost: '',
+        rentCostUnit: '',
         waterCost: '',
-        waterUnitCost: '',
+        waterCostUnit: '',
         powerCost: '',
-        powerUnitCost: '',
+        powerCostUnit: '',
         insuranceCost: '',
-        insuranceUnitCost: 'year',
+        insuranceCostUnit: 'year',
         councilCost: '',
-        councilUnitCost: 'year'
+        councilCostUnit: 'year'
       }
     },
     errors: null
@@ -61,19 +61,6 @@ class VenueForm extends Component {
         this.props.venues.selectedVenue._id
       );
     }
-    // if (
-    //   this.props.venues !== null &&
-    //   this.props.venues.selectedVenue !== null
-    // ) {
-    //   console.log(
-    //     'this.props.venues.selectedVenue',
-    //     this.props.venues.selectedVenue
-    //   );
-    //   const venue = setVenueData(this.props.venues.selectedVenue);
-    //   this.setState({
-    //     updatedVenue: venue
-    //   });
-    // }
   }
 
   componentDidUpdate(prevProps, state) {
@@ -107,12 +94,40 @@ class VenueForm extends Component {
     }));
   };
 
+  handleNumberChange = e => {
+    let value = e.target.value;
+    if (value !== '') {
+      if (!isNaN(value)) {
+        let checkDecimal = value.search(/\./);
+        // console.log('checkDecimal: ', checkDecimal);
+        if (checkDecimal !== -1) {
+          value = e.target.value;
+        }
+        e.persist();
+        this.setState(prevState => ({
+          updatedVenue: {
+            ...prevState.updatedVenue,
+            [e.target.name]: e.target.value
+          }
+        }));
+      }
+    } else {
+      e.persist();
+      this.setState(prevState => ({
+        updatedVenue: {
+          ...prevState.updatedVenue,
+          [e.target.name]: e.target.value
+        }
+      }));
+    }
+  };
+
   handleCostChange = e => {
     let value = e.target.value;
     if (value !== '') {
       if (!isNaN(value)) {
         let checkDecimal = value.search(/\./);
-        console.log('checkDecimal: ', checkDecimal);
+        // console.log('checkDecimal: ', checkDecimal);
         if (checkDecimal !== -1) {
           value = e.target.value;
         }
@@ -155,26 +170,27 @@ class VenueForm extends Component {
       type,
       prepTime,
       prepTimeUnit,
-      totalItemsOnMenu,
+      totalMenuItems,
 
-      weeksOpenPerYear,
+      weeksOpen,
+      weeksOpenUnit,
       email,
       phone,
       address,
       website,
       costs: {
         chefCost,
-        chefUnitCost,
+        chefCostUnit,
         rentCost,
-        rentUnitCost,
+        rentCostUnit,
         waterCost,
-        waterUnitCost,
+        waterCostUnit,
         powerCost,
-        powerUnitCost,
+        powerCostUnit,
         insuranceCost,
-        insuranceUnitCost,
+        insuranceCostUnit,
         councilCost,
-        councilUnitCost
+        councilCostUnit
       }
     } = this.state.updatedVenue;
 
@@ -182,37 +198,67 @@ class VenueForm extends Component {
       _id,
       displayName,
       type,
-      prepTime,
+      weeksOpen,
+      weeksOpenUnit,
+      prepTime: calcCostToSeconds(prepTime, prepTimeUnit),
       prepTimeUnit,
-      totalItemsOnMenu,
-
+      totalMenuItems,
       email,
       phone,
       address,
       website,
-      chefCost: calcCostToSeconds(chefCost, chefUnitCost),
-      chefUnitCost,
-      rentCost: calcCostToSeconds(rentCost, rentUnitCost),
-      rentUnitCost,
-      waterCost: calcCostToSeconds(waterCost, waterUnitCost),
-      waterUnitCost,
-      powerCost: calcCostToSeconds(powerCost, powerUnitCost),
-      powerUnitCost,
+      chefCost: calcCostToSeconds(chefCost, chefCostUnit),
+      chefCostUnit,
+      rentCost: calcCostToSeconds(rentCost, rentCostUnit),
+      rentCostUnit,
+      waterCost: calcCostToSeconds(waterCost, waterCostUnit),
+      waterCostUnit,
+      powerCost: calcCostToSeconds(powerCost, powerCostUnit),
+      powerCostUnit,
       insuranceCost: calcCostToSeconds(
         insuranceCost,
-        insuranceUnitCost
+        insuranceCostUnit
       ),
-      insuranceUnitCost,
-      councilCost: calcCostToSeconds(councilCost, councilUnitCost),
-      councilUnitCost,
-      weeksOpenPerYear
+      insuranceCostUnit,
+      councilCost: calcCostToSeconds(councilCost, councilCostUnit),
+      councilCostUnit
     };
-
-    // console.log('venueData SAVE: ', venueData);
-    // console.log('chefCost SAVE: ', chefCost);
 
     this.props.removeErrors();
     this.props.addOrEditVenue(venueData);
+  };
+
+  getSelectedValue = selectedValue => {
+    this.setState(prevState => ({
+      updatedVenue: {
+        ...prevState.updatedVenue,
+        type: selectedValue.value
+      }
+    }));
+  };
+
+  getSelectedUnitValue = (selectedTimeValue, name) => {
+    this.setState(prevState => ({
+      updatedVenue: {
+        ...prevState.updatedVenue,
+        [name]: selectedTimeValue.value
+      }
+    }));
+  };
+
+  getSelectedCostUnitValue = (selectedTimeValue, name) => {
+    console.log('selectedTimeValue: ', selectedTimeValue);
+    console.log('name: ', name);
+
+    this.setState(prevState => ({
+      updatedVenue: {
+        ...prevState.updatedVenue,
+        costs: {
+          ...prevState.updatedVenue.costs,
+          [name]: selectedTimeValue.value
+        }
+      }
+    }));
   };
 
   render() {
@@ -222,30 +268,31 @@ class VenueForm extends Component {
       type,
       prepTime,
       prepTimeUnit,
-      totalItemsOnMenu,
+      totalMenuItems,
 
-      weeksOpenPerYear,
+      weeksOpen,
+      weeksOpenUnit,
       email,
       phone,
       address,
       website,
       costs: {
         chefCost,
-        chefUnitCost,
+        // chefCostUnit,
         rentCost,
-        rentUnitCost,
+        rentCostUnit,
         waterCost,
-        waterUnitCost,
+        waterCostUnit,
         powerCost,
-        powerUnitCost,
+        powerCostUnit,
         insuranceCost,
-        insuranceUnitCost,
+        insuranceCostUnit,
         councilCost,
-        councilUnitCost
+        councilCostUnit
       }
     } = this.state.updatedVenue;
 
-    console.log('RENDER: STATE ', this.state.updatedVenue);
+    // console.log('RENDER: STATE ', this.state.updatedVenue);
 
     let title;
     if (displayName !== '') {
@@ -254,6 +301,26 @@ class VenueForm extends Component {
       if (venues.selectedVenue)
         title = venues.selectedVenue.displayName;
     }
+
+    const typeOptions = [
+      { value: 'bar', label: 'Bar' },
+      { value: 'cafe', label: 'Cafe' },
+      { value: 'restraunt', label: 'Restraunt' }
+    ];
+
+    const weekTimeOptions = [
+      { value: 'day', label: 'hours per Day' },
+      { value: 'week', label: 'hours per Week' }
+    ];
+
+    const yearTimeOptions = [
+      { value: 'week', label: 'Week' },
+      { value: 'month', label: 'Month' },
+      { value: 'year', label: 'Year' }
+    ];
+    const yearOnlyTimeOptions = [
+      { value: 'year', label: 'per Year' }
+    ];
 
     let formContent;
     if (venues.loading) {
@@ -281,31 +348,59 @@ class VenueForm extends Component {
               type="text"
               error={errors.displayName && errors.displayName}
             />
-            <TextInputHorizontal
+            <SelectInputHorizontal
               label="Venue Type"
-              value={type}
               name="type"
-              onChange={this.onChange}
-              type="text"
+              placeholder="Select venue type..."
+              options={typeOptions}
+              getSelectedValue={this.getSelectedValue}
+              className="selectInput"
               error={errors.type && errors.type}
+              value={type}
             />
-            <TextInputHorizontal
-              label="Venue Prep Time"
-              value={prepTime}
-              name="prepTime"
-              onChange={this.onChange}
-              type="text"
-              error={errors.prepTime && errors.prepTime}
-            />
+
+            <div className="inlineFormField largeSelect">
+              <TextInputHorizontal
+                label="Weeks Open"
+                value={weeksOpen}
+                name="weeksOpen"
+                onChange={this.handleNumberChange}
+                type="text"
+                error={errors.weeksOpen && errors.weeksOpen}
+              />
+              <SelectInput
+                name="weeksOpenUnit"
+                options={yearOnlyTimeOptions}
+                getSelectedValue={this.getSelectedUnitValue}
+                error={errors.weeksOpenUnit && errors.weeksOpenUnit}
+                value={weeksOpenUnit}
+              />
+            </div>
+            <div className="inlineFormField largeSelect">
+              <TextInputHorizontal
+                label="Venue Prep Time"
+                value={prepTime}
+                name="prepTime"
+                onChange={this.handleNumberChange}
+                type="text"
+                error={errors.prepTime && errors.prepTime}
+              />
+              <SelectInput
+                name="prepTimeUnit"
+                options={weekTimeOptions}
+                getSelectedValue={this.getSelectedUnitValue}
+                error={errors.prepTimeUnit && errors.prepTimeUnit}
+                value={prepTimeUnit}
+              />
+            </div>
             <TextInputHorizontal
               label="Total Menu Items"
-              value={totalItemsOnMenu}
-              name="totalItemsOnMenu"
-              onChange={this.onChange}
+              value={totalMenuItems}
+              name="totalMenuItems"
+              placeholder="that are included in the Venue Prep Time"
+              onChange={this.handleNumberChange}
               type="text"
-              error={
-                errors.totalItemsOnMenu && errors.totalItemsOnMenu
-              }
+              error={errors.totalMenuItems && errors.totalMenuItems}
               labelClass="inputGap"
             />
 
@@ -321,7 +416,7 @@ class VenueForm extends Component {
               label="Phone"
               value={phone}
               name="phone"
-              onChange={this.onChange}
+              onChange={this.handleNumberChange}
               type="text"
               error={errors.phone && errors.phone}
             />
@@ -351,6 +446,95 @@ class VenueForm extends Component {
               type="text"
               error={errors.chefCost && errors.chefCost}
             />
+            <div className="inlineFormField">
+              <TextInputHorizontal
+                label="Rent Cost"
+                value={rentCost}
+                name="rentCost"
+                onChange={this.handleCostChange}
+                type="text"
+                error={errors.rentCost && errors.rentCost}
+              />
+              <SelectInput
+                name="rentCostUnit"
+                options={yearTimeOptions}
+                getSelectedValue={this.getSelectedCostUnitValue}
+                error={errors.rentCostUnit && errors.rentCostUnit}
+                value={rentCostUnit}
+              />
+            </div>
+            <div className="inlineFormField">
+              <TextInputHorizontal
+                label="Water Cost"
+                value={waterCost}
+                name="waterCost"
+                onChange={this.handleCostChange}
+                type="text"
+                error={errors.waterCost && errors.waterCost}
+              />
+              <SelectInput
+                name="waterCostUnit"
+                options={yearTimeOptions}
+                getSelectedValue={this.getSelectedCostUnitValue}
+                error={errors.waterCostUnit && errors.waterCostUnit}
+                value={waterCostUnit}
+              />
+            </div>
+            <div className="inlineFormField">
+              <TextInputHorizontal
+                label="Power Cost"
+                value={powerCost}
+                name="powerCost"
+                onChange={this.handleCostChange}
+                type="text"
+                error={errors.powerCost && errors.powerCost}
+              />
+              <SelectInput
+                name="powerCostUnit"
+                options={yearTimeOptions}
+                getSelectedValue={this.getSelectedCostUnitValue}
+                error={errors.powerCostUnit && errors.powerCostUnit}
+                value={powerCostUnit}
+              />
+            </div>
+            <div className="inlineFormField">
+              <TextInputHorizontal
+                label="Insurance Cost"
+                value={insuranceCost}
+                name="insuranceCost"
+                onChange={this.handleCostChange}
+                type="text"
+                error={errors.insuranceCost && errors.insuranceCost}
+              />
+              <SelectInput
+                name="insuranceCostUnit"
+                options={yearTimeOptions}
+                getSelectedValue={this.getSelectedCostUnitValue}
+                error={
+                  errors.insuranceCostUnit && errors.insuranceCostUnit
+                }
+                value={insuranceCostUnit}
+              />
+            </div>
+            <div className="inlineFormField">
+              <TextInputHorizontal
+                label="Council Cost"
+                value={councilCost}
+                name="councilCost"
+                onChange={this.handleCostChange}
+                type="text"
+                error={errors.councilCost && errors.councilCost}
+              />
+              <SelectInput
+                name="councilCostUnit"
+                options={yearTimeOptions}
+                getSelectedValue={this.getSelectedCostUnitValue}
+                error={
+                  errors.councilCostUnit && errors.councilCostUnit
+                }
+                value={councilCostUnit}
+              />
+            </div>
             <div className="button">
               <button type="submit" className="orange">
                 Save Venue

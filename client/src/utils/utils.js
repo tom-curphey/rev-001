@@ -30,17 +30,11 @@ export const openNav = () => {
 };
 
 export const addSelectedNameToEndOfArray = (array, selectedName) => {
-  console.log('FUNC Array: ', array);
-
   const checkFilter = array.filter(item => {
     return item.urlName !== selectedName;
   });
 
-  console.log('CHECK FILTER: ', checkFilter);
-
   const filteredArray = array.filter(item => {
-    console.log('selectedName: ', selectedName);
-    console.log('ITEM: ', item);
     if (selectedName !== item.urlName) {
       return item;
     }
@@ -85,7 +79,7 @@ export const calcCostToSeconds = (cost, unit) => {
       costPerSecond = cost / 24 / 60 / 60;
       break;
     case 'week':
-      costPerSecond = 7 / 24 / 60 / 60;
+      costPerSecond = cost / 7 / 24 / 60 / 60;
       break;
     case 'month':
       // console.log('Made it');
@@ -105,6 +99,9 @@ export const calcCostPerSecondToCostPerUnit = (
   costPerSecond,
   unit
 ) => {
+  // console.log('costPerSecond', costPerSecond);
+  // console.log('unit', unit);
+
   let costPerUnit = null;
   switch (unit) {
     case 'sec':
@@ -147,6 +144,11 @@ export const roundNumber = (value, decimals) => {
   );
 };
 
+export const capitalizeFirstLetter = string => {
+  if (typeof string !== 'string') return '';
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 export const setVenueData = venue => {
   const venueData = {};
   venueData.costs = {};
@@ -154,6 +156,8 @@ export const setVenueData = venue => {
   venueData._id = venue._id;
   venueData.displayName = isEmptyString(venue.displayName);
   venueData.type = isEmptyString(venue.type);
+  venueData.weeksOpen = isEmptyString(venue.weeksOpen).toString();
+  venueData.weeksOpenUnit = isEmptyString(venue.weeksOpenUnit);
   venueData.prepTime =
     !isEmpty(venue.prepTime) || venue.prepTime === 0
       ? calcCostPerSecondToCostPerUnit(
@@ -162,7 +166,9 @@ export const setVenueData = venue => {
         ).toString()
       : '';
   venueData.prepTimeUnit = isEmptyString(venue.prepTimeUnit);
-  venueData.totalItemsOnMenu = isEmptyString(venue.totalItemsOnMenu);
+  venueData.totalMenuItems = isEmptyString(
+    venue.totalMenuItems
+  ).toString();
 
   venueData.email = isEmptyString(venue.email);
   venueData.phone = isEmptyString(venue.phone);
@@ -173,62 +179,62 @@ export const setVenueData = venue => {
     !isEmpty(venue.costs.chefCost) || venue.costs.chefCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.chefCost,
-          venue.costs.chefUnitCost
+          venue.costs.chefCostUnit
         ).toString()
       : '';
-  venueData.costs.chefUnitCost = isEmptyString(
-    venue.costs.chefUnitCost
+  venueData.costs.chefCostUnit = isEmptyString(
+    venue.costs.chefCostUnit
   );
   venueData.costs.rentCost =
     !isEmpty(venue.costs.rentCost) || venue.costs.rentCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.rentCost,
-          venue.costs.rentUnitCost
+          venue.costs.rentCostUnit
         ).toString()
       : '';
-  venueData.costs.rentUnitCost = isEmptyString(
-    venue.costs.rentUnitCost
+  venueData.costs.rentCostUnit = isEmptyString(
+    venue.costs.rentCostUnit
   );
   venueData.costs.waterCost =
     !isEmpty(venue.costs.waterCost) || venue.costs.waterCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.waterCost,
-          venue.costs.waterUnitCost
+          venue.costs.waterCostUnit
         ).toString()
       : '';
-  venueData.costs.waterUnitCost = isEmptyString(
-    venue.costs.waterUnitCost
+  venueData.costs.waterCostUnit = isEmptyString(
+    venue.costs.waterCostUnit
   );
   venueData.costs.powerCost =
     !isEmpty(venue.costs.powerCost) || venue.costs.powerCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.powerCost,
-          venue.costs.powerUnitCost
+          venue.costs.powerCostUnit
         ).toString()
       : '';
-  venueData.costs.powerUnitCost = isEmptyString(
-    venue.costs.powerUnitCost
+  venueData.costs.powerCostUnit = isEmptyString(
+    venue.costs.powerCostUnit
   );
   venueData.costs.insuranceCost =
     !isEmpty(venue.costs.insuranceCost) ||
     venue.costs.insuranceCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.insuranceCost,
-          venue.costs.insuranceUnitCost
+          venue.costs.insuranceCostUnit
         ).toString()
       : '';
-  venueData.costs.insuranceUnitCost = isEmptyString(
-    venue.costs.insuranceUnitCost
+  venueData.costs.insuranceCostUnit = isEmptyString(
+    venue.costs.insuranceCostUnit
   );
   venueData.costs.councilCost =
     !isEmpty(venue.costs.councilCost) || venue.costs.councilCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.councilCost,
-          venue.costs.councilUnitCost
+          venue.costs.councilCostUnit
         ).toString()
       : '';
-  venueData.costs.councilUnitCost = isEmptyString(
-    venue.costs.councilUnitCost
+  venueData.costs.councilCostUnit = isEmptyString(
+    venue.costs.councilCostUnit
   );
   venueData.costs.wastageCost = isEmptyString(venue.wastageCost);
   return venueData;

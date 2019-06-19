@@ -13,7 +13,7 @@ const AdminMenu = props => {
         <div id="screen">
           <main id="main">
             <MainMenu />
-            {props.children}
+            <section className="screenData">{props.children}</section>
           </main>
         </div>
       </div>

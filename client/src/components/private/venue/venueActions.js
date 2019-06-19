@@ -6,11 +6,16 @@ import {
   VENUES_ERROR,
   GET_ERRORS,
   REMOVE_ERRORS,
-  SET_SELECTED_VENUE
+  SET_SELECTED_VENUE,
+  SET_VENUE_LOADING
 } from '../../../redux/types';
 import { isEmpty } from '../../../utils/utils';
 import { loadProfile } from '../profile/profileActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
+
+export const setVenueLoading = () => dispatch => {
+  dispatch({ type: SET_VENUE_LOADING });
+};
 
 // Load Venues
 export const loadVenues = (
@@ -23,15 +28,12 @@ export const loadVenues = (
   try {
     const res = await axios.get('/api/venue/all');
 
-    console.log('CHECK: ', res.data);
+    // console.log('CHECK: ', res.data);
 
     const filteredVenues = addSelectedNameToEndOfArray(
       res.data,
       'personal'
     );
-
-    console.log('CHECK filteredVenues: ', filteredVenues);
-
     dispatch({
       type: VENUES_LOADED,
       payload: filteredVenues
@@ -41,7 +43,6 @@ export const loadVenues = (
       const sV = filteredVenues.filter(
         venue => venue._id === venueID
       );
-      console.log('filteredVenues', sV);
       dispatch(setSelectedVenue(sV[0]));
     } else {
       if (!isEmpty(selectedVenue)) {
@@ -77,8 +78,7 @@ export const setSelectedVenue = selectedVenue => async dispatch => {
 
 // Add or Edit Venue
 export const addOrEditVenue = venueData => async dispatch => {
-  console.log('Yes');
-
+  dispatch(setVenueLoading());
   const config = {
     headers: {
       'Content-Type': 'application/json'
