@@ -4,10 +4,10 @@ const venueController = require('./venue.controller');
 const auth = require('../../config/middleware/auth');
 const { check } = require('express-validator/check');
 
-// @router GET api/venue
+// @router GET api/venue/all
 // @desc Get current users venues
 // @access Public
-router.get('/', auth, venueController.getVenues);
+router.get('/all', auth, venueController.getVenues);
 
 router.post(
   '/',

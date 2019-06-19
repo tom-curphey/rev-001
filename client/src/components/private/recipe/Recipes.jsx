@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthMenu from '../../layout/menu/AuthMenu';
+import { loadVenues } from '../venue/venueActions';
 
-const Recipes = ({ profile, isAuthenticated }) => {
+const Recipes = ({ profile, isAuthenticated, loadVenues }) => {
   if (isAuthenticated === null || isAuthenticated === false) {
     return <Redirect to="/signin" />;
   }
@@ -22,13 +23,22 @@ const Recipes = ({ profile, isAuthenticated }) => {
   return (
     <AuthMenu>
       <div>Recipes</div>
+      <button onClick={loadVenues}>Load Venues</button>
     </AuthMenu>
   );
 };
 
+const actions = {
+  loadVenues
+};
+
 const mapState = state => ({
   profile: state.profile,
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  venues: state.venues
 });
 
-export default connect(mapState)(Recipes);
+export default connect(
+  mapState,
+  actions
+)(Recipes);

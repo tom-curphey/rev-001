@@ -81,15 +81,9 @@ class VenueForm extends Component {
       prevProps.venues !== this.props.venues &&
       this.props.venues.selectedVenue !== null
     ) {
-      console.log(
-        'his.props.venues.selectedVenue',
-        this.props.venues.selectedVenue
-      );
-
-      const venue = setVenueData(this.props.venues.selectedVenue);
-
+      const venueData = setVenueData(this.props.venues.selectedVenue);
       this.setState({
-        updatedVenue: venue
+        updatedVenue: venueData
       });
     }
 
@@ -156,6 +150,7 @@ class VenueForm extends Component {
     console.log('this.state.updatedVenue: ', this.state.updatedVenue);
 
     const {
+      _id,
       displayName,
       type,
       prepTime,
@@ -183,41 +178,41 @@ class VenueForm extends Component {
       }
     } = this.state.updatedVenue;
 
-    console.log('CHEF COSTS: ', chefCost);
-
     const venueData = {
-      displayName: displayName,
-      type: type,
-      prepTime: prepTime,
-      prepTimeUnit: prepTimeUnit,
-      totalItemsOnMenu: totalItemsOnMenu,
+      _id,
+      displayName,
+      type,
+      prepTime,
+      prepTimeUnit,
+      totalItemsOnMenu,
 
-      email: email,
-      phone: phone,
-      address: address,
-      website: website,
+      email,
+      phone,
+      address,
+      website,
       chefCost: calcCostToSeconds(chefCost, chefUnitCost),
-      chefUnitCost: chefUnitCost,
+      chefUnitCost,
       rentCost: calcCostToSeconds(rentCost, rentUnitCost),
-      rentUnitCost: rentUnitCost,
+      rentUnitCost,
       waterCost: calcCostToSeconds(waterCost, waterUnitCost),
-      waterUnitCost: waterUnitCost,
+      waterUnitCost,
       powerCost: calcCostToSeconds(powerCost, powerUnitCost),
-      powerUnitCost: powerUnitCost,
+      powerUnitCost,
       insuranceCost: calcCostToSeconds(
         insuranceCost,
         insuranceUnitCost
       ),
-      insuranceUnitCost: insuranceUnitCost,
+      insuranceUnitCost,
       councilCost: calcCostToSeconds(councilCost, councilUnitCost),
-      councilUnitCost: councilUnitCost,
-      weeksOpenPerYear: weeksOpenPerYear
+      councilUnitCost,
+      weeksOpenPerYear
     };
 
-    console.log(venueData);
+    // console.log('venueData SAVE: ', venueData);
+    // console.log('chefCost SAVE: ', chefCost);
 
     this.props.removeErrors();
-    this.props.addOrEditVenue(this.state.updatedVenue);
+    this.props.addOrEditVenue(venueData);
   };
 
   render() {
@@ -249,6 +244,8 @@ class VenueForm extends Component {
         councilUnitCost
       }
     } = this.state.updatedVenue;
+
+    console.log('RENDER: STATE ', this.state.updatedVenue);
 
     let title;
     if (displayName !== '') {

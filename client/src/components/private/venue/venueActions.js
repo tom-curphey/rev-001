@@ -21,7 +21,7 @@ export const loadVenues = (
   // console.log('SV id: ', id);
 
   try {
-    const res = await axios.get('/api/venue');
+    const res = await axios.get('/api/venue/all');
 
     console.log('CHECK: ', res.data);
 

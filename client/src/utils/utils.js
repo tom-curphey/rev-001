@@ -30,14 +30,26 @@ export const openNav = () => {
 };
 
 export const addSelectedNameToEndOfArray = (array, selectedName) => {
-  const filteredArray = array.filter(item => {
+  console.log('FUNC Array: ', array);
+
+  const checkFilter = array.filter(item => {
     return item.urlName !== selectedName;
+  });
+
+  console.log('CHECK FILTER: ', checkFilter);
+
+  const filteredArray = array.filter(item => {
+    console.log('selectedName: ', selectedName);
+    console.log('ITEM: ', item);
+    if (selectedName !== item.urlName) {
+      return item;
+    }
   });
   const selectedNameData = array.filter(item => {
     return item.urlName === selectedName;
   });
 
-  console.log('filteredArray: ', filteredArray);
+  // console.log('filteredArray: ', filteredArray);
 
   return filteredArray.concat(selectedNameData[0]);
 };
@@ -136,70 +148,68 @@ export const roundNumber = (value, decimals) => {
 };
 
 export const setVenueData = venue => {
-  venue.displayName = isEmptyString(venue.displayName);
-  venue.type = isEmptyString(venue.type);
-  venue.prepTime =
+  const venueData = {};
+  venueData.costs = {};
+
+  venueData._id = venue._id;
+  venueData.displayName = isEmptyString(venue.displayName);
+  venueData.type = isEmptyString(venue.type);
+  venueData.prepTime =
     !isEmpty(venue.prepTime) || venue.prepTime === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.prepTime,
           venue.prepTimeUnit
         ).toString()
       : '';
-  venue.prepTimeUnit = isEmptyString(venue.prepTimeUnit);
-  venue.totalItemsOnMenu = isEmptyString(venue.totalItemsOnMenu);
+  venueData.prepTimeUnit = isEmptyString(venue.prepTimeUnit);
+  venueData.totalItemsOnMenu = isEmptyString(venue.totalItemsOnMenu);
 
-  venue.email = isEmptyString(venue.email);
-  venue.phone = isEmptyString(venue.phone);
-  venue.address = isEmptyString(venue.address);
-  venue.website = isEmptyString(venue.website);
+  venueData.email = isEmptyString(venue.email);
+  venueData.phone = isEmptyString(venue.phone);
+  venueData.address = isEmptyString(venue.address);
+  venueData.website = isEmptyString(venue.website);
 
-  console.log('FUNC: ', venue.costs.chefCost);
-
-  venue.costs.chefCost =
+  venueData.costs.chefCost =
     !isEmpty(venue.costs.chefCost) || venue.costs.chefCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.chefCost,
           venue.costs.chefUnitCost
         ).toString()
       : '';
-  venue.costs.chefUnitCost = !isEmptyString(venue.costs.chefUnitCost)
-    ? venue.costs.chefUnitCost.toString()
-    : '';
-  venue.costs.rentCost =
+  venueData.costs.chefUnitCost = isEmptyString(
+    venue.costs.chefUnitCost
+  );
+  venueData.costs.rentCost =
     !isEmpty(venue.costs.rentCost) || venue.costs.rentCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.rentCost,
           venue.costs.rentUnitCost
         ).toString()
       : '';
-  venue.costs.rentUnitCost = !isEmptyString(venue.costs.rentUnitCost)
-    ? venue.costs.rentUnitCost.toString()
-    : '';
-  venue.costs.waterCost =
+  venueData.costs.rentUnitCost = isEmptyString(
+    venue.costs.rentUnitCost
+  );
+  venueData.costs.waterCost =
     !isEmpty(venue.costs.waterCost) || venue.costs.waterCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.waterCost,
           venue.costs.waterUnitCost
         ).toString()
       : '';
-  venue.costs.waterUnitCost = !isEmptyString(
+  venueData.costs.waterUnitCost = isEmptyString(
     venue.costs.waterUnitCost
-  )
-    ? venue.costs.waterUnitCost.toString()
-    : '';
-  venue.costs.powerCost =
+  );
+  venueData.costs.powerCost =
     !isEmpty(venue.costs.powerCost) || venue.costs.powerCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.powerCost,
           venue.costs.powerUnitCost
         ).toString()
       : '';
-  venue.costs.powerUnitCost = !isEmptyString(
+  venueData.costs.powerUnitCost = isEmptyString(
     venue.costs.powerUnitCost
-  )
-    ? venue.costs.powerUnitCost.toString()
-    : '';
-  venue.costs.insuranceCost =
+  );
+  venueData.costs.insuranceCost =
     !isEmpty(venue.costs.insuranceCost) ||
     venue.costs.insuranceCost === 0
       ? calcCostPerSecondToCostPerUnit(
@@ -207,23 +217,19 @@ export const setVenueData = venue => {
           venue.costs.insuranceUnitCost
         ).toString()
       : '';
-  venue.costs.insuranceUnitCost = !isEmptyString(
+  venueData.costs.insuranceUnitCost = isEmptyString(
     venue.costs.insuranceUnitCost
-  )
-    ? venue.costs.insuranceUnitCost.toString()
-    : '';
-  venue.costs.councilCost =
+  );
+  venueData.costs.councilCost =
     !isEmpty(venue.costs.councilCost) || venue.costs.councilCost === 0
       ? calcCostPerSecondToCostPerUnit(
           venue.costs.councilCost,
           venue.costs.councilUnitCost
         ).toString()
       : '';
-  venue.costs.councilUnitCost = !isEmptyString(
+  venueData.costs.councilUnitCost = isEmptyString(
     venue.costs.councilUnitCost
-  )
-    ? venue.costs.councilUnitCost.toString()
-    : '';
-  venue.costs.wastageCost = isEmptyString(venue.wastageCost);
-  return venue;
+  );
+  venueData.costs.wastageCost = isEmptyString(venue.wastageCost);
+  return venueData;
 };
