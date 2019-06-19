@@ -1,6 +1,4 @@
-import React, { Fragment } from 'react';
-import MainMenu from './MainMenu';
-import DeviceMenu from './DeviceMenu';
+import React from 'react';
 import DeviceSubMenu from './DeviceSubMenu';
 // import { Link } from 'react-router-dom';
 

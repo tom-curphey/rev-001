@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthMenu from '../../layout/menu/AuthMenu';
 import { loadVenues } from '../venue/venueActions';
@@ -26,6 +26,13 @@ const Recipes = ({ profile, isAuthenticated, loadVenues }) => {
       <button onClick={loadVenues}>Load Venues</button>
     </AuthMenu>
   );
+};
+
+Recipes.propTypes = {
+  loadVenues: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
+  venues: PropTypes.object.isRequired
 };
 
 const actions = {

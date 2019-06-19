@@ -6,7 +6,6 @@ import {
   addPersonalVenue
 } from '../venue/venueActions';
 import PublicMenu from '../../layout/menu/PublicMenu';
-import { Link, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import SelectInput from '../../layout/input/SelectInput';
 import { openNav } from '../../../utils/utils';
@@ -111,7 +110,7 @@ class OnboardingVenue extends Component {
   };
 
   render() {
-    const { displayName, email, type, errors } = this.state;
+    const { displayName, email, errors } = this.state;
 
     const options = [
       { value: 'bar', label: 'Bar', className: 'optOpt' },

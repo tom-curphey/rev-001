@@ -30,21 +30,12 @@ export const openNav = () => {
 };
 
 export const addSelectedNameToEndOfArray = (array, selectedName) => {
-  const checkFilter = array.filter(item => {
-    return item.urlName !== selectedName;
-  });
-
   const filteredArray = array.filter(item => {
-    if (selectedName !== item.urlName) {
-      return item;
-    }
+    return selectedName !== item.urlName;
   });
   const selectedNameData = array.filter(item => {
     return item.urlName === selectedName;
   });
-
-  // console.log('filteredArray: ', filteredArray);
-
   return filteredArray.concat(selectedNameData[0]);
 };
 

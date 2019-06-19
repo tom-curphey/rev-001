@@ -5,13 +5,13 @@ import {
   VENUES_LOADED,
   VENUES_ERROR,
   GET_ERRORS,
-  REMOVE_ERRORS,
   SET_SELECTED_VENUE,
   SET_VENUE_LOADING
 } from '../../../redux/types';
 import { isEmpty } from '../../../utils/utils';
 import { loadProfile } from '../profile/profileActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
+import { displayErrors } from '../../../utils/utils';
 
 export const setVenueLoading = () => dispatch => {
   dispatch({ type: SET_VENUE_LOADING });
@@ -97,17 +97,10 @@ export const addOrEditVenue = venueData => async dispatch => {
     await dispatch(loadProfile());
     await dispatch(loadVenues(res.data));
   } catch (err) {
-    var errObj = err.response.data.errors.reduce((obj, item) => {
-      return (obj[item.param] = item.msg), obj;
-    }, {});
-
     dispatch({
       type: SELECTED_VENUE_FAILED
     });
-    dispatch({
-      type: GET_ERRORS,
-      payload: errObj
-    });
+    displayErrors(err, dispatch, GET_ERRORS);
   }
 };
 
@@ -139,15 +132,9 @@ export const addPersonalVenue = userEmail => async dispatch => {
     dispatch(loadProfile());
     dispatch(loadVenues());
   } catch (err) {
-    var errObj = err.response.data.errors.reduce((obj, item) => {
-      return (obj[item.param] = item.msg), obj;
-    }, {});
     dispatch({
       type: SELECTED_VENUE_FAILED
     });
-    dispatch({
-      type: GET_ERRORS,
-      payload: errObj
-    });
+    displayErrors(err, dispatch, GET_ERRORS);
   }
 };

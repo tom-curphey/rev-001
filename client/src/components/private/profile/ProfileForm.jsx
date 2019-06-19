@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import AuthMenu from '../../layout/menu/AuthMenu';
-import AccountMenu from '../../layout/menu/AccountMenu';
 import { connect } from 'react-redux';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import { removeErrors } from '../../../redux/errorActions';
@@ -27,8 +25,6 @@ class ProfileForm extends Component {
         email: isEmptyString(email)
       }));
     }
-
-    console.log('PROFILE -->', this.props.profile);
 
     if (this.props.profile.profile) {
       const {

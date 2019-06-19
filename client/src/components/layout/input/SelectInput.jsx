@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
-import { capitalizeFirstLetter, isEmpty } from '../../../utils/utils';
+import { isEmpty } from '../../../utils/utils';
 
 const SelectInput = ({
   options,

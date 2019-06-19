@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import AuthMenu from '../../layout/menu/AuthMenu';
-import AccountMenu from '../../layout/menu/AccountMenu';
 import { connect } from 'react-redux';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import { removeErrors } from '../../../redux/errorActions';
 import { setProfileLoading } from './profileActions';
 import { updatePassword } from '../../public/auth/authActions';
-import { isEmptyString } from '../../../utils/utils';
 import Spinner from '../../../utils/Spinner';
 import PropTypes from 'prop-types';
 

@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 function Venues({ venues, loading, history, setSelectedVenue }) {
   let venuesList = '';
 
-  console.log('history', history);
-
   const selectVenue = e => {
     const selectedVenue = venues.venues.filter(
       venue => venue._id === e.target.parentNode.id

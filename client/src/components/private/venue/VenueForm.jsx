@@ -330,219 +330,244 @@ class VenueForm extends Component {
         </div>
       );
     } else {
-      formContent = (
-        <Fragment>
-          <h1>{`< ${title}`}</h1>
-          <p>
-            Provide as much or as little information as you’d like.{' '}
-            <br />
-            Recipe Revenue will never share or sell individual
-            personal information or personally identifiable details.
-          </p>
-          <form onSubmit={this.handleOnSubmit}>
-            <TextInputHorizontal
-              label="Venue Name"
-              value={displayName}
-              name="displayName"
-              onChange={this.onChange}
-              type="text"
-              error={errors.displayName && errors.displayName}
-            />
-            <SelectInputHorizontal
-              label="Venue Type"
-              name="type"
-              placeholder="Select venue type..."
-              options={typeOptions}
-              getSelectedValue={this.getSelectedValue}
-              className="selectInput"
-              error={errors.type && errors.type}
-              value={type}
-            />
-
-            <div className="inlineFormField largeSelect">
+      if (
+        venues.selectedVenue !== null &&
+        venues.selectedVenue.urlName === 'personal'
+      ) {
+        console.log('URL', venues.selectedVenue);
+        formContent = (
+          <Fragment>
+            <h1>{`< ${title}`}</h1>
+            <p>
+              Your personal account has no venue attached to it..{' '}
+              <br />
+              <br />
+              We will be developing a feature in the near future where
+              you can add a venue to the recipes under your personal
+              account.
+              <br />
+              <br />
+              Regards, <br />
+              Tom Curphey
+            </p>
+          </Fragment>
+        );
+      } else {
+        formContent = (
+          <Fragment>
+            <h1>{`< ${title}`}</h1>
+            <p>
+              Provide as much or as little information as you’d like.{' '}
+              <br />
+              Recipe Revenue will never share or sell individual
+              personal information or personally identifiable details.
+            </p>
+            <form onSubmit={this.handleOnSubmit}>
               <TextInputHorizontal
-                label="Weeks Open"
-                value={weeksOpen}
-                name="weeksOpen"
+                label="Venue Name"
+                value={displayName}
+                name="displayName"
+                onChange={this.onChange}
+                type="text"
+                error={errors.displayName && errors.displayName}
+              />
+              <SelectInputHorizontal
+                label="Venue Type"
+                name="type"
+                placeholder="Select venue type..."
+                options={typeOptions}
+                getSelectedValue={this.getSelectedValue}
+                className="selectInput"
+                error={errors.type && errors.type}
+                value={type}
+              />
+
+              <div className="inlineFormField largeSelect">
+                <TextInputHorizontal
+                  label="Weeks Open"
+                  value={weeksOpen}
+                  name="weeksOpen"
+                  onChange={this.handleNumberChange}
+                  type="text"
+                  error={errors.weeksOpen && errors.weeksOpen}
+                />
+                <SelectInput
+                  name="weeksOpenUnit"
+                  options={yearOnlyTimeOptions}
+                  getSelectedValue={this.getSelectedUnitValue}
+                  error={errors.weeksOpenUnit && errors.weeksOpenUnit}
+                  value={weeksOpenUnit}
+                />
+              </div>
+              <div className="inlineFormField largeSelect">
+                <TextInputHorizontal
+                  label="Venue Prep Time"
+                  value={prepTime}
+                  name="prepTime"
+                  onChange={this.handleNumberChange}
+                  type="text"
+                  error={errors.prepTime && errors.prepTime}
+                />
+                <SelectInput
+                  name="prepTimeUnit"
+                  options={weekTimeOptions}
+                  getSelectedValue={this.getSelectedUnitValue}
+                  error={errors.prepTimeUnit && errors.prepTimeUnit}
+                  value={prepTimeUnit}
+                />
+              </div>
+              <TextInputHorizontal
+                label="Total Menu Items"
+                value={totalMenuItems}
+                name="totalMenuItems"
+                placeholder="that are included in the Venue Prep Time"
                 onChange={this.handleNumberChange}
                 type="text"
-                error={errors.weeksOpen && errors.weeksOpen}
+                error={errors.totalMenuItems && errors.totalMenuItems}
+                labelClass="inputGap"
               />
-              <SelectInput
-                name="weeksOpenUnit"
-                options={yearOnlyTimeOptions}
-                getSelectedValue={this.getSelectedUnitValue}
-                error={errors.weeksOpenUnit && errors.weeksOpenUnit}
-                value={weeksOpenUnit}
-              />
-            </div>
-            <div className="inlineFormField largeSelect">
+
               <TextInputHorizontal
-                label="Venue Prep Time"
-                value={prepTime}
-                name="prepTime"
+                label="Email"
+                value={email}
+                name="email"
+                onChange={this.onChange}
+                type="text"
+                error={errors.email && errors.email}
+              />
+              <TextInputHorizontal
+                label="Phone"
+                value={phone}
+                name="phone"
                 onChange={this.handleNumberChange}
                 type="text"
-                error={errors.prepTime && errors.prepTime}
+                error={errors.phone && errors.phone}
               />
-              <SelectInput
-                name="prepTimeUnit"
-                options={weekTimeOptions}
-                getSelectedValue={this.getSelectedUnitValue}
-                error={errors.prepTimeUnit && errors.prepTimeUnit}
-                value={prepTimeUnit}
+              <TextInputHorizontal
+                label="Address"
+                value={address}
+                name="address"
+                onChange={this.onChange}
+                type="text"
+                error={errors.address && errors.address}
               />
-            </div>
-            <TextInputHorizontal
-              label="Total Menu Items"
-              value={totalMenuItems}
-              name="totalMenuItems"
-              placeholder="that are included in the Venue Prep Time"
-              onChange={this.handleNumberChange}
-              type="text"
-              error={errors.totalMenuItems && errors.totalMenuItems}
-              labelClass="inputGap"
-            />
+              <TextInputHorizontal
+                label="Website"
+                value={website}
+                name="website"
+                onChange={this.onChange}
+                type="text"
+                error={errors.website && errors.website}
+                labelClass="inputGap"
+              />
 
-            <TextInputHorizontal
-              label="Email"
-              value={email}
-              name="email"
-              onChange={this.onChange}
-              type="text"
-              error={errors.email && errors.email}
-            />
-            <TextInputHorizontal
-              label="Phone"
-              value={phone}
-              name="phone"
-              onChange={this.handleNumberChange}
-              type="text"
-              error={errors.phone && errors.phone}
-            />
-            <TextInputHorizontal
-              label="Address"
-              value={address}
-              name="address"
-              onChange={this.onChange}
-              type="text"
-              error={errors.address && errors.address}
-            />
-            <TextInputHorizontal
-              label="Website"
-              value={website}
-              name="website"
-              onChange={this.onChange}
-              type="text"
-              error={errors.website && errors.website}
-              labelClass="inputGap"
-            />
-
-            <TextInputHorizontal
-              label="Chef Cost Per Hour"
-              value={chefCost}
-              name="chefCost"
-              onChange={this.handleCostChange}
-              type="text"
-              error={errors.chefCost && errors.chefCost}
-            />
-            <div className="inlineFormField">
               <TextInputHorizontal
-                label="Rent Cost"
-                value={rentCost}
-                name="rentCost"
+                label="Chef Cost Per Hour"
+                value={chefCost}
+                name="chefCost"
                 onChange={this.handleCostChange}
                 type="text"
-                error={errors.rentCost && errors.rentCost}
+                error={errors.chefCost && errors.chefCost}
               />
-              <SelectInput
-                name="rentCostUnit"
-                options={yearTimeOptions}
-                getSelectedValue={this.getSelectedCostUnitValue}
-                error={errors.rentCostUnit && errors.rentCostUnit}
-                value={rentCostUnit}
-              />
-            </div>
-            <div className="inlineFormField">
-              <TextInputHorizontal
-                label="Water Cost"
-                value={waterCost}
-                name="waterCost"
-                onChange={this.handleCostChange}
-                type="text"
-                error={errors.waterCost && errors.waterCost}
-              />
-              <SelectInput
-                name="waterCostUnit"
-                options={yearTimeOptions}
-                getSelectedValue={this.getSelectedCostUnitValue}
-                error={errors.waterCostUnit && errors.waterCostUnit}
-                value={waterCostUnit}
-              />
-            </div>
-            <div className="inlineFormField">
-              <TextInputHorizontal
-                label="Power Cost"
-                value={powerCost}
-                name="powerCost"
-                onChange={this.handleCostChange}
-                type="text"
-                error={errors.powerCost && errors.powerCost}
-              />
-              <SelectInput
-                name="powerCostUnit"
-                options={yearTimeOptions}
-                getSelectedValue={this.getSelectedCostUnitValue}
-                error={errors.powerCostUnit && errors.powerCostUnit}
-                value={powerCostUnit}
-              />
-            </div>
-            <div className="inlineFormField">
-              <TextInputHorizontal
-                label="Insurance Cost"
-                value={insuranceCost}
-                name="insuranceCost"
-                onChange={this.handleCostChange}
-                type="text"
-                error={errors.insuranceCost && errors.insuranceCost}
-              />
-              <SelectInput
-                name="insuranceCostUnit"
-                options={yearTimeOptions}
-                getSelectedValue={this.getSelectedCostUnitValue}
-                error={
-                  errors.insuranceCostUnit && errors.insuranceCostUnit
-                }
-                value={insuranceCostUnit}
-              />
-            </div>
-            <div className="inlineFormField">
-              <TextInputHorizontal
-                label="Council Cost"
-                value={councilCost}
-                name="councilCost"
-                onChange={this.handleCostChange}
-                type="text"
-                error={errors.councilCost && errors.councilCost}
-              />
-              <SelectInput
-                name="councilCostUnit"
-                options={yearTimeOptions}
-                getSelectedValue={this.getSelectedCostUnitValue}
-                error={
-                  errors.councilCostUnit && errors.councilCostUnit
-                }
-                value={councilCostUnit}
-              />
-            </div>
-            <div className="button">
-              <button type="submit" className="orange">
-                Save Venue
-              </button>
-            </div>
-          </form>
-        </Fragment>
-      );
+              <div className="inlineFormField">
+                <TextInputHorizontal
+                  label="Rent Cost"
+                  value={rentCost}
+                  name="rentCost"
+                  onChange={this.handleCostChange}
+                  type="text"
+                  error={errors.rentCost && errors.rentCost}
+                />
+                <SelectInput
+                  name="rentCostUnit"
+                  options={yearTimeOptions}
+                  getSelectedValue={this.getSelectedCostUnitValue}
+                  error={errors.rentCostUnit && errors.rentCostUnit}
+                  value={rentCostUnit}
+                />
+              </div>
+              <div className="inlineFormField">
+                <TextInputHorizontal
+                  label="Water Cost"
+                  value={waterCost}
+                  name="waterCost"
+                  onChange={this.handleCostChange}
+                  type="text"
+                  error={errors.waterCost && errors.waterCost}
+                />
+                <SelectInput
+                  name="waterCostUnit"
+                  options={yearTimeOptions}
+                  getSelectedValue={this.getSelectedCostUnitValue}
+                  error={errors.waterCostUnit && errors.waterCostUnit}
+                  value={waterCostUnit}
+                />
+              </div>
+              <div className="inlineFormField">
+                <TextInputHorizontal
+                  label="Power Cost"
+                  value={powerCost}
+                  name="powerCost"
+                  onChange={this.handleCostChange}
+                  type="text"
+                  error={errors.powerCost && errors.powerCost}
+                />
+                <SelectInput
+                  name="powerCostUnit"
+                  options={yearTimeOptions}
+                  getSelectedValue={this.getSelectedCostUnitValue}
+                  error={errors.powerCostUnit && errors.powerCostUnit}
+                  value={powerCostUnit}
+                />
+              </div>
+              <div className="inlineFormField">
+                <TextInputHorizontal
+                  label="Insurance Cost"
+                  value={insuranceCost}
+                  name="insuranceCost"
+                  onChange={this.handleCostChange}
+                  type="text"
+                  error={errors.insuranceCost && errors.insuranceCost}
+                />
+                <SelectInput
+                  name="insuranceCostUnit"
+                  options={yearTimeOptions}
+                  getSelectedValue={this.getSelectedCostUnitValue}
+                  error={
+                    errors.insuranceCostUnit &&
+                    errors.insuranceCostUnit
+                  }
+                  value={insuranceCostUnit}
+                />
+              </div>
+              <div className="inlineFormField">
+                <TextInputHorizontal
+                  label="Council Cost"
+                  value={councilCost}
+                  name="councilCost"
+                  onChange={this.handleCostChange}
+                  type="text"
+                  error={errors.councilCost && errors.councilCost}
+                />
+                <SelectInput
+                  name="councilCostUnit"
+                  options={yearTimeOptions}
+                  getSelectedValue={this.getSelectedCostUnitValue}
+                  error={
+                    errors.councilCostUnit && errors.councilCostUnit
+                  }
+                  value={councilCostUnit}
+                />
+              </div>
+              <div className="button">
+                <button type="submit" className="orange">
+                  Save Venue
+                </button>
+              </div>
+            </form>
+          </Fragment>
+        );
+      }
     }
 
     return (
