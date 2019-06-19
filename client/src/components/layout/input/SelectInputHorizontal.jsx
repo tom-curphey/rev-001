@@ -72,12 +72,12 @@ const SelectInputHorizontal = ({
           ...theme,
           colors: {
             ...theme.colors,
+            // neutral80: '#9d9584',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
         })}
       />
-      {error && <span className="errorMsg">{error}</span>}
       <span className="message">
         {info && <small>{info}</small>}
         {error && <span className="errorMsg">{error}</span>}

@@ -63,7 +63,12 @@ const App = () => {
           />
           <PrivateRoute
             exact
-            path="/account/:account_section/edit/:venue_name"
+            path="/account/:account_section/:venue_action"
+            component={AccountSettings}
+          />
+          <PrivateRoute
+            exact
+            path="/account/:account_section/:venue_action/:venue_name"
             component={AccountSettings}
           />
         </Switch>

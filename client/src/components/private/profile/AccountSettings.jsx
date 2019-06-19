@@ -8,7 +8,7 @@ import Venues from '../venue/Venues';
 import VenueForm from '../venue/VenueForm';
 
 const AccountSettings = ({ match }) => {
-  const { account_section, venue_name } = match.params;
+  const { account_section, venue_action } = match.params;
   let formContent;
 
   switch (account_section) {
@@ -19,9 +19,13 @@ const AccountSettings = ({ match }) => {
       formContent = <PasswordForm />;
       break;
     case 'venues':
-      if (venue_name) {
-        // console.log('match: ', match);
-        formContent = <VenueForm />;
+      if (venue_action) {
+        if (venue_action === 'add') {
+          formContent = <VenueForm />;
+        }
+        if (venue_action === 'edit') {
+          formContent = <VenueForm />;
+        }
       } else {
         formContent = <Venues />;
       }

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import SelectInputHorizontal from '../../layout/input/SelectInputHorizontal';
 import SelectInput from '../../layout/input/SelectInput';
@@ -31,13 +32,13 @@ class VenueForm extends Component {
 
       costs: {
         chefCost: '',
-        chefCostUnit: '',
+        chefCostUnit: 'hour',
         rentCost: '',
-        rentCostUnit: '',
+        rentCostUnit: 'month',
         waterCost: '',
-        waterCostUnit: '',
+        waterCostUnit: 'month',
         powerCost: '',
-        powerCostUnit: '',
+        powerCostUnit: 'month',
         insuranceCost: '',
         insuranceCostUnit: 'year',
         councilCost: '',
@@ -48,34 +49,53 @@ class VenueForm extends Component {
   };
 
   componentDidMount() {
+    // console.log('Venues', this.props.venues);
+
     if (
       this.props.venues !== null &&
       this.props.venues.selectedVenue !== null
     ) {
-      // console.log(
-      //   'this.props..',
-      //   this.props.venues.selectedVenue._id
-      // );
-      this.props.loadVenues(
-        null,
-        this.props.venues.selectedVenue._id
-      );
+      if (this.props.match.params.venue_action === 'edit') {
+        console.log(
+          'this.props',
+          this.props.match.params.venue_action
+        );
+
+        const venueData = setVenueData(
+          this.props.venues.selectedVenue
+        );
+        this.setState({
+          updatedVenue: venueData
+        });
+      }
+    } else {
+      // console.log(this.props.match);
+
+      this.props.history.push(`/account/venues`);
     }
   }
 
-  componentDidUpdate(prevProps, state) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+
     if (
       prevProps.venues !== this.props.venues &&
       this.props.venues.selectedVenue !== null
     ) {
+      console.log(
+        'this.props.venues.selectedVenue',
+        this.props.venues.selectedVenue
+      );
+
       const venueData = setVenueData(this.props.venues.selectedVenue);
+
+      console.log('VEnue DATA', venueData);
+
       this.setState({
         updatedVenue: venueData
       });
-    }
-
-    if (prevProps.errors !== this.props.errors) {
-      this.setState({ errors: this.props.errors });
     }
   }
 
@@ -305,7 +325,7 @@ class VenueForm extends Component {
     const typeOptions = [
       { value: 'bar', label: 'Bar' },
       { value: 'cafe', label: 'Cafe' },
-      { value: 'restraunt', label: 'Restraunt' }
+      { value: 'restaurant', label: 'Restaurant' }
     ];
 
     const weekTimeOptions = [
@@ -374,7 +394,7 @@ class VenueForm extends Component {
               <SelectInputHorizontal
                 label="Venue Type"
                 name="type"
-                placeholder="Select venue type..."
+                placeholder="Click To Select..."
                 options={typeOptions}
                 getSelectedValue={this.getSelectedValue}
                 className="selectInput"
@@ -602,4 +622,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(VenueForm);
+)(withRouter(VenueForm));

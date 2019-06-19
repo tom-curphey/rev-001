@@ -2,9 +2,11 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { setSelectedVenue } from './venueActions';
+import Spinner from '../../../utils/Spinner';
+import { getNewVenueData } from '../../../utils/utils';
 import PropTypes from 'prop-types';
 
-function Venues({ venues, loading, history, setSelectedVenue }) {
+function Venues({ venues, history, setSelectedVenue }) {
   let venuesList = '';
 
   const selectVenue = e => {
@@ -14,6 +16,13 @@ function Venues({ venues, loading, history, setSelectedVenue }) {
 
     setSelectedVenue(selectedVenue[0]);
     history.push(`/account/venues/edit/${selectedVenue[0].urlName}`);
+  };
+
+  const handleAddVenue = () => {
+    const venueData = getNewVenueData();
+    setSelectedVenue(venueData);
+
+    history.push(`/account/venues/add`);
   };
 
   if (venues.venues !== null) {
@@ -29,19 +38,39 @@ function Venues({ venues, loading, history, setSelectedVenue }) {
     });
   }
 
+  let venuesContent;
+  console.log('LOading: ', venues.loading);
+
+  if (venues.loading) {
+    venuesContent = (
+      <div style={{ marginTop: '200px' }}>
+        <Spinner width="30px" />
+      </div>
+    );
+  } else {
+    venuesContent = (
+      <ul>
+        <li className="header">
+          <div />
+          <div>Name</div>
+          <div>Recipes</div>
+          <div>ROI</div>
+        </li>
+        {venuesList}
+      </ul>
+    );
+  }
+
   return (
     <Fragment>
       <section className="settings venues">
-        <h1>Venues</h1>
-        <ul>
-          <li className="header">
-            <div />
-            <div>Name</div>
-            <div>Recipes</div>
-            <div>ROI</div>
-          </li>
-          {venuesList}
-        </ul>
+        <div className="titleAndButtons">
+          <h1>Venues</h1>
+          <ul>
+            <li onClick={handleAddVenue}> + Add Venue</li>
+          </ul>
+        </div>
+        {venuesContent}
       </section>
     </Fragment>
   );

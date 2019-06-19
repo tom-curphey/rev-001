@@ -6,7 +6,8 @@ import {
   VENUES_ERROR,
   GET_ERRORS,
   SET_SELECTED_VENUE,
-  SET_VENUE_LOADING
+  SET_VENUE_LOADING,
+  STOP_VENUE_LOADING
 } from '../../../redux/types';
 import { isEmpty } from '../../../utils/utils';
 import { loadProfile } from '../profile/profileActions';
@@ -98,7 +99,7 @@ export const addOrEditVenue = venueData => async dispatch => {
     await dispatch(loadVenues(res.data));
   } catch (err) {
     dispatch({
-      type: SELECTED_VENUE_FAILED
+      type: STOP_VENUE_LOADING
     });
     displayErrors(err, dispatch, GET_ERRORS);
   }

@@ -5,7 +5,8 @@ import {
   SELECTED_VENUE_SUCCESS,
   SELECTED_VENUE_FAILED,
   CLEAR_VENUES,
-  SET_VENUE_LOADING
+  SET_VENUE_LOADING,
+  STOP_VENUE_LOADING
 } from '../../../redux/types';
 
 const initialState = {
@@ -59,6 +60,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+
+    case STOP_VENUE_LOADING:
+      return {
+        ...state,
+        loading: false
       };
 
     default:

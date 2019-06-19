@@ -144,8 +144,13 @@ export const setVenueData = venue => {
   const venueData = {};
   venueData.costs = {};
 
-  venueData._id = venue._id;
-  venueData.displayName = isEmptyString(venue.displayName);
+  console.log('venueData', venueData);
+
+  venueData._id = venue._id ? venue._id : '';
+  venueData.displayName =
+    venue.displayName !== 'Add New Venue'
+      ? isEmptyString(venue.displayName)
+      : '';
   venueData.type = isEmptyString(venue.type);
   venueData.weeksOpen = isEmptyString(venue.weeksOpen).toString();
   venueData.weeksOpenUnit = isEmptyString(venue.weeksOpenUnit);
@@ -228,5 +233,38 @@ export const setVenueData = venue => {
     venue.costs.councilCostUnit
   );
   venueData.costs.wastageCost = isEmptyString(venue.wastageCost);
+  return venueData;
+};
+
+export const getNewVenueData = () => {
+  const venueData = {
+    displayName: 'Add New Venue',
+    type: '',
+    prepTime: '',
+    prepTimeUnit: 'week',
+    totalMenuItems: '',
+
+    weeksOpen: '',
+    weeksOpenUnit: 'year',
+    email: '',
+    phone: '',
+    address: '',
+    website: '',
+
+    costs: {
+      chefCost: '',
+      chefCostUnit: 'hour',
+      rentCost: '',
+      rentCostUnit: 'month',
+      waterCost: '',
+      waterCostUnit: 'month',
+      powerCost: '',
+      powerCostUnit: 'month',
+      insuranceCost: '',
+      insuranceCostUnit: 'year',
+      councilCost: '',
+      councilCostUnit: 'year'
+    }
+  };
   return venueData;
 };

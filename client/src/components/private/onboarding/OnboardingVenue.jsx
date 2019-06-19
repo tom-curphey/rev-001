@@ -7,7 +7,7 @@ import {
 } from '../venue/venueActions';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import { withRouter } from 'react-router';
-import SelectInput from '../../layout/input/SelectInput';
+import SelectInputBorder from '../../layout/input/SelectInputBorder';
 import { openNav } from '../../../utils/utils';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
@@ -115,7 +115,7 @@ class OnboardingVenue extends Component {
     const options = [
       { value: 'bar', label: 'Bar', className: 'optOpt' },
       { value: 'cafe', label: 'Cafe' },
-      { value: 'restraunt', label: 'Restraunt' }
+      { value: 'restaurant', label: 'Restaurant' }
     ];
 
     return (
@@ -148,12 +148,11 @@ class OnboardingVenue extends Component {
                   onChange={this.onChange}
                   error={errors.email && errors.email}
                 />
-                <SelectInput
+                <SelectInputBorder
                   name="type"
                   placeholder="Select venue type..."
                   options={options}
                   getSelectedValue={this.getSelectedValue}
-                  className="selectInput"
                   error={errors.type && errors.type}
                 />
                 <button type="submit" className="orange">

@@ -3,7 +3,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
 
-const SelectInput = ({
+const SelectInputBorder = ({
   options,
   getSelectedValue,
   placeholder,
@@ -48,18 +48,18 @@ const SelectInput = ({
       borderBottom: 'none',
       color: state.isSelected ? '#000' : '#343434',
       padding: 12,
-      fontSize: '14px'
+      fontSize: '16px'
     }),
     control: (base, state) => ({
       ...base,
-      fontSize: '14px',
+      fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
-      // borderColor: '#cdc0b2',
-      borderColor: '#fff',
+      borderColor: '#cdc0b2',
+      // borderColor: '#fff',
       '&:hover': {
-        backgroundColor: '#f1ede7'
-        // borderColor: '#fff'
+        // backgroundColor: '#f1ede7',
+        borderColor: '#cdc0b2'
       }
     })
   };
@@ -72,14 +72,14 @@ const SelectInput = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options}
-        className={`selectInput ${className}`}
+        className={`sBorderelectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         theme={theme => ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#9d9584',
+            neutral80: '#666',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
@@ -90,11 +90,11 @@ const SelectInput = ({
   );
 };
 
-SelectInput.propTypes = {
+SelectInputBorder.propTypes = {
   options: PropTypes.array.isRequired,
   getSelectedValue: PropTypes.func.isRequired
   // placeholder: PropTypes.string.isRequired,
   // className: PropTypes.string.isRequired
 };
 
-export default SelectInput;
+export default SelectInputBorder;
