@@ -8,7 +8,8 @@ import { removeErrors } from '../../../redux/errorActions';
 // import { setProfileLoading } from './profileActions';
 import {
   calcCostToSeconds,
-  setVenueData
+  setVenueData,
+  isEmpty
 } from '../../../utils/utils';
 import { addOrEditVenue, loadVenues } from './venueActions';
 import Spinner from '../../../utils/Spinner';
@@ -56,10 +57,10 @@ class VenueForm extends Component {
       this.props.venues.selectedVenue !== null
     ) {
       if (this.props.match.params.venue_action === 'edit') {
-        console.log(
-          'this.props',
-          this.props.match.params.venue_action
-        );
+        // console.log(
+        //   'this.props',
+        //   this.props.match.params.venue_action
+        // );
 
         const venueData = setVenueData(
           this.props.venues.selectedVenue
@@ -67,6 +68,10 @@ class VenueForm extends Component {
         this.setState({
           updatedVenue: venueData
         });
+      } else {
+        console.log('ID', this.props.venues.selectedVenue._id);
+        if (!isEmpty(this.props.venues.selectedVenue._id)) {
+        }
       }
     } else {
       // console.log(this.props.match);
@@ -84,18 +89,20 @@ class VenueForm extends Component {
       prevProps.venues !== this.props.venues &&
       this.props.venues.selectedVenue !== null
     ) {
-      console.log(
-        'this.props.venues.selectedVenue',
-        this.props.venues.selectedVenue
-      );
-
-      const venueData = setVenueData(this.props.venues.selectedVenue);
-
-      console.log('VEnue DATA', venueData);
-
-      this.setState({
-        updatedVenue: venueData
-      });
+      const { match, venues, history } = this.props;
+      if (
+        match.params.venue_action !== 'edit' &&
+        !isEmpty(venues.selectedVenue._id)
+      ) {
+        history.push(
+          `/account/venues/edit/${venues.selectedVenue.urlName}`
+        );
+      } else {
+        const venueData = setVenueData(venues.selectedVenue);
+        this.setState({
+          updatedVenue: venueData
+        });
+      }
     }
   }
 
