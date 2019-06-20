@@ -4,7 +4,7 @@ import { randomID } from '../../../utils/utils';
 export const setAlert = (
   msg,
   alertType,
-  timeout = 5000
+  timeout = 3000
 ) => dispatch => {
   const id = randomID();
   dispatch({

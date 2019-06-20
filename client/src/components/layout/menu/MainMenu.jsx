@@ -62,6 +62,7 @@ const MainMenu = ({
         </Link>
         <span onClick={handleLogout}>Logout</span>
       </nav>
+      <Alert />
     </Fragment>
   );
 
@@ -91,6 +92,7 @@ const MainMenu = ({
           Terms & Conditions
         </Link>
       </nav>
+      <div>Alert</div>
       <Alert />
     </Fragment>
   );

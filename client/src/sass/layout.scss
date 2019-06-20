@@ -95,14 +95,32 @@ section.app.public {
   width: 100%;
 }
 
-div.alert {
+div.alertBox {
   position: absolute;
-  bottom: 20px;
+  bottom: -50px;
   left: 20px;
+  transition: transform 500ms ease-in-out;
+}
+
+div.alertBox.alertStart {
+  transform: translate(0px, -170px);
+}
+
+div.alert {
   width: 200px;
-  background-color: $cOrange;
   padding: 20px;
   border-radius: 40px;
+  background-color: $cOrangeDark;
+  color: $cWhite;
+  text-align: center;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+div.alert-success {
+  background-color: $cGreen;
+}
+div.alert-error {
+  background-color: $cOrangeDark;
 }
 
 /* 
@@ -136,6 +154,7 @@ section.mainMenu {
     font-size: 16px;
     cursor: pointer;
     width: 270px;
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
 
     div {
       display: flex;

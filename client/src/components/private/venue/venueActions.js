@@ -13,6 +13,7 @@ import { isEmpty } from '../../../utils/utils';
 import { loadProfile } from '../profile/profileActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
 import { displayErrors } from '../../../utils/utils';
+import { setAlert } from '../../layout/alert/alertActions';
 
 export const setVenueLoading = () => dispatch => {
   dispatch({ type: SET_VENUE_LOADING });
@@ -60,6 +61,7 @@ export const loadVenues = (
         }
       }
     }
+    // dispatch(setAlert('Venues Loaded', 'success'));
   } catch (err) {
     dispatch({
       type: VENUES_ERROR
@@ -97,11 +99,13 @@ export const addOrEditVenue = venueData => async dispatch => {
 
     await dispatch(loadProfile());
     await dispatch(loadVenues(res.data));
+    dispatch(setAlert('Venue Saved', 'success'));
   } catch (err) {
     displayErrors(err, dispatch, GET_ERRORS);
     dispatch({
       type: STOP_VENUE_LOADING
     });
+    dispatch(setAlert('Venue Error', 'error'));
   }
 };
 
