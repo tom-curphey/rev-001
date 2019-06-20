@@ -7,6 +7,7 @@ import {
 import Home from './components/public/Home';
 import Signin from './components/public/auth/Signin';
 import ForgotPassword from './components/public/auth/ForgotPassword';
+import ResetPassword from './components/public/auth/ResetPassword';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
@@ -54,6 +55,11 @@ const App = () => {
             exact
             path="/forgot-password"
             component={ForgotPassword}
+          />
+          <Route
+            exact
+            path="/resetpassword/:id/:token"
+            component={ResetPassword}
           />
           <Route exact path="/test" component={Test} />
           <PrivateRoute

@@ -10,9 +10,8 @@ import { openNav } from '../../../utils/utils';
 import { removeErrors } from '../../../redux/errorActions';
 import { isEmpty } from '../../../utils/utils';
 
-class ForgotPassword extends Component {
+class ResetPassword extends Component {
   state = {
-    userID: '',
     email: '',
     tempToken: '',
     errors: {}
@@ -41,7 +40,7 @@ class ForgotPassword extends Component {
       prevState.tempToken === this.state.tempToken &&
       isEmpty(this.state.tempToken)
     ) {
-      this.fetch_temp_tokens();
+      this.fetch_temp_token();
     }
   }
 
@@ -50,16 +49,14 @@ class ForgotPassword extends Component {
     this.props.removeErrors();
   }
 
-  fetch_temp_tokens = e => {
+  fetch_temp_token = e => {
     const tempToken = JSON.stringify(
       localStorage.getItem('temp-token')
     );
-    const userID = JSON.stringify(localStorage.getItem('user-id'));
 
-    console.log('teuserIDmp', userID);
-    console.log('teuserIDmp', tempToken);
-    if (tempToken && userID) {
-      this.setState({ tempToken: tempToken, userID: userID });
+    if (tempToken) {
+      // console.log('temp', tempToken);
+      this.setState({ tempToken: tempToken });
     }
   };
 
@@ -80,10 +77,9 @@ class ForgotPassword extends Component {
   };
 
   render() {
-    const { email, errors, tempToken, userID } = this.state;
+    const { email, errors, tempToken } = this.state;
 
     console.log('STATE TEMP:', tempToken);
-    console.log('STATE USEID:', userID);
 
     return (
       <PublicMenu>
@@ -117,15 +113,8 @@ class ForgotPassword extends Component {
               />
               <Link to="/contact-us">Forgot account email?</Link>
               <button>Email Me The Password Reset Link</button>
-              {tempToken && userID && (
-                <Link
-                  to={`/resetpassword/${userID.replace(
-                    /['"]+/g,
-                    ''
-                  )}/${tempToken.replace(/['"]+/g, '')}`}
-                >
-                  Reset Password Link
-                </Link>
+              {tempToken && (
+                <Link to="/contact-us">Forgot account email?</Link>
               )}
             </form>
             <Link className="subLink" to="/register">
@@ -139,7 +128,7 @@ class ForgotPassword extends Component {
   }
 }
 
-ForgotPassword.propTypes = {
+ResetPassword.propTypes = {
   isAuthenticated: PropTypes.bool,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
@@ -159,4 +148,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(ForgotPassword);
+)(ResetPassword);

@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const nodemailer = require('nodemailer');
 
 module.exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -259,7 +260,7 @@ module.exports.forgotPassword = async (req, res) => {
     }
     console.log('EMAIL: ', email);
 
-    var payload = {
+    const payload = {
       _id: user._id, // User ID from database
       email: user.email
     };
@@ -268,22 +269,15 @@ module.exports.forgotPassword = async (req, res) => {
     // current password hash from the database, and combine it
     // with the user's created date to make a very unique secret key!
     // For example:
-    // var secret = user.password + ‘-' + user.created.getTime();
+    // const secret = user.password + ‘-' + user.created.getTime();
 
-    var secret = `${user.password}-${user.createdAt.getTime()}`;
+    // Need to sign the token this way to get access it again when user clicks to reset password
+    const secret = `${user.password}-${user.createdAt.getTime()}`;
+    const token = jwt.sign(payload, secret);
+    const userID = user._id;
+    return res.status(200).json({ token, userID });
 
-    // var token = jwt.sign(payload, secret);
-
-    jwt.sign(
-      payload,
-      config.get('jwtToken'),
-      { expiresIn: 64800 },
-      (err, token) => {
-        if (err) throw err;
-
-        console.log('token', token);
-      }
-    );
+    // @todo: send link to users email
   } catch (err) {
     console.error(err);
     return res.status(500).send('Server Error');

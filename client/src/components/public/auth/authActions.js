@@ -13,7 +13,8 @@ import {
   CLEAR_PROFILE,
   CLEAR_VENUES,
   UPDATE_PASSWORD_SUCCESS,
-  PASSWORD_FAILED
+  PASSWORD_FAILED,
+  LOAD_RESET_TOKEN
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
@@ -178,6 +179,12 @@ export const getForgotPasswordLink = ({
   try {
     const res = await axios.post('/api/auth/forgot', body, config);
     console.log('RES', res.data);
+
+    dispatch({
+      type: LOAD_RESET_TOKEN,
+      payload: res.data
+    });
+    dispatch(loadUser());
   } catch (err) {
     displayErrors(err, dispatch, GET_ERRORS);
     console.log('err', err);

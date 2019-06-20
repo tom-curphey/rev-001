@@ -7,6 +7,7 @@ import {
   REGISTER_FAILED,
   UPDATE_USER_SUCCESS,
   UPDATE_PASSWORD_SUCCESS,
+  LOAD_RESET_TOKEN,
   PASSWORD_FAILED,
   LOGOUT
 } from '../../../redux/types';
@@ -39,6 +40,15 @@ export default function(state = initialState, action) {
         ...state,
         ...payload,
         isAuthenticated: true,
+        loading: false
+      };
+
+    case LOAD_RESET_TOKEN:
+      localStorage.setItem('temp-token', payload.token);
+      localStorage.setItem('user-id', payload.userID);
+      return {
+        ...state,
+        isAuthenticated: false,
         loading: false
       };
 
