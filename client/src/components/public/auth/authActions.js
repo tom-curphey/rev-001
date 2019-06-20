@@ -20,6 +20,7 @@ import { loadProfile } from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
 import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
+import { removeErrors } from '../../../redux/errorActions';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -162,4 +163,25 @@ export const logout = () => dispatch => {
   dispatch({ type: REMOVE_ERRORS });
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: CLEAR_VENUES });
+};
+
+export const getForgotPasswordLink = ({
+  email
+}) => async dispatch => {
+  dispatch(removeErrors());
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  const body = JSON.stringify({ email });
+  try {
+    const res = await axios.post('/api/auth/forgot', body, config);
+    console.log('RES', res.data);
+  } catch (err) {
+    displayErrors(err, dispatch, GET_ERRORS);
+    console.log('err', err);
+
+    // can dispatch an alert
+  }
 };

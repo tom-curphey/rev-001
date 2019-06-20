@@ -82,4 +82,18 @@ router.post(
   authController.updatePassword
 );
 
+// @router POST api/auth/forgot
+// @desc reset forgotten password
+// @access Public
+router.post(
+  '/forgot',
+  [
+    check('email', 'Email is required')
+      .not()
+      .isEmpty(),
+    check('email', 'Email is not valid').isEmail()
+  ],
+  authController.forgotPassword
+);
+
 module.exports = router;

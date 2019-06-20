@@ -236,3 +236,56 @@ module.exports.signinUser = async (req, res) => {
     return res.status(500).send('Server Error');
   }
 };
+
+module.exports.forgotPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('::errors', errors);
+
+    return res
+      .status(400)
+      .json({ errors: errors.array({ onlyFirstError: true }) });
+  }
+
+  const { email } = req.body;
+
+  // Using email, find user from your database.
+  try {
+    let user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({
+        errors: [{ param: 'signin', msg: 'Invalid Credentials' }]
+      });
+    }
+    console.log('EMAIL: ', email);
+
+    var payload = {
+      _id: user._id, // User ID from database
+      email: user.email
+    };
+
+    // TODO: Make this a one-time-use token by using the user's
+    // current password hash from the database, and combine it
+    // with the user's created date to make a very unique secret key!
+    // For example:
+    // var secret = user.password + ‘-' + user.created.getTime();
+
+    var secret = `${user.password}-${user.createdAt.getTime()}`;
+
+    // var token = jwt.sign(payload, secret);
+
+    jwt.sign(
+      payload,
+      config.get('jwtToken'),
+      { expiresIn: 64800 },
+      (err, token) => {
+        if (err) throw err;
+
+        console.log('token', token);
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Server Error');
+  }
+};

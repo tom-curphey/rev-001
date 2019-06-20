@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Home from './components/public/Home';
 import Signin from './components/public/auth/Signin';
+import ForgotPassword from './components/public/auth/ForgotPassword';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
@@ -49,6 +50,11 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/signin" component={Signin} />
+          <Route
+            exact
+            path="/forgot-password"
+            component={ForgotPassword}
+          />
           <Route exact path="/test" component={Test} />
           <PrivateRoute
             exact
