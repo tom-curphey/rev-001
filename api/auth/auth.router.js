@@ -74,6 +74,9 @@ router.post(
   [
     check('password', 'Password is required')
       .not()
+      .isEmpty(),
+    check('newPassword', 'New password is required')
+      .not()
       .isEmpty()
   ],
   authController.updatePassword

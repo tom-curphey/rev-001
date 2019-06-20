@@ -7,6 +7,7 @@ import {
   GET_ERRORS
 } from '../../../redux/types';
 import { displayErrors } from '../../../utils/utils';
+import { setAlert } from '../../layout/alert/alertActions';
 
 // Load Profile
 export const loadProfile = () => async dispatch => {
@@ -30,12 +31,14 @@ export const updateProfile = profileData => async dispatch => {
       type: UPDATE_PROFILE,
       payload: res.data
     });
+    dispatch(setAlert('Profile Saved', 'success'));
   } catch (err) {
-    console.log('err', err);
+    // console.log('err', err);
     dispatch({
       type: PROFILE_ERROR
     });
     displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(setAlert('Profile Error', 'error'));
   }
 };
 

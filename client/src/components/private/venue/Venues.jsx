@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { setSelectedVenue } from './venueActions';
-import Spinner from '../../../utils/Spinner';
+import Spinner from '../../layout/Spinner';
 import { getNewVenueData } from '../../../utils/utils';
 import PropTypes from 'prop-types';
 

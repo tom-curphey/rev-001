@@ -4,7 +4,7 @@ import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import { removeErrors } from '../../../redux/errorActions';
 import { setProfileLoading } from './profileActions';
 import { updatePassword } from '../../public/auth/authActions';
-import Spinner from '../../../utils/Spinner';
+import Spinner from '../../layout/Spinner';
 import PropTypes from 'prop-types';
 
 class PasswordForm extends Component {
@@ -42,6 +42,9 @@ class PasswordForm extends Component {
       password: password,
       newPassword: newPassword
     };
+
+    console.log('updatedPassword', updatedPassword);
+
     this.props.updatePassword(updatedPassword);
   };
 
@@ -73,7 +76,10 @@ class PasswordForm extends Component {
             name="newPassword"
             onChange={this.onChange}
             type="password"
-            error={errors.newPassword && errors.newPassword}
+            error={
+              (errors.newPassword && errors.newPassword) ||
+              (errors.signin && errors.signin)
+            }
           />
 
           <div className="button">

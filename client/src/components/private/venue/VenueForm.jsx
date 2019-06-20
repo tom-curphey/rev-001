@@ -12,7 +12,7 @@ import {
   isEmpty
 } from '../../../utils/utils';
 import { addOrEditVenue, loadVenues } from './venueActions';
-import Spinner from '../../../utils/Spinner';
+import Spinner from '../../layout/Spinner';
 import PropTypes from 'prop-types';
 
 class VenueForm extends Component {

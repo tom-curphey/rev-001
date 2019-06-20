@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+import SelectInputHorizontal from '../../layout/input/SelectInputHorizontal';
 import { removeErrors } from '../../../redux/errorActions';
 import { updateProfile, setProfileLoading } from './profileActions';
 import { updateUser } from '../../public/auth/authActions';
 import { isEmptyString } from '../../../utils/utils';
-import Spinner from '../../../utils/Spinner';
+import Spinner from '../../layout/Spinner';
 import PropTypes from 'prop-types';
 
 class ProfileForm extends Component {
@@ -44,35 +45,36 @@ class ProfileForm extends Component {
   }
 
   componentDidUpdate(prevProps, state) {
-    if (prevProps.user !== this.props.user) {
-      const { email } = this.props.user;
-      this.setState(prevState => ({
-        ...prevState,
-        email: isEmptyString(email)
-      }));
-    }
-
-    if (
-      prevProps.profile !== this.props.profile &&
-      this.props.profile !== null
-    ) {
-      const {
-        firstName,
-        lastName,
-        mobile,
-        position
-      } = this.props.profile.profile;
-      this.setState(prevState => ({
-        ...prevState,
-        firstName: isEmptyString(firstName),
-        lastName: isEmptyString(lastName),
-        mobile: isEmptyString(mobile),
-        position: isEmptyString(position)
-      }));
-    }
-
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
+    } else {
+      if (prevProps.user !== this.props.user) {
+        const { email } = this.props.user;
+        this.setState(prevState => ({
+          ...prevState,
+          email: isEmptyString(email)
+        }));
+      }
+
+      if (
+        prevProps.profile !== this.props.profile &&
+        this.props.profile !== null &&
+        this.props.profile.profile !== null
+      ) {
+        const {
+          firstName,
+          lastName,
+          mobile,
+          position
+        } = this.props.profile.profile;
+        this.setState(prevState => ({
+          ...prevState,
+          firstName: isEmptyString(firstName),
+          lastName: isEmptyString(lastName),
+          mobile: isEmptyString(mobile),
+          position: isEmptyString(position)
+        }));
+      }
     }
   }
 
@@ -85,6 +87,28 @@ class ProfileForm extends Component {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value
     });
+
+  handleNumberChange = e => {
+    let value = e.target.value;
+    if (value !== '') {
+      if (!isNaN(value)) {
+        let checkDecimal = value.search(/\./);
+        // console.log('checkDecimal: ', checkDecimal);
+        if (checkDecimal !== -1) {
+          value = e.target.value;
+        }
+        e.persist();
+        this.setState({
+          [e.target.name]: e.target.value
+        });
+      }
+    } else {
+      e.persist();
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+  };
 
   handleOnSubmit = e => {
     e.preventDefault();
@@ -105,6 +129,9 @@ class ProfileForm extends Component {
       mobile: mobile,
       position: position
     };
+
+    console.log('updatedProfile', updatedProfile);
+
     this.props.updateProfile(updatedProfile);
 
     if (email !== this.props.user.email) {
@@ -117,6 +144,12 @@ class ProfileForm extends Component {
     }
   };
 
+  getSelectedValue = selectedValue => {
+    this.setState({
+      position: selectedValue.value
+    });
+  };
+
   render() {
     const { errors, profile } = this.props;
     const {
@@ -126,6 +159,17 @@ class ProfileForm extends Component {
       mobile,
       position
     } = this.state;
+
+    const positionOptions = [
+      { value: 'chef', label: 'Chef' },
+      { value: 'head-chef', label: 'Head Chef' },
+      { value: 'recipe-developer', label: 'Recipe Developer' },
+      { value: 'venue-manager', label: 'Venue Manager' },
+      { value: 'venue-owner', label: 'Venue Owner' },
+      { value: 'venue-owner-chef', label: 'Venue Owner & Chef' }
+    ];
+
+    console.log('postion', position);
 
     let formContent;
     if (profile.loading) {
@@ -162,15 +206,17 @@ class ProfileForm extends Component {
             label="Mobile"
             value={mobile.toString()}
             name="mobile"
-            onChange={this.onChange}
+            onChange={this.handleNumberChange}
             error={errors.mobile && errors.mobile}
           />
-          <TextInputHorizontal
+          <SelectInputHorizontal
             label="Job Position"
-            value={position}
             name="position"
-            onChange={this.onChange}
+            placeholder="Click To Select..."
+            options={positionOptions}
+            getSelectedValue={this.getSelectedValue}
             error={errors.position && errors.position}
+            value={position}
           />
           <div className="button">
             <button type="submit" className="orange">

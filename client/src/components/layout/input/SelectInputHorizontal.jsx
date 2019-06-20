@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
-import { capitalizeFirstLetter } from '../../../utils/utils';
+import { isEmpty } from '../../../utils/utils';
 
 const SelectInputHorizontal = ({
   options,
@@ -26,8 +26,20 @@ const SelectInputHorizontal = ({
 
   let selectedValue;
   if (value) {
-    let label = capitalizeFirstLetter(value);
-    selectedValue = { value: value, label: label };
+    let selectedOption = options.filter(option => {
+      return option.value === value;
+    });
+
+    if (isEmpty(selectedOption)) {
+      console.log('Name', name);
+
+      console.log('selectedOption: ', selectedOption);
+    } else {
+      selectedValue = {
+        value: value,
+        label: selectedOption[0].label
+      };
+    }
   }
 
   // What to do when input is being typed
@@ -65,7 +77,7 @@ const SelectInputHorizontal = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options}
-        className={className}
+        className={`selectInput ${className}`}
         styles={customStyles}
         value={selectedValue}
         theme={theme => ({
@@ -90,7 +102,7 @@ SelectInputHorizontal.propTypes = {
   options: PropTypes.array.isRequired,
   getSelectedValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired
+  className: PropTypes.string
 };
 
 export default SelectInputHorizontal;

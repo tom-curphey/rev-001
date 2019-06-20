@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Alert from '../../layout/alert/Alert';
 import MainVenueMenu from './MainVenueMenu';
 import icon from '../../../images/recipeRevenueIcon.png';
+import Spinner from '../Spinner';
 
 const MainMenu = ({
   auth: { isAuthenticated, loading },
@@ -23,7 +24,7 @@ const MainMenu = ({
     history.push('/signin');
   };
 
-  let venueName = '-';
+  let venueName = <Spinner width="20px" />;
   if (venues && venues.selectedVenue !== null) {
     venueName = venues.selectedVenue.displayName;
   }

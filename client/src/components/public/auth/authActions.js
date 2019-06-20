@@ -19,6 +19,7 @@ import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
 import { displayErrors } from '../../../utils/utils';
+import { setAlert } from '../../layout/alert/alertActions';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -115,11 +116,13 @@ export const updatePassword = updatedPassword => async dispatch => {
     dispatch(loadUser());
     dispatch(loadProfile());
     dispatch(loadVenues());
+    dispatch(setAlert('Profile Saved', 'success'));
   } catch (err) {
-    dispatch({
-      type: PASSWORD_FAILED
-    });
+    // dispatch({
+    //   type: PASSWORD_FAILED
+    // });
     displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(setAlert('Password Error', 'error'));
     console.log('err', err);
   }
 };
