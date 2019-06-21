@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
@@ -113,4 +114,4 @@ MainVenueMenu.propTypes = {
 export default connect(
   mapState,
   actions
-)(MainVenueMenu);
+)(withRouter(MainVenueMenu));

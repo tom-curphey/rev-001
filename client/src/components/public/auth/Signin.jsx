@@ -38,7 +38,9 @@ class Signin extends Component {
 
   componentWillUnmount() {
     console.log('signin Unmounted');
-    this.props.removeErrors();
+    if (this.props.errors) {
+      this.props.removeErrors();
+    }
   }
 
   onChange = e =>

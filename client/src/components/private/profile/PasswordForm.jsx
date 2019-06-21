@@ -19,6 +19,9 @@ class PasswordForm extends Component {
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
     }
+    if (prevProps.auth !== this.props.auth) {
+      this.setState({ password: '', newPassword: '' });
+    }
   }
 
   componentWillUnmount() {
@@ -122,7 +125,7 @@ const actions = {
 };
 
 const mapState = state => ({
-  user: state.auth.user,
+  auth: state.auth,
   profile: state.profile,
   errors: state.errors
 });

@@ -21,6 +21,7 @@ import store from './redux/store';
 import { loadUser } from './components/public/auth/authActions';
 import { loadProfile } from './components/private/profile/profileActions';
 import { loadVenues } from './components/private/venue/venueActions';
+import { loadRecipes } from './components/private/recipe/recipeActions';
 import setAuthToken from './utils/setAuthToken';
 import { AUTH_ERROR } from './redux/types';
 
@@ -37,6 +38,7 @@ const App = () => {
       store.dispatch(loadUser());
       store.dispatch(loadProfile());
       store.dispatch(loadVenues());
+      store.dispatch(loadRecipes());
     } else {
       store.dispatch({
         type: AUTH_ERROR

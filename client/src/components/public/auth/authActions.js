@@ -12,16 +12,17 @@ import {
   REMOVE_ERRORS,
   CLEAR_PROFILE,
   CLEAR_VENUES,
+  CLEAR_RECIPES,
   UPDATE_PASSWORD_SUCCESS,
   LOAD_RESET_FORM,
   REMOVE_RESET_FORM_TOKEN,
-  PASSWORD_FAILED,
   LOAD_RESET_TOKEN,
   REMOVE_RESET_TOKEN
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
+import { loadRecipes } from '../../private/recipe/recipeActions';
 import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
 import { removeErrors } from '../../../redux/errorActions';
@@ -95,6 +96,7 @@ export const updateUser = updatedUser => async dispatch => {
     dispatch(loadUser());
     dispatch(loadProfile());
     dispatch(loadVenues());
+    dispatch(loadRecipes());
   } catch (err) {
     displayErrors(err, dispatch, GET_ERRORS);
     console.log('err', err);
@@ -121,7 +123,7 @@ export const updatePassword = updatedPassword => async dispatch => {
     dispatch(loadUser());
     dispatch(loadProfile());
     dispatch(loadVenues());
-    dispatch(setAlert('Profile Saved', 'success'));
+    dispatch(setAlert('Password Saved', 'success'));
   } catch (err) {
     // dispatch({
     //   type: PASSWORD_FAILED
@@ -152,7 +154,10 @@ export const signin = ({ email, password }) => async dispatch => {
     dispatch(loadUser());
     dispatch(loadProfile());
     dispatch(loadVenues());
+    dispatch(loadRecipes());
   } catch (err) {
+    console.log('err', err);
+
     dispatch({
       type: SIGNIN_FAILED
     });
@@ -163,10 +168,13 @@ export const signin = ({ email, password }) => async dispatch => {
 
 // Logout / Clear Profile
 export const logout = () => dispatch => {
+  console.log('Logout');
+
   dispatch({ type: LOGOUT });
   dispatch({ type: REMOVE_ERRORS });
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: CLEAR_VENUES });
+  dispatch({ type: CLEAR_RECIPES });
 };
 
 export const getForgotPasswordLink = ({
@@ -252,6 +260,7 @@ export const resetPassword = ({
     dispatch(loadUser());
     dispatch(loadProfile());
     dispatch(loadVenues());
+    dispatch(loadRecipes());
     dispatch(setAlert('Password Updated', 'success'));
   } catch (err) {
     displayErrors(err, dispatch, GET_ERRORS);

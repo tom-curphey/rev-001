@@ -53,7 +53,7 @@ export default function(state = initialState, action) {
         ...state,
         venues: null,
         selectedVenue: null,
-        loading: false
+        loading: true
       };
 
     case SET_VENUE_LOADING:

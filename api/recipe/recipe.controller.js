@@ -1,13 +1,71 @@
 const Recipe = require('./recipe.model');
+const User = require('../auth/auth.model');
+const { validationResult } = require('express-validator/check');
 
-module.exports.getRecipes = (req, res) => {
+module.exports.getRecipes = async (req, res) => {
   console.log('Recipe Controller');
+  try {
+    const recipes = await Recipe.find({ user: req.user.id });
+    if (!recipes) {
+      return res.status(400).json({
+        errors: [
+          {
+            param: 'recipe',
+            msg: 'You have no recipes'
+          }
+        ]
+      });
+    }
+    res.status(200).json(recipes);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Sever Error');
+  }
+};
 
-  // Recipe.find().then(recipes => {
-  //   if (recipes) {
-  //     return res.status(200).json(recipes);
-  //   } else {
-  //     return res.status(404).json({ message: 'No items found' });
-  //   }
-  // });
+module.exports.addOrEditRecipe = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { _id, displayName, serves } = req.body;
+
+  const recipeData = {};
+  if (_id) recipeData._id = _id;
+  recipeData.user = req.user.id;
+  recipeData.displayName = displayName;
+  recipeData.urlName = displayName
+    .trim()
+    .replace(/\s+/g, '-')
+    .toLowerCase();
+  recipeData.serves = serves;
+
+  try {
+    if (_id) {
+      const recipe = await Recipe.findById(_id);
+    } else {
+      let recipe = await Recipe.findOne({
+        displayName: displayName
+      });
+      if (recipe) {
+        return res.status(400).json({
+          errors: [
+            {
+              param: 'recipe',
+              msg: 'You already have a recipe by this name..'
+            }
+          ]
+        });
+      }
+
+      recipe = new Recipe(recipeData);
+
+      await recipe.save();
+      return res.status(200).json(recipe);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Sever Error');
+  }
 };

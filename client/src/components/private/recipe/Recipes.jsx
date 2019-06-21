@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthMenu from '../../layout/menu/AuthMenu';
-// import { loadVenues } from '../venue/venueActions';
+import Spinner from '../../layout/Spinner';
+import RecipeWelcome from './RecipeWelcome';
 
-const Recipes = ({ profile, isAuthenticated, loadVenues }) => {
+const Recipes = ({ profile, isAuthenticated, recipes }) => {
   if (isAuthenticated === null || isAuthenticated === false) {
     return <Redirect to="/signin" />;
   }
@@ -20,16 +21,30 @@ const Recipes = ({ profile, isAuthenticated, loadVenues }) => {
     }
   }
 
+  let content;
+  if (recipes.loading) {
+    content = (
+      <div style={{ marginTop: '200px' }}>
+        <Spinner width="30px" />
+      </div>
+    );
+  } else {
+    if (recipes.recipes && recipes.recipes.length !== 0) {
+      content = <div>Recipes</div>;
+    } else {
+      content = <RecipeWelcome />;
+    }
+  }
+
   return (
     <AuthMenu>
-      <div>Recipes</div>
-      {/* <button onClick={loadVenues}>Load Venues</button> */}
+      <section className="recipes">{content}</section>
     </AuthMenu>
   );
 };
 
 Recipes.propTypes = {
-  // loadVenues: PropTypes.func.isRequired,
+  recipes: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool,
   venues: PropTypes.object.isRequired
@@ -42,7 +57,8 @@ Recipes.propTypes = {
 const mapState = state => ({
   profile: state.profile,
   isAuthenticated: state.auth.isAuthenticated,
-  venues: state.venues
+  venues: state.venues,
+  recipes: state.recipes
 });
 
 export default connect(mapState)(Recipes);
