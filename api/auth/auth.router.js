@@ -77,13 +77,17 @@ router.post(
       .isEmpty(),
     check('newPassword', 'New password is required')
       .not()
-      .isEmpty()
+      .isEmpty(),
+    check(
+      'newPassword',
+      'Password must be atleast 6 characters long'
+    ).isLength({ min: 6 })
   ],
   authController.updatePassword
 );
 
 // @router POST api/auth/forgot
-// @desc reset forgotten password
+// @desc generate forgotten password link
 // @access Public
 router.post(
   '/forgot',
@@ -94,6 +98,45 @@ router.post(
     check('email', 'Email is not valid').isEmail()
   ],
   authController.forgotPassword
+);
+
+// @router POST api/auth/check
+// @desc check forgotten password link
+// @access Public
+router.post(
+  '/check',
+  [
+    check('id', 'Link is invalid')
+      .not()
+      .isEmpty(),
+    check('tempToken', 'Link is invalid')
+      .not()
+      .isEmpty()
+  ],
+  authController.checkForgotPasswordLink
+);
+
+// @router POST api/auth/reset
+// @desc check forgotten password link
+// @access Public
+router.post(
+  '/reset',
+  [
+    check('id', 'Link is invalid')
+      .not()
+      .isEmpty(),
+    check('tempToken', 'Link is invalid')
+      .not()
+      .isEmpty(),
+    check('newPassword', 'New password is required')
+      .not()
+      .isEmpty(),
+    check(
+      'newPassword',
+      'Password must be atleast 6 characters long'
+    ).isLength({ min: 6 })
+  ],
+  authController.resetPassword
 );
 
 module.exports = router;

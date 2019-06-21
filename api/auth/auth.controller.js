@@ -283,3 +283,97 @@ module.exports.forgotPassword = async (req, res) => {
     return res.status(500).send('Server Error');
   }
 };
+
+module.exports.checkForgotPasswordLink = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('::errors', errors);
+
+    return res
+      .status(400)
+      .json({ errors: errors.array({ onlyFirstError: true }) });
+  }
+
+  const { id, tempToken } = req.body;
+
+  try {
+    let user = await User.findById(id);
+
+    // Compare if password entered matches users password
+
+    const secret = `${user.password}-${user.createdAt.getTime()}`;
+    var isMatch = jwt.decode(tempToken, secret);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        errors: [{ param: 'reset', msg: 'Link is invalid' }]
+      });
+    }
+    return res.status(200).json(true);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Server Error');
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('::errors', errors);
+
+    return res
+      .status(400)
+      .json({ errors: errors.array({ onlyFirstError: true }) });
+  }
+
+  const { id, tempToken, newPassword } = req.body;
+
+  try {
+    let user = await User.findById(id);
+
+    // Compare if password entered matches users password
+
+    const secret = `${user.password}-${user.createdAt.getTime()}`;
+    var isMatch = jwt.decode(tempToken, secret);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        errors: [{ param: 'reset', msg: 'Link is invalid' }]
+      });
+    }
+
+    console.log('MATCH!!');
+
+    // Encrypt Password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    // Save the user
+    await user.save();
+
+    // Return JSON webtoken
+    // When a user registers we want them to be logged in immediately
+    // This is why we need to return the JSON web token
+    const payload = {
+      user: {
+        id: user._id,
+        email: user.email,
+        active: user.active
+      }
+    };
+
+    // Sign the JWT token
+    jwt.sign(
+      payload,
+      config.get('jwtToken'),
+      { expiresIn: 64800 },
+      (err, token) => {
+        if (err) throw err;
+        return res.status(200).json({ token });
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Server Error');
+  }
+};

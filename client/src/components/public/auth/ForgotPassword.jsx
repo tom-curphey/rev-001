@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getForgotPasswordLink } from './authActions';
+import {
+  getForgotPasswordLink,
+  removeResetTokens
+} from './authActions';
 import TextInput from '../../layout/input/TextInput';
 import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
@@ -20,15 +23,16 @@ class ForgotPassword extends Component {
 
   componentDidMount() {
     // Redirect if logged in
-    if (this.props.isAuthenticated) {
+    if (this.props.auth.isAuthenticated) {
       return <Redirect to="/recipes" />;
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      prevProps.isAuthenticated !== this.props.isAuthenticated &&
-      this.props.isAuthenticated
+      prevProps.auth.isAuthenticated !==
+        this.props.auth.isAuthenticated &&
+      this.props.auth.isAuthenticated
     ) {
       this.props.history.push('/recipes');
     }
@@ -38,7 +42,8 @@ class ForgotPassword extends Component {
     }
 
     if (
-      prevState.tempToken === this.state.tempToken &&
+      prevProps.auth.token !== this.props.auth.token &&
+      this.props.auth.token === true &&
       isEmpty(this.state.tempToken)
     ) {
       this.fetch_temp_tokens();
@@ -47,7 +52,8 @@ class ForgotPassword extends Component {
 
   componentWillUnmount() {
     console.log('Forgot Password Unmounted');
-    this.props.removeErrors();
+    // this.props.removeErrors();
+    this.props.removeResetTokens();
   }
 
   fetch_temp_tokens = e => {
@@ -56,9 +62,7 @@ class ForgotPassword extends Component {
     );
     const userID = JSON.stringify(localStorage.getItem('user-id'));
 
-    console.log('teuserIDmp', userID);
-    console.log('teuserIDmp', tempToken);
-    if (tempToken && userID) {
+    if (!isEmpty(tempToken) && !isEmpty(userID)) {
       this.setState({ tempToken: tempToken, userID: userID });
     }
   };
@@ -82,8 +86,8 @@ class ForgotPassword extends Component {
   render() {
     const { email, errors, tempToken, userID } = this.state;
 
-    console.log('STATE TEMP:', tempToken);
-    console.log('STATE USEID:', userID);
+    // console.log('STATE TEMP:', tempToken);
+    // console.log('STATE USEID:', userID);
 
     return (
       <PublicMenu>
@@ -115,11 +119,11 @@ class ForgotPassword extends Component {
                   (errors.signin && errors.signin)
                 }
               />
-              <Link to="/contact-us">Forgot account email?</Link>
-              <button>Email Me The Password Reset Link</button>
+              <Link to="/contact-us">Forgot Account Email?</Link>
+              <button>Send Password Reset Link</button>
               {tempToken && userID && (
                 <Link
-                  to={`/resetpassword/${userID.replace(
+                  to={`/reset-password/${userID.replace(
                     /['"]+/g,
                     ''
                   )}/${tempToken.replace(/['"]+/g, '')}`}
@@ -140,18 +144,23 @@ class ForgotPassword extends Component {
 }
 
 ForgotPassword.propTypes = {
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  getForgotPasswordLink: PropTypes.func.isRequired,
+  removeResetTokens: PropTypes.func.isRequired,
+  removeErrors: PropTypes.func.isRequired
 };
 
 const actions = {
   getForgotPasswordLink,
+  removeResetTokens,
   removeErrors
 };
 
 const mapState = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
+
   profile: state.profile,
   errors: state.errors
 });

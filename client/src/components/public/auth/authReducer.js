@@ -8,6 +8,9 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_PASSWORD_SUCCESS,
   LOAD_RESET_TOKEN,
+  REMOVE_RESET_TOKEN,
+  LOAD_RESET_FORM,
+  REMOVE_RESET_FORM_TOKEN,
   PASSWORD_FAILED,
   LOGOUT
 } from '../../../redux/types';
@@ -48,9 +51,37 @@ export default function(state = initialState, action) {
       localStorage.setItem('user-id', payload.userID);
       return {
         ...state,
+        token: true,
         isAuthenticated: false,
         loading: false
       };
+    case REMOVE_RESET_TOKEN:
+      localStorage.removeItem('temp-token');
+      localStorage.removeItem('user-id');
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false
+      };
+    case LOAD_RESET_FORM: {
+      localStorage.setItem('load-form', payload);
+      return {
+        ...state,
+        token: payload,
+        isAuthenticated: false,
+        loading: false
+      };
+    }
+    case REMOVE_RESET_FORM_TOKEN: {
+      localStorage.removeItem('load-form');
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false
+      };
+    }
 
     case LOGOUT:
     case PASSWORD_FAILED:

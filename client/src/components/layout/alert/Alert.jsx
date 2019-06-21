@@ -10,6 +10,22 @@ class Alert extends Component {
     showAlert: false
   };
 
+  componentDidMount = () => {
+    const { alert } = this.props;
+    console.log('alert', alert);
+
+    if (alert.length > 0) {
+      this.setState({
+        message: alert[0].msg,
+        type: alert[0].alertType,
+        id: alert[0].id,
+        showAlert: true
+      });
+    } else {
+      this.setState({ showAlert: false });
+    }
+  };
+
   componentDidUpdate = prevProps => {
     const { alert } = this.props;
     console.log('alert', alert);

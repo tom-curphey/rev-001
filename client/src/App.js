@@ -58,7 +58,7 @@ const App = () => {
           />
           <Route
             exact
-            path="/resetpassword/:id/:token"
+            path="/reset-password/:id/:tempToken"
             component={ResetPassword}
           />
           <Route exact path="/test" component={Test} />

@@ -722,13 +722,13 @@ form {
     border: 0;
     border-radius: 25px;
     font-weight: 400;
-    background-color: $cOrange;
+    background-color: $cOrangeDark;
     outline: 0px;
     cursor: pointer;
     margin-top: 40px;
 
     &.orange {
-      background-color: $cOrange;
+      background-color: $cOrangeDark;
     }
     &.green {
       background-color: $cGreen;

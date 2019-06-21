@@ -14,7 +14,8 @@ export const isEmpty = value =>
   value === null ||
   value === 0 ||
   (typeof value === 'object' && Object.keys(value).length === 0) ||
-  (typeof value === 'string' && value.trim().length === 0);
+  (typeof value === 'string' && value.trim().length === 0) ||
+  (typeof value === 'string' && value === 'null');
 
 export const isEmptyString = value => {
   if (isEmpty(value)) {

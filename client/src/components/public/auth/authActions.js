@@ -13,8 +13,11 @@ import {
   CLEAR_PROFILE,
   CLEAR_VENUES,
   UPDATE_PASSWORD_SUCCESS,
+  LOAD_RESET_FORM,
+  REMOVE_RESET_FORM_TOKEN,
   PASSWORD_FAILED,
-  LOAD_RESET_TOKEN
+  LOAD_RESET_TOKEN,
+  REMOVE_RESET_TOKEN
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
@@ -184,11 +187,74 @@ export const getForgotPasswordLink = ({
       type: LOAD_RESET_TOKEN,
       payload: res.data
     });
-    dispatch(loadUser());
+    // dispatch(loadUser());
   } catch (err) {
     displayErrors(err, dispatch, GET_ERRORS);
     console.log('err', err);
 
     // can dispatch an alert
+  }
+};
+
+export const removeResetTokens = () => dispatch => {
+  dispatch({ type: REMOVE_RESET_TOKEN });
+};
+export const removeResetFormToken = () => dispatch => {
+  dispatch({ type: REMOVE_RESET_FORM_TOKEN });
+};
+
+export const decodeForgotPasswordLink = ({
+  id,
+  tempToken
+}) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    console.log('token:', tempToken);
+    console.log('id:', id);
+
+    const body = JSON.stringify({ id, tempToken });
+    const res = await axios.post('/api/auth/check', body, config);
+    console.log('RESDATA', res.data);
+
+    if (res.data) {
+      dispatch({ type: LOAD_RESET_FORM, payload: res.data });
+    }
+  } catch (err) {
+    console.log('err', err);
+    dispatch(removeResetFormToken());
+  }
+};
+
+export const resetPassword = ({
+  id,
+  tempToken,
+  newPassword
+}) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = JSON.stringify({ id, tempToken, newPassword });
+    const res = await axios.post('/api/auth/reset', body, config);
+    console.log('RES', res);
+
+    dispatch({
+      type: UPDATE_PASSWORD_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+    dispatch(loadProfile());
+    dispatch(loadVenues());
+    dispatch(setAlert('Password Updated', 'success'));
+  } catch (err) {
+    displayErrors(err, dispatch, GET_ERRORS);
+    console.log('err', err);
   }
 };
