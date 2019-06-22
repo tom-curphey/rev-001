@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const nodemailer = require('nodemailer');
+const sendMail = require('../../config/email/sendMail');
 
 module.exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -273,11 +273,15 @@ module.exports.forgotPassword = async (req, res) => {
 
     // Need to sign the token this way to get access it again when user clicks to reset password
     const secret = `${user.password}-${user.createdAt.getTime()}`;
-    const token = jwt.sign(payload, secret);
+    const tempToken = jwt.sign(payload, secret);
     const userID = user._id;
-    return res.status(200).json({ token, userID });
 
+    const link = `<a href="https://rev001.herokuapp.com/reset-password/reset-password/${userID}/${tempToken}" >Reset Password</a>`;
+    // '<a target="_blank" href={`http://localhost:3000/reset-password/reset-password/${userID}/${tempToken}`}>Reset Password</a>';
     // @todo: send link to users email
+    sendMail(link);
+
+    return res.status(200).json({ tempToken, userID });
   } catch (err) {
     console.error(err);
     return res.status(500).send('Server Error');
