@@ -103,7 +103,7 @@ class ResetPassword extends Component {
     if (loadForm) {
       PasswordForm = (
         <Fragment>
-          <h1>Password Reset</h1>
+          <h1>Update Password</h1>
           <p>
             Please enter in you account email, <br />
             we will then email you the <br />

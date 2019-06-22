@@ -97,7 +97,7 @@ class ForgotPassword extends Component {
         <section className="signin">
           <section className="sideContent">
             <img src={logo} alt="Recipe Revenue Logo" />
-            <h1>Password Reset</h1>
+            <h1>Forgot Password?</h1>
             <p>
               Please enter in you account email, <br />
               we will then email you the <br />

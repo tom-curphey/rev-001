@@ -276,7 +276,7 @@ module.exports.forgotPassword = async (req, res) => {
     const tempToken = jwt.sign(payload, secret);
     const userID = user._id;
 
-    const link = `<a href="https://rev001.herokuapp.com/reset-password/reset-password/${userID}/${tempToken}" >Reset Password</a>`;
+    const link = `<a href="https://rev001.herokuapp.com/reset-password/${userID}/${tempToken}" >Reset Password</a>`;
     // '<a target="_blank" href={`http://localhost:3000/reset-password/reset-password/${userID}/${tempToken}`}>Reset Password</a>';
     // @todo: send link to users email
     sendMail(link);
