@@ -36,7 +36,7 @@ const RecipeWelcome = ({ selectedVenue }) => {
 };
 
 RecipeWelcome.propTypes = {
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object
 };
 
 const mapState = state => ({

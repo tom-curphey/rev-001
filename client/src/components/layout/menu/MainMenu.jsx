@@ -45,7 +45,7 @@ const MainMenu = ({
           <i />
           <span>Recipes</span>
         </Link>
-        <Link className="menuItem" to="#!">
+        <Link className="menuItem" to="/ingredients">
           <i />
           <span>Ingredients</span>
         </Link>

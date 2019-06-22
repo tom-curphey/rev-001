@@ -338,9 +338,10 @@ class VenueForm extends Component {
     ];
 
     const yearTimeOptions = [
-      { value: 'week', label: 'Week' },
-      { value: 'month', label: 'Month' },
-      { value: 'year', label: 'Year' }
+      { value: 'week', label: 'per Week' },
+      { value: 'month', label: 'per Month' },
+      { value: 'quarter', label: 'per Quarter' },
+      { value: 'year', label: 'per Year' }
     ];
     const yearOnlyTimeOptions = [
       { value: 'year', label: 'per Year' }
@@ -493,7 +494,7 @@ class VenueForm extends Component {
                 type="text"
                 error={errors.chefCost && errors.chefCost}
               />
-              <div className="inlineFormField">
+              <div className="inlineFormField largeSelect">
                 <TextInputHorizontal
                   label="Rent Cost"
                   value={rentCost}
@@ -510,7 +511,7 @@ class VenueForm extends Component {
                   value={rentCostUnit}
                 />
               </div>
-              <div className="inlineFormField">
+              <div className="inlineFormField largeSelect">
                 <TextInputHorizontal
                   label="Water Cost"
                   value={waterCost}
@@ -527,7 +528,7 @@ class VenueForm extends Component {
                   value={waterCostUnit}
                 />
               </div>
-              <div className="inlineFormField">
+              <div className="inlineFormField largeSelect">
                 <TextInputHorizontal
                   label="Power Cost"
                   value={powerCost}
@@ -544,7 +545,7 @@ class VenueForm extends Component {
                   value={powerCostUnit}
                 />
               </div>
-              <div className="inlineFormField">
+              <div className="inlineFormField largeSelect">
                 <TextInputHorizontal
                   label="Insurance Cost"
                   value={insuranceCost}
@@ -564,7 +565,7 @@ class VenueForm extends Component {
                   value={insuranceCostUnit}
                 />
               </div>
-              <div className="inlineFormField">
+              <div className="inlineFormField largeSelect">
                 <TextInputHorizontal
                   label="Council Cost"
                   value={councilCost}

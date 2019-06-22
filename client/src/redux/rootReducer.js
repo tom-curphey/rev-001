@@ -5,6 +5,7 @@ import authReducer from '../components/public/auth/authReducer';
 import profileReducer from '../components/private/profile/profileReducer';
 import venueReducer from '../components/private/venue/venueReducer';
 import recipeReducer from '../components/private/recipe/recipeReducer';
+import ingredientReducer from '../components/private/ingredient/ingredientReducer';
 
 export default combineReducers({
   errors: errorReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   auth: authReducer,
   profile: profileReducer,
   venues: venueReducer,
-  recipes: recipeReducer
+  recipes: recipeReducer,
+  ingredients: ingredientReducer
 });

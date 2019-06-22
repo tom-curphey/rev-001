@@ -74,8 +74,6 @@ module.exports.registerUser = async (req, res) => {
 };
 
 module.exports.getUser = async (req, res) => {
-  console.log('GET REQ USER :', req.user);
-
   try {
     const user = await User.findById(req.user.id).select('-password');
     return res.status(200).json(user);

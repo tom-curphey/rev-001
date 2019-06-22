@@ -74,9 +74,11 @@ export const calcCostToSeconds = (cost, unit) => {
       costPerSecond = cost / 7 / 24 / 60 / 60;
       break;
     case 'month':
-      // console.log('Made it');
       // 31556925.9747 -> Hewlett-Packard seconds per year
       costPerSecond = (cost / 31556925.9747) * 12;
+      break;
+    case 'quarter':
+      costPerSecond = (cost / 31556925.9747) * 4;
       break;
     case 'year':
       costPerSecond = cost / 31556925.9747;
@@ -91,9 +93,6 @@ export const calcCostPerSecondToCostPerUnit = (
   costPerSecond,
   unit
 ) => {
-  // console.log('costPerSecond', costPerSecond);
-  // console.log('unit', unit);
-
   let costPerUnit = null;
   switch (unit) {
     case 'sec':
@@ -112,10 +111,11 @@ export const calcCostPerSecondToCostPerUnit = (
       costPerUnit = costPerSecond * 7 * 24 * 60 * 60;
       break;
     case 'month':
-      // console.log('Made it');
       // 31556925.9747 -> Hewlett-Packard seconds per year
       costPerUnit = (costPerSecond * 31556925.9747) / 12;
-      // costPerUnit = 1;
+      break;
+    case 'quarter':
+      costPerUnit = (costPerSecond * 31556925.9747) / 4;
       break;
     case 'year':
       costPerUnit = costPerSecond * 31556925.9747;
