@@ -29,9 +29,10 @@ module.exports.addOrEditIngredient = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { _id, displayName } = req.body;
+  const { _id, displayName, cup } = req.body;
 
   const ingredientData = {};
+  ingredientData.metrics = {};
   if (_id) ingredientData._id = _id;
   ingredientData.user = req.user.id;
   ingredientData.displayName = displayName;
@@ -39,6 +40,8 @@ module.exports.addOrEditIngredient = async (req, res) => {
     .trim()
     .replace(/\s+/g, '-')
     .toLowerCase();
+
+  ingredientData.metrics.cup = cup;
 
   try {
     if (_id) {

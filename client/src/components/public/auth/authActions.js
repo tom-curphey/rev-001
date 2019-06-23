@@ -17,7 +17,8 @@ import {
   LOAD_RESET_FORM,
   REMOVE_RESET_FORM_TOKEN,
   LOAD_RESET_TOKEN,
-  REMOVE_RESET_TOKEN
+  REMOVE_RESET_TOKEN,
+  CLEAR_INGREDIENTS
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
@@ -175,6 +176,7 @@ export const logout = () => dispatch => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: CLEAR_VENUES });
   dispatch({ type: CLEAR_RECIPES });
+  dispatch({ type: CLEAR_INGREDIENTS });
 };
 
 export const getForgotPasswordLink = ({

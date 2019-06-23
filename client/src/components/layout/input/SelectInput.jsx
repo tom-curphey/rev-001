@@ -3,6 +3,12 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
 
+// ============================
+//
+// -> This select has no border and streches width 100%
+//
+// ============================
+
 const SelectInput = ({
   options,
   getSelectedValue,

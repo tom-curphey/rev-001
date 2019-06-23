@@ -20,7 +20,7 @@ const RecipeWelcome = ({ selectedVenue }) => {
             Recipe Profits
           </p>
         </Link>
-        <Link to="!#">
+        <Link to="/ingredients">
           <img src={ingredientBasket} alt="Kiwi standing on oval" />
           <h2>Organise Ingredient Suppliers</h2>
           <p>Update ingredient prices & compare the market</p>

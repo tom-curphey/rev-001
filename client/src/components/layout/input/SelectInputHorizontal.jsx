@@ -3,6 +3,13 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
 
+// ============================
+//
+// -> This select has a border and streches width 100%
+// -> It also has a label that is horizontal to the select field
+//
+// ============================
+
 const SelectInputHorizontal = ({
   options,
   getSelectedValue,
