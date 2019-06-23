@@ -32,9 +32,7 @@ const CreatableSelectInput = ({
     });
 
     if (isEmpty(selectedOption)) {
-      console.log('Name', name);
-
-      console.log('selectedOption: ', selectedOption);
+      selectedValue = value;
     } else {
       selectedValue = {
         value: value,
@@ -52,9 +50,21 @@ const CreatableSelectInput = ({
     option: (provided, state) => ({
       ...provided,
       borderBottom: 'none',
-      color: state.isSelected ? '#000' : '#343434',
+      color: state.isSelected
+        ? '#000'
+        : `${state.data.__isNew__ ? '#e77d01' : '#9d9584 '}`,
+      // color: state.data.__isNew__ && '#343434',
+      // backgroundColor: state.data.__isNew__ && '#f1ede7',
       padding: 12,
-      fontSize: '16px'
+      fontSize: '16px',
+      '&:hover': {
+        color: '#343434',
+        cursor: 'pointer'
+      },
+      '&:active': {
+        backgroundColor: '#f1ede7',
+        cursor: 'pointer'
+      }
     }),
     control: (base, state) => ({
       ...base,
@@ -73,7 +83,7 @@ const CreatableSelectInput = ({
   return (
     <div>
       <CreatableSelect
-        isClearable
+        // isClearable
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
@@ -81,6 +91,9 @@ const CreatableSelectInput = ({
         className={`sBorderelectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
+        formatCreateLabel={userInput =>
+          `+ Add Ingredient "${userInput}"`
+        }
         theme={theme => ({
           ...theme,
           colors: {

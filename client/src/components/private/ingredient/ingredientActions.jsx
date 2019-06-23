@@ -2,7 +2,8 @@ import {
   SET_INGREDIENTS_LOADING,
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
-  REMOVE_SELECTED_INGREDIENT
+  REMOVE_SELECTED_INGREDIENT,
+  SET_SELECTED_INGREDIENT
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../utils/utils';
@@ -20,6 +21,24 @@ export const loadIngredients = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: INGREDIENTS_ERROR
+    });
+  }
+};
+
+export const setSelectedIngredient = (
+  selectedIngredient,
+  profile,
+  selectIngredientSupplier
+) => async dispatch => {
+  if (selectedIngredient.new) {
+    dispatch({
+      type: SET_SELECTED_INGREDIENT,
+      payload: selectedIngredient
+    });
+  } else {
+    dispatch({
+      type: SET_SELECTED_INGREDIENT,
+      payload: selectedIngredient
     });
   }
 };

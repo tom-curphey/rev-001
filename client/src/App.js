@@ -11,7 +11,7 @@ import ResetPassword from './components/public/auth/ResetPassword';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipes from './components/private/recipe/Recipes';
-import Ingredients from './components/private/ingredient/Ingredients';
+import Ingredient from './components/private/ingredient/Ingredient';
 import AccountSettings from './components/private/profile/AccountSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
 import Test from './utils/Test';
@@ -74,7 +74,7 @@ const App = () => {
           <PrivateRoute
             exact
             path="/ingredients"
-            component={Ingredients}
+            component={Ingredient}
           />
           <PrivateRoute
             exact

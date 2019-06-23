@@ -2,106 +2,88 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
-import { removeSelectedIngredient } from './ingredientActions';
+import {
+  setSelectedIngredient,
+  removeSelectedIngredient
+} from './ingredientActions';
+import { isEmpty } from '../../../utils/utils';
 
 class SelectIngredient extends Component {
   state = {
     selectedValue: {
-      label: 'Select Ingredient',
+      label: 'Type ingredient name to start..',
       value: 'no-ingredient-selected'
     }
   };
 
   componentDidMount() {
-    // console.log('SELECT MOUNT this.props: ', this.props.ingredient);
+    console.log('SELECT MOUNT this.props: ', this.props.ingredient);
 
-    if (this.props.ingredient.selectedIngredient !== null) {
+    if (!isEmpty(this.props.ingredient.selectedIngredient)) {
       const { selectedIngredient } = this.props.ingredient;
-      let selectedValue = {
-        label: selectedIngredient.displayName,
-        value: selectedIngredient._id
-      };
+
+      console.log('selectedIngredient', selectedIngredient);
+
+      let selectedValue = {};
+      selectedValue.label = selectedIngredient.displayName;
+      if (!selectedIngredient._id) {
+        selectedValue.value = 'new';
+      } else {
+        selectedValue.value = selectedIngredient._id;
+      }
       this.setState({ selectedValue: selectedValue });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log('SELECT prevProps: ', prevProps);
-    // console.log('SELECT this.props: ', this.props);
-
     if (
-      this.props.ingredient.selectedIngredient !== null &&
+      !isEmpty(this.props.ingredient.selectedIngredient) &&
       prevProps.ingredient.selectedIngredient !==
         this.props.ingredient.selectedIngredient
     ) {
       const { selectedIngredient } = this.props.ingredient;
-      let selectedValue = {
-        label: selectedIngredient.displayName,
-        value: selectedIngredient._id
-      };
-      this.setState({ selectedValue: selectedValue });
-    }
+      console.log('selectedIngredient - UP', selectedIngredient);
+      // if (!selectedIngredient.new) {
+      let selectedValue = {};
+      selectedValue.label = selectedIngredient.displayName;
 
-    if (
-      prevProps.ingredient.openIngredientPanel !==
-      this.props.ingredient.openIngredientPanel
-    ) {
-      if (
-        this.props.ingredient.openIngredientPanel === false &&
-        this.props.ingredient.selectedIngredient === null
-      ) {
-        this.setState({
-          selectedValue: {
-            label: 'Select Ingredient',
-            value: 'no-ingredient-selected'
-          }
-        });
+      if (!selectedIngredient._id) {
+        selectedValue.value = 'new';
+      } else {
+        selectedValue.value = selectedIngredient._id;
       }
+      this.setState({ selectedValue: selectedValue });
     }
   }
 
+  componentWillUnmount() {
+    // console.log('SELECT INGREDIENT UNMOUNTED');
+  }
+
   getSelectedValue = selectedValue => {
-    let addIngredient = false;
+    // let addIngredient = false;
     let selectedIngredient = [];
     if (selectedValue.__isNew__) {
       this.props.removeSelectedIngredient();
-      addIngredient = true;
+      // addIngredient = true;
       const newIngredient = {};
       newIngredient.displayName = selectedValue.label;
       newIngredient.new = true;
+      newIngredient.cup = '';
+      newIngredient.whole = '';
       selectedIngredient.push(newIngredient);
     } else {
-      // console.log(
-      //   'this.props.ingredient.ingredients: ',
-      //   this.props.ingredient.ingredients
-      // );
-
-      // for (
-      //   let index = 0;
-      //   index < this.props.ingredient.ingredients.length;
-      //   index++
-      // ) {
-      //   if (
-      //     this.props.ingredient.ingredients[index]._id ===
-      //     selectedValue.value
-      //   ) {
-      //     selectedIngredient = this.props.ingredient.ingredients[
-      //       index
-      //     ];
-      //   }
-      //   // let ingredient = this.props.ingredient.ingredients[index];
-      // }
-
       selectedIngredient = this.props.ingredient.ingredients.filter(
         ingredient => {
           return ingredient._id === selectedValue.value;
         }
       );
     }
-    // console.log('selectIngredient: ', selectedIngredient[0]);
-    this.props.getSelectedIngredient(
+
+    this.props.setSelectedIngredient(
       selectedIngredient[0],
-      addIngredient
+      this.props.profile.profile,
+      true
     );
   };
 
@@ -121,7 +103,6 @@ class SelectIngredient extends Component {
 
       formContent = (
         <CreatableSelectInput
-          label="Search Ingredient"
           value={selectedValue}
           name="ingredient"
           options={options}
@@ -135,19 +116,22 @@ class SelectIngredient extends Component {
   }
 }
 
+SelectIngredient.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+  setSelectedIngredient: PropTypes.func.isRequired,
+  removeSelectedIngredient: PropTypes.func.isRequired
+};
+
 const actions = {
+  setSelectedIngredient,
   removeSelectedIngredient
 };
 
 const mapState = state => ({
-  ingredients: state.ingredients
+  ingredient: state.ingredient,
+  profile: state.profile
 });
-
-SelectIngredient.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  getSelectedIngredient: PropTypes.func.isRequired,
-  removeSelectedIngredient: PropTypes.func.isRequired
-};
 
 export default connect(
   mapState,

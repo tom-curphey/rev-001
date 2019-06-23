@@ -687,6 +687,8 @@ form {
 
     span.label {
       grid-area: label;
+      display: flex;
+      align-items: center;
     }
 
     input {
@@ -706,6 +708,19 @@ form {
     span.message {
       grid-area: message;
     }
+
+    div.button {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        width: 230px;
+      }
+    }
+  }
+
+  label.textInputHorizontal.smallTextField {
+    grid-template-columns: 200px auto;
   }
 
   a {

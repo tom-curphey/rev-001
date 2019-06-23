@@ -1,15 +1,15 @@
 import {
-  SET_INGREDIENTS_LOADING,
-  INGREDIENTS_LOADED,
-  INGREDIENTS_ERROR,
-  CLEAR_INGREDIENTS,
-  REMOVE_SELECTED_INGREDIENT,
-  SET_SELECTED_INGREDIENT
+  SET_SUPPLIERS_LOADING,
+  SUPPLIERS_LOADED,
+  SUPPLIERS_ERROR,
+  REMOVE_SELECTED_SUPPLIER,
+  SET_SELECTED_SUPPLIER,
+  CLEAR_SUPPLIERS
 } from '../../../redux/types';
 
 const initialState = {
-  ingredients: null,
-  selectedIngredient: null,
+  suppliers: null,
+  selectedSupplier: null,
   loading: true,
   errors: null
 };
@@ -17,33 +17,33 @@ const initialState = {
 export default function(state = initialState, actions) {
   const { type, payload } = actions;
   switch (type) {
-    case INGREDIENTS_LOADED:
+    case SUPPLIERS_LOADED:
       return {
         ...state,
-        ingredients: payload,
+        suppliers: payload,
         loading: false
       };
 
-    case SET_SELECTED_INGREDIENT:
+    case SET_SELECTED_SUPPLIER:
       return {
         ...state,
-        selectedIngredient: payload,
+        selectedSupplier: payload,
         laoding: false
       };
 
-    case CLEAR_INGREDIENTS:
+    case CLEAR_SUPPLIERS:
       return {
         ...state,
-        ingredients: null,
-        selectedIngredient: null,
+        suppliers: null,
+        selectedSupplier: null,
         loading: true,
         errors: null
       };
 
-    case REMOVE_SELECTED_INGREDIENT:
+    case REMOVE_SELECTED_SUPPLIER:
       return {
         ...state,
-        selectedIngredient: null,
+        selectedSupplier: null,
         loading: false,
         errors: null
       };

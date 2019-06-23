@@ -6,7 +6,7 @@ import AuthMenu from '../../layout/menu/AuthMenu';
 import Spinner from '../../layout/Spinner';
 import RecipeWelcome from './RecipeWelcome';
 
-const Recipes = ({ profile, isAuthenticated, recipes }) => {
+const Recipes = ({ profile, isAuthenticated, recipe }) => {
   if (isAuthenticated === null || isAuthenticated === false) {
     return <Redirect to="/signin" />;
   }
@@ -22,14 +22,14 @@ const Recipes = ({ profile, isAuthenticated, recipes }) => {
   }
 
   let content;
-  if (recipes.loading) {
+  if (recipe.loading) {
     content = (
       <div style={{ marginTop: '200px' }}>
         <Spinner width="30px" />
       </div>
     );
   } else {
-    if (recipes.recipes && recipes.recipes.length !== 0) {
+    if (recipe.recipes && recipe.recipes.length !== 0) {
       content = <div>Recipes</div>;
     } else {
       content = <RecipeWelcome />;
@@ -44,7 +44,7 @@ const Recipes = ({ profile, isAuthenticated, recipes }) => {
 };
 
 Recipes.propTypes = {
-  recipes: PropTypes.object.isRequired,
+  recipe: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool,
   venues: PropTypes.object.isRequired
@@ -58,7 +58,7 @@ const mapState = state => ({
   profile: state.profile,
   isAuthenticated: state.auth.isAuthenticated,
   venues: state.venues,
-  recipes: state.recipes
+  recipe: state.recipe
 });
 
 export default connect(mapState)(Recipes);

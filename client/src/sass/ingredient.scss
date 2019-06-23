@@ -1,0 +1,55 @@
+@import './colours.scss';
+
+section.ingredient {
+  padding: 30px 0px 0px 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 400px auto;
+  grid-gap: 30px;
+
+  h3 {
+    color: $cGrey;
+    font-weight: 400;
+    margin: 10px 0px 30px;
+  }
+
+  div.button {
+    display: flex;
+    justify-content: flex-end;
+
+    nav {
+      width: 200px;
+      height: 50px;
+      color: #fff;
+      border: 0;
+      border-radius: 25px;
+      font-weight: 400;
+      background-color: $cOrangeFaded;
+      outline: 0px;
+      cursor: pointer;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    nav.readyToSave {
+      background-color: $cOrangeDark;
+    }
+  }
+}
+
+section.ingredientForm {
+  margin-top: 60px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  p {
+    color: $cGrey;
+    margin: 10px 0px 30px;
+    line-height: 22px;
+  }
+}
