@@ -101,7 +101,7 @@ export const addOrEditVenue = venueData => async dispatch => {
     await dispatch(loadVenues(res.data));
     dispatch(setAlert('Venue Saved', 'success'));
   } catch (err) {
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err, dispatch, GET_ERRORS));
     dispatch({
       type: STOP_VENUE_LOADING
     });

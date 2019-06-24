@@ -1,6 +1,7 @@
 const Ingredient = require('./ingredient.model');
 const User = require('../auth/auth.model');
 const { validationResult } = require('express-validator/check');
+const { isEmpty } = require('../../client/src/utils/utils');
 
 module.exports.getIngredients = async (req, res) => {
   console.log('Ingredient Controller');
@@ -29,7 +30,19 @@ module.exports.addOrEditIngredient = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { _id, displayName, cup } = req.body;
+  const { _id, displayName, cup, whole } = req.body;
+
+  if (isEmpty(cup) && isEmpty(whole)) {
+    return res.status(400).json({
+      errors: [
+        {
+          param: 'ingredient',
+          msg:
+            'New Ingredients required atleast 1 unit metric provided'
+        }
+      ]
+    });
+  }
 
   const ingredientData = {};
   ingredientData.metrics = {};

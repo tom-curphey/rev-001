@@ -5,13 +5,15 @@ import AuthMenu from '../../layout/menu/AuthMenu';
 import Spinner from '../../layout/Spinner';
 import {
   loadIngredients,
-  setSelectedIngredient
+  setSelectedIngredient,
+  addOrEditIngredient
 } from './ingredientActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from '../ingredient/IngredientForm';
+import { isEmpty } from '../../../utils/utils';
 
-class Ingredients extends Component {
+class Ingredient extends Component {
   state = {
     addIngredientForm: false,
     selectedIngredient: null,
@@ -57,35 +59,76 @@ class Ingredients extends Component {
   };
 
   handleSupplierNumberChange = e => {
+    e.persist();
     let value = e.target.value;
-    if (value !== '') {
-      if (!isNaN(value)) {
-        let checkDecimal = value.search(/\./);
-        // console.log('checkDecimal: ', checkDecimal);
-        if (checkDecimal !== -1) {
-          value = e.target.value;
-        }
-        e.persist();
-        this.setState(prevState => ({
-          selectedSupplier: {
-            ...prevState.selectedSupplier,
-            [e.target.name]: e.target.value
-          }
-        }));
-      }
-    } else {
-      e.persist();
+    if (!isNaN(value) || value === '') {
       this.setState(prevState => ({
         selectedSupplier: {
           ...prevState.selectedSupplier,
-          [e.target.name]: e.target.value
+          [e.target.name]: value
         }
       }));
     }
   };
 
+  handleIngredientNumberChange = e => {
+    e.persist();
+    let value = e.target.value;
+    if (!isNaN(value) || value === '') {
+      this.setState(prevState => ({
+        selectedIngredient: {
+          ...prevState.selectedIngredient,
+          [e.target.name]: value
+        }
+      }));
+      this.checkReadyToSave(e);
+    }
+  };
+
+  checkReadyToSave = e => {
+    const {
+      selectedIngredient: { cup, whole }
+    } = this.state;
+
+    console.log('this.state', e.target);
+    const { name, value } = e.target;
+    if (value === '') {
+      if (
+        (name === 'cup' && !isEmpty(whole)) ||
+        (name === 'whole' && !isEmpty(cup))
+      ) {
+        this.setState({ readyToSave: true });
+      } else {
+        this.setState({ readyToSave: false });
+      }
+    } else {
+      this.setState({ readyToSave: true });
+    }
+  };
+
   handleSubmit = () => {
-    console.log('STATE:', this.state);
+    // console.log('STATE:', this.state);
+    const {
+      selectedIngredient,
+      selectedSupplier,
+      readyToSave
+    } = this.state;
+    const { id, displayName, cup, whole } = selectedIngredient;
+
+    if (readyToSave) {
+      if (!isEmpty(cup) || !isEmpty(whole)) {
+        const ingredientData = {
+          displayName: displayName,
+          cup: cup,
+          whole: whole
+        };
+        if (!isEmpty(id)) {
+          ingredientData.id = id;
+        }
+
+        this.props.addOrEditIngredient(ingredientData);
+      }
+    }
   };
 
   render() {
@@ -95,6 +138,8 @@ class Ingredients extends Component {
       selectedSupplier,
       readyToSave
     } = this.state;
+
+    const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 
     let ingredientForm;
     if (ingredient && ingredient.loading) {
@@ -124,16 +169,15 @@ class Ingredients extends Component {
               selectedIngredient.new && (
                 <IngredientForm
                   selectedIngredient={selectedIngredient}
-                  handleSupplierChange={this.handleSupplierChange}
-                  handleSupplierNumberChange={
-                    this.handleSupplierNumberChange
+                  handleIngredientNumberChange={
+                    this.handleIngredientNumberChange
                   }
                 />
               )}
             {selectedIngredient && (
               <div className="button">
                 <nav
-                  className={readyToSave && 'readyToSave'}
+                  className={readyToSaveClass}
                   onClick={this.handleSubmit}
                 >
                   Save Ingredient
@@ -166,16 +210,18 @@ class Ingredients extends Component {
   }
 }
 
-Ingredients.propTypes = {
+Ingredient.propTypes = {
   ingredient: PropTypes.object,
   profile: PropTypes.object,
   loadIngredients: PropTypes.func.isRequired,
-  setSelectedIngredient: PropTypes.func.isRequired
+  setSelectedIngredient: PropTypes.func.isRequired,
+  addOrEditIngredient: PropTypes.func.isRequired
 };
 
 const actions = {
   loadIngredients,
-  setSelectedIngredient
+  setSelectedIngredient,
+  addOrEditIngredient
 };
 
 const mapState = state => ({
@@ -186,4 +232,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(Ingredients);
+)(Ingredient);

@@ -19,7 +19,7 @@ class IngredientForm extends Component {
 
     return (
       <section className="ingredientForm">
-        <h2>Add Ingredient Unit Weight Metric</h2>
+        <h2>Add Ingredient Unit Weight Metric *</h2>
         <p>
           For every new ingredient we need to know it’s relevant unit
           metric weight
@@ -27,18 +27,18 @@ class IngredientForm extends Component {
         <form onSubmit={this.handleOnSubmit}>
           <TextInputHorizontal
             label="Cup"
-            placeholder="Cup weight in grams"
+            placeholder="Cup metric weight in grams"
             value={selectedIngredient.cup}
             name="cup"
-            onChange={this.props.handleSupplierNumberChange}
+            onChange={this.props.handleIngredientNumberChange}
             error={errors.cup && errors.cup}
           />
           <TextInputHorizontal
             label="Whole"
             placeholder="Whole weight in grams"
             value={selectedIngredient.whole}
-            name="Whole"
-            onChange={this.props.handleSupplierNumberChange}
+            name="whole"
+            onChange={this.props.handleIngredientNumberChange}
             error={errors && errors.Whole}
           />
         </form>
@@ -49,15 +49,12 @@ class IngredientForm extends Component {
 
 IngredientForm.propTypes = {
   selectedIngredient: PropTypes.object.isRequired,
-  handleSupplierChange: PropTypes.func.isRequired,
-  handleSupplierNumberChange: PropTypes.func.isRequired
+  handleIngredientNumberChange: PropTypes.func.isRequired
 };
 
 const actions = {};
 
 const mapState = state => ({
-  // ingredient: state.ingredient,
-  // supplier: state.supplier,
   errors: state.errors
 });
 

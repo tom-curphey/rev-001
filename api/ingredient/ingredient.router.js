@@ -18,9 +18,6 @@ router.post(
   [
     check('displayName', 'Ingredient name is required')
       .not()
-      .isEmpty(),
-    check('cup', 'Metric cup is required')
-      .not()
       .isEmpty()
   ],
   ingredientController.addOrEditIngredient

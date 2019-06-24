@@ -3,7 +3,8 @@ import {
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
   REMOVE_SELECTED_INGREDIENT,
-  SET_SELECTED_INGREDIENT
+  SET_SELECTED_INGREDIENT,
+  GET_ERRORS
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../utils/utils';
@@ -40,6 +41,24 @@ export const setSelectedIngredient = (
       type: SET_SELECTED_INGREDIENT,
       payload: selectedIngredient
     });
+  }
+};
+
+export const addOrEditIngredient = ingredientData => async dispatch => {
+  console.log('SI', ingredientData);
+
+  try {
+    // dispatch(setVenueLoading());
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = JSON.stringify(ingredientData);
+    const res = await axios.post('/api/ingredient', body, config);
+    console.log('res', res);
+  } catch (err) {
+    dispatch(displayErrors(err, dispatch, GET_ERRORS));
   }
 };
 
