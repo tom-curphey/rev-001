@@ -1,4 +1,6 @@
 import {
+  SELECTED_INGREDIENT_SUCCESS,
+  SELECTED_INGREDIENT_FAILED,
   SET_INGREDIENTS_LOADING,
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
@@ -8,6 +10,7 @@ import {
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../utils/utils';
+import { setAlert } from '../../layout/alert/alertActions';
 
 export const loadIngredients = () => async dispatch => {
   console.log('TRIGGER');
@@ -57,8 +60,16 @@ export const addOrEditIngredient = ingredientData => async dispatch => {
     const body = JSON.stringify(ingredientData);
     const res = await axios.post('/api/ingredient', body, config);
     console.log('res', res);
+    dispatch({
+      type: SELECTED_INGREDIENT_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadIngredients());
+    dispatch(setSelectedIngredient(res.data));
+    dispatch(setAlert('Ingredient Saved', 'success'));
   } catch (err) {
     dispatch(displayErrors(err, dispatch, GET_ERRORS));
+    dispatch(setAlert('Ingredient Error', 'error'));
   }
 };
 

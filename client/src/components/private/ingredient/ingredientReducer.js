@@ -1,4 +1,5 @@
 import {
+  SELECTED_INGREDIENT_SUCCESS,
   SET_INGREDIENTS_LOADING,
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
@@ -22,6 +23,13 @@ export default function(state = initialState, actions) {
         ...state,
         ingredients: payload,
         loading: false
+      };
+
+    case SELECTED_INGREDIENT_SUCCESS:
+      return {
+        ...state,
+        selectedIngredient: payload,
+        laoding: false
       };
 
     case SET_SELECTED_INGREDIENT:

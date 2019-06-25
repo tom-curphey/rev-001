@@ -1,7 +1,6 @@
 const Ingredient = require('./ingredient.model');
 const User = require('../auth/auth.model');
 const { validationResult } = require('express-validator/check');
-const { isEmpty } = require('../../client/src/utils/utils');
 
 module.exports.getIngredients = async (req, res) => {
   console.log('Ingredient Controller');
@@ -32,7 +31,11 @@ module.exports.addOrEditIngredient = async (req, res) => {
 
   const { _id, displayName, cup, whole } = req.body;
 
-  if (isEmpty(cup) && isEmpty(whole)) {
+  if (cup) {
+    console.log('CUP', cup);
+  }
+
+  if (!cup && !whole) {
     return res.status(400).json({
       errors: [
         {
@@ -54,7 +57,8 @@ module.exports.addOrEditIngredient = async (req, res) => {
     .replace(/\s+/g, '-')
     .toLowerCase();
 
-  ingredientData.metrics.cup = cup;
+  if (cup) ingredientData.metrics.cup = cup;
+  if (whole) ingredientData.metrics.whole = whole;
 
   try {
     if (_id) {

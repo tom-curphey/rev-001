@@ -26,8 +26,8 @@ const IngredientSchema = new Schema({
   },
   metrics: {
     cup: {
-      type: Number,
-      required: true
+      type: Number
+      // required: true
     },
     tablespoon: {
       type: Number
