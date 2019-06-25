@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import Spinner from '../../layout/Spinner';
 
 class SupplierForm extends Component {
@@ -16,9 +17,16 @@ class SupplierForm extends Component {
     const {
       ingredient,
       supplier,
+      getSelectedValue,
       selectedSupplier: { packetCost, packetGrams, preferred },
       errors
     } = this.props;
+
+    const options = [
+      { value: '893246923', label: 'Veggie Bar' },
+      { value: '891273219', label: 'New Farm' },
+      { value: '891273', label: 'Peachy' }
+    ];
 
     return (
       <section className="supplierForm">
@@ -45,6 +53,13 @@ class SupplierForm extends Component {
             name="preferred"
             onChange={this.props.handleSupplierChange}
             error={errors && errors.preferred}
+          />
+          <CreatableSelectInput
+            name="type"
+            placeholder="Select Ingredient Supplier..."
+            options={options}
+            getSelectedValue={this.props.getSelectedValue}
+            error={errors.type && errors.type}
           />
         </form>
       </section>

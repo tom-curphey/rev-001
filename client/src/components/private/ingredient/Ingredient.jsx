@@ -8,6 +8,10 @@ import {
   setSelectedIngredient,
   addOrEditIngredient
 } from './ingredientActions';
+import {
+  loadSuppliers,
+  setSelectedSupplier
+} from '../supplier/supplierActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from '../ingredient/IngredientForm';
@@ -23,15 +27,21 @@ class Ingredient extends Component {
       packetGrams: '',
       preferred: ''
     },
-    readyToSave: null
+    readyToSave: false
   };
 
   componentDidMount() {
     // console.log('I RAN');
     this.props.loadIngredients();
+    this.props.loadSuppliers();
     if (this.props.ingredient.selectedIngredient) {
       this.setState({
         selectedIngredient: this.props.ingredient.selectedIngredient
+      });
+    }
+    if (this.props.supplier.selectedSupplier) {
+      this.setState({
+        selectedSupplier: this.props.supplier.selectedSupplier
       });
     }
   }
@@ -41,21 +51,30 @@ class Ingredient extends Component {
       prevProps.ingredient.selectedIngredient !==
       this.props.ingredient.selectedIngredient
     ) {
+      const { selectedIngredient } = this.props.ingredient;
+
       this.setState({
-        selectedIngredient: this.props.ingredient.selectedIngredient
+        selectedIngredient: selectedIngredient
       });
+
+      if (!isEmpty(selectedIngredient.metrics)) {
+        this.setState({ readyToSave: true });
+      } else {
+        this.setState({ readyToSave: false });
+      }
     }
   }
 
   handleSupplierChange = e => {
-    console.log(e.target.name);
     e.persist();
+    let value = e.target.value;
     this.setState(prevState => ({
       selectedSupplier: {
         ...prevState.selectedSupplier,
-        [e.target.name]: e.target.value
+        [e.target.name]: value
       }
     }));
+    this.checkReadyToSave(e);
   };
 
   handleSupplierNumberChange = e => {
@@ -68,7 +87,37 @@ class Ingredient extends Component {
           [e.target.name]: value
         }
       }));
+      this.checkReadyToSave(e);
     }
+  };
+
+  getSelectedValue = selectedValue => {
+    // let addIngredient = false;
+    let selectedSupplier = [];
+    if (selectedValue.__isNew__) {
+      this.props.removeSelectedSupplier();
+      // addSupplier = true;
+      const newSupplier = {};
+      newSupplier.displayName = selectedValue.label;
+      newSupplier.new = true;
+      newSupplier.phone = '';
+      newSupplier.email = '';
+      newSupplier.address = '';
+      newSupplier.website = '';
+      selectedSupplier.push(newSupplier);
+    } else {
+      selectedSupplier = this.props.supplier.suppliers.filter(
+        Supplier => {
+          return Supplier._id === selectedValue.value;
+        }
+      );
+    }
+
+    this.props.setSelectedSupplier(
+      selectedSupplier[0],
+      this.props.profile.profile,
+      true
+    );
   };
 
   handleIngredientNumberChange = e => {
@@ -87,22 +136,98 @@ class Ingredient extends Component {
 
   checkReadyToSave = e => {
     const {
-      selectedIngredient: { cup, whole }
+      selectedIngredient: { cup, whole },
+      selectedSupplier: { id, packetCost, packetGrams, preferred }
     } = this.state;
 
     console.log('this.state', e.target);
     const { name, value } = e.target;
     if (value === '') {
-      if (
-        (name === 'cup' && !isEmpty(whole)) ||
-        (name === 'whole' && !isEmpty(cup))
-      ) {
-        this.setState({ readyToSave: true });
-      } else {
-        this.setState({ readyToSave: false });
+      switch (name) {
+        case 'cup':
+          if (
+            !isEmpty(whole) &&
+            !isEmpty(id) &&
+            !isEmpty(packetCost) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        case 'whole':
+          if (
+            !isEmpty(whole) &&
+            !isEmpty(id) &&
+            !isEmpty(packetCost) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        default:
+          this.setState({ readyToSave: false });
+          break;
       }
     } else {
-      this.setState({ readyToSave: true });
+      switch (name) {
+        case 'cup':
+          if (
+            !isEmpty(whole) &&
+            !isEmpty(id) &&
+            !isEmpty(packetCost) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        case 'whole':
+          if (
+            !isEmpty(whole) &&
+            !isEmpty(id) &&
+            !isEmpty(packetCost) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        case 'id':
+          if (
+            (!isEmpty(cup) || !isEmpty(whole)) &&
+            !isEmpty(packetCost) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        case 'packetCost':
+          if (
+            (!isEmpty(cup) || !isEmpty(whole)) &&
+            !isEmpty(id) &&
+            !isEmpty(packetGrams)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        case 'packetGrams':
+          if (
+            (!isEmpty(cup) || !isEmpty(whole)) &&
+            !isEmpty(id) &&
+            !isEmpty(packetCost)
+          ) {
+            this.setState({ readyToSave: true });
+          }
+          break;
+
+        default:
+          this.setState({ readyToSave: false });
+          break;
+      }
     }
   };
 
@@ -162,6 +287,7 @@ class Ingredient extends Component {
                 handleSupplierNumberChange={
                   this.handleSupplierNumberChange
                 }
+                getSelectedValue={this.getSelectedValue}
               />
             )}
             {selectedIngredient &&
@@ -215,17 +341,22 @@ Ingredient.propTypes = {
   profile: PropTypes.object,
   loadIngredients: PropTypes.func.isRequired,
   setSelectedIngredient: PropTypes.func.isRequired,
-  addOrEditIngredient: PropTypes.func.isRequired
+  addOrEditIngredient: PropTypes.func.isRequired,
+  loadSuppliers: PropTypes.func.isRequired,
+  setSelectedSupplier: PropTypes.func.isRequired
 };
 
 const actions = {
   loadIngredients,
   setSelectedIngredient,
-  addOrEditIngredient
+  addOrEditIngredient,
+  loadSuppliers,
+  setSelectedSupplier
 };
 
 const mapState = state => ({
   ingredient: state.ingredient,
+  supplier: state.supplier,
   profile: state.profile
 });
 

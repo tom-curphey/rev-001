@@ -22,3 +22,21 @@ export const loadSuppliers = () => async dispatch => {
     });
   }
 };
+
+export const setSelectedSupplier = (
+  selectedSupplier,
+  profile
+  // selectIngredientSupplier
+) => async dispatch => {
+  if (selectedSupplier.new) {
+    dispatch({
+      type: SET_SELECTED_SUPPLIER,
+      payload: selectedSupplier
+    });
+  } else {
+    dispatch({
+      type: SET_SELECTED_SUPPLIER,
+      payload: selectedSupplier
+    });
+  }
+};
