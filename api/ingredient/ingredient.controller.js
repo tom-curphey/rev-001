@@ -6,7 +6,7 @@ module.exports.getIngredients = async (req, res) => {
   console.log('Ingredient Controller');
   try {
     const ingredients = await Ingredient.find({ user: req.user.id });
-    if (!ingredients) {
+    if (ingredients.length === 0) {
       return res.status(400).json({
         errors: [
           {
@@ -41,7 +41,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
         {
           param: 'ingredient',
           msg:
-            'New Ingredients required atleast 1 unit metric provided'
+            'New Ingredients required to atleast have 1 unit metric provided'
         }
       ]
     });
@@ -65,7 +65,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
       const ingredient = await Ingredient.findById(_id);
     } else {
       let ingredient = await Ingredient.findOne({
-        displayName: displayName
+        urlName: ingredientData.urlName
       });
       if (ingredient) {
         return res.status(400).json({

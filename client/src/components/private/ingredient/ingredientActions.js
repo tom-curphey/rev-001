@@ -1,19 +1,19 @@
 import {
-  SELECTED_INGREDIENT_SUCCESS,
   SELECTED_INGREDIENT_FAILED,
   SET_INGREDIENTS_LOADING,
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
   REMOVE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENT,
-  GET_ERRORS
+  GET_ERRORS,
+  STOP_INGREDIENTS_LOADING
 } from '../../../redux/types';
 import axios from 'axios';
-import { displayErrors } from '../../../utils/utils';
+import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
 
 export const loadIngredients = () => async dispatch => {
-  console.log('TRIGGER');
+  // console.log('TRIGGER');
 
   try {
     const res = await axios.get('/api/ingredient/all');
@@ -23,9 +23,15 @@ export const loadIngredients = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
+    // console.log('ERR', err.response);
+
     dispatch({
       type: INGREDIENTS_ERROR
     });
+    dispatch({
+      type: STOP_INGREDIENTS_LOADING
+    });
+    dispatch(displayErrors(err));
   }
 };
 
@@ -60,15 +66,12 @@ export const addOrEditIngredient = ingredientData => async dispatch => {
     const body = JSON.stringify(ingredientData);
     const res = await axios.post('/api/ingredient', body, config);
     console.log('res', res);
-    dispatch({
-      type: SELECTED_INGREDIENT_SUCCESS,
-      payload: res.data
-    });
+
     dispatch(loadIngredients());
     dispatch(setSelectedIngredient(res.data));
     dispatch(setAlert('Ingredient Saved', 'success'));
   } catch (err) {
-    dispatch(displayErrors(err, dispatch, GET_ERRORS));
+    dispatch(displayErrors(err));
     dispatch(setAlert('Ingredient Error', 'error'));
   }
 };

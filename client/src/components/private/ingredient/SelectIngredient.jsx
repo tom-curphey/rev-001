@@ -73,11 +73,21 @@ class SelectIngredient extends Component {
       newIngredient.whole = '';
       selectedIngredient.push(newIngredient);
     } else {
-      selectedIngredient = this.props.ingredient.ingredients.filter(
-        ingredient => {
-          return ingredient._id === selectedValue.value;
-        }
-      );
+      if (this.props.ingredient.ingredients !== null) {
+        selectedIngredient = this.props.ingredient.ingredients.filter(
+          ingredient => {
+            return ingredient._id === selectedValue.value;
+          }
+        );
+      } else {
+        console.log('CHECK THIS');
+
+        // console.log('selectedIngredient', selectedIngredient);
+        // console.log(
+        //   'this.props.ingredient.ingredients',
+        //   this.props.ingredient.ingredients
+        // );
+      }
     }
 
     this.props.setSelectedIngredient(
@@ -107,6 +117,16 @@ class SelectIngredient extends Component {
           name="ingredient"
           options={options}
           getSelectedValue={this.getSelectedValue}
+          placeholder="Type ingredient name to start.."
+        />
+      );
+    } else {
+      formContent = (
+        <CreatableSelectInput
+          value={selectedValue}
+          name="ingredient"
+          getSelectedValue={this.getSelectedValue}
+          placeholder="Type ingredient name to start.."
         />
       );
     }

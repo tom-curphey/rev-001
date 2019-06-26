@@ -5,7 +5,8 @@ import {
   INGREDIENTS_ERROR,
   CLEAR_INGREDIENTS,
   REMOVE_SELECTED_INGREDIENT,
-  SET_SELECTED_INGREDIENT
+  SET_SELECTED_INGREDIENT,
+  STOP_INGREDIENTS_LOADING
 } from '../../../redux/types';
 
 const initialState = {
@@ -23,13 +24,6 @@ export default function(state = initialState, actions) {
         ...state,
         ingredients: payload,
         loading: false
-      };
-
-    case SELECTED_INGREDIENT_SUCCESS:
-      return {
-        ...state,
-        selectedIngredient: payload,
-        laoding: false
       };
 
     case SET_SELECTED_INGREDIENT:
@@ -54,6 +48,12 @@ export default function(state = initialState, actions) {
         selectedIngredient: null,
         loading: false,
         errors: null
+      };
+
+    case STOP_INGREDIENTS_LOADING:
+      return {
+        ...state,
+        loading: false
       };
 
     default:

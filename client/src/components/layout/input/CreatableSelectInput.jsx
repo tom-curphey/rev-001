@@ -27,9 +27,12 @@ const CreatableSelectInput = ({
 
   let selectedValue;
   if (value) {
-    let selectedOption = options.filter(option => {
-      return option.value === value;
-    });
+    let selectedOption;
+    if (options) {
+      selectedOption = options.filter(option => {
+        return option.value === value;
+      });
+    }
 
     if (isEmpty(selectedOption)) {
       selectedValue = value;
@@ -87,7 +90,7 @@ const CreatableSelectInput = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
-        options={options}
+        options={options && options}
         className={`sBorderelectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
@@ -110,7 +113,7 @@ const CreatableSelectInput = ({
 };
 
 CreatableSelectInput.propTypes = {
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   getSelectedValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   className: PropTypes.string

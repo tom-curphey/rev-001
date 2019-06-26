@@ -95,6 +95,23 @@ section.app.public {
   width: 100%;
 }
 
+span.close {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+
+  &:hover {
+    background-color: $cFaded;
+  }
+}
+
 div.alertBox {
   position: absolute;
   bottom: -50px;
@@ -730,6 +747,24 @@ form {
     text-decoration: none;
   }
 
+  div.button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  div.twoButtons {
+    display: grid;
+    grid-template-columns: 120px 250px;
+    grid-gap: 20px;
+
+    button:first-child {
+      width: 120px;
+    }
+    button:last-child {
+      width: 250px;
+    }
+  }
+
   button {
     width: 100%;
     height: 50px;
@@ -747,6 +782,14 @@ form {
     }
     &.green {
       background-color: $cGreen;
+    }
+    &.cancel {
+      background-color: transparent;
+      color: $cGrey;
+    }
+    &.cancel:hover {
+      background-color: $cFaded;
+      color: $cBlack;
     }
   }
 }
@@ -781,4 +824,65 @@ div.inlineFormField {
   grid-template-rows: 40px;
   margin-bottom: 10px;
   grid-gap: 15px;
+}
+
+/* 
+Modals
+********************************
+********************************/
+
+section.modalScreen {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: #e4940066;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div.modal {
+    position: relative;
+    width: 500px;
+    height: fit-content;
+    padding: 40px;
+    background-color: $cWhite;
+    box-shadow: $cBoxShadowBig;
+    border-radius: 30px;
+
+    div.modalHeader {
+      display: grid;
+      grid-template-columns: auto 50px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    p {
+      padding: 10px 0px;
+      color: #999;
+      font-weight: 400;
+    }
+
+    form {
+      margin-top: 20px;
+
+      label.textInput {
+        font-weight: 100;
+        margin-bottom: 30px;
+        display: block;
+
+        input {
+          height: 60px;
+          margin-top: 5px;
+          font-size: 24px;
+        }
+      }
+    }
+  }
 }

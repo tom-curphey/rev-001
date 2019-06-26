@@ -22,11 +22,24 @@ class SupplierForm extends Component {
       errors
     } = this.props;
 
-    const options = [
-      { value: '893246923', label: 'Veggie Bar' },
-      { value: '891273219', label: 'New Farm' },
-      { value: '891273', label: 'Peachy' }
-    ];
+    let options;
+    console.log(this.props.supplier);
+    if (supplier.suppliers.length !== 0) {
+      options = supplier.suppliers.map(supplier => {
+        let selectData = {};
+        selectData.label = supplier.displayName;
+        selectData.value = supplier._id;
+        return selectData;
+      });
+    }
+
+    // console.log(options);
+
+    // const options = [
+    //   { value: '893246923', label: 'Veggie Bar' },
+    //   { value: '891273219', label: 'New Farm' },
+    //   { value: '891273', label: 'Peachy' }
+    // ];
 
     return (
       <section className="supplierForm">

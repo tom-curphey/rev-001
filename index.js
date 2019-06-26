@@ -22,6 +22,7 @@ app.use(
   '/api/ingredient',
   require('./api/ingredient/ingredient.router')
 );
+app.use('/api/supplier', require('./api/supplier/supplier.router'));
 
 if (process.env.NODE_ENV === 'production') {
   // Serve static files from the React app

@@ -10,7 +10,8 @@ import {
 } from './ingredientActions';
 import {
   loadSuppliers,
-  setSelectedSupplier
+  setSelectedSupplier,
+  removeSelectedSupplier
 } from '../supplier/supplierActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
@@ -313,6 +314,8 @@ class Ingredient extends Component {
           </Fragment>
         );
       } else {
+        // console.log('HERE');
+
         ingredientForm = (
           <SelectIngredient
             getSelectedIngredient={this.getSelectedIngredient}
@@ -343,7 +346,8 @@ Ingredient.propTypes = {
   setSelectedIngredient: PropTypes.func.isRequired,
   addOrEditIngredient: PropTypes.func.isRequired,
   loadSuppliers: PropTypes.func.isRequired,
-  setSelectedSupplier: PropTypes.func.isRequired
+  setSelectedSupplier: PropTypes.func.isRequired,
+  removeSelectedSupplier: PropTypes.func.isRequired
 };
 
 const actions = {
@@ -351,7 +355,8 @@ const actions = {
   setSelectedIngredient,
   addOrEditIngredient,
   loadSuppliers,
-  setSelectedSupplier
+  setSelectedSupplier,
+  removeSelectedSupplier
 };
 
 const mapState = state => ({

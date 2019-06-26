@@ -25,7 +25,7 @@ import setAuthToken from '../../../utils/setAuthToken';
 import { loadProfile } from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
 import { loadRecipes } from '../../private/recipe/recipeActions';
-import { displayErrors } from '../../../utils/utils';
+import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
 import { removeErrors } from '../../../redux/errorActions';
 
@@ -46,7 +46,7 @@ export const loadUser = () => async dispatch => {
     dispatch({
       type: AUTH_ERROR
     });
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
   }
 };
 
@@ -74,7 +74,7 @@ export const register = ({
     dispatch({
       type: REGISTER_FAILED
     });
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
   }
 };
 
@@ -100,7 +100,7 @@ export const updateUser = updatedUser => async dispatch => {
     dispatch(loadVenues());
     dispatch(loadRecipes());
   } catch (err) {
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
     console.log('err', err);
   }
 };
@@ -130,7 +130,7 @@ export const updatePassword = updatedPassword => async dispatch => {
     // dispatch({
     //   type: PASSWORD_FAILED
     // });
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
     dispatch(setAlert('Password Error', 'error'));
     console.log('err', err);
   }
@@ -163,7 +163,7 @@ export const signin = ({ email, password }) => async dispatch => {
     dispatch({
       type: SIGNIN_FAILED
     });
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
     // can dispatch an alert
   }
 };
@@ -201,7 +201,7 @@ export const getForgotPasswordLink = ({
     });
     // dispatch(loadUser());
   } catch (err) {
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
     console.log('err', err);
 
     // can dispatch an alert
@@ -267,7 +267,7 @@ export const resetPassword = ({
     dispatch(loadRecipes());
     dispatch(setAlert('Password Updated', 'success'));
   } catch (err) {
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
     console.log('err', err);
   }
 };

@@ -4,7 +4,8 @@ import {
   SUPPLIERS_ERROR,
   REMOVE_SELECTED_SUPPLIER,
   SET_SELECTED_SUPPLIER,
-  CLEAR_SUPPLIERS
+  CLEAR_SUPPLIERS,
+  STOP_SUPPLIERS_LOADING
 } from '../../../redux/types';
 
 const initialState = {
@@ -46,6 +47,12 @@ export default function(state = initialState, actions) {
         selectedSupplier: null,
         loading: false,
         errors: null
+      };
+
+    case STOP_SUPPLIERS_LOADING:
+      return {
+        ...state,
+        loading: false
       };
 
     default:

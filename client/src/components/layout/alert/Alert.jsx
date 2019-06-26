@@ -12,8 +12,6 @@ class Alert extends Component {
 
   componentDidMount = () => {
     const { alert } = this.props;
-    console.log('alert', alert);
-
     if (alert.length > 0) {
       this.setState({
         message: alert[0].msg,
@@ -28,7 +26,6 @@ class Alert extends Component {
 
   componentDidUpdate = prevProps => {
     const { alert } = this.props;
-    console.log('alert', alert);
     if (prevProps.alert !== alert) {
       if (alert.length > 0) {
         this.setState({
