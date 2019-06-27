@@ -53,8 +53,12 @@ export const setSelectedIngredient = (
   }
 };
 
-export const addOrEditIngredient = ingredientData => async dispatch => {
-  console.log('SI', ingredientData);
+export const addOrEditIngredient = (
+  ingredientData,
+  supplierData
+) => async dispatch => {
+  console.log('ID', ingredientData);
+  console.log('SD', supplierData);
 
   try {
     // dispatch(setVenueLoading());
@@ -63,7 +67,18 @@ export const addOrEditIngredient = ingredientData => async dispatch => {
         'Content-Type': 'application/json'
       }
     };
-    const body = JSON.stringify(ingredientData);
+
+    const data = {
+      ...ingredientData,
+      ...supplierData,
+      ingredientID: ingredientData._id,
+      supplierID: supplierData._id
+    };
+
+    const body = JSON.stringify(data);
+
+    console.log('BODY', body);
+
     const res = await axios.post('/api/ingredient', body, config);
     console.log('res', res);
 

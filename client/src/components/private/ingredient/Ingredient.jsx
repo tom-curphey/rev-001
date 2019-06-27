@@ -23,7 +23,8 @@ class Ingredient extends Component {
     addIngredientForm: false,
     selectedIngredient: null,
     selectedSupplier: {
-      id: '',
+      _id: '',
+      displayName: '',
       packetCost: '',
       packetGrams: '',
       preferred: ''
@@ -36,14 +37,22 @@ class Ingredient extends Component {
     this.props.loadIngredients();
     this.props.loadSuppliers();
     if (this.props.ingredient.selectedIngredient) {
-      this.setState({
-        selectedIngredient: this.props.ingredient.selectedIngredient
-      });
+      this.changeSelectedIngredient(
+        this.props.ingredient.selectedIngredient
+      );
     }
     if (this.props.supplier.selectedSupplier) {
-      this.setState({
-        selectedSupplier: this.props.supplier.selectedSupplier
-      });
+      const {
+        _id,
+        displayName
+      } = this.props.supplier.selectedSupplier;
+      this.setState(prevState => ({
+        selectedSupplier: {
+          ...prevState.selectedSupplier,
+          _id: _id,
+          displayName: displayName
+        }
+      }));
     }
   }
 
@@ -53,16 +62,33 @@ class Ingredient extends Component {
       this.props.ingredient.selectedIngredient
     ) {
       const { selectedIngredient } = this.props.ingredient;
+      this.changeSelectedIngredient(
+        this.props.ingredient.selectedIngredient
+      );
+    }
+    if (
+      prevProps.supplier.selectedSupplier !==
+      this.props.supplier.selectedSupplier
+    ) {
+      console.log('in func');
 
-      this.setState({
-        selectedIngredient: selectedIngredient
-      });
+      const {
+        _id,
+        displayName
+      } = this.props.supplier.selectedSupplier;
+      this.setState(prevState => ({
+        selectedSupplier: {
+          ...prevState.selectedSupplier,
+          _id: _id,
+          displayName: displayName
+        }
+      }));
+      this.checkReadyToSave();
+    }
+    if (prevState.selectedSupplier !== this.state.selectedSupplier) {
+      console.log('state check');
 
-      if (!isEmpty(selectedIngredient.metrics)) {
-        this.setState({ readyToSave: true });
-      } else {
-        this.setState({ readyToSave: false });
-      }
+      this.checkReadyToSave();
     }
   }
 
@@ -92,7 +118,7 @@ class Ingredient extends Component {
     }
   };
 
-  getSelectedValue = selectedValue => {
+  getSelectedSupplier = selectedValue => {
     // let addIngredient = false;
     let selectedSupplier = [];
     if (selectedValue.__isNew__) {
@@ -128,107 +154,58 @@ class Ingredient extends Component {
       this.setState(prevState => ({
         selectedIngredient: {
           ...prevState.selectedIngredient,
-          [e.target.name]: value
+          metrics: {
+            ...prevState.selectedIngredient.metrics,
+            [e.target.name]: value
+          }
         }
       }));
       this.checkReadyToSave(e);
     }
   };
 
-  checkReadyToSave = e => {
+  changeSelectedIngredient = selectedIngredient => {
+    if (isEmpty(selectedIngredient._id)) {
+      this.setState({
+        selectedIngredient: this.props.ingredient.selectedIngredient,
+        selectedSupplier: {
+          _id: '',
+          displayName: '',
+          packetCost: '',
+          packetGrams: '',
+          preferred: ''
+        },
+        readyToSave: false
+      });
+    } else {
+      this.setState({
+        selectedIngredient: this.props.ingredient.selectedIngredient,
+        readyToSave: false
+      });
+    }
+  };
+
+  checkReadyToSave = () => {
     const {
-      selectedIngredient: { cup, whole },
-      selectedSupplier: { id, packetCost, packetGrams, preferred }
+      selectedIngredient: { metrics },
+      selectedSupplier: { _id, packetCost, packetGrams }
     } = this.state;
 
-    console.log('this.state', e.target);
-    const { name, value } = e.target;
-    if (value === '') {
-      switch (name) {
-        case 'cup':
-          if (
-            !isEmpty(whole) &&
-            !isEmpty(id) &&
-            !isEmpty(packetCost) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
+    console.group('in Check');
+    console.log('cup', metrics.cup);
+    console.log('whole', metrics.whole);
+    console.log('id', _id);
+    console.log('packetCost', packetCost);
+    console.log('packetGrams', packetGrams);
+    console.groupEnd();
 
-        case 'whole':
-          if (
-            !isEmpty(whole) &&
-            !isEmpty(id) &&
-            !isEmpty(packetCost) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        default:
-          this.setState({ readyToSave: false });
-          break;
-      }
-    } else {
-      switch (name) {
-        case 'cup':
-          if (
-            !isEmpty(whole) &&
-            !isEmpty(id) &&
-            !isEmpty(packetCost) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        case 'whole':
-          if (
-            !isEmpty(whole) &&
-            !isEmpty(id) &&
-            !isEmpty(packetCost) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        case 'id':
-          if (
-            (!isEmpty(cup) || !isEmpty(whole)) &&
-            !isEmpty(packetCost) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        case 'packetCost':
-          if (
-            (!isEmpty(cup) || !isEmpty(whole)) &&
-            !isEmpty(id) &&
-            !isEmpty(packetGrams)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        case 'packetGrams':
-          if (
-            (!isEmpty(cup) || !isEmpty(whole)) &&
-            !isEmpty(id) &&
-            !isEmpty(packetCost)
-          ) {
-            this.setState({ readyToSave: true });
-          }
-          break;
-
-        default:
-          this.setState({ readyToSave: false });
-          break;
-      }
+    if (
+      (!isEmpty(metrics.cup) || !isEmpty(metrics.whole)) &&
+      !isEmpty(_id) &&
+      !isEmpty(packetCost) &&
+      !isEmpty(packetGrams)
+    ) {
+      this.setState({ readyToSave: true });
     }
   };
 
@@ -239,21 +216,41 @@ class Ingredient extends Component {
       selectedSupplier,
       readyToSave
     } = this.state;
-    const { id, displayName, cup, whole } = selectedIngredient;
 
     if (readyToSave) {
-      if (!isEmpty(cup) || !isEmpty(whole)) {
-        const ingredientData = {
-          displayName: displayName,
-          cup: cup,
-          whole: whole
-        };
-        if (!isEmpty(id)) {
-          ingredientData.id = id;
-        }
+      const ingredientData = {};
+      ingredientData.metrics = {};
+      const supplierData = {};
+      if (selectedIngredient._id) {
+        console.log('Edit ingredient');
+        ingredientData._id = selectedIngredient._id;
+        ingredientData.displayName = selectedIngredient.displayName;
+        if (!isEmpty(selectedIngredient.metrics.cup))
+          ingredientData.metrics.cup = selectedIngredient.metrics.cup;
+        if (!isEmpty(selectedIngredient.metrics.whole))
+          ingredientData.metrics.whole =
+            selectedIngredient.metrics.whole;
 
-        this.props.addOrEditIngredient(ingredientData);
+        supplierData._id = selectedSupplier._id;
+        supplierData.packetGrams = selectedSupplier.packetGrams;
+        supplierData.packetCost = selectedSupplier.packetCost;
+        console.log('supplierData', supplierData);
+      } else {
+        console.log('Add new ingredient');
+        ingredientData.displayName = selectedIngredient.displayName;
+        if (!isEmpty(selectedIngredient.metrics.cup))
+          ingredientData.metrics.cup = selectedIngredient.metrics.cup;
+        if (!isEmpty(selectedIngredient.metrics.whole))
+          ingredientData.metrics.whole =
+            selectedIngredient.metrics.whole;
+
+        supplierData._id = selectedSupplier._id;
+        supplierData.packetGrams = selectedSupplier.packetGrams;
+        supplierData.packetCost = selectedSupplier.packetCost;
+        console.log('supplierData', supplierData);
       }
+
+      this.props.addOrEditIngredient(ingredientData, supplierData);
     }
   };
 
@@ -288,7 +285,7 @@ class Ingredient extends Component {
                 handleSupplierNumberChange={
                   this.handleSupplierNumberChange
                 }
-                getSelectedValue={this.getSelectedValue}
+                getSelectedValue={this.getSelectedSupplier}
               />
             )}
             {selectedIngredient &&

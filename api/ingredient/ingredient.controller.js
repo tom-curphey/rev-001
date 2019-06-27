@@ -29,11 +29,12 @@ module.exports.addOrEditIngredient = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { _id, displayName, cup, whole } = req.body;
-
-  if (cup) {
-    console.log('CUP', cup);
-  }
+  const {
+    displayName,
+    metrics: { cup, whole },
+    ingredientID,
+    supplierID
+  } = req.body;
 
   if (!cup && !whole) {
     return res.status(400).json({
@@ -47,9 +48,11 @@ module.exports.addOrEditIngredient = async (req, res) => {
     });
   }
 
+  console.log('REQ.BODY', req.body);
+
   const ingredientData = {};
   ingredientData.metrics = {};
-  if (_id) ingredientData._id = _id;
+  if (ingredientID) ingredientData._id = req.body.ingredientID;
   ingredientData.user = req.user.id;
   ingredientData.displayName = displayName;
   ingredientData.urlName = displayName
@@ -61,9 +64,15 @@ module.exports.addOrEditIngredient = async (req, res) => {
   if (whole) ingredientData.metrics.whole = whole;
 
   try {
-    if (_id) {
-      const ingredient = await Ingredient.findById(_id);
+    if (ingredientData._id) {
+      // Edit ingredient
+      const ingredient = await Ingredient.findById(
+        ingredientData._id
+      );
+
+      console.log('INGREDIENT', ingredient);
     } else {
+      // Add new ingredient
       let ingredient = await Ingredient.findOne({
         urlName: ingredientData.urlName
       });
@@ -77,9 +86,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
           ]
         });
       }
-
       ingredient = new Ingredient(ingredientData);
-
       await ingredient.save();
       return res.status(200).json(ingredient);
     }

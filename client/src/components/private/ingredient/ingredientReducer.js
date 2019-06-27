@@ -30,7 +30,7 @@ export default function(state = initialState, actions) {
       return {
         ...state,
         selectedIngredient: payload,
-        laoding: false
+        loading: false
       };
 
     case CLEAR_INGREDIENTS:

@@ -17,12 +17,12 @@ class SelectIngredient extends Component {
   };
 
   componentDidMount() {
-    console.log('SELECT MOUNT this.props: ', this.props.ingredient);
+    // console.log('SELECT MOUNT this.props: ', this.props.ingredient);
 
     if (!isEmpty(this.props.ingredient.selectedIngredient)) {
       const { selectedIngredient } = this.props.ingredient;
 
-      console.log('selectedIngredient', selectedIngredient);
+      // console.log('selectedIngredient', selectedIngredient);
 
       let selectedValue = {};
       selectedValue.label = selectedIngredient.displayName;
@@ -67,10 +67,11 @@ class SelectIngredient extends Component {
       this.props.removeSelectedIngredient();
       // addIngredient = true;
       const newIngredient = {};
+      newIngredient.metrics = {};
       newIngredient.displayName = selectedValue.label;
       newIngredient.new = true;
-      newIngredient.cup = '';
-      newIngredient.whole = '';
+      newIngredient.metrics.cup = '';
+      newIngredient.metrics.whole = '';
       selectedIngredient.push(newIngredient);
     } else {
       if (this.props.ingredient.ingredients !== null) {

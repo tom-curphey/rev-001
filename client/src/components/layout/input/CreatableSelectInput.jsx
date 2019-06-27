@@ -27,6 +27,8 @@ const CreatableSelectInput = ({
 
   let selectedValue;
   if (value) {
+    // console.log('VALUE', value);
+
     let selectedOption;
     if (options) {
       selectedOption = options.filter(option => {

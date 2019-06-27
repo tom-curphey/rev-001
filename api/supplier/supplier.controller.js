@@ -6,7 +6,7 @@ module.exports.getSuppliers = async (req, res) => {
   try {
     const suppliers = await Supplier.find();
 
-    console.log('SUPPLIERS', suppliers);
+    // console.log('SUPPLIERS', suppliers);
 
     if (suppliers.length === 0) {
       return res.status(400).json({

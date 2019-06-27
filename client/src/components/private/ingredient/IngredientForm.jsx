@@ -28,7 +28,7 @@ class IngredientForm extends Component {
           <TextInputHorizontal
             label="Cup"
             placeholder="Cup metric weight in grams"
-            value={selectedIngredient.cup}
+            value={selectedIngredient.metrics.cup}
             name="cup"
             onChange={this.props.handleIngredientNumberChange}
             error={errors.cup && errors.cup}
@@ -36,7 +36,7 @@ class IngredientForm extends Component {
           <TextInputHorizontal
             label="Whole"
             placeholder="Whole weight in grams"
-            value={selectedIngredient.whole}
+            value={selectedIngredient.metrics.whole}
             name="whole"
             onChange={this.props.handleIngredientNumberChange}
             error={errors && errors.Whole}

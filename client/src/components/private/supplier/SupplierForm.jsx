@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import Spinner from '../../layout/Spinner';
+import { isEmpty } from '../../../utils/utils';
 
 class SupplierForm extends Component {
   // state = {
@@ -18,7 +19,13 @@ class SupplierForm extends Component {
       ingredient,
       supplier,
       getSelectedValue,
-      selectedSupplier: { packetCost, packetGrams, preferred },
+      selectedSupplier: {
+        _id,
+        displayName,
+        packetCost,
+        packetGrams,
+        preferred
+      },
       errors
     } = this.props;
 
@@ -31,6 +38,17 @@ class SupplierForm extends Component {
         selectData.value = supplier._id;
         return selectData;
       });
+    }
+
+    let selectedValue = {
+      label: 'Select Ingredient Supplier...',
+      value: 'no-supplier-selected'
+    };
+    console.log(displayName);
+
+    if (!isEmpty(_id)) {
+      selectedValue.label = displayName;
+      selectedValue.value = _id;
     }
 
     // console.log(options);
@@ -70,6 +88,7 @@ class SupplierForm extends Component {
           <CreatableSelectInput
             name="type"
             placeholder="Select Ingredient Supplier..."
+            value={selectedValue && selectedValue}
             options={options}
             getSelectedValue={this.props.getSelectedValue}
             error={errors.type && errors.type}

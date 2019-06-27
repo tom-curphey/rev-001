@@ -29,7 +29,7 @@ export default function(state = initialState, actions) {
       return {
         ...state,
         selectedSupplier: payload,
-        laoding: false
+        loading: false
       };
 
     case CLEAR_SUPPLIERS:
