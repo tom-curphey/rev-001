@@ -16,13 +16,17 @@ const IngredientSchema = new Schema({
     required: true,
     unique: true
   },
-  packageGrams: {
+  packetCost: {
     type: Number,
     default: 0
   },
-  packageCost: {
+  packetGrams: {
     type: Number,
     default: 0
+  },
+  confirmedDetails: {
+    type: Boolean,
+    default: false
   },
   metrics: {
     cup: {
@@ -47,11 +51,11 @@ const IngredientSchema = new Schema({
         required: true,
         sparse: true
       },
-      packageCost: {
+      packetCost: {
         type: Number,
         default: 0
       },
-      packageGrams: {
+      packetGrams: {
         type: Number,
         default: 0
       },

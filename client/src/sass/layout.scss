@@ -826,6 +826,124 @@ div.inlineFormField {
   grid-gap: 15px;
 }
 
+div.toggleInputHorizontal {
+  grid-template-rows: 40px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto 120px;
+
+  div.inputTitle {
+    display: flex;
+    align-items: center;
+    font-weight: 100;
+  }
+
+  div.toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 120px;
+      height: 40px;
+    }
+
+    label.switch {
+      input {
+        display: none;
+
+        &:checked + .slider {
+          background-color: #2ab934;
+        }
+
+        &:focus + .slider {
+          box-shadow: 0 0 1px #2196f3;
+        }
+
+        &:checked + .slider:before {
+          -webkit-transform: translateX(83px);
+          -ms-transform: translateX(83px);
+          transform: translateX(83px);
+        }
+
+        input:checked + .slider .on {
+          display: block;
+        }
+
+        input:checked + .slider .off {
+          display: none;
+        }
+      }
+
+      div.slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $cFaded;
+        -webkit-transition: 0.6s;
+        transition: 0.6s;
+
+        &:before {
+          position: absolute;
+          content: '';
+          height: 29px;
+          width: 29px;
+          left: 4px;
+          bottom: 6px;
+          background-color: $cWhiteFaded;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+        }
+      }
+
+      // Rounded sliders
+      div.slider.round {
+        border-radius: 34px;
+        &:before {
+          border-radius: 50%;
+        }
+      }
+    }
+
+    //  Toggle Labels
+    span.on {
+      display: none;
+    }
+
+    span.on,
+    span.off {
+      font-size: 14px;
+      font-weight: 400;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+    }
+
+    span.off {
+      color: $cBlack;
+      left: 73%;
+    }
+
+    span.on {
+      color: $cWhite;
+      left: 38%;
+    }
+
+    input:checked + .slider .on {
+      display: block;
+    }
+
+    input:checked + .slider .off {
+      display: none;
+    }
+  }
+}
+
 /* 
 Modals
 ********************************

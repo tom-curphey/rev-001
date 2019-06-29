@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+import ToggleHorizontal from '../../layout/input/ToggleHorizontal';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
@@ -31,7 +32,10 @@ class SupplierForm extends Component {
 
     let options;
     console.log(this.props.supplier);
-    if (supplier.suppliers.length !== 0) {
+    if (
+      !isEmpty(supplier.suppliers) &&
+      supplier.suppliers.length !== 0
+    ) {
       options = supplier.suppliers.map(supplier => {
         let selectData = {};
         selectData.label = supplier.displayName;
@@ -41,7 +45,7 @@ class SupplierForm extends Component {
     }
 
     let selectedValue = {
-      label: 'Select Ingredient Supplier...',
+      label: 'Type supplier name to select supplier..',
       value: 'no-supplier-selected'
     };
     console.log(displayName);
@@ -78,12 +82,13 @@ class SupplierForm extends Component {
             onChange={this.props.handleSupplierNumberChange}
             error={errors && errors.packetGrams}
           />
-          <TextInputHorizontal
-            label="Prefered Supplier"
-            value={preferred}
+          <ToggleHorizontal
+            label="Is this your preferred supplier?"
+            value={packetGrams}
             name="preferred"
-            onChange={this.props.handleSupplierChange}
-            error={errors && errors.preferred}
+            // labelClass="smallTextField"
+            onChange={this.props.toggleChange}
+            toggleOn="Preferred"
           />
           <CreatableSelectInput
             name="type"
@@ -103,7 +108,8 @@ SupplierForm.propTypes = {
   ingredient: PropTypes.object.isRequired,
   supplier: PropTypes.object.isRequired,
   handleSupplierChange: PropTypes.func.isRequired,
-  handleSupplierNumberChange: PropTypes.func.isRequired
+  handleSupplierNumberChange: PropTypes.func.isRequired,
+  toggleChange: PropTypes.func.isRequired
 };
 
 const actions = {};

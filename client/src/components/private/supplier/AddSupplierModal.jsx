@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import TextInput from '../../layout/input/TextInput';
-import { addOrEditSupplier } from './supplierActions';
+import {
+  addOrEditSupplier,
+  removeSelectedSupplier
+} from './supplierActions';
 
 class AddSupplierModal extends Component {
   state = {
@@ -26,31 +29,37 @@ class AddSupplierModal extends Component {
   componentDidUpdate(prevProps) {
     if (
       prevProps.selectedSupplier !== this.props.selectedSupplier &&
-      !this.props.selectedSupplier._id
+      this.props.selectedSupplier
     ) {
-      console.log('true', this.props.selectedSupplier);
+      if (this.props.selectedSupplier._id) {
+        this.setState({
+          showModal: false
+        });
+      } else {
+        console.log('true', this.props.selectedSupplier);
 
-      const {
-        displayName,
-        email,
-        phone,
-        address,
-        website
-      } = this.props.selectedSupplier;
+        const {
+          displayName,
+          email,
+          phone,
+          address,
+          website
+        } = this.props.selectedSupplier;
 
-      this.setState({
-        showModal: true,
-        displayName: displayName,
-        email: email,
-        phone: phone,
-        address: address,
-        website: website
-      });
+        this.setState({
+          showModal: true,
+          displayName: displayName,
+          email: email,
+          phone: phone,
+          address: address,
+          website: website
+        });
+      }
     }
 
     if (
       prevProps.selectedSupplier !== this.props.selectedSupplier &&
-      this.props.selectedSupplier._id
+      !this.props.selectedSupplier
     ) {
       this.setState({
         showModal: false
@@ -97,7 +106,7 @@ class AddSupplierModal extends Component {
   };
 
   handleFormCancel = () => {
-    console.log('CANCEL');
+    this.props.removeSelectedSupplier();
   };
 
   render() {
@@ -185,11 +194,13 @@ class AddSupplierModal extends Component {
 
 AddSupplierModal.propTypes = {
   selectedSupplier: PropTypes.object,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  removeSelectedSupplier: PropTypes.func.isRequired
 };
 
 const actions = {
-  addOrEditSupplier
+  addOrEditSupplier,
+  removeSelectedSupplier
 };
 
 const mapState = state => ({

@@ -53,7 +53,7 @@ export const setSelectedIngredient = (
   }
 };
 
-export const addOrEditIngredient = (
+export const addOrEditIngredientAndSupplier = (
   ingredientData,
   supplierData
 ) => async dispatch => {
@@ -76,14 +76,12 @@ export const addOrEditIngredient = (
     };
 
     const body = JSON.stringify(data);
-
-    console.log('BODY', body);
-
     const res = await axios.post('/api/ingredient', body, config);
-    console.log('res', res);
+
+    console.log('res', res.data);
 
     dispatch(loadIngredients());
-    dispatch(setSelectedIngredient(res.data));
+    dispatch(setSelectedIngredient(res.data.ingredient));
     dispatch(setAlert('Ingredient Saved', 'success'));
   } catch (err) {
     dispatch(displayErrors(err));

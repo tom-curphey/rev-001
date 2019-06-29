@@ -6,7 +6,7 @@ import {
   setSelectedIngredient,
   removeSelectedIngredient
 } from './ingredientActions';
-import { isEmpty } from '../../../utils/utils';
+import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 class SelectIngredient extends Component {
   state = {
@@ -68,8 +68,11 @@ class SelectIngredient extends Component {
       // addIngredient = true;
       const newIngredient = {};
       newIngredient.metrics = {};
-      newIngredient.displayName = selectedValue.label;
-      newIngredient.new = true;
+      newIngredient.displayName = capitalizeFirstLetter(
+        selectedValue.label
+      );
+
+      // newIngredient.new = true;
       newIngredient.metrics.cup = '';
       newIngredient.metrics.whole = '';
       selectedIngredient.push(newIngredient);
@@ -118,7 +121,7 @@ class SelectIngredient extends Component {
           name="ingredient"
           options={options}
           getSelectedValue={this.getSelectedValue}
-          placeholder="Type ingredient name to start.."
+          placeholder="Type ingredient name to select ingredient.."
         />
       );
     } else {
@@ -127,7 +130,7 @@ class SelectIngredient extends Component {
           value={selectedValue}
           name="ingredient"
           getSelectedValue={this.getSelectedValue}
-          placeholder="Type ingredient name to start.."
+          placeholder="Type ingredient name to select ingredient.."
         />
       );
     }

@@ -77,3 +77,9 @@ export const removeSelectedSupplier = () => async dispatch => {
     type: REMOVE_SELECTED_SUPPLIER
   });
 };
+
+// export const closeAddSupplierModal = () => async dispatch => {
+//   dispatch({
+//     type: REMOVE_SELECTED_SUPPLIER
+//   });
+// };

@@ -56,11 +56,11 @@ const ProfileSchema = new Schema(
               ref: 'supplier',
               required: true
             },
-            packageCost: {
+            packetCost: {
               type: Number,
               required: true
             },
-            packageGrams: {
+            packetGrams: {
               type: Number,
               required: true
             },

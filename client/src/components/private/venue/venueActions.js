@@ -14,6 +14,7 @@ import { loadProfile } from '../profile/profileActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
 import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
+import { loadRecipes } from '../recipe/recipeActions';
 
 export const setVenueLoading = () => dispatch => {
   dispatch({ type: SET_VENUE_LOADING });
@@ -98,6 +99,7 @@ export const addOrEditVenue = venueData => async dispatch => {
     console.log('res.data', res.data);
 
     await dispatch(loadProfile());
+    await dispatch(loadRecipes());
     await dispatch(loadVenues(res.data));
     dispatch(setAlert('Venue Saved', 'success'));
   } catch (err) {
