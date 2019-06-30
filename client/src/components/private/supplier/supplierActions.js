@@ -30,24 +30,11 @@ export const loadSuppliers = () => async dispatch => {
   }
 };
 
-export const setSelectedSupplier = (
-  selectedSupplier,
-  profile
-  // selectIngredientSupplier
-) => async dispatch => {
-  console.log('selectedSupplier', selectedSupplier);
-
-  if (selectedSupplier.new) {
-    dispatch({
-      type: SET_SELECTED_SUPPLIER,
-      payload: selectedSupplier
-    });
-  } else {
-    dispatch({
-      type: SET_SELECTED_SUPPLIER,
-      payload: selectedSupplier
-    });
-  }
+export const setSelectedSupplier = selectedSupplier => async dispatch => {
+  dispatch({
+    type: SET_SELECTED_SUPPLIER,
+    payload: selectedSupplier
+  });
 };
 
 export const addOrEditSupplier = supplierData => async dispatch => {

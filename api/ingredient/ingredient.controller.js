@@ -6,7 +6,9 @@ const { validationResult } = require('express-validator/check');
 module.exports.getIngredients = async (req, res) => {
   console.log('Ingredient Controller');
   try {
-    const ingredients = await Ingredient.find();
+    const ingredients = await Ingredient.find()
+      .sort({ urlName: 1 })
+      .populate('suppliers.supplier', ['displayName']);
     if (ingredients.length === 0) {
       return res.status(400).json({
         errors: [
@@ -17,6 +19,7 @@ module.exports.getIngredients = async (req, res) => {
         ]
       });
     }
+
     res.status(200).json(ingredients);
   } catch (err) {
     console.error(err);
@@ -57,7 +60,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
   const ingredientData = {};
   ingredientData.metrics = {};
   if (ingredientID) ingredientData._id = ingredientID;
-  ingredientData.user = req.user.id;
+  ingredientData.Profile = req.user.id;
   ingredientData.displayName = displayName;
   ingredientData.urlName = displayName
     .trim()

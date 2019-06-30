@@ -75,13 +75,19 @@ class Ingredient extends Component {
 
       const {
         _id,
-        displayName
+        displayName,
+        packetCost,
+        packetGrams,
+        preferred
       } = this.props.supplier.selectedSupplier;
       this.setState(prevState => ({
         selectedSupplier: {
-          ...prevState.selectedSupplier,
+          // ...prevState.selectedSupplier,
           _id: _id,
-          displayName: displayName
+          displayName: displayName,
+          packetCost: packetCost,
+          packetGrams: packetGrams,
+          preferred: preferred
         }
       }));
       this.checkReadyToSave();
@@ -130,7 +136,7 @@ class Ingredient extends Component {
       // addSupplier = true;
       const newSupplier = {};
       newSupplier.displayName = selectedValue.label;
-      newSupplier.new = true;
+      // newSupplier.new = true;
       newSupplier.phone = '';
       newSupplier.email = '';
       newSupplier.address = '';
@@ -144,11 +150,7 @@ class Ingredient extends Component {
       );
     }
 
-    this.props.setSelectedSupplier(
-      selectedSupplier[0],
-      this.props.profile.profile,
-      true
-    );
+    this.props.setSelectedSupplier(selectedSupplier[0]);
   };
 
   handleIngredientNumberChange = e => {
@@ -169,23 +171,29 @@ class Ingredient extends Component {
   };
 
   changeSelectedIngredient = selectedIngredient => {
-    if (isEmpty(selectedIngredient._id)) {
-      this.setState({
-        selectedIngredient: this.props.ingredient.selectedIngredient,
-        selectedSupplier: {
-          _id: '',
-          displayName: '',
-          packetCost: '',
-          packetGrams: '',
-          preferred: ''
-        },
-        readyToSave: false
-      });
-    } else {
-      this.setState({
-        selectedIngredient: this.props.ingredient.selectedIngredient,
-        readyToSave: false
-      });
+    this.setState({
+      selectedIngredient: selectedIngredient,
+      readyToSave: false
+    });
+    if (
+      !isEmpty(selectedIngredient._id) &&
+      selectedIngredient.suppliers.length !== 0
+    ) {
+      this.updateSelectedSupplier(selectedIngredient);
+    }
+  };
+
+  updateSelectedSupplier = selectedIngredient => {
+    const selectedSupplier = selectedIngredient.suppliers.filter(
+      sSupplier => {
+        return sSupplier.preferred;
+      }
+    );
+
+    console.log('selectedSupplier', selectedSupplier);
+
+    if (selectedSupplier.length !== 0) {
+      this.props.setSelectedSupplier(selectedSupplier[0]);
     }
   };
 
@@ -206,15 +214,6 @@ class Ingredient extends Component {
       selectedIngredient: { metrics, displayName },
       selectedSupplier: { _id, packetCost, packetGrams }
     } = this.state;
-
-    console.group('in Check');
-    console.log('displayName', displayName);
-    console.log('cup', metrics.cup);
-    console.log('whole', metrics.whole);
-    console.log('id', _id);
-    console.log('packetCost', packetCost);
-    console.log('packetGrams', packetGrams);
-    console.groupEnd();
 
     if (
       (!isEmpty(metrics.cup) || !isEmpty(metrics.whole)) &&

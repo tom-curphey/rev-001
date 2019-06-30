@@ -21,7 +21,7 @@ class AddSupplierModal extends Component {
   componentDidMount() {
     if (
       this.props.selectedSupplier &&
-      this.props.supplier.selectedSupplier.new
+      this.props.supplier.selectedSupplier._id
     ) {
       console.log('true');
     }

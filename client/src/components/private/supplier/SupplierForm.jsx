@@ -2,19 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
-import ToggleHorizontal from '../../layout/input/ToggleHorizontal';
+import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
 
 class SupplierForm extends Component {
-  // state = {
-  //   // packetGrams: '',
-  //   // packetCost: '',
-  //   // preferred: '',
-  //   selectedSupplierID: ''
-  // };
-
   render() {
     const {
       ingredient,
@@ -55,14 +48,6 @@ class SupplierForm extends Component {
       selectedValue.value = _id;
     }
 
-    // console.log(options);
-
-    // const options = [
-    //   { value: '893246923', label: 'Veggie Bar' },
-    //   { value: '891273219', label: 'New Farm' },
-    //   { value: '891273', label: 'Peachy' }
-    // ];
-
     return (
       <section className="supplierForm">
         <form onSubmit={this.handleOnSubmit}>
@@ -82,13 +67,13 @@ class SupplierForm extends Component {
             onChange={this.props.handleSupplierNumberChange}
             error={errors && errors.packetGrams}
           />
-          <ToggleHorizontal
+          <ToggleInputHorizontal
             label="Is this your preferred supplier?"
             value={packetGrams}
             name="preferred"
-            // labelClass="smallTextField"
             onChange={this.props.toggleChange}
             toggleOn="Preferred"
+            checked={preferred}
           />
           <CreatableSelectInput
             name="type"

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import {
-  setSelectedIngredient,
+  getSelectedIngredient,
   removeSelectedIngredient
 } from './ingredientActions';
 import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
@@ -75,6 +75,7 @@ class SelectIngredient extends Component {
       // newIngredient.new = true;
       newIngredient.metrics.cup = '';
       newIngredient.metrics.whole = '';
+      newIngredient.suppliers = [];
       selectedIngredient.push(newIngredient);
     } else {
       if (this.props.ingredient.ingredients !== null) {
@@ -84,18 +85,13 @@ class SelectIngredient extends Component {
           }
         );
       } else {
-        console.log('CHECK THIS');
-
-        // console.log('selectedIngredient', selectedIngredient);
-        // console.log(
-        //   'this.props.ingredient.ingredients',
-        //   this.props.ingredient.ingredients
-        // );
+        console.log('CHECK THIS ---');
       }
     }
 
-    this.props.setSelectedIngredient(
+    this.props.getSelectedIngredient(
       selectedIngredient[0],
+      this.props.ingredient.ingredients,
       this.props.profile.profile,
       true
     );
@@ -143,12 +139,12 @@ class SelectIngredient extends Component {
 SelectIngredient.propTypes = {
   ingredient: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
-  setSelectedIngredient: PropTypes.func.isRequired,
+  getSelectedIngredient: PropTypes.func.isRequired,
   removeSelectedIngredient: PropTypes.func.isRequired
 };
 
 const actions = {
-  setSelectedIngredient,
+  getSelectedIngredient,
   removeSelectedIngredient
 };
 

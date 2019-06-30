@@ -40,17 +40,67 @@ export const setSelectedIngredient = (
   profile,
   selectIngredientSupplier
 ) => async dispatch => {
-  if (selectedIngredient.new) {
-    dispatch({
-      type: SET_SELECTED_INGREDIENT,
-      payload: selectedIngredient
-    });
-  } else {
-    dispatch({
-      type: SET_SELECTED_INGREDIENT,
-      payload: selectedIngredient
-    });
+  dispatch({
+    type: SET_SELECTED_INGREDIENT,
+    payload: selectedIngredient
+  });
+};
+
+export const getSelectedIngredient = (
+  selectedIngredient,
+  ingredient,
+  profile,
+  selectIngredientSupplier
+) => async dispatch => {
+  console.log('selectedIngredient', selectedIngredient);
+
+  if (
+    selectedIngredient.suppliers.length !== 0 &&
+    profile.ingredients.length !== 0
+  ) {
+    const pIngredient = profile.ingredients.filter(
+      profileIngredient => {
+        return (
+          profileIngredient.ingredient === selectedIngredient._id
+        );
+      }
+    );
+
+    console.log('pIngredient', pIngredient[0].suppliers);
+
+    if (
+      pIngredient.length !== 0 &&
+      pIngredient[0].suppliers.length !== 0
+    ) {
+      for (let is = 0; is < pIngredient[0].suppliers.length; is++) {
+        const piSupplier = pIngredient[0].suppliers[is];
+
+        for (
+          let sis = 0;
+          sis < selectedIngredient.suppliers.length;
+          sis++
+        ) {
+          const siSupplier = selectedIngredient.suppliers[sis];
+
+          if (piSupplier.supplier === siSupplier.supplier) {
+            // console.log('siSupplier', siSupplier);
+            // console.log('iSupplier', piSupplier);
+            siSupplier.packetCost =
+              (piSupplier.packetCost / piSupplier.packetGrams) * 100;
+
+            if (piSupplier.preferred) {
+              siSupplier.preferred = true;
+            } else {
+              siSupplier.preferred = false;
+            }
+          }
+        }
+      }
+    }
   }
+  // console.log('selectedIngredient', selectedIngredient);
+
+  dispatch(setSelectedIngredient(selectedIngredient));
 };
 
 export const addOrEditIngredientAndSupplier = (
