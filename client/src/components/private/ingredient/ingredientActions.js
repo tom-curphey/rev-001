@@ -11,12 +11,15 @@ import {
 import axios from 'axios';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
+import { loadProfile } from '../profile/profileActions';
 
 export const loadIngredients = () => async dispatch => {
   // console.log('TRIGGER');
 
   try {
     const res = await axios.get('/api/ingredient/all');
+
+    console.log('Loaded res.data', res.data[0]);
 
     dispatch({
       type: INGREDIENTS_LOADED,
@@ -36,9 +39,9 @@ export const loadIngredients = () => async dispatch => {
 };
 
 export const setSelectedIngredient = (
-  selectedIngredient,
-  profile,
-  selectIngredientSupplier
+  selectedIngredient
+  // profile,
+  // selectIngredientSupplier
 ) => async dispatch => {
   dispatch({
     type: SET_SELECTED_INGREDIENT,
@@ -66,7 +69,7 @@ export const getSelectedIngredient = (
       }
     );
 
-    console.log('pIngredient', pIngredient[0].suppliers);
+    // console.log('pIngredient', pIngredient[0].suppliers);
 
     if (
       pIngredient.length !== 0 &&
@@ -75,6 +78,8 @@ export const getSelectedIngredient = (
       for (let is = 0; is < pIngredient[0].suppliers.length; is++) {
         const piSupplier = pIngredient[0].suppliers[is];
 
+        // console.log('** piSupplier', piSupplier);
+
         for (
           let sis = 0;
           sis < selectedIngredient.suppliers.length;
@@ -82,9 +87,9 @@ export const getSelectedIngredient = (
         ) {
           const siSupplier = selectedIngredient.suppliers[sis];
 
-          if (piSupplier.supplier === siSupplier.supplier) {
+          if (piSupplier.supplier === siSupplier.supplier._id) {
             // console.log('siSupplier', siSupplier);
-            // console.log('iSupplier', piSupplier);
+            // console.log('piSupplier', piSupplier);
             siSupplier.packetCost =
               (piSupplier.packetCost / piSupplier.packetGrams) * 100;
 
@@ -98,7 +103,9 @@ export const getSelectedIngredient = (
       }
     }
   }
+
   // console.log('selectedIngredient', selectedIngredient);
+  console.log('res', selectedIngredient);
 
   dispatch(setSelectedIngredient(selectedIngredient));
 };
@@ -107,7 +114,7 @@ export const addOrEditIngredientAndSupplier = (
   ingredientData,
   supplierData
 ) => async dispatch => {
-  console.log('ID', ingredientData);
+  // console.log('ID', ingredientData);
   console.log('SD', supplierData);
 
   try {
@@ -130,6 +137,7 @@ export const addOrEditIngredientAndSupplier = (
 
     console.log('res', res.data);
 
+    dispatch(loadProfile());
     dispatch(loadIngredients());
     dispatch(setSelectedIngredient(res.data.ingredient));
     dispatch(setAlert('Ingredient Saved', 'success'));

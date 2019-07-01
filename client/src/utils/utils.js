@@ -140,6 +140,16 @@ export const roundNumber = (value, decimals) => {
   );
 };
 
+export const roundNumberAsString = (value, decimals) => {
+  if (!decimals) decimals = 2;
+  if (value === 0 || value === '0' || value === '') {
+    return '';
+  }
+  return Number(
+    Math.round(+value + 'e' + decimals) + 'e-' + decimals
+  ).toString();
+};
+
 export const capitalizeFirstLetter = string => {
   if (typeof string !== 'string') return '';
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -272,4 +282,96 @@ export const getNewVenueData = () => {
     }
   };
   return venueData;
+};
+
+export const formatSelectedSupplierInput = (
+  selectedSupplier,
+  profile,
+  selectedIngredient
+) => {
+  // console.log('selectedIngredient', selectedIngredient);
+
+  if (selectedIngredient.suppliers.length !== 0) {
+    // Check if selectedIngredient is in profile ingredients
+    const pIngredient = profile.ingredients.filter(
+      profileIngredient => {
+        return (
+          profileIngredient.ingredient === selectedIngredient._id
+        );
+      }
+    );
+
+    // console.log('pIngredient', pIngredient[0]);
+    // Check if supplier is in profile ingredient suppliers
+    if (
+      pIngredient.length !== 0 &&
+      pIngredient[0].suppliers.length !== 0
+    ) {
+      // Selected ingredient is in profile ingredients
+      const piSupplier = pIngredient[0].suppliers.filter(pis => {
+        if (selectedSupplier.supplier) {
+          return pis.supplier === selectedSupplier.supplier._id;
+        } else {
+          return pis.supplier === selectedSupplier._id;
+        }
+      });
+
+      // console.log('piSupplier', piSupplier);
+
+      if (piSupplier.length !== 0) {
+        // Selected supplier is in profile ingredient suppliers
+        const siSupplier = selectedIngredient.suppliers.filter(si => {
+          // if (piSupplier[0].supplier === si.supplier._id) {
+          //   console.log('si', si);
+          //   console.log(
+          //     'piSupplier[0].supplier',
+          //     piSupplier[0].supplier
+          //   );
+          // }
+
+          return piSupplier[0].supplier === si.supplier._id;
+        });
+
+        // console.log('siSupplier', siSupplier);
+
+        if (siSupplier.length !== 0) {
+          // Selected ingredient supplier was matched all requirements and was found
+          // console.log('siSupplier', siSupplier[0]);
+          // console.log('piSupplier', piSupplier[0]);
+
+          // Update selected ingredient supplier with profile ingredient supplier data
+          siSupplier[0].packetCost = piSupplier[0].packetCost;
+          siSupplier[0].packetGrams = piSupplier[0].packetGrams;
+
+          console.log('siSupplier', siSupplier[0]);
+          console.log('piSupplier', piSupplier[0]);
+
+          if (piSupplier[0].preferred) {
+            siSupplier.preferred = true;
+          } else {
+            siSupplier.preferred = false;
+          }
+
+          return siSupplier[0];
+        } else {
+          // Selected ingredient supplier was not found
+          console.log('Selected ingredient supplier was not found');
+        }
+      } else {
+        // Selected supplier is NOT in profile ingredient suppliers
+        console.log(
+          'Selected supplier is NOT in profile ingredient suppliers'
+        );
+      }
+
+      // Update & format selected supplier
+    } else {
+      // Selected ingredient is NOT in profile ingredients
+      console.log('FORMAT SUPPLIER');
+      console.log(
+        'Selected ingredient is NOT in profile ingredients'
+      );
+    }
+  }
+  console.log('Selected ingredient has not suppliers');
 };

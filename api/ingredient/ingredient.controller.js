@@ -20,6 +20,8 @@ module.exports.getIngredients = async (req, res) => {
       });
     }
 
+    console.log(ingredients[0].suppliers);
+
     res.status(200).json(ingredients);
   } catch (err) {
     console.error(err);
@@ -90,7 +92,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
         urlName: ingredientData.urlName
       });
 
-      console.log('ingredient', ingredient);
+      // console.log('ingredient', ingredient);
 
       if (ingredient.length !== 0) {
         // Error - There is already an ingredient by this name
@@ -135,7 +137,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
       });
     }
 
-    console.log('supplier---', supplier);
+    // console.log('supplier---', supplier);
 
     // Find user profile
     profile = await Profile.findOne({ user: req.user.id });
@@ -290,14 +292,14 @@ module.exports.addOrEditIngredient = async (req, res) => {
         profileSaveCount: profileSaveCount
       };
 
-      console.log(
-        'ingredient.suppliers[sIndex] ',
-        ingredient.suppliers[sIndex]
-      );
-      console.log(
-        'ingredient.suppliers -------',
-        ingredient.suppliers
-      );
+      // console.log(
+      //   'ingredient.suppliers[sIndex] ',
+      //   ingredient.suppliers[sIndex]
+      // );
+      // console.log(
+      //   'ingredient.suppliers -------',
+      //   ingredient.suppliers
+      // );
 
       // Get average ingredient cost across all suppliers
       let totalAverageSupplierPacketCost100g = 0;
@@ -308,10 +310,10 @@ module.exports.addOrEditIngredient = async (req, res) => {
           totalAverageSupplierPacketCost100g + iSupplier100g;
       }
 
-      console.log(
-        'totalAverageSupplierPacketCost100g',
-        totalAverageSupplierPacketCost100g
-      );
+      // console.log(
+      //   'totalAverageSupplierPacketCost100g',
+      //   totalAverageSupplierPacketCost100g
+      // );
 
       // Save ingredient packet cost
       ingredient.packetCost =
@@ -337,7 +339,20 @@ module.exports.addOrEditIngredient = async (req, res) => {
     await supplier.save();
     await ingredient.save();
 
-    return res.status(200).json({ ingredient, supplier });
+    const updatedIngredientWithSupplierNames = await Ingredient.findById(
+      ingredient._id
+    ).populate('suppliers.supplier', ['displayName']);
+
+    console.log('ingredient', ingredient);
+    console.log(
+      'updatedIngredientWithSupplierNames',
+      updatedIngredientWithSupplierNames
+    );
+
+    return res.status(200).json({
+      ingredient: updatedIngredientWithSupplierNames,
+      supplier
+    });
 
     // console.log('INGREDIENT', ingredient);
     // console.log('PROFILE', profile);

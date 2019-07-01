@@ -5,30 +5,31 @@ import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import Spinner from '../../layout/Spinner';
-import { isEmpty } from '../../../utils/utils';
+import { isEmpty, roundNumberAsString } from '../../../utils/utils';
 
 class SupplierForm extends Component {
   render() {
     const {
-      ingredient,
       supplier,
       getSelectedValue,
       selectedSupplier: {
-        _id,
-        displayName,
+        supplier: { _id, displayName },
         packetCost,
         packetGrams,
+        profilePacketCost,
+        profilePacketGrams,
         preferred
       },
       errors
     } = this.props;
 
     let options;
-    console.log(this.props.supplier);
+    // console.log('this.props.supplier', this.props.supplier);
     if (
       !isEmpty(supplier.suppliers) &&
       supplier.suppliers.length !== 0
     ) {
+      // console.log('supplier.suppliers', supplier.suppliers);
       options = supplier.suppliers.map(supplier => {
         let selectData = {};
         selectData.label = supplier.displayName;
@@ -41,35 +42,39 @@ class SupplierForm extends Component {
       label: 'Type supplier name to select supplier..',
       value: 'no-supplier-selected'
     };
-    console.log(displayName);
+    // console.log(displayName);
 
     if (!isEmpty(_id)) {
       selectedValue.label = displayName;
       selectedValue.value = _id;
     }
 
+    const iPacketCost =
+      profilePacketCost === null ? packetCost : profilePacketCost;
+    const iPacketGrams =
+      profilePacketGrams === null ? packetGrams : profilePacketGrams;
+
     return (
       <section className="supplierForm">
         <form onSubmit={this.handleOnSubmit}>
           <TextInputHorizontal
             label="Supplier Packet Cost"
-            value={packetCost}
-            name="packetCost"
+            value={roundNumberAsString(iPacketCost)}
+            name="profilePacketCost"
             labelClass="smallTextField"
             onChange={this.props.handleSupplierNumberChange}
             error={errors && errors.packetCost}
           />
           <TextInputHorizontal
             label="Supplier Packet Grams"
-            value={packetGrams}
-            name="packetGrams"
+            value={roundNumberAsString(iPacketGrams)}
+            name="profilePacketGrams"
             labelClass="smallTextField"
             onChange={this.props.handleSupplierNumberChange}
             error={errors && errors.packetGrams}
           />
           <ToggleInputHorizontal
             label="Is this your preferred supplier?"
-            value={packetGrams}
             name="preferred"
             onChange={this.props.toggleChange}
             toggleOn="Preferred"
@@ -80,7 +85,7 @@ class SupplierForm extends Component {
             placeholder="Select Ingredient Supplier..."
             value={selectedValue && selectedValue}
             options={options}
-            getSelectedValue={this.props.getSelectedValue}
+            getSelectedValue={getSelectedValue}
             error={errors.type && errors.type}
           />
         </form>

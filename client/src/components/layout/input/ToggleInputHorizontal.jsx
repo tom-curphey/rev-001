@@ -6,7 +6,6 @@ const ToggleInputHorizontal = ({
   checked,
   label,
   onChange,
-  labelClass,
   toggleOn
 }) => {
   return (
@@ -33,8 +32,8 @@ const ToggleInputHorizontal = ({
 
 ToggleInputHorizontal.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
+  toggleOn: PropTypes.string.isRequired,
+  checked: PropTypes.bool,
   label: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
