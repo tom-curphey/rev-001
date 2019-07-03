@@ -145,9 +145,15 @@ export const roundNumberAsString = (value, decimals) => {
   if (value === 0 || value === '0' || value === '') {
     return '';
   }
-  return Number(
+
+  // console.log('v', value);
+
+  const n = Number(
     Math.round(+value + 'e' + decimals) + 'e-' + decimals
   ).toString();
+
+  // console.log('n', n);
+  return n;
 };
 
 export const capitalizeFirstLetter = string => {

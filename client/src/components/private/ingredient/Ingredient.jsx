@@ -26,10 +26,14 @@ class Ingredient extends Component {
     addIngredientForm: false,
     selectedIngredient: null,
     selectedSupplier: {
-      _id: '',
-      displayName: '',
+      supplier: {
+        _id: '',
+        displayName: ''
+      },
       packetCost: '',
       packetGrams: '',
+      profilePacketCost: null,
+      profilePacketGrams: null,
       preferred: false
     },
     readyToSave: false
@@ -64,25 +68,25 @@ class Ingredient extends Component {
       prevProps.profile.profile !== this.props.profile.profile &&
       this.props.ingredient.selectedIngredient !== null
     ) {
-      console.log('check');
-
-      // console.log(this.props.ingredient.selectedIngredient);
-
-      this.changeSelectedIngredient(
-        this.props.ingredient.selectedIngredient
-      );
+      // this.changeSelectedIngredient(
+      //   this.props.ingredient.selectedIngredient
+      // );
     }
 
     if (
       prevProps.ingredient.selectedIngredient !==
       this.props.ingredient.selectedIngredient
     ) {
-      console.log('Here', this.props.ingredient.selectedIngredient);
+      console.log(
+        'SELECTED INGREDIENT CHANGE',
+        this.props.ingredient.selectedIngredient
+      );
 
       this.changeSelectedIngredient(
         this.props.ingredient.selectedIngredient
       );
     }
+
     if (
       this.props.supplier.selectedSupplier &&
       prevProps.supplier.selectedSupplier !==
@@ -93,22 +97,24 @@ class Ingredient extends Component {
         this.props.supplier.selectedSupplier
       );
 
-      // const {
-      //   supplier: { _id, displayName },
-      //   packetCost,
-      //   packetGrams,
-      //   preferred
-      // } = this.props.supplier.selectedSupplier;
-      // this.setState(prevState => ({
-      //   selectedSupplier: {
-      //     // ...prevState.selectedSupplier,
-      //     _id: _id,
-      //     displayName: displayName,
-      //     packetCost: packetCost,
-      //     packetGrams: packetGrams,
-      //     preferred: preferred
-      //   }
-      // }));
+      if (this.props.supplier.selectedSupplier.supplier) {
+        const {
+          supplier: { _id, displayName }
+        } = this.props.supplier.selectedSupplier;
+
+        this.setState(prevState => ({
+          selectedSupplier: {
+            ...prevState.selectedSupplier,
+            supplier: {
+              _id: _id,
+              displayName: displayName
+            }
+          }
+        }));
+      } else {
+        console.log('Selected Supplier.supplier was not set');
+      }
+
       this.checkReadyToSave();
     }
     if (
@@ -130,15 +136,11 @@ class Ingredient extends Component {
         [e.target.name]: value
       }
     }));
-    // this.checkReadyToSave(e);
   };
 
   handleSupplierNumberChange = e => {
     e.persist();
     let value = e.target.value;
-
-    console.log('Value', value);
-
     if (!isNaN(value) || value === '') {
       this.setState(prevState => ({
         selectedSupplier: {
@@ -146,59 +148,140 @@ class Ingredient extends Component {
           [e.target.name]: value
         }
       }));
-      // this.checkReadyToSave(e);
     }
   };
 
   getSelectedSupplierOnSupplierChange = selectedValue => {
     console.log('selectedValue', selectedValue);
 
-    let selectedSupplier = [];
     if (selectedValue.__isNew__) {
-      // // addSupplier = true;
-      // const newSupplier = {};
-      // newSupplier.supplier = {};
-      // newSupplier.supplier.displayName = selectedValue.label;
-      // // newSupplier.new = true;
-      // newSupplier.phone = '';
-      // newSupplier.email = '';
-      // newSupplier.address = '';
-      // newSupplier.website = '';
-      // selectedSupplier.push(newSupplier);
+      console.log('New supplier selected');
+      const selectedSupplier = {
+        supplier: {
+          _id: '',
+          displayName: selectedValue.label
+        },
+        packetCost: '',
+        packetGrams: '',
+        profilePacketCost: null,
+        profilePacketGrams: null,
+        preferred: false,
+        phone: '',
+        email: '',
+        address: '',
+        website: ''
+      };
+      this.props.setSelectedSupplier(selectedSupplier);
+      this.setState({ selectedSupplier: selectedSupplier });
     } else {
       // Find selected supplier in suppliers list
-      const selectedSupplierFromList = this.props.supplier.suppliers.filter(
+      const selectedSupplierFromSupplierList = this.props.supplier.suppliers.filter(
         Supplier => {
           return Supplier._id === selectedValue.value;
         }
       );
-
       // Check if supplier was found
-      if (selectedSupplierFromList.length !== 0) {
+      if (selectedSupplierFromSupplierList.length !== 0) {
         const { selectedIngredient } = this.state;
         // Check if selected ingredient has suppliers
-        if (selectedIngredient.suppliers !== 0) {
+        if (selectedIngredient.suppliers.length !== 0) {
           // Search for selected supplier in selected ingredient suppier list
           const selectedIngredientSupplier = selectedIngredient.suppliers.filter(
             siSupplier => {
               return (
                 siSupplier.supplier._id ===
-                selectedSupplierFromList[0]._id
+                selectedSupplierFromSupplierList[0]._id
               );
             }
           );
           if (selectedIngredientSupplier.length !== 0) {
-            console.log(
-              'selectedIngredientSupplier',
-              selectedIngredientSupplier
-            );
+            const { profile } = this.props.profile;
+            let selectedSupplier = {};
+            // Check if profile has ingredients
+            if (profile.ingredients.length !== 0) {
+              // Check if ingredient has been updated in user profile
+              const pIngredient = profile.ingredients.filter(
+                sIngredient => {
+                  return (
+                    sIngredient.ingredient === selectedIngredient._id
+                  );
+                }
+              );
+              // Check if ingredient was found in profile
+              if (pIngredient.length !== 0) {
+                // Check if profile ingredient has suppliers
+                if (pIngredient[0].suppliers.length !== 0) {
+                  // Check if supplier is listed in profile ingredient
+                  const piSupplier = pIngredient[0].suppliers.filter(
+                    pis => {
+                      return (
+                        pis.supplier ===
+                        selectedIngredientSupplier[0].supplier._id
+                      );
+                    }
+                  );
+                  // Check if profile ingredient supplier was found
+                  if (piSupplier.length !== 0) {
+                    selectedSupplier = {
+                      ...selectedIngredientSupplier[0],
+                      preferred: piSupplier[0].preferred,
+                      profilePacketCost: piSupplier[0].packetCost,
+                      profilePacketGrams: piSupplier[0].packetGrams
+                    };
+                  } else {
+                    console.log(
+                      'Supplier was not found profile ingredient suppliers list'
+                    );
+                  }
+                } else {
+                  console.log(
+                    'Profile ingredient does not have suppliers'
+                  );
+                }
+              } else {
+                console.log(
+                  'Ingredient was not found in profile ingredients'
+                );
+              }
+            } else {
+              console.log('Profile has no ingredients');
+            }
+            if (isEmpty(selectedSupplier)) {
+              console.log(
+                'selectedIngredientSupplier[0]',
+                selectedIngredientSupplier[0]
+              );
+
+              selectedSupplier = {
+                ...selectedIngredientSupplier[0],
+                preferred: false,
+                profilePacketCost:
+                  selectedIngredientSupplier[0].packetCost,
+                profilePacketGrams:
+                  selectedIngredientSupplier[0].packetGrams
+              };
+            }
+
             this.setState({
-              selectedSupplier: selectedIngredientSupplier[0]
+              selectedSupplier: selectedSupplier
             });
           } else {
             console.log(
               'Selected supplier was not in selected ingredient suppliers list'
             );
+            const selectedSupplier = {
+              supplier: {
+                _id: selectedSupplierFromSupplierList[0]._id,
+                displayName:
+                  selectedSupplierFromSupplierList[0].displayName
+              },
+              packetCost: '',
+              packetGrams: '',
+              profilePacketCost: null,
+              profilePacketGrams: null,
+              preferred: false
+            };
+            this.setState({ selectedSupplier: selectedSupplier });
           }
         } else {
           console.log(
@@ -216,8 +299,6 @@ class Ingredient extends Component {
   updateSelectedSuppliersOnIngredientChange = selectedIngredient => {
     const { profile } = this.props.profile;
 
-    console.log('PROFILE', profile);
-
     // // Check if profile has ingredients
     if (profile.ingredients.length !== 0) {
       // Filter profile ingredients to get selected ingredient from profile ingredients
@@ -229,17 +310,34 @@ class Ingredient extends Component {
 
       // Check if profile has selected ingredient
       if (pIngredient.length !== 0) {
-        console.log('pIngredient---', pIngredient);
-
         // Check if profile ingredient has suppliers
         if (pIngredient[0].suppliers.length !== 0) {
-          let preferredSupplier = {
-            _id: '',
-            displayName: '',
-            packetCost: '',
-            packetGrams: '',
-            preferred: false
-          };
+          const { selectedSupplier } = this.state;
+
+          console.log('SSI', this.state.selectedIngredient);
+          console.log('SI', selectedIngredient);
+
+          let preferredSupplier = {};
+          if (
+            this.state.selectedIngredient !== null &&
+            this.state.selectedIngredient._id ===
+              selectedIngredient._id
+          ) {
+            preferredSupplier = selectedSupplier;
+          } else {
+            preferredSupplier = {
+              supplier: {
+                _id: '',
+                displayName: ''
+              },
+              packetCost: '',
+              packetGrams: '',
+              profilePacketCost: null,
+              profilePacketGrams: null,
+              preferred: false
+            };
+          }
+
           const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
             usiSuppiler => {
               const piSupplier = pIngredient[0].suppliers.filter(
@@ -249,13 +347,19 @@ class Ingredient extends Component {
               );
 
               if (piSupplier.length !== 0) {
+                // console.log('MADE IT');
+                // console.log('piSupplier', piSupplier);
+
                 usiSuppiler.profilePacketCost =
                   piSupplier[0].packetCost;
                 usiSuppiler.profilePacketGrams =
                   piSupplier[0].packetGrams;
                 usiSuppiler.preferred = piSupplier[0].preferred;
 
-                if (usiSuppiler.preferred) {
+                if (
+                  isEmpty(preferredSupplier.supplier._id) &&
+                  usiSuppiler.preferred
+                ) {
                   preferredSupplier = usiSuppiler;
                 }
               } else {
@@ -271,6 +375,11 @@ class Ingredient extends Component {
             suppliers: updatedSelectedIngredientSuppliers
           };
 
+          console.log(
+            'updatedSelectedIngredient',
+            updatedSelectedIngredient
+          );
+
           this.setState({
             selectedIngredient: updatedSelectedIngredient,
             selectedSupplier: preferredSupplier
@@ -280,6 +389,34 @@ class Ingredient extends Component {
         }
       } else {
         console.log('Profile does not have the selected ingredient');
+        console.log('selectedIngredient -->', selectedIngredient);
+
+        this.setState(prevState => ({
+          selectedIngredient: selectedIngredient,
+          selectedSupplier: {
+            ...prevState.selectedSupplier,
+            supplier: {
+              _id: '',
+              displayName: ''
+            },
+            packetCost: selectedIngredient.packetCost,
+            packetGrams: selectedIngredient.packetGrams,
+            profilePacketCost: null,
+            profilePacketGrams: null,
+            preferred: false
+          }
+        }));
+        // preferredSupplier = {
+        //   supplier: {
+        //     _id: '',
+        //     displayName: ''
+        //   },
+        //   packetCost: '',
+        //   packetGrams: '',
+        //   profilePacketCost: null,
+        //   profilePacketGrams: null,
+        //   preferred: false
+        // };
       }
     } else {
       console.log('Profile has no ingredients');
@@ -290,15 +427,6 @@ class Ingredient extends Component {
         return sSupplier.preferred;
       }
     );
-
-    if (selectedSupplier.length !== 0) {
-      // const formattedSupplier = formatSelectedSupplierInput(
-      //   selectedSupplier[0],
-      //   this.props.profile.profile,
-      //   selectedIngredient
-      // );
-      // this.props.setSelectedSupplier(formattedSupplier);
-    }
   };
 
   changeSelectedIngredient = selectedIngredient => {
@@ -322,6 +450,9 @@ class Ingredient extends Component {
   handleIngredientNumberChange = e => {
     e.persist();
     let value = e.target.value;
+
+    console.log('Value', value);
+
     if (!isNaN(value) || value === '') {
       this.setState(prevState => ({
         selectedIngredient: {
@@ -338,7 +469,7 @@ class Ingredient extends Component {
 
   handleToggleChange = e => {
     if (e.target.name && e.target.name === 'preferred') {
-      console.log('clicked', e.target);
+      // console.log('clicked', e.target);
       this.setState(prevState => ({
         selectedSupplier: {
           ...prevState.selectedSupplier,
@@ -351,16 +482,28 @@ class Ingredient extends Component {
   checkReadyToSave = () => {
     const {
       selectedIngredient: { metrics, displayName },
-      selectedSupplier: { _id, packetCost, packetGrams }
+      selectedSupplier: {
+        supplier,
+        packetCost,
+        packetGrams,
+        profilePacketCost,
+        profilePacketGrams
+      }
     } = this.state;
+
+    console.log('RTS: selectedSupplier', this.state.selectedSupplier);
 
     if (
       (!isEmpty(metrics.cup) || !isEmpty(metrics.whole)) &&
-      !isEmpty(_id) &&
-      !isEmpty(packetCost) &&
-      !isEmpty(packetGrams)
+      !isEmpty(supplier._id) &&
+      // !isEmpty(packetCost) &&
+      // !isEmpty(packetGrams) &&
+      !isEmpty(profilePacketCost) &&
+      !isEmpty(profilePacketGrams)
     ) {
       this.setState({ readyToSave: true });
+    } else {
+      this.setState({ readyToSave: false });
     }
   };
 
@@ -413,7 +556,7 @@ class Ingredient extends Component {
       supplierData.packetCost = profilePacketCost
         ? profilePacketCost
         : packetCost;
-      console.log('supplierData', supplierData);
+      // console.log('supplierData', supplierData);
 
       this.props.addOrEditIngredientAndSupplier(
         ingredientData,

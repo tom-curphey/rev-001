@@ -42,7 +42,7 @@ class SelectIngredient extends Component {
         this.props.ingredient.selectedIngredient
     ) {
       const { selectedIngredient } = this.props.ingredient;
-      console.log('selectedIngredient - UP', selectedIngredient);
+      // console.log('selectedIngredient - UP', selectedIngredient);sss
       // if (!selectedIngredient.new) {
       let selectedValue = {};
       selectedValue.label = selectedIngredient.displayName;

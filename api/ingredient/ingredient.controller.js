@@ -20,7 +20,7 @@ module.exports.getIngredients = async (req, res) => {
       });
     }
 
-    console.log(ingredients[0].suppliers);
+    // console.log(ingredients[0].suppliers);
 
     res.status(200).json(ingredients);
   } catch (err) {
@@ -181,26 +181,31 @@ module.exports.addOrEditIngredient = async (req, res) => {
       }
     });
 
-    // Check if supplier ID is in profile ingredient
-    let profileIngredientSupplier = profile.ingredients[
-      iIndex
-    ].suppliers.filter((supplier, s) => {
-      if (supplier.supplier.toString() === supplierID.toString()) {
-        sIndex = s;
-        return supplier;
+    // Set profile ingredient supplier to null so we can check it later
+    let profileIngredientSupplier = null;
+    // We use a for loop to edit all suppliers so when the preferred status changes all suppliers can be edited
+    for (
+      let pisi = 0;
+      pisi < profile.ingredients[iIndex].suppliers.length;
+      pisi++
+    ) {
+      const piSupplier = profile.ingredients[iIndex].suppliers[pisi];
+      if (supplierData.preferred) {
+        piSupplier.preferred = false;
       }
-    });
+      if (piSupplier.supplier.toString() === supplierID.toString()) {
+        sIndex = pisi;
+        // Return found profile ingredient supplier
+        profileIngredientSupplier = piSupplier;
+      }
+    }
 
-    if (profileIngredientSupplier.length === 0) {
+    if (profileIngredientSupplier === null) {
       // Add supplier to profile ingredient suppliers
       profile.ingredients[iIndex].suppliers.push(supplierData);
-      profileIngredientSupplier[0] =
-        profile.ingredients[0].suppliers[0];
     } else {
       // Edit profile ingredient supplier
       profile.ingredients[iIndex].suppliers[sIndex] = supplierData;
-      profileIngredientSupplier[0] =
-        profile.ingredients[0].suppliers[0];
     }
 
     // Check if supplier ID is in ingredient suppliers list
@@ -343,15 +348,16 @@ module.exports.addOrEditIngredient = async (req, res) => {
       ingredient._id
     ).populate('suppliers.supplier', ['displayName']);
 
-    console.log('ingredient', ingredient);
-    console.log(
-      'updatedIngredientWithSupplierNames',
-      updatedIngredientWithSupplierNames
-    );
+    // console.log('ingredient', ingredient);
+    // console.log(
+    //   'updatedIngredientWithSupplierNames',
+    //   updatedIngredientWithSupplierNames
+    // );
 
     return res.status(200).json({
       ingredient: updatedIngredientWithSupplierNames,
-      supplier
+      supplier,
+      profile
     });
 
     // console.log('INGREDIENT', ingredient);

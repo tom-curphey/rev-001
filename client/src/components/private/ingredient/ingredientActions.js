@@ -6,7 +6,8 @@ import {
   REMOVE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENT,
   GET_ERRORS,
-  STOP_INGREDIENTS_LOADING
+  STOP_INGREDIENTS_LOADING,
+  PROFILE_LOADED
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../redux/errorActions';
@@ -19,7 +20,7 @@ export const loadIngredients = () => async dispatch => {
   try {
     const res = await axios.get('/api/ingredient/all');
 
-    console.log('Loaded res.data', res.data[0]);
+    // console.log('Loaded res.data', res.data[0]);
 
     dispatch({
       type: INGREDIENTS_LOADED,
@@ -55,7 +56,7 @@ export const getSelectedIngredient = (
   profile,
   selectIngredientSupplier
 ) => async dispatch => {
-  console.log('selectedIngredient', selectedIngredient);
+  // console.log('selectedIngredient', selectedIngredient);
 
   if (
     selectedIngredient.suppliers.length !== 0 &&
@@ -105,7 +106,7 @@ export const getSelectedIngredient = (
   }
 
   // console.log('selectedIngredient', selectedIngredient);
-  console.log('res', selectedIngredient);
+  // console.log('res', selectedIngredient);
 
   dispatch(setSelectedIngredient(selectedIngredient));
 };
@@ -115,7 +116,7 @@ export const addOrEditIngredientAndSupplier = (
   supplierData
 ) => async dispatch => {
   // console.log('ID', ingredientData);
-  console.log('SD', supplierData);
+  // console.log('SD', supplierData);
 
   try {
     // dispatch(setVenueLoading());
@@ -135,9 +136,9 @@ export const addOrEditIngredientAndSupplier = (
     const body = JSON.stringify(data);
     const res = await axios.post('/api/ingredient', body, config);
 
-    console.log('res', res.data);
+    // console.log('res', res.data);
 
-    dispatch(loadProfile());
+    dispatch({ type: PROFILE_LOADED, payload: res.data.profile });
     dispatch(loadIngredients());
     dispatch(setSelectedIngredient(res.data.ingredient));
     dispatch(setAlert('Ingredient Saved', 'success'));

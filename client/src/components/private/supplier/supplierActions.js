@@ -30,7 +30,26 @@ export const loadSuppliers = () => async dispatch => {
   }
 };
 
-export const setSelectedSupplier = selectedSupplier => async dispatch => {
+export const setSelectedSupplier = sSupplier => async dispatch => {
+  let selectedSupplier = {};
+  if (sSupplier.supplier) {
+    selectedSupplier = { ...sSupplier };
+  } else {
+    console.log('Supplier Added', sSupplier);
+    selectedSupplier.supplier = {};
+    selectedSupplier = {
+      packetCost: '',
+      packetGrams: '',
+      preferred: false,
+      profilePacketCost: '',
+      profilePacketGrams: '',
+      profileSaveCount: 0,
+      supplier: {
+        _id: sSupplier._id,
+        displayName: sSupplier.displayName
+      }
+    };
+  }
   dispatch({
     type: SET_SELECTED_SUPPLIER,
     payload: selectedSupplier

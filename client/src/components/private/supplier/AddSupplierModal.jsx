@@ -31,28 +31,36 @@ class AddSupplierModal extends Component {
       prevProps.selectedSupplier !== this.props.selectedSupplier &&
       this.props.selectedSupplier
     ) {
-      if (this.props.selectedSupplier._id) {
+      if (this.props.selectedSupplier.supplier) {
+        if (this.props.selectedSupplier.supplier._id) {
+          this.setState({
+            showModal: false
+          });
+        } else {
+          console.log('true', this.props.selectedSupplier);
+
+          // const {
+          //   displayName,
+          //   email,
+          //   phone,
+          //   address,
+          //   website
+          // } = this.props.selectedSupplier;
+
+          this.setState({
+            showModal: true,
+            displayName: this.props.selectedSupplier.supplier
+              .displayName,
+            email: '',
+            phone: '',
+            address: '',
+            website: ''
+          });
+        }
+      } else {
+        console.log('New supplier added');
         this.setState({
           showModal: false
-        });
-      } else {
-        console.log('true', this.props.selectedSupplier);
-
-        const {
-          displayName,
-          email,
-          phone,
-          address,
-          website
-        } = this.props.selectedSupplier;
-
-        this.setState({
-          showModal: true,
-          displayName: displayName,
-          email: email,
-          phone: phone,
-          address: address,
-          website: website
         });
       }
     }

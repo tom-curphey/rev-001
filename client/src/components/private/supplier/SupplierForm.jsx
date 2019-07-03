@@ -49,17 +49,25 @@ class SupplierForm extends Component {
       selectedValue.value = _id;
     }
 
+    // console.log('profilePacketCost', profilePacketCost);
+
     const iPacketCost =
-      profilePacketCost === null ? packetCost : profilePacketCost;
+      profilePacketCost === null
+        ? roundNumberAsString(packetCost)
+        : profilePacketCost.toString();
     const iPacketGrams =
-      profilePacketGrams === null ? packetGrams : profilePacketGrams;
+      profilePacketGrams === null
+        ? roundNumberAsString(packetGrams)
+        : profilePacketGrams.toString();
+
+    // console.log('iPacketCost', iPacketCost);
 
     return (
       <section className="supplierForm">
         <form onSubmit={this.handleOnSubmit}>
           <TextInputHorizontal
             label="Supplier Packet Cost"
-            value={roundNumberAsString(iPacketCost)}
+            value={iPacketCost}
             name="profilePacketCost"
             labelClass="smallTextField"
             onChange={this.props.handleSupplierNumberChange}
@@ -67,7 +75,7 @@ class SupplierForm extends Component {
           />
           <TextInputHorizontal
             label="Supplier Packet Grams"
-            value={roundNumberAsString(iPacketGrams)}
+            value={iPacketGrams}
             name="profilePacketGrams"
             labelClass="smallTextField"
             onChange={this.props.handleSupplierNumberChange}
