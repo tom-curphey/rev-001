@@ -17,7 +17,9 @@ const CreatableSelectInput = ({
   error,
   name,
   value,
-  label
+  label,
+  labelClass,
+  info
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -87,8 +89,11 @@ const CreatableSelectInput = ({
   };
 
   return (
-    <div>
-      {label && <span>{label}</span>}
+    <label
+      htmlFor={name}
+      className={`textInputHorizontal ${labelClass}`}
+    >
+      <span className="label">{label} </span>
       <CreatableSelect
         // isClearable
         name={name}
@@ -111,8 +116,11 @@ const CreatableSelectInput = ({
           }
         })}
       />
-      {error && <span className="errorMsg">{error}</span>}
-    </div>
+      <span className="message">
+        {info && <small>{info}</small>}
+        {error && <span className="errorMsg">{error}</span>}
+      </span>
+    </label>
   );
 };
 

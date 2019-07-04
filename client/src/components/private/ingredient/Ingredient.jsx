@@ -15,11 +15,9 @@ import {
 } from '../supplier/supplierActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
-import IngredientForm from '../ingredient/IngredientForm';
-import {
-  isEmpty,
-  formatSelectedSupplierInput
-} from '../../../utils/utils';
+import IngredientForm from './IngredientForm';
+import SupplierPanel from '../supplier/SupplierPanel';
+import { isEmpty } from '../../../utils/utils';
 
 class Ingredient extends Component {
   state = {
@@ -77,10 +75,10 @@ class Ingredient extends Component {
       prevProps.ingredient.selectedIngredient !==
       this.props.ingredient.selectedIngredient
     ) {
-      console.log(
-        'SELECTED INGREDIENT CHANGE',
-        this.props.ingredient.selectedIngredient
-      );
+      // console.log(
+      //   'SELECTED INGREDIENT CHANGE',
+      //   this.props.ingredient.selectedIngredient
+      // );
 
       this.changeSelectedIngredient(
         this.props.ingredient.selectedIngredient
@@ -314,8 +312,8 @@ class Ingredient extends Component {
         if (pIngredient[0].suppliers.length !== 0) {
           const { selectedSupplier } = this.state;
 
-          console.log('SSI', this.state.selectedIngredient);
-          console.log('SI', selectedIngredient);
+          // console.log('SSI', this.state.selectedIngredient);
+          // console.log('SI', selectedIngredient);
 
           let preferredSupplier = {};
           if (
@@ -375,10 +373,10 @@ class Ingredient extends Component {
             suppliers: updatedSelectedIngredientSuppliers
           };
 
-          console.log(
-            'updatedSelectedIngredient',
-            updatedSelectedIngredient
-          );
+          // console.log(
+          //   'updatedSelectedIngredient',
+          //   updatedSelectedIngredient
+          // );
 
           this.setState({
             selectedIngredient: updatedSelectedIngredient,
@@ -406,17 +404,6 @@ class Ingredient extends Component {
             preferred: false
           }
         }));
-        // preferredSupplier = {
-        //   supplier: {
-        //     _id: '',
-        //     displayName: ''
-        //   },
-        //   packetCost: '',
-        //   packetGrams: '',
-        //   profilePacketCost: null,
-        //   profilePacketGrams: null,
-        //   preferred: false
-        // };
       }
     } else {
       console.log('Profile has no ingredients');
@@ -468,14 +455,146 @@ class Ingredient extends Component {
   };
 
   handleToggleChange = e => {
-    if (e.target.name && e.target.name === 'preferred') {
-      // console.log('clicked', e.target);
+    const { selectedSupplier, selectedIngredient } = this.state;
+
+    if (selectedSupplier.preferred) {
+      // Search through props to see if there was another preferred supplier prior
+      let spSupplier;
+      console.log('SISS', this.props.ingredient.selectedIngredient);
+
+      if (
+        this.props.ingredient.selectedIngredient.suppliers.length !==
+        0
+      ) {
+        spSupplier = this.props.ingredient.selectedIngredient.suppliers.filter(
+          sps => {
+            return sps.preferred === true;
+          }
+        );
+
+        if (
+          spSupplier.length !== 0 &&
+          selectedIngredient.suppliers.length !== 0
+        ) {
+          // const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
+          //   sis => {
+          //     console.log('sis', sis);
+          //     console.log('spSupplier', spSupplier[0]);
+
+          //     if (sis.supplier._id === spSupplier[0].supplier._id) {
+          //       sis.preferred = true;
+          //     } else {
+          //       // Set all state selected ingredients to false
+          //       sis.preferred = false;
+          //     }
+          //     return sis;
+          //   }
+          // );
+
+          // const updatedSelectedIngredient = {
+          //   ...selectedIngredient,
+          //   updatedSelectedIngredientSuppliers
+          // };
+
+          this.setState(prevState => ({
+            // selectedIngredient: updatedSelectedIngredient,
+            selectedSupplier: {
+              ...prevState.selectedSupplier,
+              preferred: !this.state.selectedSupplier.preferred
+            }
+          }));
+        } else {
+          console.log(
+            'State selected ingredient had no preferred supplier'
+          );
+        }
+      } else {
+        console.log(
+          ' There are no props.selectedIngredient suppliers'
+        );
+      }
+
+      // Current selected supplier is preferred & needs to be false
+    } else {
+      // Set state selected supplier to preferred
+      // Set all other ingredient suppliers to false in the state
+      const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
+        sis => {
+          if (sis.supplier._id !== selectedSupplier._id) {
+            // Set all state selected ingredients to false
+            sis.preferred = false;
+          }
+          return sis;
+        }
+      );
+
+      const updatedSelectedIngredient = {
+        ...selectedIngredient,
+        updatedSelectedIngredientSuppliers
+      };
+
+      console.log('HERE', selectedSupplier);
+
       this.setState(prevState => ({
+        selectedIngredient: updatedSelectedIngredient,
         selectedSupplier: {
           ...prevState.selectedSupplier,
           preferred: !this.state.selectedSupplier.preferred
         }
       }));
+    }
+
+    // this.setState(prevState => ({
+    //   selectedSupplier: {
+    //     ...prevState.selectedSupplier,
+    //     preferred: !this.state.selectedSupplier.preferred
+    //   }
+    // }));
+  };
+
+  changeSelectedIngredientPreferredSupplier = cpSupplier => {
+    const { selectedIngredient } = this.state;
+    if (selectedIngredient.suppliers.length !== 0) {
+      const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
+        sis => {
+          if (sis.supplier._id === cpSupplier.supplier._id) {
+            sis.preferred = false;
+          }
+          return sis;
+        }
+      );
+
+      const updatedSelectedIngredient = {
+        ...selectedIngredient,
+        updatedSelectedIngredientSuppliers
+      };
+
+      this.setState({
+        selectedIngredient: updatedSelectedIngredient
+      });
+    }
+  };
+
+  checkSelectedIngredientPreferredSupplier = cpSupplier => {
+    const { selectedIngredient } = this.state;
+    if (selectedIngredient.suppliers.length !== 0) {
+      const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
+        sis => {
+          if (sis.supplier._id === cpSupplier.supplier._id) {
+            sis.preferred = true;
+          }
+          return sis;
+        }
+      );
+
+      const updatedSelectedIngredient = {
+        ...selectedIngredient,
+        updatedSelectedIngredientSuppliers
+      };
+
+      this.setState({
+        selectedIngredient: updatedSelectedIngredient
+      });
     }
   };
 
@@ -491,7 +610,7 @@ class Ingredient extends Component {
       }
     } = this.state;
 
-    console.log('RTS: selectedSupplier', this.state.selectedSupplier);
+    // console.log('RTS: selectedSupplier', this.state.selectedSupplier);
 
     if (
       (!isEmpty(metrics.cup) || !isEmpty(metrics.whole)) &&
@@ -576,6 +695,7 @@ class Ingredient extends Component {
     const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 
     let ingredientForm;
+    let supplierPanel;
     if (ingredient && ingredient.loading) {
       ingredientForm = (
         <div style={{ marginTop: '200px' }}>
@@ -624,6 +744,19 @@ class Ingredient extends Component {
             )}
           </Fragment>
         );
+
+        supplierPanel = (
+          <SupplierPanel
+            selectedIngredient={selectedIngredient}
+            selectedSupplier={selectedSupplier}
+            changeSelectedIngredientPreferredSupplier={
+              this.changeSelectedIngredientPreferredSupplier
+            }
+            checkSelectedIngredientPreferredSupplier={
+              this.checkSelectedIngredientPreferredSupplier
+            }
+          />
+        );
       } else {
         // console.log('HERE');
 
@@ -643,7 +776,7 @@ class Ingredient extends Component {
             <h3>Search / Create / Edit</h3>
             {ingredientForm}
           </div>
-          <div>Panel</div>
+          <div>{supplierPanel}</div>
         </section>
       </AuthMenu>
     );

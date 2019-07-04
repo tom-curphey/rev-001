@@ -38,9 +38,7 @@ const SelectInputHorizontal = ({
     });
 
     if (isEmpty(selectedOption)) {
-      console.log('Name', name);
-
-      console.log('selectedOption: ', selectedOption);
+      selectedValue = value;
     } else {
       selectedValue = {
         value: value,

@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
-import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
+import CreatableSelectInputHorizontal from '../../layout/input/CreatableSelectInputHorizontal';
+import SelectInputHorizontal from '../../layout/input/SelectInputHorizontal';
 import Spinner from '../../layout/Spinner';
 import { isEmpty, roundNumberAsString } from '../../../utils/utils';
 
@@ -39,7 +40,7 @@ class SupplierForm extends Component {
     }
 
     let selectedValue = {
-      label: 'Type supplier name to select supplier..',
+      label: 'Type supplier name..',
       value: 'no-supplier-selected'
     };
     // console.log(displayName);
@@ -65,6 +66,24 @@ class SupplierForm extends Component {
     return (
       <section className="supplierForm">
         <form onSubmit={this.handleOnSubmit}>
+          {/* <CreatableSelectInput
+            label="Supplier Name"
+            name="type"
+            placeholder="Select Ingredient Supplier..."
+            value={selectedValue && selectedValue}
+            options={options}
+            getSelectedValue={getSelectedValue}
+            error={errors.type && errors.type}
+          /> */}
+          <CreatableSelectInputHorizontal
+            label="Supplier Name"
+            name="type"
+            placeholder="Type supplier name.."
+            value={selectedValue && selectedValue}
+            options={options}
+            getSelectedValue={getSelectedValue}
+            error={errors.type && errors.type}
+          />
           <TextInputHorizontal
             label="Supplier Packet Cost"
             value={iPacketCost}
@@ -87,14 +106,6 @@ class SupplierForm extends Component {
             onChange={this.props.toggleChange}
             toggleOn="Preferred"
             checked={preferred}
-          />
-          <CreatableSelectInput
-            name="type"
-            placeholder="Select Ingredient Supplier..."
-            value={selectedValue && selectedValue}
-            options={options}
-            getSelectedValue={getSelectedValue}
-            error={errors.type && errors.type}
           />
         </form>
       </section>
