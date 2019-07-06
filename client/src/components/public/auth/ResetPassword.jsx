@@ -12,7 +12,6 @@ import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { openNav } from '../../../utils/utils';
 import { removeErrors } from '../../../redux/errorActions';
-import { isEmpty } from '../../../utils/utils';
 
 class ResetPassword extends Component {
   state = {

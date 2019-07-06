@@ -1,10 +1,8 @@
 import {
-  SET_SUPPLIERS_LOADING,
   SUPPLIERS_LOADED,
   SUPPLIERS_ERROR,
   REMOVE_SELECTED_SUPPLIER,
   SET_SELECTED_SUPPLIER,
-  GET_ERRORS,
   STOP_SUPPLIERS_LOADING
 } from '../../../redux/types';
 import axios from 'axios';

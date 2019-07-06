@@ -1,18 +1,14 @@
 import {
-  SELECTED_INGREDIENT_FAILED,
-  SET_INGREDIENTS_LOADING,
   INGREDIENTS_LOADED,
   INGREDIENTS_ERROR,
   REMOVE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENT,
-  GET_ERRORS,
   STOP_INGREDIENTS_LOADING,
   PROFILE_LOADED
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import { loadProfile } from '../profile/profileActions';
 
 export const loadIngredients = () => async dispatch => {
   // console.log('TRIGGER');

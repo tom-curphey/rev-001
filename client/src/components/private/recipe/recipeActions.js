@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {
-  SET_RECIPES_LOADING,
+  // SET_RECIPES_LOADING,
   RECIPES_LOADED,
-  RECIPES_ERROR,
-  GET_ERRORS
+  RECIPES_ERROR
+  // GET_ERRORS
 } from '../../../redux/types';
-import { displayErrors } from '../../../utils/utils';
-import { setAlert } from '../../layout/alert/alertActions';
+// import { displayErrors } from '../../../utils/utils';
+// import { setAlert } from '../../layout/alert/alertActions';
 
 // Load Profile
 export const loadRecipes = () => async dispatch => {

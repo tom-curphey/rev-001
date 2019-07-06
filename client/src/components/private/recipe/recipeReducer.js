@@ -1,10 +1,4 @@
-import {
-  SET_RECIPES_LOADING,
-  RECIPES_LOADED,
-  CLEAR_RECIPES,
-  RECIPES_ERROR,
-  GET_ERRORS
-} from '../../../redux/types';
+import { RECIPES_LOADED, CLEAR_RECIPES } from '../../../redux/types';
 
 const initialState = {
   recipes: null,

@@ -316,6 +316,8 @@ class Ingredient extends Component {
           // console.log('SI', selectedIngredient);
 
           let preferredSupplier = {};
+          // If selected ingredient hasn't changed in local state set local state selected supplier as the preferred supplier
+          // Otherwise set local selected supplier to an empty state
           if (
             this.state.selectedIngredient !== null &&
             this.state.selectedIngredient._id ===
@@ -476,25 +478,28 @@ class Ingredient extends Component {
           spSupplier.length !== 0 &&
           selectedIngredient.suppliers.length !== 0
         ) {
-          // const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
-          //   sis => {
-          //     console.log('sis', sis);
-          //     console.log('spSupplier', spSupplier[0]);
+          console.log('spSupplier', spSupplier);
+          console.log('selectedSupplier', selectedSupplier);
 
-          //     if (sis.supplier._id === spSupplier[0].supplier._id) {
-          //       sis.preferred = true;
-          //     } else {
-          //       // Set all state selected ingredients to false
-          //       sis.preferred = false;
-          //     }
-          //     return sis;
-          //   }
-          // );
+          const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
+            sis => {
+              console.log('sis', sis);
+              console.log('spSupplier', spSupplier[0]);
 
-          // const updatedSelectedIngredient = {
-          //   ...selectedIngredient,
-          //   updatedSelectedIngredientSuppliers
-          // };
+              if (sis.supplier._id === spSupplier[0].supplier._id) {
+                sis.preferred = true;
+              } else {
+                // Set all state selected ingredients to false
+                sis.preferred = false;
+              }
+              return sis;
+            }
+          );
+
+          const updatedSelectedIngredient = {
+            ...selectedIngredient,
+            updatedSelectedIngredientSuppliers
+          };
 
           this.setState(prevState => ({
             // selectedIngredient: updatedSelectedIngredient,
@@ -516,6 +521,16 @@ class Ingredient extends Component {
 
       // Current selected supplier is preferred & needs to be false
     } else {
+      console.log('selectedIngredient', selectedIngredient);
+      console.log(
+        'props selectedIngredient',
+        this.props.ingredient.selectedIngredient
+      );
+      console.log(
+        'state selectedIngredient',
+        this.state.selectedIngredient
+      );
+
       // Set state selected supplier to preferred
       // Set all other ingredient suppliers to false in the state
       const updatedSelectedIngredientSuppliers = selectedIngredient.suppliers.map(
@@ -533,7 +548,11 @@ class Ingredient extends Component {
         updatedSelectedIngredientSuppliers
       };
 
-      console.log('HERE', selectedSupplier);
+      console.log('State selectedSupplier', selectedSupplier);
+      console.log(
+        'State updatedSelectedIngredient',
+        updatedSelectedIngredient
+      );
 
       this.setState(prevState => ({
         selectedIngredient: updatedSelectedIngredient,
