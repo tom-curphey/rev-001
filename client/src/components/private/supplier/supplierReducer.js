@@ -3,12 +3,15 @@ import {
   REMOVE_SELECTED_SUPPLIER,
   SET_SELECTED_SUPPLIER,
   CLEAR_SUPPLIERS,
-  STOP_SUPPLIERS_LOADING
+  STOP_SUPPLIERS_LOADING,
+  SET_UPDATED_SELECTED_SUPPLIER,
+  SET_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 
 const initialState = {
   suppliers: null,
   selectedSupplier: null,
+  preferredIngredientSupplierId: null,
   loading: true,
   errors: null
 };
@@ -28,6 +31,19 @@ export default function(state = initialState, actions) {
         ...state,
         selectedSupplier: payload,
         loading: false
+      };
+
+    case SET_UPDATED_SELECTED_SUPPLIER:
+      return {
+        ...state,
+        selectedSupplier: payload,
+        loading: false
+      };
+
+    case SET_PREFERRED_SUPPLIER:
+      return {
+        ...state,
+        preferredIngredientSupplierId: payload
       };
 
     case CLEAR_SUPPLIERS:

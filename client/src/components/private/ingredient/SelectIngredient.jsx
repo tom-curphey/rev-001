@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import {
   setSelectedIngredient,
+  getSelectedIngredient,
   removeSelectedIngredient
 } from './ingredientActions';
 import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
@@ -86,10 +87,14 @@ class SelectIngredient extends Component {
         );
       }
     }
+    console.log('selectedIngredient[0]', selectedIngredient[0]);
 
-    // console.log('selectedIngredient[0]', selectedIngredient[0]);
-
-    this.props.setSelectedIngredient(selectedIngredient[0]);
+    if (!isEmpty(selectedIngredient)) {
+      this.props.getSelectedIngredient(
+        selectedIngredient[0],
+        this.props.profile.profile
+      );
+    }
   };
 
   render() {
@@ -135,11 +140,13 @@ SelectIngredient.propTypes = {
   ingredient: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   setSelectedIngredient: PropTypes.func.isRequired,
+  getSelectedIngredient: PropTypes.func.isRequired,
   removeSelectedIngredient: PropTypes.func.isRequired
 };
 
 const actions = {
   setSelectedIngredient,
+  getSelectedIngredient,
   removeSelectedIngredient
 };
 

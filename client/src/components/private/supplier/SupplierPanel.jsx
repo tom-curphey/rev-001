@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import trolley from '../../../images/trolley.svg';
 import heart from '../../../images/heart.svg';
 import {
@@ -9,9 +10,9 @@ import {
 
 const SupplierPanel = ({
   selectedIngredient,
-  selectedSupplier,
-  changeSelectedIngredientPreferredSupplier,
-  checkSelectedIngredientPreferredSupplier
+  supplier: { selectedSupplier, preferredIngredientSupplierId }
+  // changeSelectedIngredientPreferredSupplier,
+  // checkSelectedIngredientPreferredSupplier
 }) => {
   // console.log('selectedSupplier', selectedSupplier);
   // console.log('selectedIngredient', selectedIngredient);
@@ -37,7 +38,7 @@ const SupplierPanel = ({
         return (
           <li key={selectedSupplier.supplier._id}>
             <div>
-              {selectedSupplier.preferred && (
+              {preferredIngredientSupplierId === si.supplier._id && (
                 <img
                   src={heart}
                   alt="Man standing at a bar as an icon to complete venue setup"
@@ -63,39 +64,10 @@ const SupplierPanel = ({
           </li>
         );
       } else {
-        // Find current preferred supplier
-        const cpSupplier = selectedIngredient.suppliers.filter(
-          sis => {
-            return sis.preferred === true;
-          }
-        );
-
-        // console.log('cpSupplier', cpSupplier);
-
-        // if (
-        //   cpSupplier.length !== 0 &&
-        //   selectedSupplier.preferred &&
-        //   selectedSupplier.supplier._id !== cpSupplier[0].supplier._id
-        // ) {
-        //   console.log('Change Suppliers', cpSupplier);
-        //   changeSelectedIngredientPreferredSupplier(cpSupplier[0]);
-        // }
-
-        // if (
-        //   cpSupplier.length !== 0 &&
-        //   selectedSupplier.preferred === false &&
-        //   selectedSupplier.supplier._id !==
-        //     cpSupplier[0].supplier._id &&
-        //   cpSupplier[0].preferred === false
-        // ) {
-        //   console.log('Change Suppliers', cpSupplier);
-        //   checkSelectedIngredientPreferredSupplier(cpSupplier[0]);
-        // }
-
         return (
           <li key={si.supplier._id}>
             <div>
-              {si.preferred && (
+              {preferredIngredientSupplierId === si.supplier._id && (
                 <img
                   src={heart}
                   alt="Man standing at a bar as an icon to complete venue setup"
@@ -170,4 +142,9 @@ const SupplierPanel = ({
   );
 };
 
-export default SupplierPanel;
+const mapState = state => ({
+  selectedIngredient: state.ingredient.selectedIngredient,
+  supplier: state.supplier
+});
+
+export default connect(mapState)(SupplierPanel);

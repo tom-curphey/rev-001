@@ -7,8 +7,10 @@ import {
   PROFILE_LOADED
 } from '../../../redux/types';
 import axios from 'axios';
+import { setSelectedSupplier } from '../supplier/supplierActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
+import { isEmpty } from '../../../utils/utils';
 
 export const loadIngredients = () => async dispatch => {
   // console.log('TRIGGER');
@@ -35,76 +37,118 @@ export const loadIngredients = () => async dispatch => {
   }
 };
 
-export const setSelectedIngredient = (
-  selectedIngredient
-  // profile,
-  // selectIngredientSupplier
+export const getSelectedIngredient = (
+  rawSelectedIngredient,
+  profile,
+  rawSelectedSupplier
 ) => async dispatch => {
+  if (
+    !isEmpty(rawSelectedIngredient._id) &&
+    rawSelectedIngredient.suppliers.length !== 0
+  ) {
+    // // Check if profile has ingredients
+    if (!isEmpty(profile.ingredients)) {
+      // Filter profile ingredients to get selected ingredient from profile ingredients
+      const pIngredient = profile.ingredients.filter(pi => {
+        return pi.ingredient === rawSelectedIngredient._id;
+      });
+      // Check if profile has selected ingredient
+      if (!isEmpty(pIngredient)) {
+        // Check if profile ingredient has suppliers
+        if (!isEmpty(pIngredient[0].suppliers)) {
+          let preferredSupplier = {};
+
+          const updatedSelectedIngredientSuppliers = rawSelectedIngredient.suppliers.map(
+            rsiSuppiler => {
+              const piSupplier = pIngredient[0].suppliers.filter(
+                pis => {
+                  return pis.supplier === rsiSuppiler.supplier._id;
+                }
+              );
+
+              const usiSupplier = {
+                ...rsiSuppiler
+              };
+
+              if (piSupplier.length !== 0) {
+                usiSupplier.profilePacketCost =
+                  piSupplier[0].packetCost;
+                usiSupplier.profilePacketGrams =
+                  piSupplier[0].packetGrams;
+                usiSupplier.preferred = piSupplier[0].preferred;
+
+                if (!rawSelectedSupplier) {
+                  if (usiSupplier.preferred) {
+                    preferredSupplier = usiSupplier;
+
+                    dispatch(setSelectedSupplier(preferredSupplier));
+                  }
+                } else {
+                  if (
+                    usiSupplier.supplier._id ===
+                    rawSelectedSupplier._id
+                  ) {
+                    const completeSelectedSupplier = {
+                      ...usiSupplier,
+                      supplier: {
+                        ...usiSupplier.supplier,
+                        address: rawSelectedSupplier.address,
+                        confirmedDetails:
+                          rawSelectedSupplier.confirmedDetails,
+                        email: rawSelectedSupplier.email,
+                        phone: rawSelectedSupplier.phone,
+                        urlName: rawSelectedSupplier.urlName,
+                        website: rawSelectedSupplier.website
+                      }
+                    };
+
+                    dispatch(
+                      setSelectedSupplier(completeSelectedSupplier)
+                    );
+                  }
+                }
+              } else {
+                usiSupplier.preferred = false;
+              }
+
+              return usiSupplier;
+            }
+          );
+
+          const updatedSelectedIngredient = {
+            ...rawSelectedIngredient,
+            suppliers: updatedSelectedIngredientSuppliers
+          };
+
+          // If preferred supplier is not found set the state for the selected
+          if (isEmpty(preferredSupplier)) {
+            console.log('Preferred supplier was not found');
+          }
+
+          // dispatch updated selected ingredient
+          dispatch(setSelectedIngredient(updatedSelectedIngredient));
+        } else {
+          console.log('Profile ingredient has not suppliers');
+        }
+      } else {
+        console.log('Profile does not have the selected ingredient');
+      }
+    } else {
+      console.log('Profile has no ingredients');
+    }
+  } else {
+    // User has added a new ingredient, no need to check suppliers
+    dispatch(setSelectedIngredient(rawSelectedIngredient));
+  }
+
+  // dispatch(setSelectedIngredient(selectedIngredient));
+};
+
+export const setSelectedIngredient = selectedIngredient => async dispatch => {
   dispatch({
     type: SET_SELECTED_INGREDIENT,
     payload: selectedIngredient
   });
-};
-
-export const getSelectedIngredient = (
-  selectedIngredient,
-  ingredient,
-  profile,
-  selectIngredientSupplier
-) => async dispatch => {
-  // console.log('selectedIngredient', selectedIngredient);
-
-  if (
-    selectedIngredient.suppliers.length !== 0 &&
-    profile.ingredients.length !== 0
-  ) {
-    const pIngredient = profile.ingredients.filter(
-      profileIngredient => {
-        return (
-          profileIngredient.ingredient === selectedIngredient._id
-        );
-      }
-    );
-
-    // console.log('pIngredient', pIngredient[0].suppliers);
-
-    if (
-      pIngredient.length !== 0 &&
-      pIngredient[0].suppliers.length !== 0
-    ) {
-      for (let is = 0; is < pIngredient[0].suppliers.length; is++) {
-        const piSupplier = pIngredient[0].suppliers[is];
-
-        // console.log('** piSupplier', piSupplier);
-
-        for (
-          let sis = 0;
-          sis < selectedIngredient.suppliers.length;
-          sis++
-        ) {
-          const siSupplier = selectedIngredient.suppliers[sis];
-
-          if (piSupplier.supplier === siSupplier.supplier._id) {
-            // console.log('siSupplier', siSupplier);
-            // console.log('piSupplier', piSupplier);
-            siSupplier.packetCost =
-              (piSupplier.packetCost / piSupplier.packetGrams) * 100;
-
-            if (piSupplier.preferred) {
-              siSupplier.preferred = true;
-            } else {
-              siSupplier.preferred = false;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // console.log('selectedIngredient', selectedIngredient);
-  // console.log('res', selectedIngredient);
-
-  dispatch(setSelectedIngredient(selectedIngredient));
 };
 
 export const addOrEditIngredientAndSupplier = (
@@ -136,7 +180,13 @@ export const addOrEditIngredientAndSupplier = (
 
     dispatch({ type: PROFILE_LOADED, payload: res.data.profile });
     dispatch(loadIngredients());
-    dispatch(setSelectedIngredient(res.data.ingredient));
+    dispatch(
+      getSelectedIngredient(
+        res.data.ingredient,
+        res.data.profile,
+        res.data.supplier
+      )
+    );
     dispatch(setAlert('Ingredient Saved', 'success'));
   } catch (err) {
     dispatch(displayErrors(err));

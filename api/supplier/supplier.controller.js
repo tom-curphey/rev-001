@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator/check');
 
 module.exports.getSuppliers = async (req, res) => {
   try {
-    const suppliers = await Supplier.find();
+    const suppliers = await Supplier.find().sort({ urlName: 1 });
 
     // console.log('SUPPLIERS', suppliers);
 
