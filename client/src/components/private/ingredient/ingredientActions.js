@@ -7,7 +7,11 @@ import {
   PROFILE_LOADED
 } from '../../../redux/types';
 import axios from 'axios';
-import { setSelectedSupplier } from '../supplier/supplierActions';
+import {
+  setSelectedSupplier,
+  removeSelectedSupplier,
+  removePreferredSupplier
+} from '../supplier/supplierActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
 import { isEmpty } from '../../../utils/utils';
@@ -80,8 +84,6 @@ export const getSelectedIngredient = (
                 if (!rawSelectedSupplier) {
                   if (usiSupplier.preferred) {
                     preferredSupplier = usiSupplier;
-
-                    dispatch(setSelectedSupplier(preferredSupplier));
                   }
                 } else {
                   if (
@@ -120,13 +122,17 @@ export const getSelectedIngredient = (
             suppliers: updatedSelectedIngredientSuppliers
           };
 
+          // dispatch updated selected ingredient
+          dispatch(setSelectedIngredient(updatedSelectedIngredient));
+
           // If preferred supplier is not found set the state for the selected
           if (isEmpty(preferredSupplier)) {
             console.log('Preferred supplier was not found');
+            dispatch(removeSelectedSupplier());
+            dispatch(removePreferredSupplier());
+          } else {
+            dispatch(setSelectedSupplier(preferredSupplier));
           }
-
-          // dispatch updated selected ingredient
-          dispatch(setSelectedIngredient(updatedSelectedIngredient));
         } else {
           console.log('Profile ingredient has not suppliers');
         }

@@ -20,7 +20,7 @@ router.post(
       .not()
       .isEmpty()
   ],
-  ingredientController.addOrEditIngredient
+  ingredientController.addOrEditIngredientAndSupplier
 );
 
 module.exports = router;

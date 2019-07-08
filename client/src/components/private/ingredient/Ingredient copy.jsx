@@ -10,18 +10,20 @@ import {
 } from './ingredientActions';
 import {
   loadSuppliers,
-  setPreferredSupplier,
   setSelectedSupplier,
-  removeSelectedSupplier,
-  updateSelectedSupplierState,
-  getSelectedSupplier,
-  updatePreferredSupplier
+  removeSelectedSupplier
 } from '../supplier/supplierActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from './IngredientForm';
 import SupplierPanel from '../supplier/SupplierPanel';
 import { isEmpty } from '../../../utils/utils';
+import {
+  updateSelectedSupplierState,
+  getSelectedSupplier,
+  setPreferredSupplier,
+  updatePreferredSupplier
+} from '../supplier/supplierActions';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 
 export class Ingredient extends Component {
@@ -86,7 +88,7 @@ export class Ingredient extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { ingredient, supplier } = this.props;
-    const { selectedIngredient, selectedSupplier } = this.state;
+    const { selectedIngredient } = this.state;
 
     // If selected ingredient changes update local state with selected ingredient
     if (
@@ -98,50 +100,13 @@ export class Ingredient extends Component {
       });
     }
 
-    // If selected supplier changes update local state with selected supplier
     if (
-      prevProps.supplier.selectedSupplier !==
-      supplier.selectedSupplier
+      prevState.selectedIngredient !== selectedIngredient &&
+      prevProps.preferredIngredientSupplierId !==
+        this.props.preferredIngredientSupplierId
     ) {
-      // Check if props selected supplier !== null
-      if (supplier.selectedSupplier !== null) {
-        this.setState({
-          selectedSupplier: supplier.selectedSupplier
-        });
-        // If props selected supplier is equal to preferred run setPreferredSupplier action
-        if (supplier.selectedSupplier.preferred) {
-          this.props.setPreferredSupplier(
-            supplier.selectedSupplier.supplier._id
-          );
-        }
-      } else {
-        console.log('I TRIED ---');
+      console.log('Fixed');
 
-        this.setState({
-          selectedSupplier: {
-            supplier: {
-              _id: '',
-              displayName: ''
-            },
-            packetCost: '',
-            packetGrams: '',
-            profilePacketCost: null,
-            profilePacketGrams: null,
-            preferred: false
-          }
-        });
-      }
-    }
-
-    if (
-      prevProps.supplier.preferredIngredientSupplierId !==
-        supplier.preferredIngredientSupplierId &&
-      supplier.selectedSupplier !== null
-    ) {
-      console.log(
-        'Update local selected ingredient state',
-        supplier.selectedSupplier
-      );
       const updateSelectedIngredientSuppliersState = selectedIngredient.suppliers.map(
         sis => {
           if (
@@ -166,29 +131,100 @@ export class Ingredient extends Component {
         suppliers: updateSelectedIngredientSuppliersState
       };
 
-      const usSupplier = {
-        ...supplier.selectedSupplier
-      };
-
-      if (
-        supplier.preferredIngredientSupplierId ===
-        selectedSupplier.supplier._id
-      ) {
-        usSupplier.preferred = true;
-      } else {
-        usSupplier.preferred = false;
-      }
-
-      console.log('I RAN HERE');
-
       this.setState({
-        selectedIngredient: usIngredient,
-        selectedSupplier: usSupplier
+        selectedIngredient: usIngredient
       });
     }
 
+    // If selected supplier changes update local state with selected supplier
+    if (
+      prevProps.supplier.selectedSupplier !==
+      supplier.selectedSupplier
+    ) {
+      this.setState({
+        selectedSupplier: supplier.selectedSupplier
+      });
+    }
+
+    // If preferredIngredientSupplierId changes update local state to
+    // match the preferredIngredientSupplierId
+    if (
+      prevProps.supplier.preferredIngredientSupplierId !==
+      supplier.preferredIngredientSupplierId
+    ) {
+      if (!isEmpty(selectedIngredient.suppliers)) {
+        const updateSelectedIngredientSuppliersState = selectedIngredient.suppliers.map(
+          sis => {
+            if (
+              sis.supplier._id ===
+              supplier.preferredIngredientSupplierId
+            ) {
+              return {
+                ...sis,
+                preferred: true
+              };
+            } else {
+              return {
+                ...sis,
+                preferred: false
+              };
+            }
+          }
+        );
+
+        const usIngredient = {
+          ...selectedIngredient,
+          suppliers: updateSelectedIngredientSuppliersState
+        };
+
+        this.setState({
+          selectedIngredient: usIngredient
+        });
+      } else {
+        console.log(
+          'Current local state selected ingredient has no suppliers'
+        );
+      }
+
+      if (!isEmpty(this.state.selectedSupplier.supplier._id)) {
+        const usSupplier = {
+          ...this.state.selectedSupplier
+        };
+
+        if (
+          supplier.preferredIngredientSupplierId ===
+          supplier.selectedSupplier.supplier._id
+        ) {
+          usSupplier.preferred = true;
+        } else {
+          usSupplier.preferred = false;
+        }
+
+        this.setState({
+          selectedSupplier: usSupplier
+        });
+      } else {
+        const usSupplier = {
+          ...supplier.selectedSupplier
+        };
+
+        if (
+          supplier.preferredIngredientSupplierId ===
+          supplier.selectedSupplier.supplier._id
+        ) {
+          usSupplier.preferred = true;
+        } else {
+          usSupplier.preferred = false;
+        }
+
+        this.setState({
+          selectedSupplier: usSupplier
+        });
+      }
+    }
+
+    // Check if ingredient is ready to be saved
     if (prevState.selectedSupplier !== this.state.selectedSupplier) {
-      // Check if ingredient is ready to be saved
       this.checkReadyToSave();
     }
   }
@@ -339,8 +375,6 @@ export class Ingredient extends Component {
       selectedSupplier,
       readyToSave
     } = this.state;
-
-    console.log('selectedSupplier------>', selectedSupplier);
 
     const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 

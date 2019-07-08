@@ -5,7 +5,8 @@ import {
   SET_SELECTED_SUPPLIER,
   STOP_SUPPLIERS_LOADING,
   SET_UPDATED_SELECTED_SUPPLIER,
-  SET_PREFERRED_SUPPLIER
+  SET_PREFERRED_SUPPLIER,
+  REMOVE_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 import axios from 'axios';
 import { displayErrors } from '../../../redux/errorActions';
@@ -43,8 +44,8 @@ export const getSelectedSupplier = (
   suppliers,
   selectedIngredient
 ) => async dispatch => {
-  console.log('selectedSupplier', selectedSupplier);
-  console.log('supplier', suppliers);
+  // console.log('selectedSupplier', selectedSupplier);
+  // console.log('supplier', suppliers);
 
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
@@ -129,16 +130,14 @@ export const updatePreferredSupplier = (
       }
     } else {
       console.log('Previous preferred supplier was not found');
+      ssID = selectedSupplierState.supplier._id;
     }
   } else {
     console.log('Selected ingredient props has no suppliers');
   }
 
   // check the status of the preferred supplier in the state
-  if (selectedSupplierState.preferred) {
-    // Uncheck selected supplier
-  } else {
-    // set selected supplier as the preferred supplier
+  if (selectedSupplierState.preferred === false) {
     ssID = selectedSupplierState.supplier._id;
   }
 
@@ -146,9 +145,13 @@ export const updatePreferredSupplier = (
 };
 
 export const setPreferredSupplier = supplierID => async dispatch => {
-  console.log('setPreferredSupplier');
+  console.log('setPreferredSupplier', supplierID);
 
   dispatch({ type: SET_PREFERRED_SUPPLIER, payload: supplierID });
+};
+
+export const removePreferredSupplier = () => async dispatch => {
+  dispatch({ type: REMOVE_PREFERRED_SUPPLIER });
 };
 
 export const addOrEditSupplier = supplierData => async dispatch => {

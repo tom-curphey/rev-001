@@ -5,7 +5,8 @@ import {
   CLEAR_SUPPLIERS,
   STOP_SUPPLIERS_LOADING,
   SET_UPDATED_SELECTED_SUPPLIER,
-  SET_PREFERRED_SUPPLIER
+  SET_PREFERRED_SUPPLIER,
+  REMOVE_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 
 const initialState = {
@@ -46,11 +47,18 @@ export default function(state = initialState, actions) {
         preferredIngredientSupplierId: payload
       };
 
+    case REMOVE_PREFERRED_SUPPLIER:
+      return {
+        ...state,
+        preferredIngredientSupplierId: null
+      };
+
     case CLEAR_SUPPLIERS:
       return {
         ...state,
         suppliers: null,
         selectedSupplier: null,
+        preferredIngredientSupplierId: null,
         loading: true,
         errors: null
       };

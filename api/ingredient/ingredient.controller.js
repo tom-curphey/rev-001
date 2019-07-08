@@ -29,7 +29,7 @@ module.exports.getIngredients = async (req, res) => {
   }
 };
 
-module.exports.addOrEditIngredient = async (req, res) => {
+module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -37,6 +37,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
 
   const {
     ingredientID,
+    suppliers,
     displayName,
     metrics: { cup, whole },
     packetCost,
@@ -57,7 +58,7 @@ module.exports.addOrEditIngredient = async (req, res) => {
     });
   }
 
-  console.log('REQ.BODY', req.body);
+  // console.log('REQ.BODY', req.body);
 
   const ingredientData = {};
   ingredientData.metrics = {};
@@ -190,7 +191,13 @@ module.exports.addOrEditIngredient = async (req, res) => {
       pisi++
     ) {
       const piSupplier = profile.ingredients[iIndex].suppliers[pisi];
+      console.log('SUPPLIER DATA', supplierData);
+      console.log('piSuppiler', piSupplier);
+
+      // If there is a supplier that was preferred.. Set it to false
       if (supplierData.preferred) {
+        piSupplier.preferred = false;
+      } else {
         piSupplier.preferred = false;
       }
       if (piSupplier.supplier.toString() === supplierID.toString()) {

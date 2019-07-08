@@ -11,7 +11,6 @@ import { isEmpty, roundNumberAsString } from '../../../utils/utils';
 
 const SupplierForm = ({
   supplier,
-  getSelectedValue,
   errors,
   selectedSupplier: {
     supplier: { _id, displayName },
@@ -20,127 +19,96 @@ const SupplierForm = ({
     profilePacketCost,
     profilePacketGrams,
     preferred
-  }
+  },
+  getSelectedSupplier,
+  handleSupplierNumberChange,
+  handleToggleChange,
+  handleOnSubmit
 }) => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  let options;
+  if (
+    !isEmpty(supplier.suppliers) &&
+    supplier.suppliers.length !== 0
+  ) {
+    options = supplier.suppliers.map(supplier => {
+      let selectData = {};
+      selectData.label = supplier.displayName;
+      selectData.value = supplier._id;
 
-export default SupplierForm
-
-
-
-
-
-
-
-
-
-
-
-
-
-class SupplierForm extends Component {
-
-  render() {
-    const  = this.props;
-
-    let options;
-    if (
-      !isEmpty(supplier.suppliers) &&
-      supplier.suppliers.length !== 0
-    ) {
-      // console.log('supplier.suppliers', supplier.suppliers);
-      options = supplier.suppliers.map(supplier => {
-        let selectData = {};
-        selectData.label = supplier.displayName;
-        selectData.value = supplier._id;
-
-        return selectData;
-      });
-    }
-
-    let selectedValue = {
-      label: 'Type supplier name..',
-      value: 'no-supplier-selected'
-    };
-    // console.log(displayName);
-
-    if (!isEmpty(_id)) {
-      selectedValue.label = displayName;
-      selectedValue.value = _id;
-    }
-
-    // console.log('profilePacketCost', profilePacketCost);
-
-    const iPacketCost =
-      profilePacketCost === null
-        ? roundNumberAsString(packetCost)
-        : profilePacketCost.toString();
-    const iPacketGrams =
-      profilePacketGrams === null
-        ? roundNumberAsString(packetGrams)
-        : profilePacketGrams.toString();
-
-    return (
-      <section className="supplierForm">
-        <form onSubmit={this.props.handleOnSubmit}>
-          <CreatableSelectInputHorizontal
-            label="Supplier Name"
-            name="type"
-            placeholder="Type supplier name.."
-            value={selectedValue && selectedValue}
-            options={options}
-            getSelectedValue={this.props.getSelectedValue}
-            error={errors.type && errors.type}
-          />
-          <TextInputHorizontal
-            label="Supplier Packet Cost"
-            value={iPacketCost}
-            name="profilePacketCost"
-            labelClass="smallTextField"
-            onChange={this.props.handleSupplierNumberChange}
-            error={errors && errors.packetCost}
-          />
-          <TextInputHorizontal
-            label="Supplier Packet Grams"
-            value={iPacketGrams}
-            name="profilePacketGrams"
-            labelClass="smallTextField"
-            onChange={this.props.handleSupplierNumberChange}
-            error={errors && errors.packetGrams}
-          />
-          <ToggleInputHorizontal
-            label="Is this your preferred supplier?"
-            name="preferred"
-            onChange={this.props.toggleChange}
-            toggleOn="Preferred"
-            checked={preferred}
-          />
-        </form>
-      </section>
-    );
+      return selectData;
+    });
   }
-}
+
+  let selectedValue = {
+    label: 'Type supplier name..',
+    value: 'no-supplier-selected'
+  };
+
+  if (!isEmpty(_id)) {
+    selectedValue.label = displayName;
+    selectedValue.value = _id;
+  }
+
+  const iPacketCost =
+    profilePacketCost === null
+      ? roundNumberAsString(packetCost)
+      : profilePacketCost.toString();
+  const iPacketGrams =
+    profilePacketGrams === null
+      ? roundNumberAsString(packetGrams)
+      : profilePacketGrams.toString();
+
+  return (
+    <section className="supplierForm">
+      <form onSubmit={handleOnSubmit}>
+        <CreatableSelectInputHorizontal
+          label="Supplier Name"
+          name="type"
+          placeholder="Type supplier name.."
+          value={selectedValue && selectedValue}
+          options={options}
+          getSelectedValue={getSelectedSupplier}
+          error={errors.type && errors.type}
+        />
+        <TextInputHorizontal
+          label="Supplier Packet Cost"
+          value={iPacketCost}
+          name="profilePacketCost"
+          labelClass="smallTextField"
+          onChange={handleSupplierNumberChange}
+          error={errors && errors.packetCost}
+        />
+        <TextInputHorizontal
+          label="Supplier Packet Grams"
+          value={iPacketGrams}
+          name="profilePacketGrams"
+          labelClass="smallTextField"
+          onChange={handleSupplierNumberChange}
+          error={errors && errors.packetGrams}
+        />
+        <ToggleInputHorizontal
+          label="Is this your preferred supplier?"
+          name="preferred"
+          onChange={handleToggleChange}
+          toggleOn="Preferred"
+          checked={preferred}
+        />
+      </form>
+    </section>
+  );
+};
 
 SupplierForm.propTypes = {
-  ingredient: PropTypes.object.isRequired,
   supplier: PropTypes.object.isRequired,
+  getSelectedSupplier: PropTypes.func.isRequired,
   handleSupplierChange: PropTypes.func.isRequired,
   handleSupplierNumberChange: PropTypes.func.isRequired,
-  toggleChange: PropTypes.func.isRequired,
-  updateSelectedSupplierState: PropTypes.func.isRequired
+  handleToggleChange: PropTypes.func.isRequired
 };
 
-const actions = {
-  updateSelectedSupplierState
-};
+const actions = {};
 
 const mapState = state => ({
-  ingredient: state.ingredient,
   supplier: state.supplier,
   errors: state.errors
 });
