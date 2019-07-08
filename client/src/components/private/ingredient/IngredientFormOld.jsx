@@ -1,32 +1,19 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import AuthMenu from '../../layout/menu/AuthMenu';
-import Spinner from '../../layout/Spinner';
-import {
-  loadIngredients,
-  setSelectedIngredient,
-  addOrEditIngredientAndSupplier
-} from './ingredientActions';
-import {
-  loadSuppliers,
-  setSelectedSupplier,
-  removeSelectedSupplier
-} from '../supplier/supplierActions';
-import SelectIngredient from './SelectIngredient';
+import PropTypes from 'prop-types';
 import SupplierForm from '../supplier/SupplierForm';
-import IngredientForm from './IngredientForm';
-import SupplierPanel from '../supplier/SupplierPanel';
-import { isEmpty } from '../../../utils/utils';
 import {
   updateSelectedSupplierState,
   getSelectedSupplier,
   setPreferredSupplier,
   updatePreferredSupplier
 } from '../supplier/supplierActions';
+import { addOrEditIngredientAndSupplier } from './ingredientActions';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+// import Spinner from '../../layout/Spinner';
+import { isEmpty } from '../../../utils/utils';
 
-export class Ingredient extends Component {
+class IngredientForm extends Component {
   state = {
     selectedIngredient: {
       metrics: {
@@ -49,10 +36,6 @@ export class Ingredient extends Component {
   };
 
   componentDidMount() {
-    // console.log('I RAN');
-    this.props.loadIngredients();
-    this.props.loadSuppliers();
-
     const { ingredient, supplier } = this.props;
     if (!isEmpty(ingredient.selectedIngredient)) {
       this.setState({
@@ -60,7 +43,9 @@ export class Ingredient extends Component {
       });
     }
     if (!isEmpty(supplier.selectedSupplier)) {
-      setPreferredSupplier(supplier.selectedSupplier.supplier._id);
+      this.props.setPreferredSupplier(
+        supplier.selectedSupplier.supplier._id
+      );
 
       const slSupplier = supplier.suppliers.filter(sls => {
         return sls._id === supplier.selectedSupplier.supplier._id;
@@ -86,28 +71,13 @@ export class Ingredient extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { ingredient, supplier } = this.props;
+    const { supplier } = this.props;
     const { selectedIngredient } = this.state;
-
-    if (
-      prevProps.ingredient.selectedIngredient !==
-      ingredient.selectedIngredient
-    ) {
-      this.setState({
-        selectedIngredient: ingredient.selectedIngredient
-      });
-    }
 
     if (
       prevProps.supplier.selectedSupplier !==
       supplier.selectedSupplier
     ) {
-      console.log('RUN RUN', supplier.selectedSupplier.supplier._id);
-
-      this.props.setPreferredSupplier(
-        supplier.selectedSupplier.supplier._id
-      );
-
       const usSupplier = {
         ...supplier.selectedSupplier
       };
@@ -238,7 +208,7 @@ export class Ingredient extends Component {
   };
 
   getSelectedSupplier = selectedValue => {
-    console.log('selectedValue', this.props.supplier.suppliers);
+    console.log('selectedValue', selectedValue);
     this.props.getSelectedSupplier(
       selectedValue,
       this.props.supplier.suppliers,
@@ -327,90 +297,95 @@ export class Ingredient extends Component {
   };
 
   render() {
-    const { ingredient } = this.props;
+    const { errors } = this.props;
     const {
       selectedIngredient,
       selectedSupplier,
       readyToSave
     } = this.state;
+    const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 
     let ingredientForm;
-    let supplierPanel;
-    if (ingredient && ingredient.loading) {
+    if (
+      isEmpty(selectedIngredient.metrics.cup) &&
+      isEmpty(selectedIngredient.metrics.whole)
+    ) {
       ingredientForm = (
-        <div style={{ marginTop: '200px' }}>
-          <Spinner width="30px" />
-        </div>
+        <Fragment>
+          <h2>Add Ingredient Unit Weight Metric *</h2>
+          <p>
+            For every new ingredient we need to know it’s relevant
+            unit metric weight
+          </p>
+          <form onSubmit={this.handleOnSubmit}>
+            <TextInputHorizontal
+              label="Cup"
+              placeholder="Cup metric weight in grams"
+              value={selectedIngredient.metrics.cup}
+              name="cup"
+              onChange={this.handleIngredientNumberChange}
+              error={errors.cup && errors.cup}
+            />
+            <TextInputHorizontal
+              label="Whole"
+              placeholder="Whole weight in grams"
+              value={selectedIngredient.metrics.whole}
+              name="whole"
+              onChange={this.handleIngredientNumberChange}
+              error={errors && errors.Whole}
+            />
+          </form>
+        </Fragment>
       );
-    } else {
-      if (!isEmpty(selectedIngredient._id)) {
-        ingredientForm = (
-          <Fragment>
-            <SelectIngredient />
-            <IngredientForm
-              selectedIngredient={selectedIngredient}
-              handleIngredientNumberChange={
-                this.handleIngredientNumberChange
-              }
-              selectedSupplier={selectedSupplier}
-              handleSupplierChange={this.handleSupplierChange}
-              handleSupplierNumberChange={
-                this.handleSupplierNumberChange
-              }
-              handleToggleChange={this.handleToggleChange}
-              getSelectedSupplier={this.getSelectedSupplier}
-              readyToSave={readyToSave}
-              handleSubmit={this.handleSubmit}
-            />
-          </Fragment>
-        );
-
-        supplierPanel = (
-          <Fragment>
-            <SupplierPanel
-              selectedIngredient={selectedIngredient}
-              selectedSupplier={selectedSupplier}
-            />
-          </Fragment>
-        );
-      } else {
-        ingredientForm = <SelectIngredient />;
-      }
     }
 
     return (
-      <AuthMenu>
-        <section className="ingredient">
-          <div>
-            <h1>Ingredients</h1>
-            <h3>Search / Create / Edit</h3>
-            {ingredientForm}
-          </div>
-          <div>{supplierPanel}</div>
-        </section>
-      </AuthMenu>
+      <section className="ingredientForm">
+        <SupplierForm
+          selectedSupplier={selectedSupplier}
+          handleSupplierChange={this.handleSupplierChange}
+          handleSupplierNumberChange={this.handleSupplierNumberChange}
+          getSelectedValue={this.getSelectedSupplier}
+          toggleChange={this.handleToggleChange}
+        />
+        {ingredientForm && ingredientForm}
+        <div className="button">
+          <nav
+            className={readyToSaveClass}
+            onClick={this.handleSubmit}
+          >
+            Save Ingredient
+          </nav>
+        </div>
+      </section>
     );
   }
 }
 
+IngredientForm.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  supplier: PropTypes.object.isRequired,
+  updateSelectedSupplierState: PropTypes.func.isRequired,
+  getSelectedSupplier: PropTypes.func.isRequired,
+  setPreferredSupplier: PropTypes.func.isRequired,
+  updatePreferredSupplier: PropTypes.func.isRequired
+};
+
 const actions = {
-  loadIngredients,
-  loadSuppliers,
-  setSelectedIngredient,
-  addOrEditIngredientAndSupplier,
   updateSelectedSupplierState,
+  addOrEditIngredientAndSupplier,
   getSelectedSupplier,
   setPreferredSupplier,
   updatePreferredSupplier
 };
 
 const mapState = state => ({
+  errors: state.errors,
   ingredient: state.ingredient,
-  supplier: state.supplier,
-  profile: state.profile
+  supplier: state.supplier
 });
 
 export default connect(
   mapState,
   actions
-)(Ingredient);
+)(IngredientForm);

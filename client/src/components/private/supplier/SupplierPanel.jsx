@@ -10,7 +10,8 @@ import {
 
 const SupplierPanel = ({
   selectedIngredient,
-  supplier: { selectedSupplier, preferredIngredientSupplierId }
+  selectedSupplier,
+  supplier: { preferredIngredientSupplierId }
   // changeSelectedIngredientPreferredSupplier,
   // checkSelectedIngredientPreferredSupplier
 }) => {

@@ -146,6 +146,8 @@ export const updatePreferredSupplier = (
 };
 
 export const setPreferredSupplier = supplierID => async dispatch => {
+  console.log('setPreferredSupplier');
+
   dispatch({ type: SET_PREFERRED_SUPPLIER, payload: supplierID });
 };
 
