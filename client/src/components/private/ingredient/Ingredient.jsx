@@ -115,7 +115,7 @@ export class Ingredient extends Component {
           );
         }
       } else {
-        console.log('I TRIED ---');
+        console.log('I TRIED ---', supplier.selectedSupplier);
 
         this.setState({
           selectedSupplier: {
@@ -179,7 +179,8 @@ export class Ingredient extends Component {
         usSupplier.preferred = false;
       }
 
-      console.log('I RAN HERE');
+      console.log('I RAN HERE', usSupplier);
+      console.log('I RAN HERERE', usIngredient);
 
       this.setState({
         selectedIngredient: usIngredient,
@@ -243,7 +244,7 @@ export class Ingredient extends Component {
   };
 
   getSelectedSupplier = selectedValue => {
-    console.log('selectedValue', this.props.supplier.suppliers);
+    // console.log('selectedValue', this.props.supplier);
     this.props.getSelectedSupplier(
       selectedValue,
       this.props.supplier.suppliers,
@@ -340,7 +341,8 @@ export class Ingredient extends Component {
       readyToSave
     } = this.state;
 
-    console.log('selectedSupplier------>', selectedSupplier);
+    // console.log('selectedSupplier------>', selectedSupplier);
+    // console.log('selectedSupplier------>', this.props.supplier);
 
     const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 
@@ -354,7 +356,7 @@ export class Ingredient extends Component {
         </div>
       );
     } else {
-      if (!isEmpty(selectedIngredient._id)) {
+      if (!isEmpty(selectedIngredient.displayName)) {
         ingredientForm = (
           <Fragment>
             <SelectIngredient />
@@ -367,13 +369,15 @@ export class Ingredient extends Component {
               }
               handleToggleChange={this.handleToggleChange}
             />
-            <IngredientForm
-              selectedIngredient={selectedIngredient}
-              handleIngredientNumberChange={
-                this.handleIngredientNumberChange
-              }
-              readyToSave={readyToSave}
-            />
+            {isEmpty(selectedIngredient._id) && (
+              <IngredientForm
+                selectedIngredient={selectedIngredient}
+                handleIngredientNumberChange={
+                  this.handleIngredientNumberChange
+                }
+                readyToSave={readyToSave}
+              />
+            )}
             <div className="button">
               <nav
                 className={readyToSaveClass}

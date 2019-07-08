@@ -19,12 +19,14 @@ const CreatableSelectInput = ({
   value,
   label,
   labelClass,
-  info
+  info,
+  createLabel
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
       getSelectedValue(newValue, name);
+      // console.log('NEW');
     }
   };
 
@@ -104,7 +106,7 @@ const CreatableSelectInput = ({
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>
-          `+ Add Ingredient "${userInput}"`
+          `${createLabel} "${userInput}"`
         }
         theme={theme => ({
           ...theme,

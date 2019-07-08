@@ -46,6 +46,8 @@ export const getSelectedIngredient = (
   profile,
   rawSelectedSupplier
 ) => async dispatch => {
+  console.log('rawSelectedSupplier', rawSelectedSupplier);
+
   if (
     !isEmpty(rawSelectedIngredient._id) &&
     rawSelectedIngredient.suppliers.length !== 0
@@ -104,9 +106,14 @@ export const getSelectedIngredient = (
                       }
                     };
 
+                    console.log('HIT', completeSelectedSupplier);
+
                     dispatch(
                       setSelectedSupplier(completeSelectedSupplier)
                     );
+                    if (completeSelectedSupplier.preferred) {
+                      preferredSupplier = completeSelectedSupplier;
+                    }
                   }
                 }
               } else {
@@ -125,26 +132,54 @@ export const getSelectedIngredient = (
           // dispatch updated selected ingredient
           dispatch(setSelectedIngredient(updatedSelectedIngredient));
 
+          // console.log('preferredSupplier ****', preferredSupplier);
+          // console.log(
+          //   'updatedSelectedIngredient ****',
+          //   updatedSelectedIngredient
+          // );
+          // console.log('rawSelectedSupplier', rawSelectedSupplier);
+
           // If preferred supplier is not found set the state for the selected
-          if (isEmpty(preferredSupplier)) {
-            console.log('Preferred supplier was not found');
+          if (
+            isEmpty(preferredSupplier) &&
+            isEmpty(rawSelectedSupplier)
+          ) {
+            console.log('Preferred supplier was not found', profile);
+            console.log('Overhere - 3', rawSelectedSupplier);
             dispatch(removeSelectedSupplier());
             dispatch(removePreferredSupplier());
           } else {
-            dispatch(setSelectedSupplier(preferredSupplier));
+            console.log('Overhere - 4', rawSelectedSupplier);
+            console.log('preferredSupplier - 4', preferredSupplier);
+
+            console.log(
+              '---- Needs to trigger when there is a profile preferred supplier'
+            );
+            // Check if there is a preferred supplier
+            if (!isEmpty(preferredSupplier)) {
+              dispatch(setSelectedSupplier(preferredSupplier));
+            }
           }
         } else {
           console.log('Profile ingredient has not suppliers');
+          dispatch(removeSelectedSupplier());
+          dispatch(removePreferredSupplier());
         }
       } else {
         console.log('Profile does not have the selected ingredient');
+        dispatch(removeSelectedSupplier());
+        dispatch(removePreferredSupplier());
       }
     } else {
       console.log('Profile has no ingredients');
     }
   } else {
+    console.log('Overhere - 1', rawSelectedSupplier);
+
     // User has added a new ingredient, no need to check suppliers
     dispatch(setSelectedIngredient(rawSelectedIngredient));
+    // dispatch(removeSelectedSupplier());
+    // dispatch(removePreferredSupplier());
   }
 
   // dispatch(setSelectedIngredient(selectedIngredient));
@@ -201,6 +236,7 @@ export const addOrEditIngredientAndSupplier = (
 };
 
 export const removeSelectedIngredient = () => async dispatch => {
+  console.log('Overhere - 2');
   dispatch({
     type: REMOVE_SELECTED_INGREDIENT
   });

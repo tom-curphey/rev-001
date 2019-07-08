@@ -37,15 +37,10 @@ class AddSupplierModal extends Component {
             showModal: false
           });
         } else {
-          console.log('true', this.props.selectedSupplier);
-
-          // const {
-          //   displayName,
-          //   email,
-          //   phone,
-          //   address,
-          //   website
-          // } = this.props.selectedSupplier;
+          console.log(
+            'How add supplier modal',
+            this.props.selectedSupplier
+          );
 
           this.setState({
             showModal: true,

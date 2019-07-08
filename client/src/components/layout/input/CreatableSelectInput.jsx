@@ -17,7 +17,8 @@ const CreatableSelectInput = ({
   error,
   name,
   value,
-  label
+  label,
+  createLabel
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -99,7 +100,7 @@ const CreatableSelectInput = ({
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>
-          `+ Add Ingredient "${userInput}"`
+          `${createLabel} "${userInput}"`
         }
         theme={theme => ({
           ...theme,

@@ -6,26 +6,26 @@ import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 // import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
 
-const IngredientForm = ({ errors, selectedIngredient }) => {
-  let ingredientForm;
-  if (
-    isEmpty(selectedIngredient.metrics.cup) &&
-    isEmpty(selectedIngredient.metrics.whole)
-  ) {
-    ingredientForm = (
+const IngredientForm = ({
+  errors,
+  selectedIngredient,
+  handleIngredientNumberChange
+}) => {
+  return (
+    <section className="ingredientForm">
       <Fragment>
         <h2>Add Ingredient Unit Weight Metric *</h2>
         <p>
           For every new ingredient we need to know it’s relevant unit
           metric weight
         </p>
-        <form onSubmit={this.handleOnSubmit}>
+        <form>
           <TextInputHorizontal
             label="Cup"
             placeholder="Cup metric weight in grams"
             value={selectedIngredient.metrics.cup}
             name="cup"
-            onChange={this.props.handleIngredientNumberChange}
+            onChange={handleIngredientNumberChange}
             error={errors.cup && errors.cup}
           />
           <TextInputHorizontal
@@ -33,17 +33,11 @@ const IngredientForm = ({ errors, selectedIngredient }) => {
             placeholder="Whole weight in grams"
             value={selectedIngredient.metrics.whole}
             name="whole"
-            onChange={this.handleIngredientNumberChange}
+            onChange={handleIngredientNumberChange}
             error={errors && errors.Whole}
           />
         </form>
       </Fragment>
-    );
-  }
-
-  return (
-    <section className="ingredientForm">
-      {ingredientForm && ingredientForm}
     </section>
   );
 };

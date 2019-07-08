@@ -118,6 +118,7 @@ class SelectIngredient extends Component {
           options={options}
           getSelectedValue={this.getSelectedValue}
           placeholder="Type ingredient name to select ingredient.."
+          createLabel="+ Add Ingredient"
         />
       );
     } else {
@@ -127,6 +128,7 @@ class SelectIngredient extends Component {
           name="ingredient"
           getSelectedValue={this.getSelectedValue}
           placeholder="Type ingredient name to select ingredient.."
+          createLabel="+ Add Ingredient"
         />
       );
     }

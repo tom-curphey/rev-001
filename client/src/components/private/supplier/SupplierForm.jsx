@@ -49,6 +49,8 @@ const SupplierForm = ({
     selectedValue.value = _id;
   }
 
+  // console.log('profilePacketCost', profilePacketCost);
+
   const iPacketCost =
     profilePacketCost === null
       ? roundNumberAsString(packetCost)
@@ -69,6 +71,7 @@ const SupplierForm = ({
           options={options}
           getSelectedValue={getSelectedSupplier}
           error={errors.type && errors.type}
+          createLabel="+ Add Supplier"
         />
         <TextInputHorizontal
           label="Supplier Packet Cost"

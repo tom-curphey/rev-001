@@ -49,7 +49,19 @@ export const getSelectedSupplier = (
 
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
-    console.log('NEW SUPPLIER');
+    console.log('NEW SUPPLIER', selectedSupplier);
+    const updatedSelectedSupplier = {
+      supplier: {
+        _id: '',
+        displayName: selectedSupplier.value
+      },
+      packetCost: '',
+      packetGrams: '',
+      profilePacketCost: null,
+      profilePacketGrams: null,
+      preferred: false
+    };
+    dispatch(setSelectedSupplier(updatedSelectedSupplier));
   } else {
     // Find selected supplier in supplier list
     const sSupplier = suppliers.filter(ss => {
@@ -67,6 +79,7 @@ export const getSelectedSupplier = (
         // Check if selected supplier was found in the selected ingredient supplier list
         if (!isEmpty(siSupplier)) {
           // Create new object combining the selected suppliers
+
           const updatedSelectedSupplier = {
             ...siSupplier[0],
             supplier: {
@@ -81,9 +94,25 @@ export const getSelectedSupplier = (
           };
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
-          console.log(
-            'Selected ingredient does not have the selected supplier'
-          );
+          const newSelectedSupplier = {
+            packetCost: '',
+            packetGrams: '',
+            preferred: false,
+            profilePacketCost: '',
+            profilePacketGrams: '',
+            // profileSaveCount: 0,
+            supplier: {
+              _id: sSupplier[0]._id,
+              displayName: sSupplier[0].displayName,
+              address: sSupplier[0].address,
+              confirmedDetails: sSupplier[0].confirmedDetails,
+              email: sSupplier[0].email,
+              phone: sSupplier[0].phone,
+              urlName: sSupplier[0].urlName,
+              website: sSupplier[0].website
+            }
+          };
+          dispatch(setSelectedSupplier(newSelectedSupplier));
         }
       } else {
         console.log('Selected ingredient has no suppliers');
@@ -167,8 +196,27 @@ export const addOrEditSupplier = supplierData => async dispatch => {
     const body = JSON.stringify(supplierData);
     const res = await axios.post('/api/supplier', body, config);
     console.log('res', res);
+
+    const formattedSupplier = {
+      supplier: {
+        _id: res.data._id,
+        displayName: res.data.displayName,
+        address: res.data.address,
+        confirmedDetails: res.data.confirmedDetails,
+        email: res.data.email,
+        phone: res.data.phone,
+        urlName: res.data.urlName,
+        website: res.data.website
+      },
+      packetCost: '',
+      packetGrams: '',
+      profilePacketCost: null,
+      profilePacketGrams: null,
+      preferred: false
+    };
+
     dispatch(loadSuppliers());
-    dispatch(setSelectedSupplier(res.data));
+    dispatch(setSelectedSupplier(formattedSupplier));
     dispatch(setAlert('Supplier Saved', 'success'));
   } catch (err) {
     dispatch(displayErrors(err));
