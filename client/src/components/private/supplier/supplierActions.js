@@ -45,9 +45,6 @@ export const getSelectedSupplier = (
   selectedIngredient,
   isStatePreferredSupplier
 ) => async dispatch => {
-  // console.log('selectedSupplier', selectedSupplier);
-  // console.log('supplier', suppliers);
-
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
     console.log('NEW SUPPLIER', selectedSupplier);
@@ -93,11 +90,6 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
-
-          // console.log(
-          //   'updatedSelectedSupplier - >',
-          //   updatedSelectedSupplier
-          // );
 
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
@@ -192,8 +184,6 @@ export const removePreferredSupplier = () => async dispatch => {
 };
 
 export const addOrEditSupplier = supplierData => async dispatch => {
-  console.log('SI', supplierData);
-
   try {
     // dispatch(setVenueLoading());
     const config = {
@@ -203,8 +193,6 @@ export const addOrEditSupplier = supplierData => async dispatch => {
     };
     const body = JSON.stringify(supplierData);
     const res = await axios.post('/api/supplier', body, config);
-    console.log('res', res);
-
     const formattedSupplier = {
       supplier: {
         _id: res.data._id,

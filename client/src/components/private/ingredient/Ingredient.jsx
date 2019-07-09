@@ -48,7 +48,6 @@ export class Ingredient extends Component {
   };
 
   componentDidMount() {
-    // console.log('I RAN');
     this.props.loadIngredients();
     this.props.loadSuppliers();
 
@@ -66,7 +65,6 @@ export class Ingredient extends Component {
       });
 
       if (!isEmpty(slSupplier)) {
-        console.log('slSupplier', slSupplier);
         const usiSupplier = {
           ...supplier.selectedSupplier,
           supplier: {
@@ -181,12 +179,6 @@ export class Ingredient extends Component {
             supplier.preferredIngredientSupplierId ===
               supplier.selectedSupplier.supplier._id
           ) {
-            console.log('I called it', supplier.selectedSupplier);
-            console.log('I called it', this.state.selectedIngredient);
-            console.log(
-              'I called it',
-              supplier.preferredIngredientSupplierId
-            );
             this.props.setPreferredSupplier(
               supplier.selectedSupplier.supplier._id
             );
@@ -216,10 +208,6 @@ export class Ingredient extends Component {
         supplier.preferredIngredientSupplierId &&
       supplier.selectedSupplier !== null
     ) {
-      console.log(
-        'Update local selected ingredient state',
-        supplier.selectedSupplier
-      );
       const updateSelectedIngredientSuppliersState = selectedIngredient.suppliers.map(
         sis => {
           if (
@@ -239,8 +227,21 @@ export class Ingredient extends Component {
         }
       );
 
+      let correctIngredient;
+
+      if (
+        this.props.ingredient.selectedIngredient !==
+        this.state.selectedIngredient
+      ) {
+        correctIngredient = {
+          ...this.props.ingredient.selectedIngredient
+        };
+      } else {
+        correctIngredient = { ...this.state.selectedIngredient };
+      }
+
       const usIngredient = {
-        ...selectedIngredient,
+        ...correctIngredient,
         suppliers: updateSelectedIngredientSuppliersState
       };
 
@@ -256,6 +257,8 @@ export class Ingredient extends Component {
       } else {
         usSupplier.preferred = false;
       }
+
+      console.log('Right here', usIngredient);
 
       this.setState({
         selectedIngredient: usIngredient,
@@ -319,7 +322,6 @@ export class Ingredient extends Component {
   };
 
   getSelectedSupplier = selectedValue => {
-    // console.log('selectedValue', this.props.supplier);
     const statePreferredSupplier = this.state.selectedIngredient.suppliers.filter(
       sis => {
         return sis.preferred === true;
@@ -355,8 +357,6 @@ export class Ingredient extends Component {
       }
     } = this.state;
 
-    // console.log('RTS: selectedSupplier', this.state.selectedSupplier);
-
     if (
       (!isEmpty(cup) || !isEmpty(whole)) &&
       !isEmpty(supplier._id) &&
@@ -370,7 +370,6 @@ export class Ingredient extends Component {
   };
 
   handleSubmit = () => {
-    // console.log('STATE:', this.state);
     const {
       selectedIngredient,
       selectedSupplier,
@@ -415,8 +414,6 @@ export class Ingredient extends Component {
       supplierData.packetCost = profilePacketCost
         ? profilePacketCost
         : packetCost;
-      // console.log('supplierData', supplierData);
-
       this.props.addOrEditIngredientAndSupplier(
         ingredientData,
         supplierData
@@ -431,9 +428,6 @@ export class Ingredient extends Component {
       selectedSupplier,
       readyToSave
     } = this.state;
-
-    // console.log('selectedSupplier------>', selectedSupplier);
-    // console.log('selectedSupplier------>', this.props.supplier);
 
     const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 

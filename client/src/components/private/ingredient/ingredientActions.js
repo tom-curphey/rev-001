@@ -18,20 +18,13 @@ import { setAlert } from '../../layout/alert/alertActions';
 import { isEmpty } from '../../../utils/utils';
 
 export const loadIngredients = () => async dispatch => {
-  // console.log('TRIGGER');
-
   try {
     const res = await axios.get('/api/ingredient/all');
-
-    // console.log('Loaded res.data', res.data[0]);
-
     dispatch({
       type: INGREDIENTS_LOADED,
       payload: res.data
     });
   } catch (err) {
-    // console.log('ERR', err.response);
-
     dispatch({
       type: INGREDIENTS_ERROR
     });
@@ -221,7 +214,7 @@ export const addOrEditIngredientAndSupplier = (
     const body = JSON.stringify(data);
     const res = await axios.post('/api/ingredient', body, config);
 
-    // console.log('res', res.data);
+    console.log('****** res', res.data);
 
     dispatch({ type: PROFILE_LOADED, payload: res.data.profile });
     dispatch(loadIngredients());
@@ -240,7 +233,6 @@ export const addOrEditIngredientAndSupplier = (
 };
 
 export const removeSelectedIngredient = () => async dispatch => {
-  console.log('Overhere - 2');
   dispatch({
     type: REMOVE_SELECTED_INGREDIENT
   });

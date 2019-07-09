@@ -191,13 +191,9 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
       pisi++
     ) {
       const piSupplier = profile.ingredients[iIndex].suppliers[pisi];
-      console.log('SUPPLIER DATA', supplierData);
-      console.log('piSuppiler', piSupplier);
 
       // If there is a supplier that was preferred.. Set it to false
       if (supplierData.preferred) {
-        piSupplier.preferred = false;
-      } else {
         piSupplier.preferred = false;
       }
       if (piSupplier.supplier.toString() === supplierID.toString()) {
