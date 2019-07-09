@@ -105,14 +105,92 @@ export class Ingredient extends Component {
     ) {
       // Check if props selected supplier !== null
       if (supplier.selectedSupplier !== null) {
-        this.setState({
-          selectedSupplier: supplier.selectedSupplier
-        });
-        // If props selected supplier is equal to preferred run setPreferredSupplier action
-        if (supplier.selectedSupplier.preferred) {
-          this.props.setPreferredSupplier(
-            supplier.selectedSupplier.supplier._id
+        console.log('You caught me', supplier.selectedSupplier);
+
+        if (!isEmpty(selectedIngredient.suppliers)) {
+          const statePreferredSupplier = this.state.selectedIngredient.suppliers.filter(
+            sis => {
+              return sis.preferred === true;
+            }
           );
+
+          // Check is state has a preferred supplier
+          if (!isEmpty(statePreferredSupplier)) {
+            if (!isEmpty(supplier.preferredIngredientSupplierId)) {
+              if (
+                supplier.selectedSupplier.supplier._id ===
+                supplier.preferredIngredientSupplierId
+              ) {
+                console.log('YEP - IDs match');
+                const updatedSelectedSupplier = {
+                  ...supplier.selectedSupplier,
+                  preferred: true
+                };
+                this.setState({
+                  selectedSupplier: updatedSelectedSupplier
+                });
+              } else {
+                console.log('Got Past');
+                if (supplier.selectedSupplier.preferred) {
+                  console.log('preferred');
+                  if (
+                    supplier.selectedSupplier.supplier._id !==
+                    supplier.preferredIngredientSupplierId
+                  ) {
+                    const updatedSelectedSupplier = {
+                      ...supplier.selectedSupplier,
+                      preferred: false
+                    };
+                    this.setState({
+                      selectedSupplier: updatedSelectedSupplier
+                    });
+                  }
+                } else {
+                  console.log(
+                    'Props selected supplier is not preferred'
+                  );
+                  this.setState({
+                    selectedSupplier: supplier.selectedSupplier
+                  });
+                }
+              }
+            } else {
+              console.log('Just trying to run here');
+              this.setState({
+                selectedSupplier: supplier.selectedSupplier
+              });
+            }
+          } else {
+            console.log('state had no preferred supplier');
+            this.setState({
+              selectedSupplier: supplier.selectedSupplier
+            });
+          }
+        } else {
+          console.log('You slipt past me', supplier.selectedSupplier);
+          this.setState({
+            selectedSupplier: supplier.selectedSupplier
+          });
+        }
+
+        // If props selected supplier is equal to preferred run setPreferredSupplier action
+
+        if (supplier.selectedSupplier.preferred) {
+          if (
+            isEmpty(supplier.preferredIngredientSupplierId) ||
+            supplier.preferredIngredientSupplierId ===
+              supplier.selectedSupplier.supplier._id
+          ) {
+            console.log('I called it', supplier.selectedSupplier);
+            console.log('I called it', this.state.selectedIngredient);
+            console.log(
+              'I called it',
+              supplier.preferredIngredientSupplierId
+            );
+            this.props.setPreferredSupplier(
+              supplier.selectedSupplier.supplier._id
+            );
+          }
         }
       } else {
         console.log('I TRIED ---', supplier.selectedSupplier);
@@ -179,9 +257,6 @@ export class Ingredient extends Component {
         usSupplier.preferred = false;
       }
 
-      console.log('I RAN HERE', usSupplier);
-      console.log('I RAN HERERE', usIngredient);
-
       this.setState({
         selectedIngredient: usIngredient,
         selectedSupplier: usSupplier
@@ -245,11 +320,27 @@ export class Ingredient extends Component {
 
   getSelectedSupplier = selectedValue => {
     // console.log('selectedValue', this.props.supplier);
-    this.props.getSelectedSupplier(
-      selectedValue,
-      this.props.supplier.suppliers,
-      this.props.ingredient.selectedIngredient
+    const statePreferredSupplier = this.state.selectedIngredient.suppliers.filter(
+      sis => {
+        return sis.preferred === true;
+      }
     );
+
+    // If the state has a preferred supplier do not chnage the preferred supplier
+    if (!isEmpty(statePreferredSupplier)) {
+      this.props.getSelectedSupplier(
+        selectedValue,
+        this.props.supplier.suppliers,
+        this.props.ingredient.selectedIngredient,
+        true
+      );
+    } else {
+      this.props.getSelectedSupplier(
+        selectedValue,
+        this.props.supplier.suppliers,
+        this.props.ingredient.selectedIngredient
+      );
+    }
   };
 
   checkReadyToSave = () => {

@@ -10,7 +10,8 @@ import axios from 'axios';
 import {
   setSelectedSupplier,
   removeSelectedSupplier,
-  removePreferredSupplier
+  removePreferredSupplier,
+  setPreferredSupplier
 } from '../supplier/supplierActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
@@ -158,6 +159,9 @@ export const getSelectedIngredient = (
             // Check if there is a preferred supplier
             if (!isEmpty(preferredSupplier)) {
               dispatch(setSelectedSupplier(preferredSupplier));
+              // dispatch(
+              //   setPreferredSupplier(preferredSupplier.supplier._id)
+              // );
             }
           }
         } else {

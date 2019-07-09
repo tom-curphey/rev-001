@@ -7,6 +7,7 @@ import {
   getSelectedIngredient,
   removeSelectedIngredient
 } from './ingredientActions';
+import { removePreferredSupplier } from '../supplier/supplierActions';
 import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 class SelectIngredient extends Component {
@@ -87,9 +88,8 @@ class SelectIngredient extends Component {
         );
       }
     }
-    console.log('selectedIngredient[0]', selectedIngredient[0]);
-
     if (!isEmpty(selectedIngredient)) {
+      this.props.removePreferredSupplier();
       this.props.getSelectedIngredient(
         selectedIngredient[0],
         this.props.profile.profile
@@ -143,13 +143,15 @@ SelectIngredient.propTypes = {
   profile: PropTypes.object.isRequired,
   setSelectedIngredient: PropTypes.func.isRequired,
   getSelectedIngredient: PropTypes.func.isRequired,
-  removeSelectedIngredient: PropTypes.func.isRequired
+  removeSelectedIngredient: PropTypes.func.isRequired,
+  removePreferredSupplier: PropTypes.func.isRequired
 };
 
 const actions = {
   setSelectedIngredient,
   getSelectedIngredient,
-  removeSelectedIngredient
+  removeSelectedIngredient,
+  removePreferredSupplier
 };
 
 const mapState = state => ({

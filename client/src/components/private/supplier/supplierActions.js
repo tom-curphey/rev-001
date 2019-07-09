@@ -42,7 +42,8 @@ export const setSelectedSupplier = selectedSupplier => async dispatch => {
 export const getSelectedSupplier = (
   selectedSupplier,
   suppliers,
-  selectedIngredient
+  selectedIngredient,
+  isStatePreferredSupplier
 ) => async dispatch => {
   // console.log('selectedSupplier', selectedSupplier);
   // console.log('supplier', suppliers);
@@ -92,8 +93,15 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
+
+          // console.log(
+          //   'updatedSelectedSupplier - >',
+          //   updatedSelectedSupplier
+          // );
+
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
+          // Create new object combining the selected supplier from the suppliers list and the extra data as blank for formatting
           const newSelectedSupplier = {
             packetCost: '',
             packetGrams: '',
