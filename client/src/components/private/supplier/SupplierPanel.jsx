@@ -11,13 +11,10 @@ import {
 const SupplierPanel = ({
   selectedIngredient,
   selectedSupplier,
-  supplier: { preferredIngredientSupplierId }
-  // changeSelectedIngredientPreferredSupplier,
-  // checkSelectedIngredientPreferredSupplier
+  supplier: { preferredIngredientSupplierId },
+  handleSelectSupplier,
+  addNewSupplierButtonClicked
 }) => {
-  // console.log('selectedSupplier', selectedSupplier);
-  // console.log('selectedIngredient', selectedIngredient);
-
   let supplierListHeader;
   let supplierList;
 
@@ -37,12 +34,19 @@ const SupplierPanel = ({
     const supplierRow = selectedIngredient.suppliers.map(si => {
       if (selectedSupplier.supplier._id === si.supplier._id) {
         return (
-          <li key={selectedSupplier.supplier._id}>
+          <li
+            key={selectedSupplier.supplier._id}
+            onClick={handleSelectSupplier(
+              selectedSupplier.supplier._id,
+              selectedSupplier.supplier.displayName
+            )}
+            className="selectedSupplier"
+          >
             <div>
               {preferredIngredientSupplierId === si.supplier._id && (
                 <img
                   src={heart}
-                  alt="Man standing at a bar as an icon to complete venue setup"
+                  alt="Heart to indicate preferred supplier"
                 />
               )}
               {selectedSupplier.supplier.displayName}
@@ -66,12 +70,18 @@ const SupplierPanel = ({
         );
       } else {
         return (
-          <li key={si.supplier._id}>
+          <li
+            key={si.supplier._id}
+            onClick={handleSelectSupplier(
+              si.supplier._id,
+              si.supplier.displayName
+            )}
+          >
             <div>
               {preferredIngredientSupplierId === si.supplier._id && (
                 <img
                   src={heart}
-                  alt="Man standing at a bar as an icon to complete venue setup"
+                  alt="Heart to indicate the preferred supplier"
                 />
               )}
               {si.supplier.displayName}
@@ -130,7 +140,7 @@ const SupplierPanel = ({
           alt="Man standing at a bar as an icon to complete venue setup"
         />
 
-        <div className="button">
+        <div className="button" onClick={addNewSupplierButtonClicked}>
           <nav
           // className={readyToSaveClass}
           // onClick={this.handleSubmit}

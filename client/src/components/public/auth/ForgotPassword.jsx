@@ -118,6 +118,7 @@ class ForgotPassword extends Component {
                   (errors.email && errors.email) ||
                   (errors.signin && errors.signin)
                 }
+                autoFocus={true}
               />
               <Link to="/contact-us">Forgot Account Email?</Link>
               <button>Send Password Reset Link</button>

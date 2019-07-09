@@ -322,13 +322,15 @@ export class Ingredient extends Component {
   };
 
   getSelectedSupplier = selectedValue => {
+    console.log('selected v', selectedValue);
+
     const statePreferredSupplier = this.state.selectedIngredient.suppliers.filter(
       sis => {
         return sis.preferred === true;
       }
     );
 
-    // If the state has a preferred supplier do not chnage the preferred supplier
+    // If the state has a preferred supplier do not change the preferred supplier
     if (!isEmpty(statePreferredSupplier)) {
       this.props.getSelectedSupplier(
         selectedValue,
@@ -343,6 +345,23 @@ export class Ingredient extends Component {
         this.props.ingredient.selectedIngredient
       );
     }
+  };
+
+  handleSelectSupplier = (supplierID, displayName) => e => {
+    const selectedValue = {
+      label: displayName,
+      value: supplierID
+    };
+    this.getSelectedSupplier(selectedValue);
+  };
+
+  addNewSupplierButtonClicked = () => {
+    const selectedValue = {
+      label: '',
+      value: '',
+      __isNew__: true
+    };
+    this.getSelectedSupplier(selectedValue);
   };
 
   checkReadyToSave = () => {
@@ -479,6 +498,10 @@ export class Ingredient extends Component {
             <SupplierPanel
               selectedIngredient={selectedIngredient}
               selectedSupplier={selectedSupplier}
+              handleSelectSupplier={this.handleSelectSupplier}
+              addNewSupplierButtonClicked={
+                this.addNewSupplierButtonClicked
+              }
             />
           </Fragment>
         );

@@ -140,6 +140,7 @@ class OnboardingVenue extends Component {
                   name="displayName"
                   onChange={this.onChange}
                   error={errors.displayName && errors.displayName}
+                  autoFocus={true}
                 />
                 <TextInput
                   placeholder="Venue email address"

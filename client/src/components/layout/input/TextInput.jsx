@@ -12,7 +12,8 @@ const TextInput = ({
   onChange,
   disabled,
   id,
-  style
+  style,
+  autoFocus
   // labelClass
 }) => {
   return (
@@ -27,6 +28,7 @@ const TextInput = ({
         disabled={disabled}
         id={id}
         style={style}
+        autoFocus={autoFocus && autoFocus}
       />
       {info && <small>{info}</small>}
       {error && <span className="errorMsg">{error}</span>}

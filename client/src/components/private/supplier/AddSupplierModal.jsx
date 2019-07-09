@@ -140,6 +140,7 @@ class AddSupplierModal extends Component {
                 name="displayName"
                 onChange={this.handleChange}
                 error={errors.displayName && errors.displayName}
+                autoFocus={true}
               />
               <TextInputHorizontal
                 label="Email"

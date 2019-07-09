@@ -101,6 +101,7 @@ class Register extends Component {
                   name="firstName"
                   onChange={this.onChange}
                   error={errors.firstName && errors.firstName}
+                  autoFocus={true}
                 />
                 <TextInput
                   placeholder="Email"

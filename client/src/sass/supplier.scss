@@ -56,6 +56,15 @@ section.supplierPanel {
         padding: 5px 10px;
         color: $cBlack;
         border-bottom: 1px solid $cFaded;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $cFadedLight;
+        }
+
+        &.selectedSupplier {
+          background-color: $cFaded;
+        }
 
         &:last-child {
           border-bottom: none;
