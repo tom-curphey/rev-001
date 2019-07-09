@@ -5,7 +5,8 @@ import heart from '../../../images/heart.svg';
 import {
   roundNumber,
   convert100gInto1Kg,
-  compareSupplierPacketCostToProfilePacketCost
+  compareSupplierPacketCostToProfilePacketCost,
+  isEmpty
 } from '../../../utils/utils';
 
 const SupplierPanel = ({
@@ -20,6 +21,14 @@ const SupplierPanel = ({
 
   if (selectedIngredient.suppliers.length !== 0) {
     // console.log('Ingredient has suppliers');
+
+    // Find the preferred supplier
+    const pSupplier = selectedIngredient.suppliers.filter(si => {
+      return preferredIngredientSupplierId === si.supplier._id;
+    });
+
+    console.log('pSupplier', pSupplier);
+
     supplierListHeader = (
       <ul>
         <li>
@@ -27,6 +36,32 @@ const SupplierPanel = ({
           <div>100g</div>
           <div>1 Kg</div>
           <div>You Pay</div>
+        </li>
+        <li>
+          <div>Industry Average Price</div>
+          <div>
+            {selectedIngredient.packetCost
+              ? roundNumber(selectedIngredient.packetCost)
+              : '-'}
+          </div>
+          <div>
+            {selectedIngredient.packetCost
+              ? roundNumber(
+                  convert100gInto1Kg(selectedIngredient.packetCost)
+                )
+              : '-'}
+          </div>
+          <div
+            className={compareSupplierPacketCostToProfilePacketCost(
+              selectedIngredient.packetCost,
+              pSupplier[0].profilePacketCost,
+              pSupplier[0].profilePacketGrams
+            )}
+          >
+            {!isEmpty(pSupplier)
+              ? roundNumber(pSupplier[0].profilePacketCost)
+              : '-'}
+          </div>
         </li>
       </ul>
     );
@@ -126,6 +161,8 @@ const SupplierPanel = ({
       </div>
     );
   }
+
+  console.log('SI ', selectedIngredient);
 
   return (
     <section className="supplierPanel">

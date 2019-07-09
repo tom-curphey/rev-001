@@ -14,7 +14,7 @@ const IngredientForm = ({
   return (
     <section className="ingredientForm">
       <Fragment>
-        <h2>Add Ingredient Unit Weight Metric *</h2>
+        <h2>Add New Ingredient Metric Weight</h2>
         <p>
           For every new ingredient we need to know it’s relevant unit
           metric weight

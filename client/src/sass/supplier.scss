@@ -31,10 +31,22 @@ section.supplierPanel {
         font-weight: 400;
         padding: 10px 10px;
         border-top: 1px solid $cFadedDark;
-        border-bottom: 1px solid $cFaded;
 
         div:last-child {
           text-align: right;
+        }
+
+        &:first-child {
+          color: $cBlack;
+        }
+
+        &:last-child {
+          border-bottom: 1px solid $cFaded;
+        }
+
+        div.betterPrice {
+          color: $cGreen;
+          font-weight: bold;
         }
       }
     }

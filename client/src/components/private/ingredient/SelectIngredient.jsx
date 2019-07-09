@@ -7,7 +7,10 @@ import {
   getSelectedIngredient,
   removeSelectedIngredient
 } from './ingredientActions';
-import { removePreferredSupplier } from '../supplier/supplierActions';
+import {
+  removePreferredSupplier,
+  removeSelectedSupplier
+} from '../supplier/supplierActions';
 import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 class SelectIngredient extends Component {
@@ -67,6 +70,7 @@ class SelectIngredient extends Component {
     let selectedIngredient = [];
     if (selectedValue.__isNew__) {
       this.props.removeSelectedIngredient();
+      this.props.removeSelectedSupplier();
       // addIngredient = true;
       const newIngredient = {};
       newIngredient.metrics = {};
@@ -144,14 +148,16 @@ SelectIngredient.propTypes = {
   setSelectedIngredient: PropTypes.func.isRequired,
   getSelectedIngredient: PropTypes.func.isRequired,
   removeSelectedIngredient: PropTypes.func.isRequired,
-  removePreferredSupplier: PropTypes.func.isRequired
+  removePreferredSupplier: PropTypes.func.isRequired,
+  removeSelectedSupplier: PropTypes.func.isRequired
 };
 
 const actions = {
   setSelectedIngredient,
   getSelectedIngredient,
   removeSelectedIngredient,
-  removePreferredSupplier
+  removePreferredSupplier,
+  removeSelectedSupplier
 };
 
 const mapState = state => ({

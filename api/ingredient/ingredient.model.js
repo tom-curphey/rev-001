@@ -22,7 +22,7 @@ const IngredientSchema = new Schema({
   },
   packetGrams: {
     type: Number,
-    default: 0
+    default: 100
   },
   confirmedDetails: {
     type: Boolean,

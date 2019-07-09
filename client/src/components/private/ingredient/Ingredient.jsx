@@ -233,9 +233,15 @@ export class Ingredient extends Component {
         this.props.ingredient.selectedIngredient !==
         this.state.selectedIngredient
       ) {
-        correctIngredient = {
-          ...this.props.ingredient.selectedIngredient
-        };
+        if (isEmpty(selectedIngredient._id)) {
+          console.log('CHECK MATE', selectedIngredient);
+
+          correctIngredient = { ...selectedIngredient };
+        } else {
+          correctIngredient = {
+            ...this.props.ingredient.selectedIngredient
+          };
+        }
       } else {
         correctIngredient = { ...this.state.selectedIngredient };
       }
@@ -245,9 +251,17 @@ export class Ingredient extends Component {
         suppliers: updateSelectedIngredientSuppliersState
       };
 
-      const usSupplier = {
-        ...supplier.selectedSupplier
-      };
+      let usSupplier;
+
+      if (!isEmpty(selectedSupplier.supplier._id)) {
+        usSupplier = {
+          ...selectedSupplier
+        };
+      } else {
+        usSupplier = {
+          ...supplier.selectedSupplier
+        };
+      }
 
       if (
         supplier.preferredIngredientSupplierId ===
@@ -464,15 +478,6 @@ export class Ingredient extends Component {
         ingredientForm = (
           <Fragment>
             <SelectIngredient />
-            <SupplierForm
-              selectedSupplier={selectedSupplier}
-              getSelectedSupplier={this.getSelectedSupplier}
-              handleSupplierChange={this.handleSupplierChange}
-              handleSupplierNumberChange={
-                this.handleSupplierNumberChange
-              }
-              handleToggleChange={this.handleToggleChange}
-            />
             {isEmpty(selectedIngredient._id) && (
               <IngredientForm
                 selectedIngredient={selectedIngredient}
@@ -482,6 +487,16 @@ export class Ingredient extends Component {
                 readyToSave={readyToSave}
               />
             )}
+            <SupplierForm
+              selectedSupplier={selectedSupplier}
+              getSelectedSupplier={this.getSelectedSupplier}
+              handleSupplierChange={this.handleSupplierChange}
+              handleSupplierNumberChange={
+                this.handleSupplierNumberChange
+              }
+              handleToggleChange={this.handleToggleChange}
+            />
+
             <div className="button">
               <nav
                 className={readyToSaveClass}

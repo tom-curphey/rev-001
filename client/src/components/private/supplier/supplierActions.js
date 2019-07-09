@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import { isEmpty } from '../../../utils/utils';
+import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 export const loadSuppliers = () => async dispatch => {
   try {
@@ -51,7 +51,7 @@ export const getSelectedSupplier = (
     const updatedSelectedSupplier = {
       supplier: {
         _id: '',
-        displayName: selectedSupplier.value
+        displayName: capitalizeFirstLetter(selectedSupplier.value)
       },
       packetCost: '',
       packetGrams: '',
