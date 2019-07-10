@@ -14,6 +14,7 @@ import Recipes from './components/private/recipe/Recipes';
 import Ingredient from './components/private/ingredient/Ingredient';
 import AccountSettings from './components/private/profile/AccountSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
+import NewFeature from './components/public/NewFeature';
 import Test from './utils/Test';
 
 // Redux
@@ -70,11 +71,21 @@ const App = () => {
             path="/onboarding"
             component={OnboardingVenue}
           />
+          <PrivateRoute
+            exact
+            path="/menu-items"
+            component={NewFeature}
+          />
           <PrivateRoute exact path="/recipes" component={Recipes} />
           <PrivateRoute
             exact
             path="/ingredients"
             component={Ingredient}
+          />
+          <PrivateRoute
+            exact
+            path="/packaging"
+            component={NewFeature}
           />
           <PrivateRoute
             exact
@@ -88,8 +99,18 @@ const App = () => {
           />
           <PrivateRoute
             exact
-            path="/account/:account_section/:venue_action/:venue_name"
-            component={AccountSettings}
+            path="/menu-items"
+            component={NewFeature}
+          />
+          <PrivateRoute
+            exact
+            path="/integrations"
+            component={NewFeature}
+          />
+          <PrivateRoute
+            exact
+            path="/performance"
+            component={NewFeature}
           />
         </Switch>
       </Router>

@@ -37,7 +37,6 @@ class Signin extends Component {
   }
 
   componentWillUnmount() {
-    console.log('signin Unmounted');
     if (this.props.errors) {
       this.props.removeErrors();
     }

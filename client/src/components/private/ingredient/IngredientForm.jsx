@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SupplierForm from '../supplier/SupplierForm';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
-// import Spinner from '../../layout/Spinner';
-import { isEmpty } from '../../../utils/utils';
 
 const IngredientForm = ({
   errors,

@@ -10,8 +10,7 @@ import axios from 'axios';
 import {
   setSelectedSupplier,
   removeSelectedSupplier,
-  removePreferredSupplier,
-  setPreferredSupplier
+  removePreferredSupplier
 } from '../supplier/supplierActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';

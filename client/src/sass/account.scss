@@ -31,15 +31,37 @@ section.venues {
     grid-gap: 5px;
     cursor: pointer;
 
+    &:hover {
+      div.icon {
+        img {
+          opacity: 1;
+        }
+      }
+    }
+
     div {
       display: flex;
       align-items: center;
+
+      img {
+        width: 18px;
+        opacity: 0.5;
+      }
     }
 
     div:nth-child(2) {
       padding-right: 30px;
       color: $cOrangeDark;
       font-weight: 400;
+
+      &:hover {
+        text-decoration: underline;
+        div {
+          img {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 

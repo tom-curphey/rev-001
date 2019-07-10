@@ -1,0 +1,23 @@
+@import './colours.scss';
+
+section.newFeature {
+  padding: 80px 0px 0px 20px;
+  width: 100%;
+
+  h1,
+  h3 {
+    text-align: center;
+  }
+
+  h3 {
+    color: $cGrey;
+    font-weight: 400;
+    margin: 10px 0px 60px;
+  }
+
+  p {
+    margin-bottom: 20px;
+    color: $cBlack;
+    line-height: 25px;
+  }
+}

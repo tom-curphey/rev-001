@@ -50,7 +50,10 @@ class Alert extends Component {
 
     return (
       <div className={`alertBox ${extraClasses}`}>
-        <div className={`alert alert-${type}`}>{message}</div>
+        <div className="alert">
+          <div className={`alert-${type}`} />
+          <div className="alertMessage">{message}</div>
+        </div>
       </div>
     );
   }

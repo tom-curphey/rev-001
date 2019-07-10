@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import trolley from '../../../images/trolley.svg';
-import heart from '../../../images/heart.svg';
+import heartIcon from '../../../images/heart.svg';
 import {
   roundNumber,
   convert100gInto1Kg,
@@ -26,8 +26,6 @@ const SupplierPanel = ({
     const pSupplier = selectedIngredient.suppliers.filter(si => {
       return preferredIngredientSupplierId === si.supplier._id;
     });
-
-    console.log('pSupplier', pSupplier);
 
     supplierListHeader = (
       <ul>
@@ -80,7 +78,7 @@ const SupplierPanel = ({
             <div>
               {preferredIngredientSupplierId === si.supplier._id && (
                 <img
-                  src={heart}
+                  src={heartIcon}
                   alt="Heart to indicate preferred supplier"
                 />
               )}
@@ -115,7 +113,7 @@ const SupplierPanel = ({
             <div>
               {preferredIngredientSupplierId === si.supplier._id && (
                 <img
-                  src={heart}
+                  src={heartIcon}
                   alt="Heart to indicate the preferred supplier"
                 />
               )}

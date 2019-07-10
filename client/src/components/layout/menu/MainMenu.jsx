@@ -8,6 +8,10 @@ import Alert from '../../layout/alert/Alert';
 import MainVenueMenu from './MainVenueMenu';
 import icon from '../../../images/recipeRevenueIcon.png';
 import Spinner from '../Spinner';
+import chefhat from '../../../images/chef.svg';
+import apple from '../../../images/apple.svg';
+import packaging from '../../../images/packaging.svg';
+import menuIcon from '../../../images/menuIcon.svg';
 
 const MainMenu = ({
   auth: { isAuthenticated, loading },
@@ -41,27 +45,54 @@ const MainMenu = ({
         <div>></div>
       </nav>
       <nav className="menu">
+        <Link className="menuItem" to="/menu-items">
+          <div>
+            <img
+              src={menuIcon}
+              alt="Menu icon for menu items link"
+              className="largeIcon"
+            />
+          </div>
+          <span>Menu Items</span>
+        </Link>
         <Link className="menuItem" to="/recipes">
-          <i />
+          <div>
+            <img
+              src={chefhat}
+              alt="Heart to indicate the preferred supplier"
+            />
+          </div>
           <span>Recipes</span>
         </Link>
         <Link className="menuItem" to="/ingredients">
-          <i />
+          <div>
+            <img
+              src={apple}
+              alt="Heart to indicate the preferred supplier"
+            />
+          </div>
           <span>Ingredients</span>
         </Link>
-        <Link className="menuItem" to="#!">
-          <i />
+        <Link className="menuItem" to="/packaging">
+          <div>
+            <img
+              src={packaging}
+              alt="Heart to indicate the preferred supplier"
+            />
+          </div>
           <span>Packaging</span>
         </Link>
       </nav>
       <nav className="subMenu">
+        <Link className="menuItem" to="/performance">
+          Venue Performance
+        </Link>
         <Link className="menuItem" to="/account/profile">
           Account Settings
         </Link>
-        <Link className="menuItem" to="#!">
-          Ask For Help
+        <Link className="menuItem" to="/integrations">
+          Integrations
         </Link>
-        <span onClick={handleLogout}>Logout</span>
       </nav>
       <Alert />
     </Fragment>
@@ -103,6 +134,9 @@ const MainMenu = ({
       {!loading && (
         <Fragment>
           {isAuthenticated ? userLinks : publicLinks}
+          <div className="helpButton">
+            <Link to="/need-help">Ask For Help</Link>
+          </div>
         </Fragment>
       )}
     </section>

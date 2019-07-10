@@ -6,23 +6,23 @@ import Spinner from '../../layout/Spinner';
 import {
   loadIngredients,
   setSelectedIngredient,
-  addOrEditIngredientAndSupplier
+  addOrEditIngredientAndSupplier,
+  removeSelectedIngredient
 } from './ingredientActions';
 import {
   loadSuppliers,
   setPreferredSupplier,
-  setSelectedSupplier,
-  removeSelectedSupplier,
   updateSelectedSupplierState,
   getSelectedSupplier,
-  updatePreferredSupplier
+  updatePreferredSupplier,
+  removeSelectedSupplier,
+  removePreferredSupplier
 } from '../supplier/supplierActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from './IngredientForm';
 import SupplierPanel from '../supplier/SupplierPanel';
 import { isEmpty } from '../../../utils/utils';
-import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 
 export class Ingredient extends Component {
   state = {
@@ -286,6 +286,15 @@ export class Ingredient extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.props.errors) {
+      this.props.removeErrors();
+    }
+    this.props.removeSelectedIngredient();
+    this.props.removeSelectedSupplier();
+    this.props.removePreferredSupplier();
+  }
+
   handleIngredientNumberChange = e => {
     e.persist();
     let value = e.target.value;
@@ -540,6 +549,23 @@ export class Ingredient extends Component {
   }
 }
 
+Ingredient.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  supplier: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+  loadIngredients: PropTypes.func.isRequired,
+  loadSuppliers: PropTypes.func.isRequired,
+  setSelectedIngredient: PropTypes.func.isRequired,
+  addOrEditIngredientAndSupplier: PropTypes.func.isRequired,
+  updateSelectedSupplierState: PropTypes.func.isRequired,
+  getSelectedSupplier: PropTypes.func.isRequired,
+  setPreferredSupplier: PropTypes.func.isRequired,
+  updatePreferredSupplier: PropTypes.func.isRequired,
+  removeSelectedIngredient: PropTypes.func.isRequired,
+  removeSelectedSupplier: PropTypes.func.isRequired,
+  removePreferredSupplier: PropTypes.func.isRequired
+};
+
 const actions = {
   loadIngredients,
   loadSuppliers,
@@ -548,7 +574,10 @@ const actions = {
   updateSelectedSupplierState,
   getSelectedSupplier,
   setPreferredSupplier,
-  updatePreferredSupplier
+  updatePreferredSupplier,
+  removeSelectedIngredient,
+  removeSelectedSupplier,
+  removePreferredSupplier
 };
 
 const mapState = state => ({

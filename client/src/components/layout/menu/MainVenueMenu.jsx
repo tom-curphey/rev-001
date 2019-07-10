@@ -6,6 +6,8 @@ import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
 import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
+import userIcon from '../../../images/user.svg';
+import exitIcon from '../../../images/exit.svg';
 
 const MainVenueMenu = ({
   venues,
@@ -80,12 +82,22 @@ const MainVenueMenu = ({
       <ul className="actionLinks">
         <li>
           <Link to="/account/profile">
-            <span>x</span>
+            <div>
+              <img
+                src={userIcon}
+                alt="User icon to represent profile link"
+              />
+            </div>
             <span className="actionLink">Account Settings</span>
           </Link>
         </li>
         <li onClick={handleLogout}>
-          <span>x</span>
+          <div>
+            <img
+              src={exitIcon}
+              alt="Exit icon to represent the logout link"
+            />
+          </div>
           <span className="actionLink">Sign out</span>
         </li>
       </ul>

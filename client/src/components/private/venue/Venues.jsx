@@ -5,6 +5,7 @@ import { setSelectedVenue } from './venueActions';
 import Spinner from '../../layout/Spinner';
 import { getNewVenueData } from '../../../utils/utils';
 import PropTypes from 'prop-types';
+import editIcon from '../../../images/edit.svg';
 
 function Venues({ venues, history, setSelectedVenue }) {
   let venuesList = '';
@@ -29,7 +30,12 @@ function Venues({ venues, history, setSelectedVenue }) {
     venuesList = venues.venues.map((venue, i) => {
       return (
         <li key={i} onClick={e => selectVenue(e)} id={venue._id}>
-          <div />
+          <div className="icon">
+            <img
+              src={editIcon}
+              alt="Editing icon to indicate the editing link"
+            />
+          </div>
           <div>{venue.displayName}</div>
           <div>-</div>
           <div>-</div>

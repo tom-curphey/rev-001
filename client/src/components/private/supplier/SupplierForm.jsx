@@ -1,12 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { updateSelectedSupplierState } from './supplierActions';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
 import CreatableSelectInputHorizontal from '../../layout/input/CreatableSelectInputHorizontal';
-// import SelectInputHorizontal from '../../layout/input/SelectInputHorizontal';
-// import Spinner from '../../layout/Spinner';
 import { isEmpty, roundNumberAsString } from '../../../utils/utils';
 
 const SupplierForm = ({
