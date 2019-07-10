@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthMenu from '../../layout/menu/AuthMenu';
 import Spinner from '../../layout/Spinner';
+import { isEmpty } from '../../../utils/utils';
 
 const Recipes = ({ profile, isAuthenticated, recipe }) => {
   if (isAuthenticated === null || isAuthenticated === false) {
@@ -28,16 +29,20 @@ const Recipes = ({ profile, isAuthenticated, recipe }) => {
       </div>
     );
   } else {
-    if (recipe.recipes && recipe.recipes.length !== 0) {
-      content = <div>Recipes</div>;
+    if (recipe.selectedRecipe === null && isEmpty(recipe.recipes)) {
+      return <Redirect to="/welcome" />;
     } else {
-      content = '';
+      content = (
+        <Fragment>
+          <h1>Add Recipe</h1>
+        </Fragment>
+      );
     }
   }
 
   return (
     <AuthMenu>
-      <section className="recipes">{content}</section>
+      <section className="recipe">{content}</section>
     </AuthMenu>
   );
 };
@@ -60,4 +65,4 @@ const mapState = state => ({
   recipe: state.recipe
 });
 
-export default connect(mapState)(Recipes);
+export default connect(mapState)(withRouter(Recipes));

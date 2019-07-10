@@ -13,7 +13,8 @@ const MainVenueMenu = ({
   venues,
   setSelectedVenue,
   history,
-  profile
+  profile,
+  logout
 }) => {
   const closeVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'none';
@@ -29,7 +30,6 @@ const MainVenueMenu = ({
 
   const handleLogout = () => {
     logout();
-    history.push('/signin');
   };
 
   let venueList;
@@ -110,7 +110,8 @@ const MainVenueMenu = ({
 };
 
 const actions = {
-  setSelectedVenue
+  setSelectedVenue,
+  logout
 };
 
 const mapState = state => ({

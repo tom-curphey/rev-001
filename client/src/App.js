@@ -6,11 +6,12 @@ import {
 } from 'react-router-dom';
 import Home from './components/public/Home';
 import Signin from './components/public/auth/Signin';
+import Welcome from './components/layout/menu/Welcome';
 import ForgotPassword from './components/public/auth/ForgotPassword';
 import ResetPassword from './components/public/auth/ResetPassword';
 import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
-import Recipes from './components/private/recipe/Recipes';
+import Recipe from './components/private/recipe/Recipe';
 import Ingredient from './components/private/ingredient/Ingredient';
 import AccountSettings from './components/private/profile/AccountSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
@@ -55,6 +56,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/signin" component={Signin} />
+
           <Route
             exact
             path="/forgot-password"
@@ -71,12 +73,13 @@ const App = () => {
             path="/onboarding"
             component={OnboardingVenue}
           />
+          <PrivateRoute exact path="/welcome" component={Welcome} />
           <PrivateRoute
             exact
             path="/menu-items"
             component={NewFeature}
           />
-          <PrivateRoute exact path="/recipes" component={Recipes} />
+          <PrivateRoute exact path="/recipes" component={Recipe} />
           <PrivateRoute
             exact
             path="/ingredients"

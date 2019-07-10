@@ -1095,3 +1095,70 @@ div.centerBox {
   max-width: 500px;
   margin: 0 auto;
 }
+
+/* 
+Welcome Menu
+********************************
+********************************/
+
+section.welcome {
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+
+  h1 {
+    font-weight: bold;
+    margin-top: 50px;
+    padding: 30px 0px;
+  }
+
+  p {
+    color: $cGreyDark;
+    padding-bottom: 80px;
+  }
+}
+div.welcomeMenu {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-gap: 30px;
+  margin: 0 auto;
+  width: 817px;
+
+  a {
+    cursor: pointer;
+    height: auto;
+    width: 230px;
+    border: 1px solid $cFaded;
+    border-radius: 15px;
+    transition: 300ms ease-in-out;
+    padding: 10px;
+    padding-bottom: 30px;
+
+    &:hover {
+      border: 1px solid $cFadedDark;
+      box-shadow: $cBoxShadowBig;
+      transition: 300ms ease-in-out;
+    }
+
+    &:first-child p,
+    &:last-child p {
+      margin-top: 20px;
+    }
+
+    img {
+      border-style: none;
+      margin-top: 30px;
+      width: 180px;
+    }
+
+    h2 {
+      padding: 30px 0px 15px;
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    p {
+      padding: 10px 0px;
+    }
+  }
+}
