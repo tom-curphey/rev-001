@@ -13,7 +13,8 @@ const TextInputHorizontal = ({
   disabled,
   id,
   style,
-  labelClass
+  labelClass,
+  inputClass
 }) => {
   return (
     <label
@@ -30,6 +31,7 @@ const TextInputHorizontal = ({
         disabled={disabled}
         id={id}
         style={style}
+        className={`${inputClass}`}
       />
       <span className="message">
         {info && <small>{info}</small>}

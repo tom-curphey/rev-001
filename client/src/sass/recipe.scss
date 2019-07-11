@@ -3,6 +3,8 @@
 section.recipe {
   padding: 30px 20px 0px 20px;
   width: 100%;
+  margin: 0 auto;
+  max-width: 900px;
 
   div.recipeHeader {
     display: grid;
@@ -25,6 +27,139 @@ section.recipe {
 
       div.selectRecipe {
         width: 350px;
+      }
+    }
+
+    div.recipeProcess {
+      ul.recipeProcessHeader {
+        display: grid;
+        grid-template-columns: 50px auto 100px 100px 200px 50px;
+        height: 40px;
+        background-color: $cFadedLight;
+        border-top: 1px solid $cGreyLight;
+        border-bottom: 1px solid $cGreyLight;
+
+        li {
+          display: flex;
+          align-items: center;
+          font-weight: 400;
+
+          &:nth-child(3),
+          &:nth-child(4),
+          &:nth-child(5) {
+            justify-content: flex-end;
+            padding-right: 5px;
+          }
+        }
+      }
+
+      ul.recipeProcessItems {
+        li {
+          grid-template-columns: 50px auto 100px 110px 190px 50px;
+          display: grid;
+          height: 50px;
+
+          div {
+            align-items: center;
+          }
+
+          div.processIcon {
+            display: flex;
+            // margin-right: 15px;
+
+            img {
+              margin: auto;
+              opacity: 0.6;
+            }
+
+            &:first-child {
+              img {
+                width: 25px;
+              }
+            }
+
+            &:last-child {
+              img {
+                width: 18px;
+              }
+            }
+          }
+
+          div.processItem {
+            display: flex;
+            margin-right: 15px;
+          }
+
+          div.processQuantity {
+            display: flex;
+            margin-right: 5px;
+          }
+          div.processUnit {
+            margin-top: 5px;
+          }
+          div.processTotal {
+            display: flex;
+            padding-right: 5px;
+            justify-content: flex-end;
+          }
+        }
+      }
+
+      ul.recipeProcessButtons {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        border-bottom: 1px solid $cFaded;
+        border-top: 1px solid $cFaded;
+        height: 50px;
+
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+
+          &:last-child {
+            border-left: 1px solid $cFaded;
+          }
+
+          &:hover {
+            img {
+              opacity: 1;
+            }
+            span {
+              color: $cBlack;
+            }
+          }
+
+          img {
+            width: 22px;
+            margin-right: 10px;
+            opacity: 0.6;
+          }
+
+          span {
+            font-size: 14px;
+            font-weight: 400;
+            color: $cGrey;
+          }
+        }
+      }
+
+      ul.recipeProcessTotal {
+        float: right;
+        margin-top: 20px;
+        padding-right: 15px;
+
+        li {
+          display: grid;
+          grid-template-columns: 180px 100px;
+          height: 30px;
+          span {
+            text-align: right;
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
       }
     }
   }

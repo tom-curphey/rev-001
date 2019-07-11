@@ -13,8 +13,8 @@ const TextInput = ({
   disabled,
   id,
   style,
-  autoFocus
-  // labelClass
+  autoFocus,
+  inputClass
 }) => {
   return (
     <label htmlFor={name} className="textInput">
@@ -29,6 +29,7 @@ const TextInput = ({
         id={id}
         style={style}
         autoFocus={autoFocus && autoFocus}
+        className={`${inputClass}`}
       />
       {info && <small>{info}</small>}
       {error && <span className="errorMsg">{error}</span>}

@@ -102,7 +102,7 @@ const CreatableSelectInput = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options && options}
-        className={`sBorderelectInput ${className}`}
+        className={`BorderselectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>

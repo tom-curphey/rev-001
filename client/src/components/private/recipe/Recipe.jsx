@@ -7,6 +7,7 @@ import Spinner from '../../layout/Spinner';
 import Button from '../../layout/menu/Button';
 import { isEmpty } from '../../../utils/utils';
 import AccordionBox from '../../layout/AccordionBox';
+import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
 
 class Recipe extends Component {
@@ -69,12 +70,12 @@ class Recipe extends Component {
                 />
               </div>
             </div>
-            <AccordionBox
+            <AccordionBoxWithOpenHeader
               headerText="Venue Details + Edit form for operating costs"
               onClick="handleAccordianClick"
             >
               <div>Edit the venue</div>
-            </AccordionBox>
+            </AccordionBoxWithOpenHeader>
             <AccordionBox
               isOpen={true}
               headerText="Recipe Details + Edit form for name, serves, weekly sales and recipe process"

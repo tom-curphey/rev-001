@@ -78,7 +78,7 @@ const SelectInputBorder = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options}
-        className={`sBorderelectInput ${className}`}
+        className={`BorderselectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         theme={theme => ({

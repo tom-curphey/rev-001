@@ -16,8 +16,8 @@ import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 class SelectRecipe extends Component {
   state = {
     selectedValue: {
-      label: 'Type ingredient name to start..',
-      value: 'no-ingredient-selected'
+      label: 'Type recipe name to start..',
+      value: 'no-recipe-selected'
     }
   };
 
@@ -121,8 +121,9 @@ class SelectRecipe extends Component {
           name="ingredient"
           options={options}
           getSelectedValue={this.getSelectedValue}
-          placeholder="Type ingredient name to select ingredient.."
-          createLabel="+ Add Ingredient"
+          placeholder="Type recipe name to start.."
+          createLabel="+ Add Recipe"
+          largeSelect={true}
         />
       );
     } else {
@@ -131,8 +132,9 @@ class SelectRecipe extends Component {
           value={selectedValue}
           name="ingredient"
           getSelectedValue={this.getSelectedValue}
-          placeholder="Type ingredient name to select ingredient.."
-          createLabel="+ Add Ingredient"
+          placeholder="Type recipe name to start.."
+          createLabel="+ Add Recipe"
+          largeSelect={true}
         />
       );
     }

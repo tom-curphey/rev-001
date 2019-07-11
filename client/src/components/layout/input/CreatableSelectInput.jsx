@@ -18,7 +18,8 @@ const CreatableSelectInput = ({
   name,
   value,
   label,
-  createLabel
+  createLabel,
+  largeSelect
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -75,7 +76,10 @@ const CreatableSelectInput = ({
     }),
     control: (base, state) => ({
       ...base,
-      fontSize: '16px',
+      height: largeSelect ? '60px' : '38px',
+      fontSize: largeSelect ? '19px' : '16px',
+      backgroundColor: largeSelect ? '#fbf6ee' : '',
+      // fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
       borderColor: '#cdc0b2',
@@ -96,7 +100,7 @@ const CreatableSelectInput = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options && options}
-        className={`sBorderelectInput ${className}`}
+        className={`BorderselectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>
