@@ -50,6 +50,8 @@ class VenueForm extends Component {
   };
 
   componentDidMount() {
+    console.log('HERE');
+
     // if (prevProps.errors !== this.props.errors) {
     //   this.setState({ errors: this.props.errors });
     // } else {
@@ -316,7 +318,7 @@ class VenueForm extends Component {
       }
     } = this.state.updatedVenue;
 
-    // console.log('RENDER: STATE ', this.state.updatedVenue);
+    console.log('RENDER: STATE ', this.state.updatedVenue);
 
     let title;
     if (displayName !== '') {

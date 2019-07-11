@@ -1,9 +1,31 @@
 @import './colours.scss';
 
 section.recipe {
-  padding: 30px 0px 0px 20px;
+  padding: 30px 20px 0px 20px;
   width: 100%;
-  display: grid;
-  grid-template-columns: 400px auto;
-  grid-gap: 30px;
+
+  div.recipeHeader {
+    display: grid;
+    grid-template-columns: 300px auto;
+    margin-bottom: 30px;
+
+    div.twoButtons {
+      display: grid;
+      grid-template-columns: 200px 200px;
+      grid-gap: 20px;
+      justify-content: end;
+    }
+  }
+
+  section.recipeDetails {
+    div.recipeDetailsHeader {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: auto 350px;
+
+      div.selectRecipe {
+        width: 350px;
+      }
+    }
+  }
 }

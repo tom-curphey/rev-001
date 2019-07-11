@@ -16,6 +16,7 @@ function Venues({ venues, history, setSelectedVenue }) {
     );
 
     setSelectedVenue(selectedVenue[0]);
+
     history.push(`/account/venues/edit/${selectedVenue[0].urlName}`);
   };
 

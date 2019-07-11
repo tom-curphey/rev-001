@@ -102,6 +102,11 @@ const App = () => {
           />
           <PrivateRoute
             exact
+            path="/account/:account_section/:venue_action/:venue_name"
+            component={AccountSettings}
+          />
+          <PrivateRoute
+            exact
             path="/menu-items"
             component={NewFeature}
           />
