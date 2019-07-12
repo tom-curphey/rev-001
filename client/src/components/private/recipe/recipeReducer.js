@@ -1,7 +1,8 @@
 import {
   RECIPES_LOADED,
   CLEAR_RECIPES,
-  ADD_NEW_RECIPE
+  ADD_NEW_RECIPE,
+  SET_SELECTED_RECIPE
 } from '../../../redux/types';
 
 const initialState = {
@@ -18,6 +19,13 @@ export default function(state = initialState, actions) {
       return {
         ...state,
         recipes: payload,
+        loading: false
+      };
+
+    case SET_SELECTED_RECIPE:
+      return {
+        ...state,
+        selectedRecipe: payload,
         loading: false
       };
 

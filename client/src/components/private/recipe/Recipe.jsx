@@ -36,7 +36,7 @@ class Recipe extends Component {
   };
 
   render() {
-    const { recipe } = this.props;
+    const { recipes, selectedRecipe, loading } = this.props.recipe;
     const {
       isVenueOpen,
       isRecipeDetailsOpen,
@@ -45,20 +45,25 @@ class Recipe extends Component {
     } = this.state;
 
     let content;
-    if (recipe.loading) {
+    if (loading) {
       content = (
         <div style={{ marginTop: '200px' }}>
           <Spinner width="30px" />
         </div>
       );
     } else {
-      if (recipe.selectedRecipe === null && isEmpty(recipe.recipes)) {
-        //   return <Redirect to="/welcome" />;
-        // } else {
+      if (selectedRecipe === null && isEmpty(recipes)) {
+        return <Redirect to="/welcome" />;
+      } else {
         content = (
           <Fragment>
             <div className="recipeHeader">
-              <h1>Add Recipe</h1>
+              {selectedRecipe !== null ? (
+                // click name to edit recipe name
+                <h1>{selectedRecipe.displayName}</h1>
+              ) : (
+                <h1>Add Recipe</h1>
+              )}
               <div className="twoButtons">
                 <Button
                   buttonTitle="Save Recipe"

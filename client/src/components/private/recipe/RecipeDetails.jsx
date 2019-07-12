@@ -124,7 +124,7 @@ class RecipeDetails extends Component {
                     placeholder="Process Step Description"
                     value={processItem}
                     name="processItem"
-                    onChange={this.onChange}
+                    onChange={this.handleRecipeNumberChange}
                     error={errors.processItem && errors.processItem}
                   />
                 </div>
@@ -133,7 +133,7 @@ class RecipeDetails extends Component {
                     placeholder="0"
                     value={processQuantity}
                     name="processQuantity"
-                    onChange={this.onChange}
+                    onChange={this.handleRecipeNumberChange}
                     error={
                       errors.processQuantity && errors.processQuantity
                     }
