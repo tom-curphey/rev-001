@@ -20,7 +20,7 @@ const RecipeSchema = new Schema(
     },
     serves: {
       type: Number,
-      required: true
+      default: 1
     },
     salePricePerServe: {
       type: Number
@@ -44,15 +44,23 @@ const RecipeSchema = new Schema(
       type: String,
       default: 'week'
     },
-    internalRecipe: {
-      type: Boolean,
-      default: false
-    },
     venues: [
       {
         venue: {
           type: Schema.Types.ObjectId,
           ref: 'venue',
+          required: true
+        }
+      }
+    ],
+    items: [
+      {
+        type: {
+          type: String,
+          required: true
+        },
+        type: {
+          type: String,
           required: true
         }
       }

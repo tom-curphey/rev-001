@@ -9,6 +9,7 @@ import { isEmpty } from '../../../utils/utils';
 import AccordionBox from '../../layout/AccordionBox';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
+import { addOrEditRecipe } from './recipeActions';
 
 class Recipe extends Component {
   state = {
@@ -32,6 +33,18 @@ class Recipe extends Component {
           return <Redirect to="/onboarding" />;
         }
       }
+    }
+  };
+
+  handleSaveRecipe = () => {
+    const { selectedRecipe } = this.props.recipe;
+
+    if (selectedRecipe !== null) {
+      console.log('SR', selectedRecipe);
+
+      this.props.addOrEditRecipe(selectedRecipe);
+    } else {
+      console.log('Direct user to select a recipe');
     }
   };
 
@@ -66,6 +79,7 @@ class Recipe extends Component {
               )}
               <div className="twoButtons">
                 <Button
+                  onClick={this.handleSaveRecipe}
                   buttonTitle="Save Recipe"
                   buttonColour="orange"
                 />
@@ -78,6 +92,7 @@ class Recipe extends Component {
             <AccordionBoxWithOpenHeader
               headerText="Venue Details + Edit form for operating costs"
               onClick="handleAccordianClick"
+              id="venueAccordion"
             >
               <div>Edit the venue</div>
             </AccordionBoxWithOpenHeader>
@@ -105,12 +120,13 @@ Recipe.propTypes = {
   recipe: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool,
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object.isRequired,
+  addOrEditRecipe: PropTypes.func.isRequired
 };
 
-// const actions = {
-//   loadVenues
-// };
+const actions = {
+  addOrEditRecipe
+};
 
 const mapState = state => ({
   profile: state.profile,
@@ -119,4 +135,7 @@ const mapState = state => ({
   recipe: state.recipe
 });
 
-export default connect(mapState)(withRouter(Recipe));
+export default connect(
+  mapState,
+  actions
+)(withRouter(Recipe));

@@ -245,14 +245,6 @@ section.mainMenu {
       text-decoration: none;
       padding: 2.5px 0px;
 
-      &:hover {
-        div {
-          img {
-            opacity: 1;
-          }
-        }
-      }
-
       div {
         display: flex;
         align-items: center;
@@ -263,6 +255,13 @@ section.mainMenu {
           &.largeIcon {
             width: 32px;
             opacity: 0.5;
+          }
+        }
+      }
+      &:hover {
+        div {
+          img {
+            opacity: 1;
           }
         }
       }
@@ -1272,6 +1271,7 @@ section.accordion-closed {
     border-radius: 10px;
   }
 }
+
 section.accordion-open {
   border: 1px solid $cGreyBorderShadow;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);

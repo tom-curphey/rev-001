@@ -18,9 +18,6 @@ router.post(
   [
     check('displayName', 'Recipe name is required')
       .not()
-      .isEmpty(),
-    check('serves', 'Recipe serves is required')
-      .not()
       .isEmpty()
   ],
   recipeController.addOrEditRecipe

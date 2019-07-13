@@ -11,6 +11,11 @@ section.recipe {
     grid-template-columns: 300px auto;
     margin-bottom: 30px;
 
+    h1 {
+      display: flex;
+      align-items: center;
+    }
+
     div.twoButtons {
       display: grid;
       grid-template-columns: 200px 200px;

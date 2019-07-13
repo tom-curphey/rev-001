@@ -24,12 +24,20 @@ module.exports.getRecipes = async (req, res) => {
 };
 
 module.exports.addOrEditRecipe = async (req, res) => {
+  console.log('RECIPE REQ', req.body);
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { _id, displayName, serves } = req.body;
+  const {
+    _id,
+    displayName,
+    serves,
+    salePricePerServe,
+    expectedSales
+  } = req.body;
 
   const recipeData = {};
   if (_id) recipeData._id = _id;
@@ -39,12 +47,24 @@ module.exports.addOrEditRecipe = async (req, res) => {
     .trim()
     .replace(/\s+/g, '-')
     .toLowerCase();
-  recipeData.serves = serves;
+  if (serves) recipeData.serves = serves;
+  if (salePricePerServe)
+    recipeData.salePricePerServe = salePricePerServe;
+  if (expectedSales) recipeData.expectedSales = expectedSales;
 
   try {
     if (_id) {
-      const recipe = await Recipe.findById(_id);
+      const recipe = await Recipe.findByIdAndUpdate(
+        recipeData._id,
+        { $set: recipeData },
+        { new: true }
+      );
+
+      // recipe.save();
+      return res.status(200).json(recipe);
     } else {
+      console.log('Create new recipe');
+
       let recipe = await Recipe.findOne({
         displayName: displayName
       });

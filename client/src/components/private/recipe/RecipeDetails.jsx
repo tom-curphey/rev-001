@@ -8,19 +8,80 @@ import SelectInput from '../../layout/input/SelectInput';
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
 import binIcon from '../../../images/bin.svg';
+import { updateReduxSelectedRecipe } from './recipeActions';
 
 class RecipeDetails extends Component {
   state = {
+    updated: false,
     selectedRecipe: {
       serves: '',
-      pricePerServe: '',
-      expectedWeeklyServesSales: '',
-      steps: {
-        processItem: '',
-        processQuantity: '',
-        processUnit: 'min'
+      salePricePerServe: '',
+      expectedSales: '',
+      expectedSales: '',
+      items: []
+      // steps: {
+      //   processItem: '',
+      //   processQuantity: '',
+      //   processUnit: 'min'
+      // }
+    }
+  };
+
+  componentDidMount = () => {
+    if (this.props.recipe.selectedRecipe) {
+      const { selectedRecipe } = this.props.recipe;
+
+      const recipeData = {
+        ...selectedRecipe,
+        serves: selectedRecipe.serves.toString()
+      };
+
+      this.setState({
+        selectedRecipe: recipeData
+      });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.recipe.selectedRecipe !==
+      this.props.recipe.selectedRecipe
+    ) {
+      const { selectedRecipe } = this.props.recipe;
+
+      const recipeData = {
+        _id: selectedRecipe._id,
+        displayName: selectedRecipe.displayName,
+        serves: selectedRecipe.serves.toString(),
+        salePricePerServe: selectedRecipe.salePricePerServe
+          ? selectedRecipe.salePricePerServe.toString()
+          : '',
+        expectedSales: selectedRecipe.expectedSales
+          ? selectedRecipe.expectedSales.toString()
+          : ''
+      };
+
+      this.setState({
+        updated: false,
+        selectedRecipe: recipeData
+      });
+      // this.setState(prevState => ({
+      //   ...prevState.selectedRecipe,
+      //   selectedRecipe: this.props.recipe.selectedRecipe
+      // }));
+    }
+
+    if (prevState.selectedRecipe !== this.state.selectedRecipe) {
+      if (this.state.updated) {
+        this.props.updateReduxSelectedRecipe(
+          this.state.selectedRecipe
+        );
       }
     }
+  };
+
+  getSelectedUnitValue = selectedValue => {
+    console.log('SV', selectedValue);
   };
 
   handleRecipeNumberChange = e => {
@@ -28,6 +89,7 @@ class RecipeDetails extends Component {
     let value = e.target.value;
     if (!isNaN(value) || value === '') {
       this.setState(prevState => ({
+        updated: true,
         selectedRecipe: {
           ...prevState.selectedRecipe,
           [e.target.name]: value
@@ -36,8 +98,19 @@ class RecipeDetails extends Component {
     }
   };
 
-  getSelectedUnitValue = selectedValue => {
-    console.log('SV', selectedValue);
+  addProcessTime = () => {
+    const { items } = this.state.selectedRecipe;
+
+    const item = {
+      type: 'processTime',
+      description: '',
+      quantity: '',
+      unit: 'min'
+    };
+
+    items.push(item);
+
+    this.setState({ items: items });
   };
 
   render() {
@@ -45,11 +118,13 @@ class RecipeDetails extends Component {
     const {
       selectedRecipe: {
         serves,
-        pricePerServe,
-        expectedWeeklyServesSales,
-        steps: { processItem, processQuantity, processUnit }
+        salePricePerServe,
+        expectedSales
+        // steps: { processItem, processQuantity, processUnit }
       }
     } = this.state;
+
+    console.log('serves', serves);
 
     const unitTimeOptions = [
       { value: 'sec', label: 'Seconds' },
@@ -79,24 +154,23 @@ class RecipeDetails extends Component {
               />
               <TextInputHorizontal
                 label="Sale price per serve"
-                value={pricePerServe}
-                name="pricePerServe"
+                value={salePricePerServe}
+                name="salePricePerServe"
                 onChange={this.handleRecipeNumberChange}
                 type="text"
-                error={errors.pricePerServe && errors.pricePerServe}
+                error={
+                  errors.salePricePerServe && errors.salePricePerServe
+                }
                 labelClass="alignTitleRight"
                 inputClass="number"
               />
               <TextInputHorizontal
                 label="Expected Weekly Serve Sales"
-                value={expectedWeeklyServesSales}
-                name="expectedWeeklyServesSales"
+                value={expectedSales}
+                name="expectedSales"
                 onChange={this.handleRecipeNumberChange}
                 type="text"
-                error={
-                  errors.expectedWeeklyServesSales &&
-                  errors.expectedWeeklyServesSales
-                }
+                error={errors.expectedSales && errors.expectedSales}
                 labelClass="alignTitleRight"
                 inputClass="number"
               />
@@ -122,21 +196,24 @@ class RecipeDetails extends Component {
                 <div className="processItem">
                   <TextInput
                     placeholder="Process Step Description"
-                    value={processItem}
+                    value=""
+                    // value={processItem}
                     name="processItem"
                     onChange={this.handleRecipeNumberChange}
-                    error={errors.processItem && errors.processItem}
+                    // error={errors.processItem && errors.processItem
+                    // error={errors.processItem && errors.processItem}
                   />
                 </div>
                 <div className="processQuantity">
                   <TextInput
                     placeholder="0"
-                    value={processQuantity}
+                    value=""
+                    // value={processQuantity}
                     name="processQuantity"
                     onChange={this.handleRecipeNumberChange}
-                    error={
-                      errors.processQuantity && errors.processQuantity
-                    }
+                    // error={
+                    //   errors.processQuantity && errors.processQuantity
+                    // }
                     inputClass="number"
                   />
                 </div>
@@ -146,7 +223,8 @@ class RecipeDetails extends Component {
                     options={unitTimeOptions}
                     getSelectedValue={this.getSelectedUnitValue}
                     error={errors.processUnit && errors.processUnit}
-                    value={processUnit}
+                    value="min"
+                    // value={processUnit}
                   />
                 </div>
                 <div className="processTotal">0.00</div>
@@ -159,7 +237,7 @@ class RecipeDetails extends Component {
               </li>
             </ul>
             <ul className="recipeProcessButtons">
-              <li>
+              <li onClick={this.addProcessTime}>
                 <div className="buttonIcon">
                   <img
                     src={timerIcon}
@@ -195,6 +273,10 @@ class RecipeDetails extends Component {
   }
 }
 
+const actions = {
+  updateReduxSelectedRecipe
+};
+
 RecipeDetails.propTypes = {
   recipe: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
@@ -205,4 +287,7 @@ const mapState = state => ({
   errors: state.errors
 });
 
-export default connect(mapState)(RecipeDetails);
+export default connect(
+  mapState,
+  actions
+)(RecipeDetails);

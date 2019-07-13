@@ -18,16 +18,23 @@ class AccordionBox extends Component {
   changeStatus = () => {
     const { status } = this.state;
     const updatedStatus = status === 'closed' ? 'open' : 'closed';
+    console.log('I found you', this.props.id);
+    if (status === 'open') {
+      document.getElementById(this.props.id);
+    }
 
     this.setState({ status: updatedStatus });
   };
 
   render() {
-    const { headerText, children, isOpen } = this.props;
+    const { headerText, children, isOpen, id } = this.props;
     const { status } = this.state;
 
     return (
-      <section className={`accordion accordion-${status}`}>
+      <section
+        id={id && id}
+        className={`accordion accordion-${status}`}
+      >
         {status !== 'open' && (
           <div
             onClick={this.changeStatus}
