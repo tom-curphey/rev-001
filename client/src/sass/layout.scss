@@ -1255,7 +1255,7 @@ section.accordion {
   }
 
   div.accordionBody {
-    max-height: 0;
+    max-height: 0px;
     transition: max-height 3.15s ease-out;
     overflow: hidden;
   }
@@ -1290,7 +1290,7 @@ section.accordion-open {
     }
   }
   div.accordionBody {
-    max-height: 500px;
+    max-height: 5000px;
     transition: max-height 3.25s ease-in;
   }
   div.closeAccordionDots {

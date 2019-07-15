@@ -49,9 +49,9 @@ class AccordionBox extends Component {
             </div>
           </div>
         )}
-        {status === 'open' && (
-          <div className="accordionBody">{children}</div>
-        )}
+        <div className="accordionBody">
+          {status === 'open' && children}
+        </div>
         <div
           className="closeAccordionDots"
           onClick={this.changeStatus}

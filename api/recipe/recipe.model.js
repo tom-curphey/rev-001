@@ -53,14 +53,26 @@ const RecipeSchema = new Schema(
         }
       }
     ],
-    items: [
+    processTime: [
       {
-        type: {
+        description: {
           type: String,
           required: true
         },
-        type: {
+        quantity: {
+          type: Number,
+          required: true
+        },
+        unit: {
           type: String,
+          required: true
+        },
+        total: {
+          type: Number,
+          required: true
+        },
+        order: {
+          type: Number,
           required: true
         }
       }
@@ -76,11 +88,11 @@ const RecipeSchema = new Schema(
           type: Number,
           required: true
         },
-        metric: {
+        unit: {
           type: String,
           required: true
         },
-        grams: {
+        total: {
           type: Number,
           required: true
         }

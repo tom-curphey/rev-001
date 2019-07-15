@@ -36,7 +36,8 @@ module.exports.addOrEditRecipe = async (req, res) => {
     displayName,
     serves,
     salePricePerServe,
-    expectedSales
+    expectedSales,
+    processTime
   } = req.body;
 
   const recipeData = {};
@@ -51,6 +52,22 @@ module.exports.addOrEditRecipe = async (req, res) => {
   if (salePricePerServe)
     recipeData.salePricePerServe = salePricePerServe;
   if (expectedSales) recipeData.expectedSales = expectedSales;
+  if (processTime) {
+    const updatedProcessTime = processTime.map(item => {
+      if (item._id === '__isNew__') {
+        const newItem = {
+          description: item.description,
+          order: item.order,
+          quantity: item.quantity,
+          total: item.total,
+          unit: item.unit
+        };
+        item = newItem;
+      }
+      return item;
+    });
+    recipeData.processTime = updatedProcessTime;
+  }
 
   try {
     if (_id) {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import {
   setSelectedRecipe,
@@ -109,6 +110,9 @@ class SelectRecipe extends Component {
         selectedRecipe[0],
         this.props.profile.profile
       );
+      this.props.history.push(
+        `/recipes/${selectedRecipe[0].urlName}`
+      );
     }
   };
 
@@ -183,4 +187,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(SelectRecipe);
+)(withRouter(SelectRecipe));

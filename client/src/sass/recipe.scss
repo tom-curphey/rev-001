@@ -38,7 +38,7 @@ section.recipe {
     div.recipeProcess {
       ul.recipeProcessHeader {
         display: grid;
-        grid-template-columns: 50px auto 100px 100px 200px 50px;
+        grid-template-columns: 50px auto 100px 116px 110px 50px;
         height: 40px;
         background-color: $cFadedLight;
         border-top: 1px solid $cGreyLight;
@@ -49,8 +49,12 @@ section.recipe {
           align-items: center;
           font-weight: 400;
 
+          &:nth-child(4) {
+            justify-content: flex-end;
+            padding-right: 40px;
+          }
+
           &:nth-child(3),
-          &:nth-child(4),
           &:nth-child(5) {
             justify-content: flex-end;
             padding-right: 5px;
@@ -59,10 +63,11 @@ section.recipe {
       }
 
       ul.recipeProcessItems {
+        padding: 10px 0px;
         li {
-          grid-template-columns: 50px auto 100px 110px 190px 50px;
+          grid-template-columns: 50px auto 100px 116px 110px 50px;
           display: grid;
-          height: 50px;
+          height: 55px;
 
           div {
             align-items: center;
@@ -70,6 +75,7 @@ section.recipe {
 
           div.processIcon {
             display: flex;
+            cursor: pointer;
             // margin-right: 15px;
 
             img {
@@ -100,7 +106,7 @@ section.recipe {
             margin-right: 5px;
           }
           div.processUnit {
-            margin-top: 5px;
+            margin-top: 8px;
           }
           div.processTotal {
             display: flex;

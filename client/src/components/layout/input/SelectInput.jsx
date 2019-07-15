@@ -16,12 +16,13 @@ const SelectInput = ({
   className,
   error,
   name,
-  value
+  value,
+  data
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, name);
+      getSelectedValue(newValue, data);
     }
   };
 

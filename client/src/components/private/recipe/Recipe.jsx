@@ -96,13 +96,8 @@ class Recipe extends Component {
             >
               <div>Edit the venue</div>
             </AccordionBoxWithOpenHeader>
-            <AccordionBox
-              isOpen={true}
-              headerText="Recipe Details + Edit form for name, serves, weekly sales and recipe process"
-              onClick="handleAccordianClick"
-            >
-              <RecipeDetails />
-            </AccordionBox>
+
+            <RecipeDetails />
           </Fragment>
         );
       }
