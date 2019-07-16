@@ -1257,7 +1257,6 @@ section.accordion {
   div.accordionBody {
     max-height: 0px;
     transition: max-height 3.15s ease-out;
-    overflow: hidden;
   }
 
   div.closeAccordionDots {

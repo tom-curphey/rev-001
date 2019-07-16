@@ -300,3 +300,39 @@ export const convertProfilePacketCostIntoCostPer100g = (
 ) => {
   return (profilePacketCost / profilePacketGrams) * 100;
 };
+
+export const calculateRecipeItemTotal = (quantity, unit) => {
+  console.log(quantity, unit);
+
+  let total = '0.00';
+
+  if (quantity) {
+    switch (unit) {
+      case 'sec':
+        total = roundNumberAsString(quantity / 100);
+        break;
+      case 'min':
+        total = quantity;
+        break;
+      case 'hour':
+        total = roundNumberAsString(quantity * 60);
+        break;
+      case 'cup':
+        console.log('--> cup');
+        break;
+      case 'gram':
+        total = quantity;
+        break;
+      case 'tablespoon':
+        console.log('--> tablespoon');
+        break;
+      case 'teaspoon':
+        console.log('--> teaspoon');
+        break;
+      default:
+        total = '0.00';
+        break;
+    }
+  }
+  return total;
+};

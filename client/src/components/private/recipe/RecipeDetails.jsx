@@ -14,7 +14,10 @@ import {
   getSelectedRecipe,
   updateReduxSelectedRecipe
 } from './recipeActions';
-import { isEmpty } from '../../../utils/utils';
+import {
+  isEmpty,
+  calculateRecipeItemTotal
+} from '../../../utils/utils';
 
 class RecipeDetails extends Component {
   state = {
@@ -32,7 +35,8 @@ class RecipeDetails extends Component {
           unit: 'sec',
           ordwer: ''
         }
-      ]
+      ],
+      ingredients: []
     }
   };
 
@@ -113,6 +117,9 @@ class RecipeDetails extends Component {
           : '',
         processTime: selectedRecipe.processTime
           ? selectedRecipe.processTime
+          : [],
+        ingredients: selectedRecipe.ingredients
+          ? selectedRecipe.ingredients
           : []
       };
 
@@ -139,7 +146,16 @@ class RecipeDetails extends Component {
           );
           recipeData.processTime = updatedProcessTime;
         }
+        if (!isEmpty(recipeData.ingredients)) {
+          const updatedIngredients = recipeData.ingredients.map(i => {
+            i.quantity = i.quantity.toString();
+            return i;
+          });
+          recipeData.ingredients = updatedIngredients;
+        }
       }
+
+      console.log('recipeData', recipeData);
 
       this.setState({
         updated: false,
@@ -191,6 +207,29 @@ class RecipeDetails extends Component {
       });
 
       recipeData.processTime = updatedProcessTime;
+      this.setState({ updated: true, selectedRecipe: recipeData });
+    } else {
+      console.log('Alert user to select a recipe');
+    }
+  };
+
+  getSelectedUnitMetricValue = (selectedValue, itemOrder) => {
+    console.log('SV', selectedValue);
+    console.log('E', itemOrder);
+    // let value = 0;
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      // const { name, value } = e.target;
+      const { selectedRecipe } = this.state;
+      const recipeData = { ...selectedRecipe };
+
+      let updatedIngredients = recipeData.ingredients.map(item => {
+        if (item.order === itemOrder) {
+          item.unit = selectedValue.value;
+        }
+        return item;
+      });
+
+      recipeData.ingredients = updatedIngredients;
       this.setState({ updated: true, selectedRecipe: recipeData });
     } else {
       console.log('Alert user to select a recipe');
@@ -280,6 +319,61 @@ class RecipeDetails extends Component {
     }
   };
 
+  addRecipeIngredient = () => {
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      const { ingredients } = this.state.selectedRecipe;
+
+      // const ptCount = processTime.length;
+      // console.log('pt', ptCount);
+
+      const ingredient = {
+        ingredient: '__isNew__',
+        quantity: '',
+        unit: 'gram',
+        total: '',
+        order: ingredients.length + 1
+      };
+
+      ingredients.push(ingredient);
+
+      console.log('ingredients', ingredients);
+
+      this.setState(prevState => ({
+        updated: true,
+        selectedRecipe: {
+          ...prevState.selectedRecipe,
+          ingredients: ingredients
+        }
+      }));
+    } else {
+      console.log('Alert user to select a recipe');
+    }
+  };
+
+  updateIngredientQuantity = itemOrder => e => {
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      const { name, value } = e.target;
+      const { selectedRecipe } = this.state;
+      const recipeData = { ...selectedRecipe };
+
+      let updatedIngredients = recipeData.ingredients.map(item => {
+        if (item.order === itemOrder) {
+          if (!isNaN(value) || value === '') {
+            item.quantity = value;
+          }
+        }
+        return item;
+      });
+
+      recipeData.ingredients = updatedIngredients;
+      this.setState({ updated: true, selectedRecipe: recipeData });
+
+      // console.log('updatedIngredients---', updatedIngredients);
+    } else {
+      console.log('Alert user to select a recipe');
+    }
+  };
+
   render() {
     const { recipe, errors } = this.props;
     const {
@@ -298,12 +392,28 @@ class RecipeDetails extends Component {
       { value: 'min', label: 'Minutes' },
       { value: 'hour', label: 'Hours' }
     ];
+    const ingredientMetricOptions = [
+      { value: 'cup', label: 'Cup' },
+      { value: 'gram', label: 'Gram' },
+      { value: 'tablepoon', label: 'Tablespoon' },
+      { value: 'teaspoon', label: 'Teaspoon' }
+    ];
+    const ingredientMetricOptionsPlural = [
+      { value: 'cup', label: 'Cups' },
+      { value: 'gram', label: 'Grams' },
+      { value: 'tablepoon', label: 'Tablespoons' },
+      { value: 'teaspoon', label: 'Teaspoons' }
+    ];
 
     let ri = [];
     if (!isEmpty(processTime) || !isEmpty(ingredients)) {
       for (let pt = 0; pt < processTime.length; pt++) {
         const process = processTime[pt];
         ri.push(process);
+      }
+      for (let i = 0; i < ingredients.length; i++) {
+        const ingredient = ingredients[i];
+        ri.push(ingredient);
       }
     }
 
@@ -357,7 +467,10 @@ class RecipeDetails extends Component {
                   // value={processUnit}
                 />
               </div>
-              <div className="processTotal">0.00</div>
+              <div className="processTotal">
+                {calculateRecipeItemTotal(item.quantity, item.unit)}{' '}
+                min
+              </div>
               <div
                 className="processIcon delete"
                 onClick={this.deleteProcessTime(item.order)}
@@ -365,6 +478,71 @@ class RecipeDetails extends Component {
                 <img
                   src={binIcon}
                   alt="Bin icon to represent the ability to delete a recipe process item"
+                />
+              </div>
+            </li>
+          );
+        }
+        if (item.ingredient || item.ingredient === '') {
+          return (
+            <li key={i}>
+              <div className="ingredientIcon">
+                <img
+                  src={timerIcon}
+                  alt="Ingredeint icon to represent the recipe ingredient item"
+                />
+              </div>
+              <div className="ingredientSelect">
+                <TextInput
+                  placeholder="Ingredient Name"
+                  value={item.ingredient}
+                  name="ingredient"
+                  onChange={this.updateProcessTime(item.order)}
+                  // data={'323232'}
+                  // error={errors.processItem && errors.processItem
+                  // error={errors.processItem && errors.processItem}
+                />
+              </div>
+              <div className="ingredientQuantity">
+                <TextInput
+                  placeholder="0"
+                  value=""
+                  value={item.quantity}
+                  name="quantity"
+                  onChange={this.updateIngredientQuantity(item.order)}
+                  inputClass="number"
+                  // error={
+                  //   errors.processQuantity && errors.processQuantity
+                  // }
+                />
+              </div>
+              <div className="ingredientUnit">
+                <SelectInput
+                  name="ingredientUnit"
+                  options={
+                    item.quantity >= 2
+                      ? ingredientMetricOptionsPlural
+                      : ingredientMetricOptions
+                  }
+                  getSelectedValue={this.getSelectedUnitMetricValue}
+                  error={
+                    errors.ingredientUnit && errors.ingredientUnit
+                  }
+                  value={item.unit}
+                  data={item.order}
+                  // value={ingredientUnit}
+                />
+              </div>
+              <div className="ingredientTotal">
+                {calculateRecipeItemTotal(item.quantity, item.unit)} g
+              </div>
+              <div
+                className="ingredientIcon delete"
+                onClick={this.deleteProcessTime(item.order)}
+              >
+                <img
+                  src={binIcon}
+                  alt="Bin icon to represent the ability to delete a recipe ingredient item"
                 />
               </div>
             </li>
@@ -445,7 +623,7 @@ class RecipeDetails extends Component {
                   </div>
                   <span> Add Process Time</span>
                 </li>
-                <li>
+                <li onClick={this.addRecipeIngredient}>
                   <div className="buttonIcon">
                     <img
                       src={appleIcon}

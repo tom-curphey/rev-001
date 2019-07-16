@@ -38,7 +38,7 @@ section.recipe {
     div.recipeProcess {
       ul.recipeProcessHeader {
         display: grid;
-        grid-template-columns: 50px auto 100px 116px 110px 50px;
+        grid-template-columns: 50px auto 100px 140px 80px 50px;
         height: 40px;
         background-color: $cFadedLight;
         border-top: 1px solid $cGreyLight;
@@ -65,7 +65,7 @@ section.recipe {
       ul.recipeProcessItems {
         padding: 10px 0px;
         li {
-          grid-template-columns: 50px auto 100px 116px 110px 50px;
+          grid-template-columns: 50px auto 100px 140px 80px 50px;
           display: grid;
           height: 55px;
 
@@ -73,7 +73,8 @@ section.recipe {
             align-items: center;
           }
 
-          div.processIcon {
+          div.processIcon,
+          div.ingredientIcon {
             display: flex;
             cursor: pointer;
             // margin-right: 15px;
@@ -101,14 +102,22 @@ section.recipe {
             margin-right: 15px;
           }
 
-          div.processQuantity {
+          div.ingredientSelect {
+            display: flex;
+            margin-right: 15px;
+          }
+
+          div.processQuantity,
+          div.ingredientQuantity {
             display: flex;
             margin-right: 5px;
           }
-          div.processUnit {
+          div.processUnit,
+          div.ingredientUnit {
             margin-top: 8px;
           }
-          div.processTotal {
+          div.processTotal,
+          div.ingredientTotal {
             display: flex;
             padding-right: 5px;
             justify-content: flex-end;
@@ -157,9 +166,10 @@ section.recipe {
       }
 
       ul.recipeProcessTotal {
-        float: right;
         margin-top: 20px;
         padding-right: 15px;
+        display: grid;
+        justify-content: flex-end;
 
         li {
           display: grid;

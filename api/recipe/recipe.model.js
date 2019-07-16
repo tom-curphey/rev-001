@@ -95,6 +95,10 @@ const RecipeSchema = new Schema(
         total: {
           type: Number,
           required: true
+        },
+        order: {
+          type: Number,
+          required: true
         }
       }
     ]
