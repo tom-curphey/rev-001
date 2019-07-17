@@ -90,8 +90,21 @@ class RecipeDetails extends Component {
       let recipeData;
       if (selectedRecipe.ingredient === '__isNew__') {
         recipeData = {
-          displayName: '',
-          serves: ''
+          // displayName: '',
+          serves: '',
+          salePricePerServe: '',
+          expectedSales: '',
+          expectedSales: '',
+          processTime: [
+            {
+              type: 'processTime',
+              description: '',
+              quantity: '',
+              unit: 'sec',
+              ordwer: ''
+            }
+          ],
+          ingredients: []
         };
       } else {
         recipeData = {

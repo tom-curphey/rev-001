@@ -9,6 +9,7 @@ import { logout } from '../../public/auth/authActions';
 import userIcon from '../../../images/user.svg';
 import exitIcon from '../../../images/exit.svg';
 import { isEmpty } from '../../../utils/utils';
+import Spinner from '../Spinner';
 
 const MainVenueMenu = ({
   venues,
@@ -38,30 +39,38 @@ const MainVenueMenu = ({
   };
 
   let venueList;
-  if (venues && venues.venues !== null) {
-    const { selectedVenue } = venues;
-    venueList = venues.venues.map(function(venue, i) {
-      if (
-        selectedVenue !== null &&
-        venue.displayName === selectedVenue.displayName
-      ) {
-        return (
-          <li className="selected" key={i}>
-            <span>{venue.displayName}</span> <span>L</span>
-          </li>
-        );
-      } else {
-        return (
-          <li
-            key={i}
-            id={venue._id}
-            onClick={e => changeSelectedVenue(e)}
-          >
-            {venue.displayName}
-          </li>
-        );
-      }
-    });
+  console.log('venue', venues);
+
+  if (!venues.loading && !isEmpty(venues.selectedVenue)) {
+    if (
+      venues &&
+      venues.venues !== null &&
+      !isEmpty(venues.venues[0])
+    ) {
+      const { selectedVenue } = venues;
+      venueList = venues.venues.map(function(venue, i) {
+        if (
+          selectedVenue !== null &&
+          venue.displayName === selectedVenue.displayName
+        ) {
+          return (
+            <li className="selected" key={i}>
+              <span>{venue.displayName}</span> <span>L</span>
+            </li>
+          );
+        } else {
+          return (
+            <li
+              key={i}
+              id={venue._id}
+              onClick={e => changeSelectedVenue(e)}
+            >
+              {venue.displayName}
+            </li>
+          );
+        }
+      });
+    }
   }
 
   return (

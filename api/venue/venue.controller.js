@@ -7,6 +7,9 @@ module.exports.getVenues = async (req, res) => {
     const venues = await Venue.find({
       user: req.user.id
     }).sort({ name: 'asc' });
+
+    // console.log('Venues', venues);
+
     if (!venues) {
       return res
         .status(400)

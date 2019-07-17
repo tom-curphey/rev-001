@@ -9,11 +9,17 @@ import LoadingPage from '../LoadingPage';
 import { isEmpty } from '../../../utils/utils';
 
 const AdminMenu = ({ auth, profile, children, history }) => {
+  if (!auth.isAuthenticated) {
+    return <Redirect to="/signin" />;
+  }
+
   let content;
   if (auth.loading || profile.loading) {
     content = <LoadingPage />;
   } else {
     if (isEmpty(profile.profile.venues)) {
+      console.log('I was touching it');
+
       return <Redirect to="onboarding" />;
     } else {
       content = (

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   SET_PROFILE_LOADING,
+  REMOVE_PROFILE_LOADING,
   PROFILE_LOADED,
   UPDATE_PROFILE,
   PROFILE_ERROR,
@@ -45,5 +46,11 @@ export const updateProfile = profileData => async dispatch => {
 export const setProfileLoading = () => async dispatch => {
   dispatch({
     type: SET_PROFILE_LOADING
+  });
+};
+
+export const removeProfileLoading = () => async dispatch => {
+  dispatch({
+    type: REMOVE_PROFILE_LOADING
   });
 };

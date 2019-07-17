@@ -13,9 +13,12 @@ import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
+import Spinner from '../../layout/Spinner';
+import LoadingPage from '../../layout/LoadingPage';
 
 class OnboardingVenue extends Component {
   state = {
+    profileLoading: false,
     displayName: '',
     email: '',
     type: '',
@@ -55,8 +58,12 @@ class OnboardingVenue extends Component {
 
     const { auth, profile, history } = this.props;
 
-    if (!auth.loading && !profile.loading) {
-      if (!isEmpty(profile.profile)) {
+    if (prevProps.profile !== profile && profile.loading) {
+      this.setState({ profileLoading: true });
+    }
+
+    if (!profile.loading) {
+      if (!isEmpty(profile.profile) && !auth.laoding) {
         if (
           auth.isAuthenticated === true &&
           !isEmpty(profile.profile.venues)
@@ -65,7 +72,6 @@ class OnboardingVenue extends Component {
         }
       }
     }
-    console.log('auth', auth);
 
     if (!auth.loading) {
       if (
@@ -77,13 +83,16 @@ class OnboardingVenue extends Component {
     }
 
     if (prevProps.errors !== this.props.errors) {
-      this.setState({ errors: this.props.errors });
+      this.setState({
+        errors: this.props.errors,
+        profileLoading: false
+      });
     }
   }
 
   componentWillUnmount() {
     console.log('Onboarding Venue Unmounted');
-    // this.props.removeErrors();
+    this.props.removeErrors();
   }
 
   onChange = e =>
@@ -119,7 +128,8 @@ class OnboardingVenue extends Component {
   };
 
   render() {
-    const { displayName, email, errors } = this.state;
+    const { displayName, email, errors, profileLoading } = this.state;
+    const { auth, profile } = this.props;
 
     const options = [
       { value: 'bar', label: 'Bar', className: 'optOpt' },
@@ -127,63 +137,76 @@ class OnboardingVenue extends Component {
       { value: 'restaurant', label: 'Restaurant' }
     ];
 
-    return (
-      <PublicMenu>
-        <nav className="toggle publicMenu" onClick={openNav}>
-          <span>&#9776;</span>
-        </nav>
-        <section className="onboarding">
-          <div className="sideImage" />
-          <div className="sideContentWrapper">
-            <section className="sideContent">
-              <img src={logo} alt="Recipe Revenue Logo" />
-              <div>
-                {/* <h1>Tell us about your venue</h1> */}
-                <p>Tell us about your venue</p>
-              </div>
+    let loading;
+    if (profile.loading || auth.loading) {
+      loading = <Spinner />;
+    } else {
+      loading = '';
+    }
 
-              <form onSubmit={this.handleOnSubmit}>
-                <TextInput
-                  placeholder="What’s the name of your venue?"
-                  value={displayName}
-                  name="displayName"
-                  onChange={this.onChange}
-                  error={errors.displayName && errors.displayName}
-                  autoFocus={true}
-                />
-                <TextInput
-                  placeholder="Venue email address"
-                  value={email}
-                  name="email"
-                  onChange={this.onChange}
-                  error={errors.email && errors.email}
-                />
-                <SelectInputBorder
-                  name="type"
-                  placeholder="Select venue type..."
-                  options={options}
-                  getSelectedValue={this.getSelectedValue}
-                  error={errors.type && errors.type}
-                />
-                <button type="submit" className="orange">
-                  Let's Go!
-                </button>
-              </form>
-              <div
-                className="subLink"
-                to="/signin"
-                onClick={this.handlePersonalSubmit}
-              >
-                <span>
-                  Don't need to add a venue? Add one later..
-                </span>
-                <span>Create personal account</span>
-              </div>
-            </section>
-          </div>
-        </section>
-      </PublicMenu>
-    );
+    if (profileLoading) {
+      return <LoadingPage />;
+    } else {
+      return (
+        <PublicMenu>
+          <nav className="toggle publicMenu" onClick={openNav}>
+            <span>&#9776;</span>
+          </nav>
+          <section className="onboarding">
+            <div className="sideImage" />
+            <div className="sideContentWrapper">
+              <section className="sideContent">
+                <img src={logo} alt="Recipe Revenue Logo" />
+                <div>
+                  {/* <h1>Tell us about your venue</h1> */}
+                  <p>Tell us about your venue</p>
+                </div>
+
+                {loading && loading}
+
+                <form onSubmit={this.handleOnSubmit}>
+                  <TextInput
+                    placeholder="What’s the name of your venue?"
+                    value={displayName}
+                    name="displayName"
+                    onChange={this.onChange}
+                    error={errors.displayName && errors.displayName}
+                    autoFocus={true}
+                  />
+                  <TextInput
+                    placeholder="Venue email address"
+                    value={email}
+                    name="email"
+                    onChange={this.onChange}
+                    error={errors.email && errors.email}
+                  />
+                  <SelectInputBorder
+                    name="type"
+                    placeholder="Select venue type..."
+                    options={options}
+                    getSelectedValue={this.getSelectedValue}
+                    error={errors.type && errors.type}
+                  />
+                  <button type="submit" className="orange">
+                    Let's Go!
+                  </button>
+                </form>
+                <div
+                  className="subLink"
+                  to="/signin"
+                  onClick={this.handlePersonalSubmit}
+                >
+                  <span>
+                    Don't need to add a venue? Add one later..
+                  </span>
+                  <span>Create personal account</span>
+                </div>
+              </section>
+            </div>
+          </section>
+        </PublicMenu>
+      );
+    }
   }
 }
 

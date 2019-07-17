@@ -12,14 +12,9 @@ import RecipeDetails from './RecipeDetails';
 import { addOrEditRecipe } from './recipeActions';
 
 class Recipe extends Component {
-  state = {
-    isVenueOpen: false,
-    isRecipeDetailsOpen: false,
-    isRecipeResultsOpen: false,
-    isRecipeIngredientsOpen: false
-  };
-
   componentDidMount = () => {
+    console.log('Recipe Page Loaded', this.props.venues);
+
     const { profile, isAuthenticated } = this.props;
     if (isAuthenticated === null || isAuthenticated === false) {
       return <Redirect to="/signin" />;
@@ -29,8 +24,8 @@ class Recipe extends Component {
       console.log('profile', profile);
       if (profile.profile !== null && profile.loading === false) {
         if (profile.profile.venues.length === 0) {
-          console.log('Redirect', profile.profile.venues);
-          return this.props.history.push('/onboarding');
+          console.log('Redirect', profile);
+          // return this.props.history.push('/onboarding');
         }
       }
     }
@@ -50,12 +45,6 @@ class Recipe extends Component {
 
   render() {
     const { recipes, selectedRecipe, loading } = this.props.recipe;
-    const {
-      isVenueOpen,
-      isRecipeDetailsOpen,
-      isRecipeResultsOpen,
-      isRecipeIngredientsOpen
-    } = this.state;
 
     let content;
     if (loading) {
@@ -73,9 +62,15 @@ class Recipe extends Component {
             <div className="recipeHeader">
               {selectedRecipe !== null ? (
                 // click name to edit recipe name
-                <h1>{selectedRecipe.displayName}</h1>
+                // <h1>{selectedRecipe.displayName}</h1>
+                !isEmpty(selectedRecipe.displayName) ? (
+                  // click name to edit recipe name
+                  <h1>{selectedRecipe.displayName}</h1>
+                ) : (
+                  <h1>Add New Recipe</h1>
+                )
               ) : (
-                <h1>Add Recipe</h1>
+                <h1>Add New Recipe</h1>
               )}
               <div className="twoButtons">
                 <Button

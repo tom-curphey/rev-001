@@ -10,11 +10,16 @@ import {
   STOP_VENUE_LOADING
 } from '../../../redux/types';
 import { isEmpty } from '../../../utils/utils';
-import { loadProfile } from '../profile/profileActions';
+import {
+  loadProfile,
+  setProfileLoading
+} from '../profile/profileActions';
+import { setAuthLoading } from '../../public/auth/authActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
-import { displayErrors } from '../../../utils/utils';
+import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
 import { loadRecipes } from '../recipe/recipeActions';
+import { removeProfileLoading } from '../profile/profileActions';
 
 export const setVenueLoading = () => dispatch => {
   dispatch({ type: SET_VENUE_LOADING });
@@ -31,44 +36,48 @@ export const loadVenues = (
   try {
     const res = await axios.get('/api/venue/all');
 
-    if (!isEmpty(res.data)) {
-      let errors = {
-        venue: 'No venues found'
-      };
-      dispatch(displayErrors(errors));
-    } else {
-      console.log('CHECK: ', res.data);
-      const filteredVenues = addSelectedNameToEndOfArray(
-        res.data,
-        'personal'
-      );
-      dispatch({
-        type: VENUES_LOADED,
-        payload: filteredVenues
-      });
+    console.log('CHECK: ', res.data);
+    // if (!isEmpty(res.data)) {
+    //   let errors = {
+    //     venue: 'No venues found'
+    //   };
+    //   console.log('e:::', errors);
 
-      if (!isEmpty(venueID)) {
-        const sV = filteredVenues.filter(
-          venue => venue._id === venueID
-        );
-        dispatch(setSelectedVenue(sV[0]));
+    //   // dispatch(displayErrors(errors));
+    // } else {
+    const filteredVenues = addSelectedNameToEndOfArray(
+      res.data,
+      'personal'
+    );
+    dispatch({
+      type: VENUES_LOADED,
+      payload: filteredVenues
+    });
+
+    if (!isEmpty(venueID)) {
+      const sV = filteredVenues.filter(
+        venue => venue._id === venueID
+      );
+      dispatch(setSelectedVenue(sV[0]));
+    } else {
+      if (!isEmpty(selectedVenue)) {
+        dispatch(setSelectedVenue(selectedVenue));
       } else {
-        if (!isEmpty(selectedVenue)) {
-          dispatch(setSelectedVenue(selectedVenue));
+        if (res.data.length !== 1) {
+          // Filter response to get selected venue
+          const selectedVenues = res.data.filter(venue => {
+            return venue.personal === false;
+          });
+          dispatch(setSelectedVenue(selectedVenues[0]));
         } else {
-          if (res.data.length !== 1) {
-            // Filter response to get selected venue
-            const selectedVenues = res.data.filter(venue => {
-              return venue.personal === false;
-            });
-            dispatch(setSelectedVenue(selectedVenues[0]));
-          } else {
-            dispatch(setSelectedVenue(res.data[0]));
-          }
+          dispatch(setSelectedVenue(res.data[0]));
         }
       }
     }
+    // }
   } catch (err) {
+    console.log('err', err);
+
     dispatch({
       type: VENUES_ERROR
     });
@@ -89,6 +98,8 @@ export const setSelectedVenue = selectedVenue => async dispatch => {
 // Add or Edit Venue
 export const addOrEditVenue = venueData => async dispatch => {
   dispatch(setVenueLoading());
+  dispatch(setProfileLoading());
+  // dispatch(setAuthLoading());
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -109,11 +120,12 @@ export const addOrEditVenue = venueData => async dispatch => {
     await dispatch(loadVenues(res.data));
     dispatch(setAlert('Venue Saved', 'success'));
   } catch (err) {
-    dispatch(displayErrors(err, dispatch, GET_ERRORS));
+    dispatch(displayErrors(err));
     dispatch({
       type: STOP_VENUE_LOADING
     });
     dispatch(setAlert('Venue Error', 'error'));
+    dispatch(removeProfileLoading());
   }
 };
 
@@ -142,12 +154,15 @@ export const addPersonalVenue = userEmail => async dispatch => {
       type: SELECTED_VENUE_SUCCESS,
       payload: res.data
     });
-    dispatch(loadProfile());
-    dispatch(loadVenues());
+    await dispatch(loadProfile());
+    await dispatch(loadVenues());
+    await dispatch(loadRecipes());
+    dispatch(setAlert('Account Created', 'success'));
   } catch (err) {
     dispatch({
       type: SELECTED_VENUE_FAILED
     });
-    displayErrors(err, dispatch, GET_ERRORS);
+    dispatch(displayErrors(err));
+    dispatch(removeProfileLoading());
   }
 };

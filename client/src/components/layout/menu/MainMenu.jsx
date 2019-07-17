@@ -20,10 +20,9 @@ const MainMenu = ({
   venues,
   history
 }) => {
-  console.log('venues', venues);
-
-  if (isEmpty(venues.venues)) {
-    return <Redirect to="/onboarding" />;
+  if (!venues.loading & isEmpty(venues.venues)) {
+    console.log('Check venues', venues);
+    // return <Redirect to="/onboarding" />;
   }
 
   const openVenueMenu = e => {

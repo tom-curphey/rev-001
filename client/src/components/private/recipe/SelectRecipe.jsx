@@ -29,15 +29,16 @@ class SelectRecipe extends Component {
       const { selectedRecipe } = this.props.recipe;
 
       // console.log('selectedIngredient', selectedIngredient);
-
-      let selectedValue = {};
-      selectedValue.label = selectedRecipe.displayName;
-      if (!selectedRecipe._id) {
-        selectedValue.value = 'new';
-      } else {
-        selectedValue.value = selectedRecipe._id;
+      if (!isEmpty(selectedRecipe.displayName)) {
+        let selectedValue = {};
+        selectedValue.label = selectedRecipe.displayName;
+        if (!selectedRecipe._id) {
+          selectedValue.value = 'new';
+        } else {
+          selectedValue.value = selectedRecipe._id;
+        }
+        this.setState({ selectedValue: selectedValue });
       }
-      this.setState({ selectedValue: selectedValue });
     }
     // if (!isEmpty(this.props.ingredient.selectedIngredient)) {
     //   const { selectedIngredient } = this.props.ingredient;

@@ -1,6 +1,7 @@
 import {
   UPDATE_PROFILE,
   SET_PROFILE_LOADING,
+  REMOVE_PROFILE_LOADING,
   PROFILE_LOADED,
   PROFILE_ERROR,
   CLEAR_PROFILE
@@ -41,6 +42,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+
+    case REMOVE_PROFILE_LOADING:
+      return {
+        ...state,
+        loading: false
       };
 
     default:
