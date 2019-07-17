@@ -13,7 +13,7 @@ import { addOrEditRecipe } from './recipeActions';
 
 class Recipe extends Component {
   componentDidMount = () => {
-    console.log('Recipe Page Loaded', this.props.venues);
+    // console.log('Recipe Page Loaded', this.props.venues);
 
     const { profile, isAuthenticated } = this.props;
     if (isAuthenticated === null || isAuthenticated === false) {
@@ -21,10 +21,9 @@ class Recipe extends Component {
     }
 
     if (profile) {
-      console.log('profile', profile);
       if (profile.profile !== null && profile.loading === false) {
         if (profile.profile.venues.length === 0) {
-          console.log('Redirect', profile);
+          console.log('Redirect? DO YOU NEED THIS?', profile);
           // return this.props.history.push('/onboarding');
         }
       }

@@ -16,7 +16,8 @@ const SelectInputBorder = ({
   className,
   error,
   name,
-  value
+  value,
+  inputLabel
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -71,7 +72,8 @@ const SelectInputBorder = ({
   };
 
   return (
-    <div>
+    <div className="selectInputBox">
+      <span>{inputLabel}</span>
       <Select
         // isClearable
         name={name}

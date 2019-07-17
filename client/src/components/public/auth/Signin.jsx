@@ -91,14 +91,14 @@ class Signin extends Component {
             )} */}
             <form onSubmit={this.handleOnSubmit}>
               <TextInput
-                placeholder="Email"
+                label="Email"
                 value={email}
                 name="email"
                 onChange={this.onChange}
                 error={errors.email && errors.email}
               />
               <TextInput
-                placeholder="Password"
+                label="Password"
                 value={password}
                 name="password"
                 onChange={this.onChange}

@@ -19,7 +19,7 @@ const TextInput = ({
 }) => {
   return (
     <label htmlFor={name} className="textInput">
-      {label}{' '}
+      <span>{label}</span>
       <input
         onChange={onChange}
         type={type}

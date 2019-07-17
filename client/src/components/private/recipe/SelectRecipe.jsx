@@ -92,6 +92,10 @@ class SelectRecipe extends Component {
       newRecipe.displayName = capitalizeFirstLetter(
         selectedValue.label
       );
+      newRecipe.urlName = newRecipe.displayName
+        .trim()
+        .replace(/\s+/g, '-')
+        .toLowerCase();
 
       // newRecipe.new = true;
       selectedRecipe.push(newRecipe);

@@ -41,7 +41,7 @@ class RecipeDetails extends Component {
   };
 
   componentDidMount = () => {
-    console.log('props', this.props);
+    // console.log('props', this.props);
 
     if (!isEmpty(this.props.match.params.recipe_name)) {
       if (isEmpty(this.props.recipe.selectedRecipe)) {
@@ -109,7 +109,9 @@ class RecipeDetails extends Component {
       } else {
         recipeData = {
           ...selectedRecipe,
-          serves: selectedRecipe.serves.toString()
+          serves: selectedRecipe.serves
+            ? selectedRecipe.serves.toString()
+            : ''
         };
       }
 
@@ -129,7 +131,10 @@ class RecipeDetails extends Component {
       const recipeData = {
         _id: selectedRecipe._id,
         displayName: selectedRecipe.displayName,
-        serves: selectedRecipe.serves.toString(),
+        // serves: selectedRecipe.serves.toString(),
+        serves: selectedRecipe.serves
+          ? selectedRecipe.serves.toString()
+          : '',
         salePricePerServe: selectedRecipe.salePricePerServe
           ? selectedRecipe.salePricePerServe.toString()
           : '',
@@ -176,16 +181,10 @@ class RecipeDetails extends Component {
         }
       }
 
-      console.log('recipeData', recipeData);
-
       this.setState({
         updated: false,
         selectedRecipe: recipeData
       });
-      // this.setState(prevState => ({
-      //   ...prevState.selectedRecipe,
-      //   selectedRecipe: this.props.recipe.selectedRecipe
-      // }));
     }
 
     if (prevState.selectedRecipe !== this.state.selectedRecipe) {

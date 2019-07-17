@@ -39,7 +39,7 @@ const MainVenueMenu = ({
   };
 
   let venueList;
-  console.log('venue', venues);
+  // console.log('venue', venues);
 
   if (!venues.loading && !isEmpty(venues.selectedVenue)) {
     if (

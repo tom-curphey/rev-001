@@ -145,7 +145,9 @@ export const roundNumberAsString = (value, decimals) => {
 
 export const capitalizeFirstLetter = string => {
   if (typeof string !== 'string') return '';
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return (
+    string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  );
 };
 
 export const setVenueData = venue => {
@@ -302,7 +304,7 @@ export const convertProfilePacketCostIntoCostPer100g = (
 };
 
 export const calculateRecipeItemTotal = (quantity, unit) => {
-  console.log(quantity, unit);
+  // console.log(quantity, unit);
 
   let total = '0.00';
 

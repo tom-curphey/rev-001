@@ -134,6 +134,9 @@ class OnboardingVenue extends Component {
     const options = [
       { value: 'bar', label: 'Bar', className: 'optOpt' },
       { value: 'cafe', label: 'Cafe' },
+      { value: 'drink', label: 'Drink Retail' },
+      { value: 'retail', label: 'Food Retail' },
+      { value: 'manufacturing', label: 'Manufacturing' },
       { value: 'restaurant', label: 'Restaurant' }
     ];
 
@@ -166,7 +169,7 @@ class OnboardingVenue extends Component {
 
                 <form onSubmit={this.handleOnSubmit}>
                   <TextInput
-                    placeholder="What’s the name of your venue?"
+                    label="Venue Name"
                     value={displayName}
                     name="displayName"
                     onChange={this.onChange}
@@ -174,7 +177,7 @@ class OnboardingVenue extends Component {
                     autoFocus={true}
                   />
                   <TextInput
-                    placeholder="Venue email address"
+                    label="Venue Email"
                     value={email}
                     name="email"
                     onChange={this.onChange}
@@ -182,7 +185,8 @@ class OnboardingVenue extends Component {
                   />
                   <SelectInputBorder
                     name="type"
-                    placeholder="Select venue type..."
+                    inputLabel="Business Type"
+                    label="Select venue type..."
                     options={options}
                     getSelectedValue={this.getSelectedValue}
                     error={errors.type && errors.type}

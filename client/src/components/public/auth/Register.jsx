@@ -117,7 +117,7 @@ class Register extends Component {
 
               <form onSubmit={this.handleOnSubmit}>
                 <TextInput
-                  placeholder="First Name"
+                  label="First Name"
                   value={firstName}
                   name="firstName"
                   onChange={this.onChange}
@@ -125,14 +125,14 @@ class Register extends Component {
                   autoFocus={true}
                 />
                 <TextInput
-                  placeholder="Email"
+                  label="Personal Email"
                   value={email}
                   name="email"
                   onChange={this.onChange}
                   error={errors.email && errors.email}
                 />
                 <TextInput
-                  placeholder="Password"
+                  label="Password"
                   value={password}
                   name="password"
                   onChange={this.onChange}

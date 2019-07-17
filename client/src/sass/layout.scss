@@ -801,6 +801,10 @@ form {
 
   label.textInput {
     width: 100%;
+    span {
+      padding-bottom: 2px;
+    }
+
     input {
       width: 100%;
       padding: 10px;
@@ -932,6 +936,12 @@ a.subLink {
   span:last-child {
     font-weight: bold;
     text-decoration: underline;
+  }
+}
+
+div.selectInputBox {
+  span {
+    padding-bottom: 2px;
   }
 }
 

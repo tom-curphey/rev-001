@@ -36,15 +36,7 @@ export const loadVenues = (
   try {
     const res = await axios.get('/api/venue/all');
 
-    console.log('CHECK: ', res.data);
-    // if (!isEmpty(res.data)) {
-    //   let errors = {
-    //     venue: 'No venues found'
-    //   };
-    //   console.log('e:::', errors);
-
-    //   // dispatch(displayErrors(errors));
-    // } else {
+    // console.log('CHECK: ', res.data);
     const filteredVenues = addSelectedNameToEndOfArray(
       res.data,
       'personal'

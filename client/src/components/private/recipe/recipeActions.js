@@ -31,7 +31,8 @@ export const getSelectedRecipe = (
   rawSelectedRecipe,
   profile
 ) => dispatch => {
-  // console.log('recipe', rawSelectedRecipe);
+  console.log('recipe', rawSelectedRecipe);
+
   dispatch(setSelectedRecipe(rawSelectedRecipe));
 };
 
