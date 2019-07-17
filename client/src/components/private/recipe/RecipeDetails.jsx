@@ -86,11 +86,19 @@ class RecipeDetails extends Component {
 
     if (this.props.recipe.selectedRecipe) {
       const { selectedRecipe } = this.props.recipe;
-
-      const recipeData = {
-        ...selectedRecipe,
-        serves: selectedRecipe.serves.toString()
-      };
+      console.log('SRR', selectedRecipe);
+      let recipeData;
+      if (selectedRecipe.ingredient === '__isNew__') {
+        recipeData = {
+          displayName: '',
+          serves: ''
+        };
+      } else {
+        recipeData = {
+          ...selectedRecipe,
+          serves: selectedRecipe.serves.toString()
+        };
+      }
 
       this.setState({
         selectedRecipe: recipeData

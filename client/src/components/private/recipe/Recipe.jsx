@@ -26,11 +26,11 @@ class Recipe extends Component {
     }
 
     if (profile) {
-      // console.log('profile', profile);
+      console.log('profile', profile);
       if (profile.profile !== null && profile.loading === false) {
         if (profile.profile.venues.length === 0) {
-          // console.log('Redirect', profile.profile.venues);
-          return <Redirect to="/onboarding" />;
+          console.log('Redirect', profile.profile.venues);
+          return this.props.history.push('/onboarding');
         }
       }
     }

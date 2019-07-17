@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ import chefhat from '../../../images/chef.svg';
 import apple from '../../../images/apple.svg';
 import packaging from '../../../images/packaging.svg';
 import menuIcon from '../../../images/menuIcon.svg';
+import { isEmpty } from '../../../utils/utils';
 
 const MainMenu = ({
   auth: { isAuthenticated, loading },
@@ -19,13 +20,14 @@ const MainMenu = ({
   venues,
   history
 }) => {
+  console.log('venues', venues);
+
+  if (isEmpty(venues.venues)) {
+    return <Redirect to="/onboarding" />;
+  }
+
   const openVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'block';
-  };
-
-  const handleLogout = () => {
-    logout();
-    history.push('/signin');
   };
 
   let venueName = <Spinner width="20px" />;

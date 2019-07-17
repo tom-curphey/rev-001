@@ -2,6 +2,10 @@ import React from 'react';
 import spinner from '../../images/spinner.gif';
 
 const Spinner = ({ width }) => {
+  if (!width) {
+    width = '30px';
+  }
+
   return (
     <div>
       <img

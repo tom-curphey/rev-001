@@ -8,6 +8,7 @@ import { Link, Redirect } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
+import Spinner from '../../layout/Spinner';
 
 class Register extends Component {
   state = {
@@ -19,30 +20,39 @@ class Register extends Component {
 
   componentDidMount() {
     // Redirect if logged in
+    const { auth, profile, history } = this.props;
 
     console.log(
-      'this.props.isAuthenticated',
-      this.props.isAuthenticated
+      'this.props.auth.isAuthenticated',
+      this.props.auth.isAuthenticated
     );
 
     if (
-      this.props.isAuthenticated !== null &&
-      this.props.isAuthenticated === true
+      // !profile.loading &&
+      // !auth.loading &&
+      auth.isAuthenticated !== null &&
+      auth.isAuthenticated === true
     ) {
-      return <Redirect to="/onboarding" />;
+      // return <Redirect to="/onboarding" />;
+      history.push('/onboarding');
     }
   }
 
   componentDidUpdate(prevProps, state) {
-    if (prevProps.errors !== this.props.errors) {
-      this.setState({ errors: this.props.errors });
+    const { auth, profile, errors } = this.props;
+
+    if (prevProps.errors !== errors) {
+      this.setState({ errors: errors });
     }
 
     if (
-      prevProps.isAuthenticated !== this.props.isAuthenticated &&
-      this.props.isAuthenticated === true
+      // !profile.loading &&
+      // !auth.loading &&
+      // prevProps.auth.isAuthenticated !== auth.isAuthenticated &&
+      auth.isAuthenticated === true
     ) {
       this.props.history.push('/onboarding');
+      // return <Redirect to="/onboarding" />;
     }
   }
 
@@ -71,6 +81,15 @@ class Register extends Component {
 
   render() {
     const { firstName, email, password, errors } = this.state;
+    const { auth, profile } = this.props;
+
+    let loading;
+    if (profile.loading && auth.loading) {
+      loading = <Spinner />;
+    } else {
+      loading = '';
+    }
+
     return (
       <PublicMenu>
         <nav className="toggle publicMenu" onClick={openNav}>
@@ -93,6 +112,8 @@ class Register extends Component {
                   their recipe profits while forcasting revenue.
                 </p>
               </div>
+
+              {loading && loading}
 
               <form onSubmit={this.handleOnSubmit}>
                 <TextInput
@@ -145,9 +166,9 @@ Register.propTypes = {
 const actions = { register, removeErrors };
 
 const mapState = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
   profile: state.profile,
-  errors: state.errors
+  errors: state.errors,
+  auth: state.auth
 });
 
 export default connect(

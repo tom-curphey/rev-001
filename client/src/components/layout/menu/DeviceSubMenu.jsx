@@ -19,6 +19,7 @@ const DeviceSubMenu = ({ logout, auth, history }) => {
       <span className="closebtn" onClick={closeNav}>
         &times;
       </span>
+      <Link to="/register">Register</Link>
       <Link to="/recipes">Recipes</Link>
       <Link to="!#">Ingredients</Link>
       <Link to="!#">Packaging</Link>

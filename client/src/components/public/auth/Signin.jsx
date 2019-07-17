@@ -8,6 +8,7 @@ import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { openNav } from '../../../utils/utils';
 import { removeErrors } from '../../../redux/errorActions';
+import Spinner from '../../../components/layout/Spinner';
 
 class Signin extends Component {
   state = {
@@ -25,8 +26,9 @@ class Signin extends Component {
 
   componentDidUpdate(prevProps, state) {
     if (
-      prevProps.isAuthenticated !== this.props.isAuthenticated &&
-      this.props.isAuthenticated
+      prevProps.auth.isAuthenticated !==
+        this.props.auth.isAuthenticated &&
+      this.props.auth.isAuthenticated
     ) {
       this.props.history.push('/recipes');
     }
@@ -63,6 +65,15 @@ class Signin extends Component {
 
   render() {
     const { email, password, errors } = this.state;
+    const { auth, profile } = this.props;
+
+    let loading;
+    if (profile.loading && auth.loading) {
+      loading = <Spinner />;
+    } else {
+      loading = '';
+    }
+
     return (
       <PublicMenu>
         <nav className="toggle publicMenu" onClick={openNav}>
@@ -72,6 +83,7 @@ class Signin extends Component {
           <section className="sideContent">
             <img src={logo} alt="Recipe Revenue Logo" />
             <h1>Sign in</h1>
+            {loading && loading}
             {/* {errors.signin && (
               <span className="errorMsg pageError">
                 {errors.signin}
@@ -123,7 +135,7 @@ const actions = {
 };
 
 const mapState = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   profile: state.profile,
   errors: state.errors
 });

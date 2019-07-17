@@ -1316,3 +1316,37 @@ section.accordion-open {
     }
   }
 }
+
+/* 
+Loading
+********************************
+********************************/
+
+section.loadingPage {
+  display: grid;
+  grid-template-columns: auto 400px;
+  max-width: 900px;
+  margin: auto;
+
+  img {
+    width: 100%;
+  }
+
+  div.loadingText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    div.loadingTextLayout {
+      display: grid;
+      grid-template-rows: auto auto;
+
+      h1 {
+        margin-bottom: 60px;
+        max-width: 300px;
+        text-align: center;
+        line-height: 50px;
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ export const REMOVE_ERRORS = 'REMOVE_ERRORS';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 
+export const SET_AUTH_LOADING = 'SET_AUTH_LOADING';
 export const SIGNIN_SUCCESS = 'SIGNIN_SUCCESS';
 export const SIGNIN_FAILED = 'SIGNIN_FAILED';
 export const LOAD_RESET_TOKEN = 'LOAD_RESET_TOKEN';

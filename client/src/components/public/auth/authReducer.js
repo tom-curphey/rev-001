@@ -1,4 +1,5 @@
 import {
+  SET_AUTH_LOADING,
   USER_LOADED,
   AUTH_ERROR,
   SIGNIN_SUCCESS,
@@ -26,6 +27,12 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case SET_AUTH_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+
     case USER_LOADED:
       return {
         ...state,

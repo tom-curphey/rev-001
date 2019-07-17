@@ -12,6 +12,7 @@ import { openNav } from '../../../utils/utils';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
 import PropTypes from 'prop-types';
+import { isEmpty } from '../../../utils/utils';
 
 class OnboardingVenue extends Component {
   state = {
@@ -23,48 +24,56 @@ class OnboardingVenue extends Component {
 
   componentDidMount() {
     // Redirect if logged in
-    if (this.props.isAuthenticated) {
-      this.props.history.push('/register');
-    }
+    // if (this.props.isAuthenticated) {
+    //   this.props.history.push('/register');
+    // }
+    const { auth, profile, history } = this.props;
 
-    if (
-      this.props.auth.isAuthenticated === null ||
-      this.props.auth.isAuthenticated === false
-    ) {
-      console.log('Props', this.props);
-      this.props.history.push('/register');
-    }
+    if (!auth.loading && !profile.loading) {
+      if (
+        auth.isAuthenticated === null ||
+        auth.isAuthenticated === false
+      ) {
+        console.log('Props', this.props);
+        // this.props.history.push('/register');
+      }
 
-    if (this.props.profile.profile !== null) {
-      if (this.props.profile.profile.venues.length !== 0) {
-        this.props.history.push('/recipes');
+      if (!isEmpty(profile.profile)) {
+        if (!isEmpty(profile.profile.venues)) {
+          history.push('/recipes');
+        }
       }
     }
   }
 
   componentDidUpdate(prevProps, state) {
-    if (prevProps.profile !== this.props.profile) {
-      this.props.history.push('/recipes');
-    }
+    // if (prevProps.profile !== this.props.profile) {
+    //   console.log('I did it');
 
-    if (this.props.profile.profile !== null) {
-      if (this.props.profile.profile.venues.length !== 0) {
-        this.props.history.push('/recipes');
+    //   this.props.history.push('/recipes');
+    // }
+
+    const { auth, profile, history } = this.props;
+
+    if (!auth.loading && !profile.loading) {
+      if (!isEmpty(profile.profile)) {
+        if (
+          auth.isAuthenticated === true &&
+          !isEmpty(profile.profile.venues)
+        ) {
+          history.push('/recipes');
+        }
       }
     }
+    console.log('auth', auth);
 
-    if (
-      prevProps.auth.isAuthenticated !==
-      this.props.auth.isAuthenticated
-    ) {
-      this.props.history.push('/recipes');
-    }
-
-    if (
-      this.props.auth.isAuthenticated === null ||
-      this.props.auth.isAuthenticated === false
-    ) {
-      this.props.history.push('/register');
+    if (!auth.loading) {
+      if (
+        auth.isAuthenticated === false ||
+        auth.isAuthenticated === null
+      ) {
+        this.props.history.push('/register');
+      }
     }
 
     if (prevProps.errors !== this.props.errors) {
@@ -74,7 +83,7 @@ class OnboardingVenue extends Component {
 
   componentWillUnmount() {
     console.log('Onboarding Venue Unmounted');
-    this.props.removeErrors();
+    // this.props.removeErrors();
   }
 
   onChange = e =>

@@ -31,42 +31,48 @@ export const loadVenues = (
   try {
     const res = await axios.get('/api/venue/all');
 
-    // console.log('CHECK: ', res.data);
-
-    const filteredVenues = addSelectedNameToEndOfArray(
-      res.data,
-      'personal'
-    );
-    dispatch({
-      type: VENUES_LOADED,
-      payload: filteredVenues
-    });
-
-    if (!isEmpty(venueID)) {
-      const sV = filteredVenues.filter(
-        venue => venue._id === venueID
-      );
-      dispatch(setSelectedVenue(sV[0]));
+    if (!isEmpty(res.data)) {
+      let errors = {
+        venue: 'No venues found'
+      };
+      dispatch(displayErrors(errors));
     } else {
-      if (!isEmpty(selectedVenue)) {
-        dispatch(setSelectedVenue(selectedVenue));
+      console.log('CHECK: ', res.data);
+      const filteredVenues = addSelectedNameToEndOfArray(
+        res.data,
+        'personal'
+      );
+      dispatch({
+        type: VENUES_LOADED,
+        payload: filteredVenues
+      });
+
+      if (!isEmpty(venueID)) {
+        const sV = filteredVenues.filter(
+          venue => venue._id === venueID
+        );
+        dispatch(setSelectedVenue(sV[0]));
       } else {
-        if (res.data.length !== 1) {
-          // Filter response to get selected venue
-          const selectedVenues = res.data.filter(venue => {
-            return venue.personal === false;
-          });
-          dispatch(setSelectedVenue(selectedVenues[0]));
+        if (!isEmpty(selectedVenue)) {
+          dispatch(setSelectedVenue(selectedVenue));
         } else {
-          dispatch(setSelectedVenue(res.data[0]));
+          if (res.data.length !== 1) {
+            // Filter response to get selected venue
+            const selectedVenues = res.data.filter(venue => {
+              return venue.personal === false;
+            });
+            dispatch(setSelectedVenue(selectedVenues[0]));
+          } else {
+            dispatch(setSelectedVenue(res.data[0]));
+          }
         }
       }
     }
-    // dispatch(setAlert('Venues Loaded', 'success'));
   } catch (err) {
     dispatch({
       type: VENUES_ERROR
     });
+    dispatch(displayErrors(err));
   }
 };
 

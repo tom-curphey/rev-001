@@ -35,7 +35,9 @@ export default function(state = initialState, actions) {
     case ADD_NEW_RECIPE:
       return {
         ...state,
-        selectedRecipe: '__isNew__',
+        selectedRecipe: {
+          ingredient: '__isNew__'
+        },
         loading: false
       };
 

@@ -5,6 +5,7 @@ import {
   REGISTER_FAILED,
   SIGNIN_SUCCESS,
   SIGNIN_FAILED,
+  SET_AUTH_LOADING,
   USER_LOADED,
   AUTH_ERROR,
   LOGOUT,
@@ -21,7 +22,10 @@ import {
   CLEAR_SUPPLIERS
 } from '../../../redux/types';
 import setAuthToken from '../../../utils/setAuthToken';
-import { loadProfile } from '../../private/profile/profileActions';
+import {
+  loadProfile,
+  setProfileLoading
+} from '../../private/profile/profileActions';
 import { loadVenues } from '../../private/venue/venueActions';
 import { loadRecipes } from '../../private/recipe/recipeActions';
 import { displayErrors } from '../../../redux/errorActions';
@@ -55,6 +59,8 @@ export const register = ({
   email,
   password
 }) => async dispatch => {
+  dispatch(setProfileLoading());
+  dispatch(setAuthLoading());
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -137,6 +143,8 @@ export const updatePassword = updatedPassword => async dispatch => {
 
 // Signin User
 export const signin = ({ email, password }) => async dispatch => {
+  dispatch(setProfileLoading());
+  dispatch(setAuthLoading());
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -269,4 +277,8 @@ export const resetPassword = ({
     dispatch(displayErrors(err));
     console.log('err', err);
   }
+};
+
+export const setAuthLoading = () => dispatch => {
+  dispatch({ type: SET_AUTH_LOADING });
 };

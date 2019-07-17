@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { logout } from '../../public/auth/authActions';
 import userIcon from '../../../images/user.svg';
 import exitIcon from '../../../images/exit.svg';
+import { isEmpty } from '../../../utils/utils';
 
 const MainVenueMenu = ({
   venues,
@@ -16,6 +17,10 @@ const MainVenueMenu = ({
   profile,
   logout
 }) => {
+  // if (isEmpty(venues.venues)) {
+  //   return <Redirect to="/onboarding" />;
+  // }
+
   const closeVenueMenu = e => {
     document.getElementById('venueMenu').style.display = 'none';
   };
