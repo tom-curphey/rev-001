@@ -86,7 +86,7 @@ const SelectInput = ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#9d9584',
+            neutral80: '#343434', //'#9d9584',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }

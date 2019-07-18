@@ -32,6 +32,11 @@ section.recipe {
 
       div.selectRecipe {
         width: 350px;
+        span {
+          padding-top: 8px;
+          color: $cOrangeDark;
+          font-weight: 400;
+        }
       }
     }
 

@@ -37,7 +37,8 @@ module.exports.addOrEditRecipe = async (req, res) => {
     serves,
     salePricePerServe,
     expectedSales,
-    processTime
+    processTime,
+    ingredients
   } = req.body;
 
   const recipeData = {};
@@ -68,6 +69,7 @@ module.exports.addOrEditRecipe = async (req, res) => {
     });
     recipeData.processTime = updatedProcessTime;
   }
+  if (ingredients) recipeData.ingredients = ingredients;
 
   try {
     if (_id) {

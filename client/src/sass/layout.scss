@@ -811,6 +811,7 @@ form {
       outline: 0px;
       border: 1px solid $cFadedDark;
       border-radius: 5px;
+      color: $cBlack; // TBC
     }
   }
 
@@ -942,6 +943,13 @@ a.subLink {
 div.selectInputBox {
   span {
     padding-bottom: 2px;
+  }
+}
+
+div.createtableSelectInputBox {
+  width: 100%;
+  div.borderSelectInput {
+    font-weight: 400;
   }
 }
 

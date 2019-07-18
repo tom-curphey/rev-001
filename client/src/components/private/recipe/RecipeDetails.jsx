@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { loadIngredients } from '../ingredient/ingredientActions';
 import SelectRecipe from './SelectRecipe';
 import AccordionBox from '../../layout/AccordionBox';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
+import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
 import binIcon from '../../../images/bin.svg';
@@ -22,6 +24,7 @@ import {
 class RecipeDetails extends Component {
   state = {
     updated: false,
+    selectRecipeError: false,
     selectedRecipe: {
       serves: '',
       salePricePerServe: '',
@@ -41,7 +44,12 @@ class RecipeDetails extends Component {
   };
 
   componentDidMount = () => {
-    // console.log('props', this.props);
+    console.log('props', this.props);
+    if (isEmpty(this.props.ingredient.ingredients)) {
+      console.log('LI');
+
+      this.props.loadIngredients();
+    }
 
     if (!isEmpty(this.props.match.params.recipe_name)) {
       if (isEmpty(this.props.recipe.selectedRecipe)) {
@@ -174,7 +182,7 @@ class RecipeDetails extends Component {
         }
         if (!isEmpty(recipeData.ingredients)) {
           const updatedIngredients = recipeData.ingredients.map(i => {
-            i.quantity = i.quantity.toString();
+            i.quantity = i.quantity ? i.quantity.toString() : '';
             return i;
           });
           recipeData.ingredients = updatedIngredients;
@@ -183,6 +191,7 @@ class RecipeDetails extends Component {
 
       this.setState({
         updated: false,
+        selectRecipeError: false,
         selectedRecipe: recipeData
       });
     }
@@ -196,17 +205,26 @@ class RecipeDetails extends Component {
     }
   };
 
+  selectRecipeError = () => {
+    console.log('Error');
+    this.setState({ selectRecipeError: true });
+  };
+
   handleRecipeNumberChange = e => {
-    e.persist();
-    let value = e.target.value;
-    if (!isNaN(value) || value === '') {
-      this.setState(prevState => ({
-        updated: true,
-        selectedRecipe: {
-          ...prevState.selectedRecipe,
-          [e.target.name]: value
-        }
-      }));
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      e.persist();
+      let value = e.target.value;
+      if (!isNaN(value) || value === '') {
+        this.setState(prevState => ({
+          updated: true,
+          selectedRecipe: {
+            ...prevState.selectedRecipe,
+            [e.target.name]: value
+          }
+        }));
+      }
+    } else {
+      this.selectRecipeError();
     }
   };
 
@@ -229,7 +247,7 @@ class RecipeDetails extends Component {
       recipeData.processTime = updatedProcessTime;
       this.setState({ updated: true, selectedRecipe: recipeData });
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -252,7 +270,7 @@ class RecipeDetails extends Component {
       recipeData.ingredients = updatedIngredients;
       this.setState({ updated: true, selectedRecipe: recipeData });
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -282,7 +300,7 @@ class RecipeDetails extends Component {
         }
       }));
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -315,7 +333,7 @@ class RecipeDetails extends Component {
 
       // console.log('updatedProcessTime---', updatedProcessTime);
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -335,7 +353,7 @@ class RecipeDetails extends Component {
 
       this.setState({ updated: true, selectedRecipe: recipeData });
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -366,7 +384,7 @@ class RecipeDetails extends Component {
         }
       }));
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
@@ -390,13 +408,35 @@ class RecipeDetails extends Component {
 
       // console.log('updatedIngredients---', updatedIngredients);
     } else {
-      console.log('Alert user to select a recipe');
+      this.selectRecipeError();
     }
   };
 
+  getSelectedIngredientValue = (
+    selectedIngredientValue,
+    itemOrder
+  ) => {
+    console.log('selectedIngredientValue', selectedIngredientValue);
+    const { selectedRecipe } = this.state;
+    const recipeData = { ...selectedRecipe };
+
+    let updatedRecipeIngredients = recipeData.ingredients.map(
+      item => {
+        if (item.order === itemOrder) {
+          item.ingredient = selectedIngredientValue.value;
+        }
+        return item;
+      }
+    );
+
+    recipeData.ingredients = updatedRecipeIngredients;
+    this.setState({ updated: true, selectedRecipe: recipeData });
+  };
+
   render() {
-    const { recipe, errors } = this.props;
+    const { recipe, ingredient, profile, errors } = this.props;
     const {
+      selectRecipeError,
       selectedRecipe: {
         serves,
         salePricePerServe,
@@ -406,6 +446,21 @@ class RecipeDetails extends Component {
         // steps: { processItem, processQuantity, processUnit }
       }
     } = this.state;
+
+    let ingredientOptions = [
+      {
+        label: 'No Ingredients Avaliable',
+        value: ''
+      }
+    ];
+    if (!isEmpty(ingredient.ingredients)) {
+      ingredientOptions = ingredient.ingredients.map(i => {
+        let selectData = {};
+        selectData.label = i.displayName;
+        selectData.value = i._id;
+        return selectData;
+      });
+    }
 
     const unitTimeOptions = [
       { value: 'sec', label: 'Seconds' },
@@ -513,7 +568,17 @@ class RecipeDetails extends Component {
                 />
               </div>
               <div className="ingredientSelect">
-                <TextInput
+                <CreatableSelectInput
+                  value={item.ingredient}
+                  name="ingredient"
+                  options={ingredientOptions}
+                  getSelectedValue={this.getSelectedIngredientValue}
+                  placeholder="Type ingredient name to start.."
+                  createLabel="+ Add Ingredient"
+                  data={item.order}
+                  styles={{ fontWeight: '400' }}
+                />
+                {/* <TextInput
                   placeholder="Ingredient Name"
                   value={item.ingredient}
                   name="ingredient"
@@ -521,7 +586,7 @@ class RecipeDetails extends Component {
                   // data={'323232'}
                   // error={errors.processItem && errors.processItem
                   // error={errors.processItem && errors.processItem}
-                />
+                /> */}
               </div>
               <div className="ingredientQuantity">
                 <TextInput
@@ -583,6 +648,9 @@ class RecipeDetails extends Component {
               <div>
                 <div className="selectRecipe">
                   <SelectRecipe />
+                  {selectRecipeError && (
+                    <span>Please select a recipe to start</span>
+                  )}
                 </div>
               </div>
               <div>
@@ -673,16 +741,23 @@ class RecipeDetails extends Component {
 
 const actions = {
   updateReduxSelectedRecipe,
-  getSelectedRecipe
+  getSelectedRecipe,
+  loadIngredients
 };
 
 RecipeDetails.propTypes = {
   recipe: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  ingredient: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  updateReduxSelectedRecipe: PropTypes.func.isRequired,
+  getSelectedRecipe: PropTypes.func.isRequired,
+  loadIngredients: PropTypes.func.isRequired
 };
 
 const mapState = state => ({
   recipe: state.recipe,
+  ingredient: state.ingredient,
   profile: state.profile,
   errors: state.errors
 });

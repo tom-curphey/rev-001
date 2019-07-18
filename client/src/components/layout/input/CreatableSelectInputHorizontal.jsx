@@ -102,7 +102,7 @@ const CreatableSelectInput = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options && options}
-        className={`BorderselectInput ${className}`}
+        className={`borderSelectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>
@@ -112,7 +112,7 @@ const CreatableSelectInput = ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#666',
+            neutral80: '#343434',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }

@@ -328,9 +328,18 @@ class VenueForm extends Component {
         title = venues.selectedVenue.displayName;
     }
 
+    // const typeOptions = [
+    //   { value: 'bar', label: 'Bar' },
+    //   { value: 'cafe', label: 'Cafe' },
+    //   { value: 'restaurant', label: 'Restaurant' }
+    // ];
+
     const typeOptions = [
       { value: 'bar', label: 'Bar' },
       { value: 'cafe', label: 'Cafe' },
+      { value: 'drink', label: 'Drink Retail' },
+      { value: 'retail', label: 'Food Retail' },
+      { value: 'manufacturing', label: 'Manufacturing' },
       { value: 'restaurant', label: 'Restaurant' }
     ];
 

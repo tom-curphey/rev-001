@@ -19,12 +19,13 @@ const CreatableSelectInput = ({
   value,
   label,
   createLabel,
-  largeSelect
+  largeSelect,
+  data
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, name);
+      getSelectedValue(newValue, data);
     }
   };
 
@@ -64,6 +65,7 @@ const CreatableSelectInput = ({
       // color: state.data.__isNew__ && '#343434',
       // backgroundColor: state.data.__isNew__ && '#f1ede7',
       padding: 12,
+      fontWeight: 400,
       fontSize: '16px',
       '&:hover': {
         color: '#343434',
@@ -92,7 +94,7 @@ const CreatableSelectInput = ({
   };
 
   return (
-    <div>
+    <div className="createtableSelectInputBox">
       {label && <span>{label}</span>}
       <CreatableSelect
         // isClearable
@@ -100,7 +102,7 @@ const CreatableSelectInput = ({
         placeholder={placeholder}
         onChange={handleChange}
         options={options && options}
-        className={`BorderselectInput ${className}`}
+        className={`borderSelectInput ${className}`}
         value={selectedValue}
         styles={customStyles}
         formatCreateLabel={userInput =>
@@ -110,7 +112,7 @@ const CreatableSelectInput = ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#666',
+            neutral80: '#343434', //'#666',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
