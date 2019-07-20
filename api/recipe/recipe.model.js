@@ -61,7 +61,7 @@ const RecipeSchema = new Schema(
         },
         quantity: {
           type: Number,
-          required: true
+          default: 0
         },
         unit: {
           type: String,
@@ -69,7 +69,7 @@ const RecipeSchema = new Schema(
         },
         total: {
           type: Number,
-          required: true
+          default: 0
         },
         order: {
           type: Number,
@@ -86,7 +86,7 @@ const RecipeSchema = new Schema(
         },
         quantity: {
           type: Number,
-          required: true
+          default: 0
         },
         unit: {
           type: String,
@@ -94,7 +94,7 @@ const RecipeSchema = new Schema(
         },
         total: {
           type: Number,
-          required: true
+          default: 0
         },
         order: {
           type: Number,

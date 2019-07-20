@@ -99,6 +99,8 @@ class Recipe extends Component {
     const { recipe, errors } = this.props;
     const { displayRecipeNameForm, selectedRecipe } = this.state;
 
+    console.log('SR', recipe);
+
     let content;
     if (recipe.loading) {
       content = (
@@ -107,7 +109,7 @@ class Recipe extends Component {
         </div>
       );
     } else {
-      if (selectedRecipe === null && isEmpty(recipe.recipes)) {
+      if (isEmpty(recipe.selectedRecipe) && isEmpty(recipe.recipes)) {
         return <Redirect to="/welcome" />;
       } else {
         content = (

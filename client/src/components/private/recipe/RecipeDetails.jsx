@@ -32,11 +32,12 @@ class RecipeDetails extends Component {
       expectedSales: '',
       processTime: [
         {
+          _id: '__isNew__',
           type: 'processTime',
           description: '',
           quantity: '',
           unit: 'sec',
-          order: ''
+          order: '1'
         }
       ],
       ingredients: []
@@ -109,7 +110,7 @@ class RecipeDetails extends Component {
               description: '',
               quantity: '',
               unit: 'sec',
-              order: ''
+              order: '1'
             }
           ],
           ingredients: []
@@ -167,14 +168,14 @@ class RecipeDetails extends Component {
             description: '',
             quantity: '',
             unit: 'hour',
-            order: ''
+            order: '1'
           }
         ];
       } else {
         if (!isEmpty(recipeData.processTime)) {
           const updatedProcessTime = recipeData.processTime.map(
             pt => {
-              pt.quantity = pt.quantity.toString();
+              pt.quantity = pt.quantity ? pt.quantity.toString() : '';
               return pt;
             }
           );
@@ -276,10 +277,12 @@ class RecipeDetails extends Component {
 
   addProcessTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      const { processTime } = this.state.selectedRecipe;
+      const { processTime, ingredients } = this.state.selectedRecipe;
 
-      // const ptCount = processTime.length;
-      // console.log('pt', ptCount);
+      const ptCount = processTime.length;
+      const iCount = ingredients.length;
+      console.log('pt', ptCount);
+      console.log('i', iCount);
 
       const step = {
         _id: '__isNew__',
@@ -287,8 +290,10 @@ class RecipeDetails extends Component {
         quantity: '',
         unit: 'min',
         total: '',
-        order: processTime.length + 1
+        order: processTime.length + ingredients.length + 1
       };
+
+      console.log('so', step.order);
 
       processTime.push(step);
 
@@ -359,18 +364,22 @@ class RecipeDetails extends Component {
 
   addRecipeIngredient = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      const { ingredients } = this.state.selectedRecipe;
+      const { processTime, ingredients } = this.state.selectedRecipe;
 
-      // const ptCount = processTime.length;
-      // console.log('pt', ptCount);
+      const ptCount = processTime.length;
+      const iCount = ingredients.length;
+      console.log('pt', ptCount);
+      console.log('i', iCount);
 
       const ingredient = {
         ingredient: '__isNew__',
         quantity: '',
         unit: 'gram',
         total: '',
-        order: ingredients.length + 1
+        order: processTime.length + ingredients.length + 1
       };
+
+      console.log('io', ingredient.order);
 
       ingredients.push(ingredient);
 
@@ -433,6 +442,42 @@ class RecipeDetails extends Component {
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
+  deleteRecipeIngredient = itemOrder => e => {
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      // const { name, value } = e.target;
+      const { selectedRecipe } = this.state;
+      const recipeData = { ...selectedRecipe };
+
+      let updatedIngredients = recipeData.ingredients.filter(item => {
+        return item.order !== itemOrder;
+      });
+
+      recipeData.Ingredients = updatedIngredients;
+
+      console.log('RD', recipeData);
+
+      this.setState({ updated: true, selectedRecipe: recipeData });
+    } else {
+      this.selectRecipeError();
+    }
+  };
+
+  compareRecipeItems = (a, b) => {
+    console.log('a', a);
+    console.log('b', b);
+
+    const itemA = a.order;
+    const itemB = b.order;
+
+    let comparison = 0;
+    if (itemA > itemB) {
+      comparison = 1;
+    } else if (itemA < itemB) {
+      comparison = -1;
+    }
+    return comparison;
+  };
+
   render() {
     const { recipe, ingredient, profile, errors } = this.props;
     const {
@@ -443,7 +488,6 @@ class RecipeDetails extends Component {
         expectedSales,
         processTime,
         ingredients
-        // steps: { processItem, processQuantity, processUnit }
       }
     } = this.state;
 
@@ -463,6 +507,11 @@ class RecipeDetails extends Component {
     }
 
     const unitTimeOptions = [
+      { value: 'sec', label: 'Second' },
+      { value: 'min', label: 'Minute' },
+      { value: 'hour', label: 'Hour' }
+    ];
+    const unitTimeOptionsPlural = [
       { value: 'sec', label: 'Seconds' },
       { value: 'min', label: 'Minutes' },
       { value: 'hour', label: 'Hours' }
@@ -493,10 +542,12 @@ class RecipeDetails extends Component {
       }
     }
 
+    // Sort Recipe items in order
+    const recipeItemsInOrder = ri.sort(this.compareRecipeItems);
+
     let recipeItems;
     if (!isEmpty(ri)) {
-      // console.log('recipeItems', ri);
-      recipeItems = ri.map((item, i) => {
+      recipeItems = recipeItemsInOrder.map((item, i) => {
         // console.log('item', item);
 
         if (item.description || item.description === '') {
@@ -521,7 +572,6 @@ class RecipeDetails extends Component {
               </div>
               <div className="processQuantity">
                 <TextInput
-                  placeholder="0"
                   value=""
                   value={item.quantity}
                   name="quantity"
@@ -535,7 +585,11 @@ class RecipeDetails extends Component {
               <div className="processUnit">
                 <SelectInput
                   name="processUnit"
-                  options={unitTimeOptions}
+                  options={
+                    item.quantity >= 2
+                      ? unitTimeOptionsPlural
+                      : unitTimeOptions
+                  }
                   getSelectedValue={this.getSelectedUnitTimeValue}
                   error={errors.processUnit && errors.processUnit}
                   value={item.unit}
@@ -582,7 +636,6 @@ class RecipeDetails extends Component {
               </div>
               <div className="ingredientQuantity">
                 <TextInput
-                  placeholder="0"
                   value=""
                   value={item.quantity}
                   name="quantity"
@@ -615,7 +668,7 @@ class RecipeDetails extends Component {
               </div>
               <div
                 className="ingredientIcon delete"
-                onClick={this.deleteProcessTime(item.order)}
+                onClick={this.deleteRecipeIngredient(item.order)}
               >
                 <img
                   src={binIcon}

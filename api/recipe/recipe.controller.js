@@ -65,11 +65,19 @@ module.exports.addOrEditRecipe = async (req, res) => {
         };
         item = newItem;
       }
+      // item.quantity = item.quantity !== '' ? item.quantity : 0;
       return item;
     });
     recipeData.processTime = updatedProcessTime;
   }
-  if (ingredients) recipeData.ingredients = ingredients;
+  // if (processTime) recipeData.processTime = processTime;
+  if (ingredients) {
+    const filteredIngredients = ingredients.filter(ing => {
+      return ing.ingredient !== '__isNew__';
+    });
+
+    recipeData.ingredients = filteredIngredients;
+  }
 
   try {
     if (_id) {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  // SET_RECIPES_LOADING,
+  SET_RECIPES_LOADING,
   RECIPES_LOADED,
   RECIPES_ERROR,
   ADD_NEW_RECIPE,
@@ -76,6 +76,9 @@ export const updateReduxSelectedRecipe = selectedRecipe => dispatch => {
 };
 
 export const addNewRecipe = () => async dispatch => {
+  dispatch({
+    type: SET_RECIPES_LOADING
+  });
   dispatch({
     type: ADD_NEW_RECIPE
   });

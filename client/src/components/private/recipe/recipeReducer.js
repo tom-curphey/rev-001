@@ -4,7 +4,7 @@ import {
   ADD_NEW_RECIPE,
   SET_SELECTED_RECIPE,
   UPDATE_SELECTED_RECIPE_STATE,
-  STOP_RECIPES_LOADING,
+  SET_RECIPES_LOADING,
   RECIPES_ERROR
 } from '../../../redux/types';
 
@@ -18,6 +18,12 @@ const initialState = {
 export default function(state = initialState, actions) {
   const { type, payload } = actions;
   switch (type) {
+    case SET_RECIPES_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+
     case RECIPES_LOADED:
       return {
         ...state,
