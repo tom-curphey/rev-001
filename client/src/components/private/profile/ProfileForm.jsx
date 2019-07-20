@@ -46,6 +46,8 @@ class ProfileForm extends Component {
 
   componentDidUpdate(prevProps, state) {
     if (prevProps.errors !== this.props.errors) {
+      console.log('STATE', this.state);
+
       this.setState({ errors: this.props.errors });
     } else {
       if (prevProps.user !== this.props.user) {
@@ -57,10 +59,11 @@ class ProfileForm extends Component {
       }
 
       if (
-        prevProps.profile !== this.props.profile &&
+        prevProps.profile.profile !== this.props.profile.profile &&
         this.props.profile !== null &&
         this.props.profile.profile !== null
       ) {
+        console.log('I did it');
         const {
           firstName,
           lastName,

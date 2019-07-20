@@ -36,7 +36,7 @@ class RecipeDetails extends Component {
           description: '',
           quantity: '',
           unit: 'sec',
-          ordwer: ''
+          order: ''
         }
       ],
       ingredients: []
@@ -109,7 +109,7 @@ class RecipeDetails extends Component {
               description: '',
               quantity: '',
               unit: 'sec',
-              ordwer: ''
+              order: ''
             }
           ],
           ingredients: []
@@ -167,7 +167,7 @@ class RecipeDetails extends Component {
             description: '',
             quantity: '',
             unit: 'hour',
-            ordwer: ''
+            order: ''
           }
         ];
       } else {
@@ -488,7 +488,8 @@ class RecipeDetails extends Component {
       }
       for (let i = 0; i < ingredients.length; i++) {
         const ingredient = ingredients[i];
-        ri.push(ingredient);
+        // ri.push(ingredient);
+        ri.splice(ingredient.order, 0, ingredient);
       }
     }
 
@@ -563,7 +564,7 @@ class RecipeDetails extends Component {
             <li key={i}>
               <div className="ingredientIcon">
                 <img
-                  src={timerIcon}
+                  src={appleIcon}
                   alt="Ingredeint icon to represent the recipe ingredient item"
                 />
               </div>
@@ -578,15 +579,6 @@ class RecipeDetails extends Component {
                   data={item.order}
                   styles={{ fontWeight: '400' }}
                 />
-                {/* <TextInput
-                  placeholder="Ingredient Name"
-                  value={item.ingredient}
-                  name="ingredient"
-                  onChange={this.updateProcessTime(item.order)}
-                  // data={'323232'}
-                  // error={errors.processItem && errors.processItem
-                  // error={errors.processItem && errors.processItem}
-                /> */}
               </div>
               <div className="ingredientQuantity">
                 <TextInput

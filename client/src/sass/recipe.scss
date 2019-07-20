@@ -7,13 +7,38 @@ section.recipe {
   max-width: 900px;
 
   div.recipeHeader {
-    display: grid;
-    grid-template-columns: 300px auto;
+    // display: grid;
+    // grid-template-columns: auto 420px;
     margin-bottom: 30px;
 
+    div.recipeName {
+      display: inline-block;
+      form {
+        height: 50px;
+        margin-bottom: 4px;
+      }
+      input {
+        font-size: 2em;
+        font-weight: bold;
+        width: 220px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        height: 50px;
+      }
+    }
     h1 {
-      display: flex;
+      margin-top: 2px;
+      display: inline-flex;
       align-items: center;
+      height: 50px;
+      padding: 0px 10px;
+      border-radius: 10px;
+      border: 1px solid $cWhite;
+
+      &:hover {
+        background-color: $cFaded;
+        cursor: pointer;
+      }
     }
 
     div.twoButtons {
@@ -21,6 +46,7 @@ section.recipe {
       grid-template-columns: 200px 200px;
       grid-gap: 20px;
       justify-content: end;
+      float: right;
     }
   }
 

@@ -14,30 +14,50 @@ const AdminMenu = ({ auth, profile, children, history }) => {
   }
 
   let content;
-  if (auth.loading || profile.loading) {
-    content = <LoadingPage />;
-  } else {
-    if (isEmpty(profile.profile.venues)) {
-      console.log('I was touching it');
-
-      return <Redirect to="onboarding" />;
+  if (isEmpty(profile.profile)) {
+    if (auth.loading || profile.loading) {
+      content = <LoadingPage />;
     } else {
-      content = (
-        <section className="app">
-          <DeviceMenu />
-          <div className="kalindi">
-            <DeviceSubMenu />
-            <AddSupplierModal />
-            <div id="screen">
-              <main id="main">
-                <MainMenu />
-                <section className="screenData">{children}</section>
-              </main>
+      console.log('ppp', profile);
+
+      if (isEmpty(profile.profile.venues)) {
+        console.log('I was touching it');
+
+        return <Redirect to="onboarding" />;
+      } else {
+        content = (
+          <section className="app">
+            <DeviceMenu />
+            <div className="kalindi">
+              <DeviceSubMenu />
+              <AddSupplierModal />
+              <div id="screen">
+                <main id="main">
+                  <MainMenu />
+                  <section className="screenData">{children}</section>
+                </main>
+              </div>
             </div>
-          </div>
-        </section>
-      );
+          </section>
+        );
+      }
     }
+  } else {
+    content = (
+      <section className="app">
+        <DeviceMenu />
+        <div className="kalindi">
+          <DeviceSubMenu />
+          <AddSupplierModal />
+          <div id="screen">
+            <main id="main">
+              <MainMenu />
+              <section className="screenData">{children}</section>
+            </main>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return content;

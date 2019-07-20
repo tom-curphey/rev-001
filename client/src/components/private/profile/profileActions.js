@@ -7,8 +7,9 @@ import {
   PROFILE_ERROR,
   GET_ERRORS
 } from '../../../redux/types';
-import { displayErrors } from '../../../utils/utils';
+// import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
+import { displayErrors } from '../../../redux/errorActions';
 
 // Load Profile
 export const loadProfile = () => async dispatch => {
@@ -26,6 +27,8 @@ export const loadProfile = () => async dispatch => {
 };
 
 export const updateProfile = profileData => async dispatch => {
+  console.log('profileData', profileData);
+
   try {
     const res = await axios.post('/api/profile', profileData);
     dispatch({
@@ -34,11 +37,12 @@ export const updateProfile = profileData => async dispatch => {
     });
     dispatch(setAlert('Profile Saved', 'success'));
   } catch (err) {
-    // console.log('err', err);
-    dispatch({
-      type: PROFILE_ERROR
-    });
-    displayErrors(err, dispatch, GET_ERRORS);
+    console.log('err', err);
+    // dispatch({
+    //   type: PROFILE_ERROR
+    // });
+    dispatch(displayErrors(err));
+    dispatch(removeProfileLoading());
     dispatch(setAlert('Profile Error', 'error'));
   }
 };

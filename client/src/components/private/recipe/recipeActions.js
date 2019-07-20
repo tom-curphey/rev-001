@@ -31,22 +31,18 @@ export const getSelectedRecipe = (
   rawSelectedRecipe,
   profile
 ) => dispatch => {
-  console.log('recipe', rawSelectedRecipe);
-
   dispatch(setSelectedRecipe(rawSelectedRecipe));
 };
 
 export const setSelectedRecipe = selectedRecipe => dispatch => {
-  console.log('recipe', selectedRecipe);
   dispatch({ type: SET_SELECTED_RECIPE, payload: selectedRecipe });
 };
 
 export const removeSelectedRecipe = () => {
-  console.log('recipe');
+  console.log('REMOVE RECIPE..');
 };
 
 export const addOrEditRecipe = selectedRecipe => async dispatch => {
-  console.log('recipe', selectedRecipe);
   try {
     const config = {
       headers: {

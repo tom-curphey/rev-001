@@ -9,13 +9,23 @@ import { isEmpty } from '../../../utils/utils';
 import AccordionBox from '../../layout/AccordionBox';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
-import { addOrEditRecipe } from './recipeActions';
+import {
+  addOrEditRecipe,
+  updateReduxSelectedRecipe
+} from './recipeActions';
+import TextInput from '../../layout/input/TextInput';
 
 class Recipe extends Component {
+  state = {
+    selectedRecipe: null,
+    displayRecipeNameForm: false,
+    updated: false
+  };
+
   componentDidMount = () => {
     // console.log('Recipe Page Loaded', this.props.venues);
 
-    const { profile, isAuthenticated } = this.props;
+    const { profile, isAuthenticated, recipe } = this.props;
     if (isAuthenticated === null || isAuthenticated === false) {
       return <Redirect to="/signin" />;
     }
@@ -28,6 +38,48 @@ class Recipe extends Component {
         }
       }
     }
+
+    if (!isEmpty(recipe.selectedRecipe)) {
+      this.setState({
+        selectedRecipe: recipe.selectedRecipe
+      });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const { recipe } = this.props;
+    if (
+      prevProps.recipe.selectedRecipe !==
+      this.props.recipe.selectedRecipe
+    ) {
+      if (!isEmpty(recipe.selectedRecipe)) {
+        this.setState({
+          selectedRecipe: recipe.selectedRecipe
+        });
+      }
+    }
+  };
+
+  displayRecipeNameForm = () => {
+    this.setState({
+      displayRecipeNameForm: true
+    });
+  };
+
+  editRecipeName = e => {
+    // console.log('e.t', e.target.value);
+    e.persist();
+    this.setState(prevState => ({
+      selectedRecipe: {
+        ...prevState.selectedRecipe,
+        displayName: e.target.value
+      }
+    }));
+  };
+
+  updateReduxSelectedRecipeName = () => {
+    this.props.updateReduxSelectedRecipe(this.state.selectedRecipe);
+    this.setState({ displayRecipeNameForm: false });
   };
 
   handleSaveRecipe = () => {
@@ -43,28 +95,54 @@ class Recipe extends Component {
   };
 
   render() {
-    const { recipes, selectedRecipe, loading } = this.props.recipe;
+    // const { recipes, selectedRecipe, loading } = this.props.recipe;
+    const { recipe, errors } = this.props;
+    const { displayRecipeNameForm, selectedRecipe } = this.state;
 
     let content;
-    if (loading) {
+    if (recipe.loading) {
       content = (
         <div style={{ marginTop: '200px' }}>
           <Spinner width="30px" />
         </div>
       );
     } else {
-      if (selectedRecipe === null && isEmpty(recipes)) {
+      if (selectedRecipe === null && isEmpty(recipe.recipes)) {
         return <Redirect to="/welcome" />;
       } else {
         content = (
           <Fragment>
             <div className="recipeHeader">
-              {selectedRecipe !== null ? (
+              {recipe.selectedRecipe !== null ? (
                 // click name to edit recipe name
                 // <h1>{selectedRecipe.displayName}</h1>
-                !isEmpty(selectedRecipe.displayName) ? (
+                !isEmpty(recipe.selectedRecipe.displayName) ? (
                   // click name to edit recipe name
-                  <h1>{selectedRecipe.displayName}</h1>
+                  <div
+                    className="recipeName"
+                    onClick={this.displayRecipeNameForm}
+                  >
+                    {displayRecipeNameForm ? (
+                      <form
+                        onBlur={this.updateReduxSelectedRecipeName}
+                      >
+                        <TextInput
+                          value={selectedRecipe.displayName}
+                          name="recipeName"
+                          onChange={this.editRecipeName}
+                          type="text"
+                          autoFocus={true}
+                          error={
+                            errors.displayName && errors.displayName
+                          }
+                        />
+                      </form>
+                    ) : (
+                      <h1 onClick={this.getRecipeNameForm}>
+                        {selectedRecipe && selectedRecipe.displayName}
+                      </h1>
+                    )}
+                  </div>
                 ) : (
                   <h1>Add New Recipe</h1>
                 )
@@ -114,14 +192,16 @@ Recipe.propTypes = {
 };
 
 const actions = {
-  addOrEditRecipe
+  addOrEditRecipe,
+  updateReduxSelectedRecipe
 };
 
 const mapState = state => ({
   profile: state.profile,
   isAuthenticated: state.auth.isAuthenticated,
   venues: state.venues,
-  recipe: state.recipe
+  recipe: state.recipe,
+  errors: state.errors
 });
 
 export default connect(
