@@ -4,7 +4,7 @@ import arrow from '../../images/arrow.svg';
 
 class AccordionBoxWithOpenHeader extends Component {
   state = {
-    status: 'closed'
+    status: 'open'
   };
 
   componentDidMount = () => {

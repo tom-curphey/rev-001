@@ -5,6 +5,7 @@ section.recipe {
   width: 100%;
   margin: 0 auto;
   max-width: 900px;
+  height: 2000px;
 
   div.recipeHeader {
     // display: grid;
@@ -211,6 +212,56 @@ section.recipe {
             font-size: 14px;
             font-weight: 400;
           }
+        }
+      }
+    }
+  }
+
+  section.recipeResults {
+    div.resultsForm {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 260px auto;
+      grid-gap: 20px;
+      label {
+        margin-bottom: 0px;
+      }
+      p {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    h3 {
+      text-align: center;
+      font-size: 18px;
+      border-top: 1px solid $cFaded;
+      border-bottom: 1px solid $cFaded;
+      padding: 16px 2px;
+      color: $cGrey;
+      margin: 50px 0px;
+    }
+
+    div.resultsData {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 15px;
+      ul {
+        li:first-child {
+          display: flex;
+          justify-content: center;
+          padding-bottom: 30px;
+          img {
+            width: 80px;
+          }
+        }
+
+        li {
+          display: grid;
+          grid-template-columns: auto 60px;
+          grid-gap: 20px;
+          max-width: 230px;
+          margin: 0px auto;
         }
       }
     }

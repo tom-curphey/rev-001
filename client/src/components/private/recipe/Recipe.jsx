@@ -6,6 +6,7 @@ import AuthMenu from '../../layout/menu/AuthMenu';
 import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
 import RecipeHeader from './RecipeHeader';
+import RecipeResults from './RecipeResults';
 import AccordionBox from '../../layout/AccordionBox';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
@@ -52,12 +53,11 @@ class Recipe extends Component {
             <RecipeHeader />
             <AccordionBoxWithOpenHeader
               headerText="Venue Details + Edit form for operating costs"
-              onClick="handleAccordianClick"
               id="venueAccordion"
             >
               <div>Edit the venue</div>
             </AccordionBoxWithOpenHeader>
-
+            {!isEmpty(recipe.selectedRecipe) && <RecipeResults />}
             <RecipeDetails />
           </Fragment>
         );

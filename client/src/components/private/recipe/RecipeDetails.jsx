@@ -9,12 +9,8 @@ import RecipeProcessTime from './RecipeProcessTime';
 import RecipeIngredient from './RecipeIngredient';
 import AccordionBox from '../../layout/AccordionBox';
 
-import TextInput from '../../layout/input/TextInput';
-import SelectInput from '../../layout/input/SelectInput';
-
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
-import binIcon from '../../../images/bin.svg';
 import {
   getSelectedRecipe,
   updateReduxSelectedRecipe
