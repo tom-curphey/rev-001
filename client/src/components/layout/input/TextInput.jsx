@@ -10,6 +10,7 @@ const TextInput = ({
   info,
   type,
   onChange,
+  onBlur,
   disabled,
   id,
   style,
@@ -22,6 +23,7 @@ const TextInput = ({
       <span>{label}</span>
       <input
         onChange={onChange}
+        onBlur={onBlur}
         type={type}
         name={name}
         value={value}

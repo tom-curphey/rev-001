@@ -20,7 +20,8 @@ const CreatableSelectInput = ({
   label,
   createLabel,
   largeSelect,
-  data
+  data,
+  onBlur
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
@@ -101,6 +102,7 @@ const CreatableSelectInput = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
+        onBlur={onBlur}
         options={options && options}
         className={`borderSelectInput ${className}`}
         value={selectedValue}

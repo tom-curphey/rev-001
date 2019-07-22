@@ -28,13 +28,9 @@ import { loadRecipes } from './components/private/recipe/recipeActions';
 import setAuthToken from './utils/setAuthToken';
 import { AUTH_ERROR } from './redux/types';
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
-
 const App = () => {
   // This will continue running..
-  // Adding [] will cause the lop to stop
+  // Adding [] will cause the loop to stop
   // It tells react that the hook doesn't rely on props or state
   useEffect(() => {
     if (localStorage.token) {

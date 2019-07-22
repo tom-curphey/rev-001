@@ -68,4 +68,5 @@ const mapState = state => ({
   profile: state.profile
 });
 
-export default connect(mapState)(AdminMenu);
+const MemoChild = React.memo(AdminMenu);
+export default connect(mapState)(MemoChild);

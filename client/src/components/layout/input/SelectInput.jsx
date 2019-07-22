@@ -15,6 +15,7 @@ const SelectInput = ({
   placeholder,
   className,
   error,
+  onBlur,
   name,
   value,
   data
@@ -78,6 +79,7 @@ const SelectInput = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
+        onBlur={onBlur}
         options={options}
         className={`selectInput ${className}`}
         value={selectedValue}

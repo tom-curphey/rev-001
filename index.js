@@ -3,6 +3,7 @@
 const express = require('express');
 const path = require('path');
 const connectDB = require('./config/db');
+const React = require('./client/node_modules/react');
 
 const app = express();
 
@@ -33,6 +34,10 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
   });
+
+  // Check for re rendering issues
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
 }
 
 const PORT = process.env.PORT || 5000;

@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loadIngredients } from '../ingredient/ingredientActions';
 import SelectRecipe from './SelectRecipe';
+import RecipeDetailsHeader from './RecipeDetailsHeader';
+import RecipeProcessTime from './RecipeProcessTime';
+import RecipeIngredient from './RecipeIngredient';
 import AccordionBox from '../../layout/AccordionBox';
-import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
+
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
-import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
+
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
 import binIcon from '../../../images/bin.svg';
@@ -18,7 +21,8 @@ import {
 } from './recipeActions';
 import {
   isEmpty,
-  calculateRecipeItemTotal
+  updateRecipeItemsOrder,
+  compareItems
 } from '../../../utils/utils';
 
 class RecipeDetails extends Component {
@@ -28,7 +32,6 @@ class RecipeDetails extends Component {
     selectedRecipe: {
       serves: '',
       salePricePerServe: '',
-      expectedSales: '',
       expectedSales: '',
       processTime: [
         {
@@ -45,10 +48,7 @@ class RecipeDetails extends Component {
   };
 
   componentDidMount = () => {
-    console.log('props', this.props);
     if (isEmpty(this.props.ingredient.ingredients)) {
-      console.log('LI');
-
       this.props.loadIngredients();
     }
 
@@ -57,7 +57,7 @@ class RecipeDetails extends Component {
         if (isEmpty(this.props.recipe.recipes)) {
           console.log('Load recipes');
         } else {
-          console.log('Select recipe from state');
+          // console.log('Select recipe from state');
           const selectedRecipe = this.props.recipe.recipes.filter(
             recipe => {
               return (
@@ -71,6 +71,8 @@ class RecipeDetails extends Component {
           );
         }
       } else {
+        console.log('HIT');
+
         if (
           this.props.recipe.selectedRecipe.urlName !==
           this.props.match.params.recipe_name
@@ -82,9 +84,26 @@ class RecipeDetails extends Component {
           const { selectedRecipe } = this.props.recipe;
 
           const recipeData = {
-            ...selectedRecipe,
-            serves: selectedRecipe.serves.toString()
+            ...selectedRecipe
+            // serves: selectedRecipe.serves.toString()
           };
+
+          console.log('RECIPE DATA', recipeData);
+
+          if (
+            isEmpty(recipeData.processTime) &&
+            isEmpty(recipeData.ingredients)
+          ) {
+            recipeData.processTime = [
+              {
+                type: 'processTime',
+                description: '',
+                quantity: '',
+                unit: 'sec',
+                order: '1'
+              }
+            ];
+          }
 
           this.setState({
             selectedRecipe: recipeData
@@ -95,7 +114,7 @@ class RecipeDetails extends Component {
 
     if (this.props.recipe.selectedRecipe) {
       const { selectedRecipe } = this.props.recipe;
-      console.log('SRR', selectedRecipe);
+      // console.log('SRR', selectedRecipe);
       let recipeData;
       if (selectedRecipe.ingredient === '__isNew__') {
         recipeData = {
@@ -131,6 +150,12 @@ class RecipeDetails extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    console.log('Updated');
+    // console.log('prevProps', prevProps.recipe.selectedRecipe);
+    console.log('thisProps', this.props.recipe.selectedRecipe);
+    // console.log('prevState', prevState);
+    // console.log('thisState', this.state);
+
     if (
       prevProps.recipe.selectedRecipe !==
       this.props.recipe.selectedRecipe
@@ -167,7 +192,7 @@ class RecipeDetails extends Component {
             type: 'processTime',
             description: '',
             quantity: '',
-            unit: 'hour',
+            unit: 'sec',
             order: '1'
           }
         ];
@@ -197,6 +222,29 @@ class RecipeDetails extends Component {
       });
     }
 
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      if (isEmpty(this.state.selectedRecipe.processTime)) {
+        const { selectedRecipe } = this.props.recipe;
+        const recipeData = {
+          ...selectedRecipe
+        };
+
+        recipeData.processTime = [
+          {
+            type: 'processTime',
+            description: '',
+            quantity: '',
+            unit: 'sec',
+            order: '1'
+          }
+        ];
+
+        this.setState({
+          selectedRecipe: recipeData
+        });
+      }
+    }
+
     if (prevState.selectedRecipe !== this.state.selectedRecipe) {
       if (this.state.updated) {
         this.props.updateReduxSelectedRecipe(
@@ -206,94 +254,23 @@ class RecipeDetails extends Component {
     }
   };
 
+  // Trigger recipe error when the user tries to edit input before selecting a recipe
   selectRecipeError = () => {
     console.log('Error');
     this.setState({ selectRecipeError: true });
   };
 
-  handleRecipeNumberChange = e => {
-    if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      e.persist();
-      let value = e.target.value;
-      if (!isNaN(value) || value === '') {
-        this.setState(prevState => ({
-          updated: true,
-          selectedRecipe: {
-            ...prevState.selectedRecipe,
-            [e.target.name]: value
-          }
-        }));
-      }
-    } else {
-      this.selectRecipeError();
-    }
-  };
-
-  getSelectedUnitTimeValue = (selectedValue, itemOrder) => {
-    console.log('SV', selectedValue);
-    console.log('E', itemOrder);
-    // let value = 0;
-    if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      // const { name, value } = e.target;
-      const { selectedRecipe } = this.state;
-      const recipeData = { ...selectedRecipe };
-
-      let updatedProcessTime = recipeData.processTime.map(item => {
-        if (item.order === itemOrder) {
-          item.unit = selectedValue.value;
-        }
-        return item;
-      });
-
-      recipeData.processTime = updatedProcessTime;
-      this.setState({ updated: true, selectedRecipe: recipeData });
-    } else {
-      this.selectRecipeError();
-    }
-  };
-
-  getSelectedUnitMetricValue = (selectedValue, itemOrder) => {
-    console.log('SV', selectedValue);
-    console.log('E', itemOrder);
-    // let value = 0;
-    if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      // const { name, value } = e.target;
-      const { selectedRecipe } = this.state;
-      const recipeData = { ...selectedRecipe };
-
-      let updatedIngredients = recipeData.ingredients.map(item => {
-        if (item.order === itemOrder) {
-          item.unit = selectedValue.value;
-        }
-        return item;
-      });
-
-      recipeData.ingredients = updatedIngredients;
-      this.setState({ updated: true, selectedRecipe: recipeData });
-    } else {
-      this.selectRecipeError();
-    }
-  };
-
   addProcessTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
-
-      const ptCount = processTime.length;
-      const iCount = ingredients.length;
-      console.log('pt', ptCount);
-      console.log('i', iCount);
-
       const step = {
         _id: '__isNew__',
         description: '',
         quantity: '',
-        unit: 'min',
+        unit: 'sec',
         total: '',
         order: processTime.length + ingredients.length + 1
       };
-
-      console.log('so', step.order);
 
       processTime.push(step);
 
@@ -309,42 +286,23 @@ class RecipeDetails extends Component {
     }
   };
 
-  updateProcessTime = itemOrder => e => {
-    if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      const { name, value } = e.target;
-      const { selectedRecipe } = this.state;
-      const recipeData = { ...selectedRecipe };
+  updateSelectedRecipeProcessTime = updatedItem => {
+    const { selectedRecipe } = this.state;
+    const recipeData = { ...selectedRecipe };
 
-      let updatedProcessTime = recipeData.processTime.map(item => {
-        if (item.order === itemOrder) {
-          switch (name) {
-            case 'description':
-              item.description = value;
-              break;
-            case 'quantity':
-              if (!isNaN(value) || value === '') {
-                item.quantity = value;
-              }
-              break;
-            default:
-              break;
-          }
-        }
-        return item;
-      });
+    let updatedProcessTime = recipeData.processTime.map(item => {
+      if (item.order === updatedItem.order) {
+        item = updatedItem;
+      }
+      return item;
+    });
 
-      recipeData.processTime = updatedProcessTime;
-      this.setState({ updated: true, selectedRecipe: recipeData });
-
-      // console.log('updatedProcessTime---', updatedProcessTime);
-    } else {
-      this.selectRecipeError();
-    }
+    recipeData.processTime = updatedProcessTime;
+    this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
   deleteProcessTime = itemOrder => e => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      // const { name, value } = e.target;
       const { selectedRecipe } = this.state;
       const recipeData = { ...selectedRecipe };
 
@@ -353,10 +311,12 @@ class RecipeDetails extends Component {
       });
 
       recipeData.processTime = updatedProcessTime;
+      const updatedRecipeData = updateRecipeItemsOrder(recipeData);
 
-      console.log('RD', recipeData);
-
-      this.setState({ updated: true, selectedRecipe: recipeData });
+      this.setState({
+        updated: true,
+        selectedRecipe: updatedRecipeData
+      });
     } else {
       this.selectRecipeError();
     }
@@ -365,12 +325,6 @@ class RecipeDetails extends Component {
   addRecipeIngredient = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
-
-      const ptCount = processTime.length;
-      const iCount = ingredients.length;
-      console.log('pt', ptCount);
-      console.log('i', iCount);
-
       const ingredient = {
         ingredient: '__isNew__',
         quantity: '',
@@ -378,13 +332,7 @@ class RecipeDetails extends Component {
         total: '',
         order: processTime.length + ingredients.length + 1
       };
-
-      console.log('io', ingredient.order);
-
       ingredients.push(ingredient);
-
-      console.log('ingredients', ingredients);
-
       this.setState(prevState => ({
         updated: true,
         selectedRecipe: {
@@ -397,100 +345,43 @@ class RecipeDetails extends Component {
     }
   };
 
-  updateIngredientQuantity = itemOrder => e => {
-    if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      const { name, value } = e.target;
-      const { selectedRecipe } = this.state;
-      const recipeData = { ...selectedRecipe };
-
-      let updatedIngredients = recipeData.ingredients.map(item => {
-        if (item.order === itemOrder) {
-          if (!isNaN(value) || value === '') {
-            item.quantity = value;
-          }
-        }
-        return item;
-      });
-
-      recipeData.ingredients = updatedIngredients;
-      this.setState({ updated: true, selectedRecipe: recipeData });
-
-      // console.log('updatedIngredients---', updatedIngredients);
-    } else {
-      this.selectRecipeError();
-    }
-  };
-
-  getSelectedIngredientValue = (
-    selectedIngredientValue,
-    itemOrder
-  ) => {
-    console.log('selectedIngredientValue', selectedIngredientValue);
+  updateSelectedRecipeIngredient = updatedItem => {
     const { selectedRecipe } = this.state;
     const recipeData = { ...selectedRecipe };
 
-    let updatedRecipeIngredients = recipeData.ingredients.map(
-      item => {
-        if (item.order === itemOrder) {
-          item.ingredient = selectedIngredientValue.value;
-        }
-        return item;
+    let updatedIngredients = recipeData.ingredients.map(item => {
+      if (item.order === updatedItem.order) {
+        item = updatedItem;
       }
-    );
+      return item;
+    });
 
-    recipeData.ingredients = updatedRecipeIngredients;
+    recipeData.ingredients = updatedIngredients;
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
   deleteRecipeIngredient = itemOrder => e => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      // const { name, value } = e.target;
       const { selectedRecipe } = this.state;
       const recipeData = { ...selectedRecipe };
-
       let updatedIngredients = recipeData.ingredients.filter(item => {
         return item.order !== itemOrder;
       });
+      recipeData.ingredients = updatedIngredients;
+      const updatedRecipeData = updateRecipeItemsOrder(recipeData);
 
-      recipeData.Ingredients = updatedIngredients;
-
-      console.log('RD', recipeData);
-
-      this.setState({ updated: true, selectedRecipe: recipeData });
+      this.setState({
+        updated: true,
+        selectedRecipe: updatedRecipeData
+      });
     } else {
       this.selectRecipeError();
     }
   };
 
-  compareRecipeItems = (a, b) => {
-    console.log('a', a);
-    console.log('b', b);
-
-    const itemA = a.order;
-    const itemB = b.order;
-
-    let comparison = 0;
-    if (itemA > itemB) {
-      comparison = 1;
-    } else if (itemA < itemB) {
-      comparison = -1;
-    }
-    return comparison;
-  };
-
   render() {
-    const { recipe, ingredient, profile, errors } = this.props;
-    const {
-      selectRecipeError,
-      selectedRecipe: {
-        serves,
-        salePricePerServe,
-        expectedSales,
-        processTime,
-        ingredients
-      }
-    } = this.state;
-
+    const { ingredient } = this.props;
+    const { selectRecipeError, selectedRecipe } = this.state;
     let ingredientOptions = [
       {
         label: 'No Ingredients Avaliable',
@@ -506,176 +397,53 @@ class RecipeDetails extends Component {
       });
     }
 
-    const unitTimeOptions = [
-      { value: 'sec', label: 'Second' },
-      { value: 'min', label: 'Minute' },
-      { value: 'hour', label: 'Hour' }
-    ];
-    const unitTimeOptionsPlural = [
-      { value: 'sec', label: 'Seconds' },
-      { value: 'min', label: 'Minutes' },
-      { value: 'hour', label: 'Hours' }
-    ];
-    const ingredientMetricOptions = [
-      { value: 'cup', label: 'Cup' },
-      { value: 'gram', label: 'Gram' },
-      { value: 'tablepoon', label: 'Tablespoon' },
-      { value: 'teaspoon', label: 'Teaspoon' }
-    ];
-    const ingredientMetricOptionsPlural = [
-      { value: 'cup', label: 'Cups' },
-      { value: 'gram', label: 'Grams' },
-      { value: 'tablepoon', label: 'Tablespoons' },
-      { value: 'teaspoon', label: 'Teaspoons' }
-    ];
-
     let ri = [];
-    if (!isEmpty(processTime) || !isEmpty(ingredients)) {
-      for (let pt = 0; pt < processTime.length; pt++) {
-        const process = processTime[pt];
+    if (
+      !isEmpty(selectedRecipe.processTime) ||
+      !isEmpty(selectedRecipe.ingredients)
+    ) {
+      for (let pt = 0; pt < selectedRecipe.processTime.length; pt++) {
+        const process = selectedRecipe.processTime[pt];
         ri.push(process);
       }
-      for (let i = 0; i < ingredients.length; i++) {
-        const ingredient = ingredients[i];
-        // ri.push(ingredient);
+      for (let i = 0; i < selectedRecipe.ingredients.length; i++) {
+        const ingredient = selectedRecipe.ingredients[i];
         ri.splice(ingredient.order, 0, ingredient);
       }
     }
 
     // Sort Recipe items in order
-    const recipeItemsInOrder = ri.sort(this.compareRecipeItems);
+    const recipeItemsInOrder = ri.sort(compareItems);
 
     let recipeItems;
     if (!isEmpty(ri)) {
       recipeItems = recipeItemsInOrder.map((item, i) => {
-        // console.log('item', item);
-
         if (item.description || item.description === '') {
+          // console.log('---item', item);
           return (
-            <li key={i}>
-              <div className="processIcon">
-                <img
-                  src={timerIcon}
-                  alt="Time icon to represent the recipe process item"
-                />
-              </div>
-              <div className="processItem">
-                <TextInput
-                  placeholder="Process Step Description"
-                  value={item.description}
-                  name="description"
-                  onChange={this.updateProcessTime(item.order)}
-                  // data={'323232'}
-                  // error={errors.processItem && errors.processItem
-                  // error={errors.processItem && errors.processItem}
-                />
-              </div>
-              <div className="processQuantity">
-                <TextInput
-                  value=""
-                  value={item.quantity}
-                  name="quantity"
-                  onChange={this.updateProcessTime(item.order)}
-                  inputClass="number"
-                  // error={
-                  //   errors.processQuantity && errors.processQuantity
-                  // }
-                />
-              </div>
-              <div className="processUnit">
-                <SelectInput
-                  name="processUnit"
-                  options={
-                    item.quantity >= 2
-                      ? unitTimeOptionsPlural
-                      : unitTimeOptions
-                  }
-                  getSelectedValue={this.getSelectedUnitTimeValue}
-                  error={errors.processUnit && errors.processUnit}
-                  value={item.unit}
-                  data={item.order}
-                  // value={processUnit}
-                />
-              </div>
-              <div className="processTotal">
-                {calculateRecipeItemTotal(item.quantity, item.unit)}{' '}
-                min
-              </div>
-              <div
-                className="processIcon delete"
-                onClick={this.deleteProcessTime(item.order)}
-              >
-                <img
-                  src={binIcon}
-                  alt="Bin icon to represent the ability to delete a recipe process item"
-                />
-              </div>
-            </li>
+            <RecipeProcessTime
+              key={i}
+              item={item}
+              deleteProcessTime={this.deleteProcessTime}
+              updateSelectedRecipeProcessTime={
+                this.updateSelectedRecipeProcessTime
+              }
+              selectedRecipe={selectedRecipe}
+              selectRecipeError={this.selectRecipeError}
+            />
           );
         }
         if (item.ingredient || item.ingredient === '') {
           return (
-            <li key={i}>
-              <div className="ingredientIcon">
-                <img
-                  src={appleIcon}
-                  alt="Ingredeint icon to represent the recipe ingredient item"
-                />
-              </div>
-              <div className="ingredientSelect">
-                <CreatableSelectInput
-                  value={item.ingredient}
-                  name="ingredient"
-                  options={ingredientOptions}
-                  getSelectedValue={this.getSelectedIngredientValue}
-                  placeholder="Type ingredient name to start.."
-                  createLabel="+ Add Ingredient"
-                  data={item.order}
-                  styles={{ fontWeight: '400' }}
-                />
-              </div>
-              <div className="ingredientQuantity">
-                <TextInput
-                  value=""
-                  value={item.quantity}
-                  name="quantity"
-                  onChange={this.updateIngredientQuantity(item.order)}
-                  inputClass="number"
-                  // error={
-                  //   errors.processQuantity && errors.processQuantity
-                  // }
-                />
-              </div>
-              <div className="ingredientUnit">
-                <SelectInput
-                  name="ingredientUnit"
-                  options={
-                    item.quantity >= 2
-                      ? ingredientMetricOptionsPlural
-                      : ingredientMetricOptions
-                  }
-                  getSelectedValue={this.getSelectedUnitMetricValue}
-                  error={
-                    errors.ingredientUnit && errors.ingredientUnit
-                  }
-                  value={item.unit}
-                  data={item.order}
-                  // value={ingredientUnit}
-                />
-              </div>
-              <div className="ingredientTotal">
-                {calculateRecipeItemTotal(item.quantity, item.unit)} g
-              </div>
-              <div
-                className="ingredientIcon delete"
-                onClick={this.deleteRecipeIngredient(item.order)}
-              >
-                <img
-                  src={binIcon}
-                  alt="Bin icon to represent the ability to delete a recipe ingredient item"
-                />
-              </div>
-            </li>
+            <RecipeIngredient
+              key={i}
+              item={item}
+              ingredientOptions={ingredientOptions}
+              deleteRecipeIngredient={this.deleteRecipeIngredient}
+              updateSelectedRecipeIngredient={
+                this.updateSelectedRecipeIngredient
+              }
+            />
           );
         }
       });
@@ -688,52 +456,21 @@ class RecipeDetails extends Component {
         onClick="handleAccordianClick"
       >
         <section className="recipeDetails">
-          <form onSubmit={this.handleOnSubmit}>
-            <div className="recipeDetailsHeader">
-              <div>
-                <div className="selectRecipe">
-                  <SelectRecipe />
-                  {selectRecipeError && (
-                    <span>Please select a recipe to start</span>
-                  )}
-                </div>
-              </div>
-              <div>
-                <TextInputHorizontal
-                  label="Recipe Serves"
-                  value={serves}
-                  name="serves"
-                  onChange={this.handleRecipeNumberChange}
-                  type="text"
-                  error={errors.serves && errors.serves}
-                  labelClass="alignTitleRight"
-                  inputClass="number"
-                />
-                <TextInputHorizontal
-                  label="Sale price per serve"
-                  value={salePricePerServe}
-                  name="salePricePerServe"
-                  onChange={this.handleRecipeNumberChange}
-                  type="text"
-                  error={
-                    errors.salePricePerServe &&
-                    errors.salePricePerServe
-                  }
-                  labelClass="alignTitleRight"
-                  inputClass="number"
-                />
-                <TextInputHorizontal
-                  label="Expected Weekly Serve Sales"
-                  value={expectedSales}
-                  name="expectedSales"
-                  onChange={this.handleRecipeNumberChange}
-                  type="text"
-                  error={errors.expectedSales && errors.expectedSales}
-                  labelClass="alignTitleRight"
-                  inputClass="number"
-                />
+          <div className="recipeDetailsHeader">
+            <div>
+              <div className="selectRecipe">
+                <SelectRecipe />
+                {selectRecipeError && (
+                  <span>Please select a recipe to start</span>
+                )}
               </div>
             </div>
+            <RecipeDetailsHeader
+              // selectedRecipe={selectedRecipe}
+              selectRecipeError={this.selectRecipeError}
+            />
+          </div>
+          <form>
             <div className="recipeProcess">
               <ul className="recipeProcessHeader">
                 <li />

@@ -28,6 +28,12 @@ class SelectRecipe extends Component {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { selectedRecipe } = this.props.recipe;
 
+      if (isEmpty(this.props.params)) {
+        this.props.history.push(`/recipes/${selectedRecipe.urlName}`);
+      }
+
+      // this.props.history.push(`/recipes/${selectedRecipe.urlName}`);
+
       // console.log('selectedIngredient', selectedIngredient);
       if (!isEmpty(selectedRecipe.displayName)) {
         let selectedValue = {};
@@ -40,20 +46,6 @@ class SelectRecipe extends Component {
         this.setState({ selectedValue: selectedValue });
       }
     }
-    // if (!isEmpty(this.props.ingredient.selectedIngredient)) {
-    //   const { selectedIngredient } = this.props.ingredient;
-
-    //   // console.log('selectedIngredient', selectedIngredient);
-
-    //   let selectedValue = {};
-    //   selectedValue.label = selectedIngredient.displayName;
-    //   if (!selectedIngredient._id) {
-    //     selectedValue.value = 'new';
-    //   } else {
-    //     selectedValue.value = selectedIngredient._id;
-    //   }
-    //   this.setState({ selectedValue: selectedValue });
-    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -74,6 +66,24 @@ class SelectRecipe extends Component {
         selectedValue.value = selectedRecipe._id;
       }
       this.setState({ selectedValue: selectedValue });
+
+      console.log(
+        'prevProps.recipe.selectedRecipe',
+        prevProps.recipe.selectedRecipe
+      );
+      console.log(
+        'this.props.recipe.selectedRecipe',
+        this.props.recipe.selectedRecipe
+      );
+
+      if (
+        !isEmpty(prevProps.recipe.selectedRecipe) &&
+        prevProps.recipe.selectedRecipe.urlName !==
+          this.props.recipe.selectedRecipe.urlName
+      ) {
+        // console.log('Yep');
+        this.props.history.push(`/recipes/${selectedRecipe.urlName}`);
+      }
     }
   }
 
@@ -89,6 +99,7 @@ class SelectRecipe extends Component {
       // this.props.removeSelectedSupplier();
       // addIngredient = true;
       const newRecipe = {};
+      newRecipe._id = '__isNew__';
       newRecipe.displayName = capitalizeFirstLetter(
         selectedValue.label
       );
@@ -107,10 +118,6 @@ class SelectRecipe extends Component {
       }
     }
     if (!isEmpty(selectedRecipe)) {
-      // this.props.removePreferredSupplier();
-
-      console.log('SR', selectedRecipe);
-
       this.props.getSelectedRecipe(
         selectedRecipe[0],
         this.props.profile.profile

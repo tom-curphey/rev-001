@@ -52,7 +52,7 @@ export const addOrEditRecipe = selectedRecipe => async dispatch => {
 
     const body = JSON.stringify(selectedRecipe);
     const res = await axios.post('/api/recipe', body, config);
-    console.log('RES', res);
+    // console.log('RES', res);
     dispatch(setSelectedRecipe(res.data));
     dispatch(setAlert('Recipe Saved', 'success'));
   } catch (err) {
@@ -68,7 +68,7 @@ export const addOrEditRecipe = selectedRecipe => async dispatch => {
 };
 
 export const updateReduxSelectedRecipe = selectedRecipe => dispatch => {
-  console.log('recipe', selectedRecipe);
+  // console.log('recipe', selectedRecipe);
   dispatch({
     type: UPDATE_SELECTED_RECIPE_STATE,
     payload: selectedRecipe

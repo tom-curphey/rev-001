@@ -311,7 +311,7 @@ export const calculateRecipeItemTotal = (quantity, unit) => {
   if (quantity) {
     switch (unit) {
       case 'sec':
-        total = roundNumberAsString(quantity / 100);
+        total = roundNumberAsString(quantity / 60);
         break;
       case 'min':
         total = quantity;
@@ -337,4 +337,69 @@ export const calculateRecipeItemTotal = (quantity, unit) => {
     }
   }
   return total;
+};
+
+export const updateRecipeItemsOrder = recipeData => {
+  let reOrderItems = [];
+  if (
+    !isEmpty(recipeData.processTime) ||
+    !isEmpty(recipeData.ingredients)
+  ) {
+    for (let pt = 0; pt < recipeData.processTime.length; pt++) {
+      const process = recipeData.processTime[pt];
+      reOrderItems.push(process);
+    }
+    for (let i = 0; i < recipeData.ingredients.length; i++) {
+      const ingredient = recipeData.ingredients[i];
+      // reOrderItems.push(ingredient);
+      reOrderItems.splice(ingredient.order, 0, ingredient);
+    }
+  }
+
+  // Sort Recipe items in order
+  const recipeItemsInOrder = reOrderItems.sort(compareItems);
+
+  console.log('recipeItemsInOrder', recipeItemsInOrder);
+  let updatedRecipeItemOrderValues = recipeItemsInOrder.map(
+    (item, index) => {
+      const updatedItem = {
+        ...item,
+        // Plus 1 so the ordering is consistent when you add an item
+        order: index + 1
+      };
+      return updatedItem;
+    }
+  );
+  console.log(
+    'updatedRecipeItemOrderValues',
+    updatedRecipeItemOrderValues
+  );
+
+  recipeData.processTime = updatedRecipeItemOrderValues.filter(
+    item => {
+      if (item.description) return item;
+    }
+  );
+
+  recipeData.ingredients = updatedRecipeItemOrderValues.filter(
+    item => {
+      if (item.ingredient) return item;
+    }
+  );
+
+  console.log('recipeData', recipeData);
+  return recipeData;
+};
+
+export const compareItems = (a, b) => {
+  const itemA = a.order;
+  const itemB = b.order;
+
+  let comparison = 0;
+  if (itemA > itemB) {
+    comparison = 1;
+  } else if (itemA < itemB) {
+    comparison = -1;
+  }
+  return comparison;
 };

@@ -80,7 +80,8 @@ module.exports.addOrEditRecipe = async (req, res) => {
   }
 
   try {
-    if (_id) {
+    if (_id && _id !== '__isNew__') {
+      console.log('Edit Recipe', recipeData);
       const recipe = await Recipe.findByIdAndUpdate(
         recipeData._id,
         { $set: recipeData },
@@ -90,7 +91,7 @@ module.exports.addOrEditRecipe = async (req, res) => {
       // recipe.save();
       return res.status(200).json(recipe);
     } else {
-      console.log('Create new recipe');
+      console.log('Create new recipe', recipeData);
 
       let recipe = await Recipe.findOne({
         displayName: displayName
@@ -105,6 +106,10 @@ module.exports.addOrEditRecipe = async (req, res) => {
           ]
         });
       }
+
+      // Remove __isNew__ from recipeData
+      delete recipeData._id;
+      console.log('Updated new recipe', recipeData);
 
       recipe = new Recipe(recipeData);
 
