@@ -43,27 +43,18 @@ class RecipeDetailsHeader extends Component {
     } = this.props.selectedRecipe;
     if (!isEmpty(prevProps.selectedRecipe)) {
       if (prevProps.selectedRecipe !== this.props.selectedRecipe) {
-        if (
-          prevProps.selectedRecipe.serves !== serves ||
-          prevProps.selectedRecipe.salePricePerServe !==
-            salePricePerServe ||
-          prevProps.selectedRecipe.expectedSales !== expectedSales
-        ) {
-          const recipeData = {
-            ...this.props.selectedRecipe,
-            serves: serves ? serves.toString() : '',
-            salePricePerServe: salePricePerServe
-              ? salePricePerServe.toString()
-              : '',
-            expectedSales: expectedSales
-              ? expectedSales.toString()
-              : ''
-          };
+        const recipeData = {
+          ...this.props.selectedRecipe,
+          serves: serves ? serves.toString() : '',
+          salePricePerServe: salePricePerServe
+            ? salePricePerServe.toString()
+            : '',
+          expectedSales: expectedSales ? expectedSales.toString() : ''
+        };
 
-          this.setState({
-            selectedRecipe: recipeData
-          });
-        }
+        this.setState({
+          selectedRecipe: recipeData
+        });
       }
     } else {
       const recipeData = {

@@ -22,7 +22,8 @@ import {
 import {
   isEmpty,
   updateRecipeItemsOrder,
-  compareItems
+  compareItems,
+  roundNumber
 } from '../../../utils/utils';
 
 class RecipeDetails extends Component {
@@ -40,10 +41,13 @@ class RecipeDetails extends Component {
           description: '',
           quantity: '',
           unit: 'sec',
-          order: '1'
+          order: 1,
+          total: 0
         }
       ],
-      ingredients: []
+      ingredients: [],
+      totalGrams: 0,
+      totalTime: 0
     }
   };
 
@@ -87,8 +91,6 @@ class RecipeDetails extends Component {
             ...selectedRecipe
             // serves: selectedRecipe.serves.toString()
           };
-
-          console.log('RECIPE DATA', recipeData);
 
           if (
             isEmpty(recipeData.processTime) &&
@@ -150,9 +152,8 @@ class RecipeDetails extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    console.log('Updated');
     // console.log('prevProps', prevProps.recipe.selectedRecipe);
-    console.log('thisProps', this.props.recipe.selectedRecipe);
+    // console.log('thisProps', this.props.recipe.selectedRecipe);
     // console.log('prevState', prevState);
     // console.log('thisState', this.state);
 
@@ -198,19 +199,25 @@ class RecipeDetails extends Component {
         ];
       } else {
         if (!isEmpty(recipeData.processTime)) {
+          let totalTime = 0;
           const updatedProcessTime = recipeData.processTime.map(
             pt => {
+              totalTime = totalTime + pt.total;
               pt.quantity = pt.quantity ? pt.quantity.toString() : '';
               return pt;
             }
           );
+          recipeData.totalTime = totalTime;
           recipeData.processTime = updatedProcessTime;
         }
         if (!isEmpty(recipeData.ingredients)) {
+          let totalGrams = 0;
           const updatedIngredients = recipeData.ingredients.map(i => {
+            totalGrams = totalGrams + i.total;
             i.quantity = i.quantity ? i.quantity.toString() : '';
             return i;
           });
+          recipeData.totalGrams = totalGrams;
           recipeData.ingredients = updatedIngredients;
         }
       }
@@ -223,7 +230,10 @@ class RecipeDetails extends Component {
     }
 
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
-      if (isEmpty(this.state.selectedRecipe.processTime)) {
+      if (
+        isEmpty(this.state.selectedRecipe.processTime) &&
+        isEmpty(this.state.selectedRecipe.ingredients)
+      ) {
         const { selectedRecipe } = this.props.recipe;
         const recipeData = {
           ...selectedRecipe
@@ -235,9 +245,11 @@ class RecipeDetails extends Component {
             description: '',
             quantity: '',
             unit: 'sec',
-            order: '1'
+            order: 0,
+            total: 0
           }
         ];
+        recipeData.ingredients = [];
 
         this.setState({
           selectedRecipe: recipeData
@@ -268,7 +280,7 @@ class RecipeDetails extends Component {
         description: '',
         quantity: '',
         unit: 'sec',
-        total: '',
+        total: 0,
         order: processTime.length + ingredients.length + 1
       };
 
@@ -310,6 +322,8 @@ class RecipeDetails extends Component {
         return item.order !== itemOrder;
       });
 
+      console.log('over here');
+
       recipeData.processTime = updatedProcessTime;
       const updatedRecipeData = updateRecipeItemsOrder(recipeData);
 
@@ -329,7 +343,7 @@ class RecipeDetails extends Component {
         ingredient: '__isNew__',
         quantity: '',
         unit: 'gram',
-        total: '',
+        total: 0,
         order: processTime.length + ingredients.length + 1
       };
       ingredients.push(ingredient);
@@ -380,22 +394,16 @@ class RecipeDetails extends Component {
   };
 
   render() {
-    const { ingredient } = this.props;
     const { selectRecipeError, selectedRecipe } = this.state;
+
+    // console.log('totalTime', this.state);
+
     let ingredientOptions = [
       {
         label: 'No Ingredients Avaliable',
         value: ''
       }
     ];
-    if (!isEmpty(ingredient.ingredients)) {
-      ingredientOptions = ingredient.ingredients.map(i => {
-        let selectData = {};
-        selectData.label = i.displayName;
-        selectData.value = i._id;
-        return selectData;
-      });
-    }
 
     let ri = [];
     if (
@@ -438,7 +446,6 @@ class RecipeDetails extends Component {
             <RecipeIngredient
               key={i}
               item={item}
-              ingredientOptions={ingredientOptions}
               deleteRecipeIngredient={this.deleteRecipeIngredient}
               updateSelectedRecipeIngredient={
                 this.updateSelectedRecipeIngredient
@@ -506,11 +513,22 @@ class RecipeDetails extends Component {
               <ul className="recipeProcessTotal">
                 <li>
                   <span>Recipe Grams</span>
-                  <span>475g</span>
+                  <span>
+                    {selectedRecipe.totalGrams
+                      ? `${roundNumber(
+                          selectedRecipe.totalGrams,
+                          4
+                        )}g`
+                      : '0.00g'}
+                  </span>
                 </li>
                 <li>
                   <span>Recipe Time</span>
-                  <span>22min</span>
+                  <span>
+                    {selectedRecipe.totalTime
+                      ? `${roundNumber(selectedRecipe.totalTime)} min`
+                      : '0.00 min'}
+                  </span>
                 </li>
               </ul>
             </div>

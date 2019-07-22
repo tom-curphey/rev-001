@@ -303,9 +303,52 @@ export const convertProfilePacketCostIntoCostPer100g = (
   return (profilePacketCost / profilePacketGrams) * 100;
 };
 
-export const calculateRecipeItemTotal = (quantity, unit) => {
-  // console.log(quantity, unit);
+export const calculateRecipeItemTotal = (quantity, unit, item) => {
+  let total = '0.00';
 
+  if (quantity) {
+    switch (unit) {
+      case 'sec':
+        total = quantity / 60;
+        break;
+      case 'min':
+        total = quantity;
+        break;
+      case 'hour':
+        total = quantity * 60;
+        break;
+      case 'cup':
+        console.log('--> cup');
+        total = quantity * item.cup;
+        break;
+      case 'gram':
+        total = quantity;
+        break;
+      case 'kilo':
+        total = quantity / 1000;
+        break;
+      case 'tablespoon':
+        console.log('--> tablespoon');
+        total = (quantity * item.cup) / 16;
+        break;
+      case 'teaspoon':
+        console.log('--> teaspoon');
+        total = (quantity * item.cup) / 48;
+        break;
+      case 'whole':
+        console.log('--> whole');
+        total = quantity * item.whole;
+        break;
+      default:
+        total = 0.0;
+        break;
+    }
+  }
+
+  return Number(total);
+};
+
+export const roundRecipeItemTotal = (quantity, unit) => {
   let total = '0.00';
 
   if (quantity) {
@@ -325,6 +368,8 @@ export const calculateRecipeItemTotal = (quantity, unit) => {
       case 'gram':
         total = quantity;
         break;
+      case 'kilo':
+        total = quantity / 1000;
       case 'tablespoon':
         console.log('--> tablespoon');
         break;
@@ -336,7 +381,7 @@ export const calculateRecipeItemTotal = (quantity, unit) => {
         break;
     }
   }
-  return total;
+  return Number(total);
 };
 
 export const updateRecipeItemsOrder = recipeData => {
@@ -375,17 +420,30 @@ export const updateRecipeItemsOrder = recipeData => {
     updatedRecipeItemOrderValues
   );
 
+  let totalGrams = 0;
   recipeData.processTime = updatedRecipeItemOrderValues.filter(
     item => {
-      if (item.description) return item;
+      if (item.description) {
+        totalGrams = totalGrams + item.total;
+        return item;
+      }
     }
   );
 
+  let totalTime = 0;
   recipeData.ingredients = updatedRecipeItemOrderValues.filter(
     item => {
-      if (item.ingredient) return item;
+      if (item.ingredient) {
+        totalTime = totalTime + item.total;
+        return item;
+      }
     }
   );
+
+  recipeData.totalGrams = totalGrams;
+  recipeData.totalTime = totalTime;
+
+  // Update Recipe totals to add to recipeData
 
   console.log('recipeData', recipeData);
   return recipeData;

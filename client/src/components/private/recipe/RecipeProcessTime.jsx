@@ -3,7 +3,8 @@ import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
 import {
   isEmpty,
-  calculateRecipeItemTotal
+  calculateRecipeItemTotal,
+  roundNumberAsString
 } from '../../../utils/utils';
 import timerIcon from '../../../images/timer.svg';
 import binIcon from '../../../images/bin.svg';
@@ -14,7 +15,8 @@ class RecipeProcessTime extends Component {
       description: '',
       quantity: '',
       unit: 'sec',
-      order: 0
+      order: 0,
+      total: 0
     }
   };
 
@@ -62,7 +64,11 @@ class RecipeProcessTime extends Component {
         this.setState(prevState => ({
           item: {
             ...prevState.item,
-            [name]: value
+            [name]: value,
+            total: calculateRecipeItemTotal(
+              Number(value),
+              prevState.item.unit
+            )
           }
         }));
       }
@@ -76,7 +82,11 @@ class RecipeProcessTime extends Component {
       this.setState(prevState => ({
         item: {
           ...prevState.item,
-          unit: selectedValue.value
+          unit: selectedValue.value,
+          total: calculateRecipeItemTotal(
+            prevState.item.quantity,
+            selectedValue.value
+          )
         }
       }));
     } else {
@@ -94,6 +104,7 @@ class RecipeProcessTime extends Component {
 
   render() {
     const { item } = this.state;
+
     const unitTimeOptions = [
       { value: 'sec', label: 'Second' },
       { value: 'min', label: 'Minute' },
@@ -154,7 +165,7 @@ class RecipeProcessTime extends Component {
           />
         </div>
         <div className="processTotal">
-          {calculateRecipeItemTotal(item.quantity, item.unit)} min
+          {item.total && roundNumberAsString(item.total)} min
         </div>
         <div
           className="processIcon delete"

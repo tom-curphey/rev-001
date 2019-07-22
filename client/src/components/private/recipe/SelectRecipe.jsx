@@ -67,15 +67,6 @@ class SelectRecipe extends Component {
       }
       this.setState({ selectedValue: selectedValue });
 
-      console.log(
-        'prevProps.recipe.selectedRecipe',
-        prevProps.recipe.selectedRecipe
-      );
-      console.log(
-        'this.props.recipe.selectedRecipe',
-        this.props.recipe.selectedRecipe
-      );
-
       if (
         !isEmpty(prevProps.recipe.selectedRecipe) &&
         prevProps.recipe.selectedRecipe.urlName !==

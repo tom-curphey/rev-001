@@ -44,6 +44,14 @@ const RecipeSchema = new Schema(
       type: String,
       default: 'week'
     },
+    totalGrams: {
+      type: Number,
+      default: 0
+    },
+    totalTime: {
+      type: Number,
+      default: 0
+    },
     venues: [
       {
         venue: {
@@ -83,6 +91,14 @@ const RecipeSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: 'ingredient',
           required: true
+        },
+        cup: {
+          type: Number,
+          default: 0
+        },
+        whole: {
+          type: Number,
+          default: 0
         },
         quantity: {
           type: Number,
