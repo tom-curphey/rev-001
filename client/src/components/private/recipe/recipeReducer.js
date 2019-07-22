@@ -4,8 +4,7 @@ import {
   ADD_NEW_RECIPE,
   SET_SELECTED_RECIPE,
   UPDATE_SELECTED_RECIPE_STATE,
-  SET_RECIPES_LOADING,
-  RECIPES_ERROR
+  SET_RECIPES_LOADING
 } from '../../../redux/types';
 
 const initialState = {

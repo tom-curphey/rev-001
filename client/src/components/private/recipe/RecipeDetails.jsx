@@ -120,7 +120,6 @@ class RecipeDetails extends Component {
           serves: '',
           salePricePerServe: '',
           expectedSales: '',
-          expectedSales: '',
           processTime: [
             {
               type: 'processTime',
@@ -392,15 +391,6 @@ class RecipeDetails extends Component {
   render() {
     const { selectRecipeError, selectedRecipe } = this.state;
 
-    // console.log('totalTime', this.state);
-
-    let ingredientOptions = [
-      {
-        label: 'No Ingredients Avaliable',
-        value: ''
-      }
-    ];
-
     let ri = [];
     if (
       !isEmpty(selectedRecipe.processTime) ||
@@ -449,6 +439,7 @@ class RecipeDetails extends Component {
             />
           );
         }
+        return null;
       });
     }
 

@@ -4,8 +4,7 @@ import {
   REMOVE_PROFILE_LOADING,
   PROFILE_LOADED,
   UPDATE_PROFILE,
-  PROFILE_ERROR,
-  GET_ERRORS
+  PROFILE_ERROR
 } from '../../../redux/types';
 // import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';

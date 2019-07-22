@@ -4,7 +4,7 @@ import TextInput from '../../layout/input/TextInput';
 import PropTypes from 'prop-types';
 import { openNav } from '../../../utils/utils';
 import { register } from './authActions';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PublicMenu from '../../layout/menu/PublicMenu';
 import logo from '../../../images/recipeRevenuelogo.png';
 import { removeErrors } from '../../../redux/errorActions';
@@ -20,7 +20,7 @@ class Register extends Component {
 
   componentDidMount() {
     // Redirect if logged in
-    const { auth, profile, history } = this.props;
+    const { auth, history } = this.props;
 
     console.log(
       'this.props.auth.isAuthenticated',
@@ -28,31 +28,22 @@ class Register extends Component {
     );
 
     if (
-      // !profile.loading &&
-      // !auth.loading &&
       auth.isAuthenticated !== null &&
       auth.isAuthenticated === true
     ) {
-      // return <Redirect to="/onboarding" />;
       history.push('/onboarding');
     }
   }
 
   componentDidUpdate(prevProps, state) {
-    const { auth, profile, errors } = this.props;
+    const { auth, errors } = this.props;
 
     if (prevProps.errors !== errors) {
       this.setState({ errors: errors });
     }
 
-    if (
-      // !profile.loading &&
-      // !auth.loading &&
-      // prevProps.auth.isAuthenticated !== auth.isAuthenticated &&
-      auth.isAuthenticated === true
-    ) {
+    if (auth.isAuthenticated === true) {
       this.props.history.push('/onboarding');
-      // return <Redirect to="/onboarding" />;
     }
   }
 
@@ -166,7 +157,7 @@ Register.propTypes = {
 const actions = { register, removeErrors };
 
 const mapState = state => ({
-  profile: state.profile,
+  // profile: state.profile,
   errors: state.errors,
   auth: state.auth
 });

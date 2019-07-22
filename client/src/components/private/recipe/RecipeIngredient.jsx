@@ -158,8 +158,6 @@ class RecipeIngredient extends Component {
       );
     }
 
-    ///////
-
     if (!isEmpty(item.whole)) {
       ingredientMetricOptions.push({
         value: 'whole',
@@ -173,21 +171,6 @@ class RecipeIngredient extends Component {
         label: 'Whole'
       });
     }
-
-    // let ingredientMetricOptions = [
-    //   { value: 'cup', label: 'Cup' },
-    //   { value: 'gram', label: 'Gram' },
-    //   { value: 'kilo', label: 'Kilo' },
-    //   { value: 'tablespoon', label: 'Tablespoon' },
-    //   { value: 'teaspoon', label: 'Teaspoon' }
-    // ];
-    // let ingredientMetricOptionsPlural = [
-    //   { value: 'cup', label: 'Cups' },
-    //   { value: 'gram', label: 'Grams' },
-    //   { value: 'kilo', label: 'Kilos' },
-    //   { value: 'tablespoon', label: 'Tablespoons' },
-    //   { value: 'teaspoon', label: 'Teaspoons' }
-    // ];
 
     return (
       <li>
@@ -212,7 +195,6 @@ class RecipeIngredient extends Component {
         </div>
         <div className="ingredientQuantity">
           <TextInput
-            value=""
             value={item.quantity}
             name="quantity"
             onChange={this.updateIngredientQuantity}

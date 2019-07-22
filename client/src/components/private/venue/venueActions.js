@@ -4,7 +4,6 @@ import {
   SELECTED_VENUE_FAILED,
   VENUES_LOADED,
   VENUES_ERROR,
-  GET_ERRORS,
   SET_SELECTED_VENUE,
   SET_VENUE_LOADING,
   STOP_VENUE_LOADING
@@ -14,7 +13,6 @@ import {
   loadProfile,
   setProfileLoading
 } from '../profile/profileActions';
-import { setAuthLoading } from '../../public/auth/authActions';
 import { addSelectedNameToEndOfArray } from '../../../utils/utils';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';

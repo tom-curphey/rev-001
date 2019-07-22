@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { setSelectedVenue } from '../../private/venue/venueActions';
 import icon from '../../../images/recipeRevenueIcon.png';
@@ -9,7 +9,6 @@ import { logout } from '../../public/auth/authActions';
 import userIcon from '../../../images/user.svg';
 import exitIcon from '../../../images/exit.svg';
 import { isEmpty } from '../../../utils/utils';
-import Spinner from '../Spinner';
 
 const MainVenueMenu = ({
   venues,

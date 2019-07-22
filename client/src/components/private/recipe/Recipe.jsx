@@ -7,7 +7,6 @@ import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
 import RecipeHeader from './RecipeHeader';
 import RecipeResults from './RecipeResults';
-import AccordionBox from '../../layout/AccordionBox';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
 
@@ -15,7 +14,7 @@ class Recipe extends Component {
   componentDidMount = () => {
     // console.log('Recipe Page Loaded', this.props.venues);
 
-    const { profile, isAuthenticated, recipe } = this.props;
+    const { profile, isAuthenticated } = this.props;
     if (isAuthenticated === null || isAuthenticated === false) {
       return <Redirect to="/signin" />;
     }
@@ -31,11 +30,7 @@ class Recipe extends Component {
   };
 
   render() {
-    // const { recipes, selectedRecipe, loading } = this.props.recipe;
-    const { recipe, errors } = this.props;
-    // const { displayRecipeNameForm, selectedRecipe } = this.state;
-
-    // console.log('SR', recipe);
+    const { recipe } = this.props;
 
     let content;
     if (recipe.loading) {

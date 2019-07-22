@@ -137,7 +137,6 @@ class RecipeProcessTime extends Component {
         </div>
         <div className="processQuantity">
           <TextInput
-            value=""
             value={item.quantity}
             name="quantity"
             onChange={this.updateProcessTimeQuantity}

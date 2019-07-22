@@ -25,7 +25,7 @@ import { loadUser } from './components/public/auth/authActions';
 import { loadProfile } from './components/private/profile/profileActions';
 import { loadVenues } from './components/private/venue/venueActions';
 import { loadRecipes } from './components/private/recipe/recipeActions';
-import setAuthToken from './utils/setAuthToken';
+// import setAuthToken from './utils/setAuthToken';
 import { AUTH_ERROR } from './redux/types';
 
 const App = () => {

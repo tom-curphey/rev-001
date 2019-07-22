@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { isEmpty } from '../../utils/utils';
 import arrow from '../../images/arrow.svg';
 
 class AccordionBox extends Component {
@@ -27,7 +26,7 @@ class AccordionBox extends Component {
   };
 
   render() {
-    const { headerText, children, isOpen, id } = this.props;
+    const { headerText, children, id } = this.props;
     const { status } = this.state;
 
     return (

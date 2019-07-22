@@ -370,6 +370,7 @@ export const roundRecipeItemTotal = (quantity, unit) => {
         break;
       case 'kilo':
         total = quantity / 1000;
+        break;
       case 'tablespoon':
         console.log('--> tablespoon');
         break;
@@ -427,6 +428,7 @@ export const updateRecipeItemsOrder = recipeData => {
         totalGrams = totalGrams + item.total;
         return item;
       }
+      return null;
     }
   );
 
@@ -437,6 +439,7 @@ export const updateRecipeItemsOrder = recipeData => {
         totalTime = totalTime + item.total;
         return item;
       }
+      return null;
     }
   );
 

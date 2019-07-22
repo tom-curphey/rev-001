@@ -8,7 +8,7 @@ const LoadingPage = () => {
       <div>
         <img
           src={loadingSvg}
-          alt="Loading image to let user know we are setting up their profile"
+          alt="We are just setting up your profile"
         />
       </div>
       <div className="loadingText">
