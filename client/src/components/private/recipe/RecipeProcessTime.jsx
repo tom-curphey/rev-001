@@ -7,6 +7,7 @@ import {
   roundNumberAsString
 } from '../../../utils/utils';
 import timerIcon from '../../../images/timer.svg';
+import chefIcon from '../../../images/chef.svg';
 import binIcon from '../../../images/bin.svg';
 
 class RecipeProcessTime extends Component {
@@ -16,6 +17,7 @@ class RecipeProcessTime extends Component {
       quantity: '',
       unit: 'sec',
       order: 0,
+      staffTime: false,
       total: 0
     }
   };
@@ -35,6 +37,17 @@ class RecipeProcessTime extends Component {
         this.setState({ item: this.props.item });
       }
     }
+  };
+
+  onChangeProcessType = e => {
+    e.persist();
+
+    this.setState(prevState => ({
+      item: {
+        ...prevState.item,
+        staffTime: !prevState.item.staffTime
+      }
+    }));
   };
 
   updateProcessTimeDescription = e => {
@@ -118,9 +131,12 @@ class RecipeProcessTime extends Component {
 
     return (
       <li>
-        <div className="processIcon">
+        <div
+          className="processIcon"
+          onClick={this.props.changeProcessTimeType(item.order)}
+        >
           <img
-            src={timerIcon}
+            src={item.staffTime ? chefIcon : timerIcon}
             alt="Time icon to represent the recipe process item"
           />
         </div>

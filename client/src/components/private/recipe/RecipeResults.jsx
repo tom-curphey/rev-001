@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
-import { isEmpty } from '../../../utils/utils';
+import {
+  isEmpty,
+  getRecipeResults,
+  roundNumber
+} from '../../../utils/utils';
 import graphIcon from '../../../images/graph.svg';
 import moneyIcon from '../../../images/money.svg';
 import carrotBlackIcon from '../../../images/carrotBlack.svg';
@@ -11,6 +15,9 @@ class RecipeResults extends Component {
   state = {
     selectedRecipe: {
       salePricePerServe: ''
+    },
+    recipeResults: {
+      totalIngredientCost: ''
     }
   };
 
@@ -20,7 +27,12 @@ class RecipeResults extends Component {
       this.props.selectedRecipe.salePricePerServe
     );
 
-    const { selectedRecipe } = this.props;
+    const {
+      selectedRecipe,
+      selectedVenue,
+      ingredients,
+      profile
+    } = this.props;
     const recipeData = {
       ...selectedRecipe,
       salePricePerServe: selectedRecipe.salePricePerServe
@@ -28,10 +40,57 @@ class RecipeResults extends Component {
         : ''
     };
 
+    const recipeResults = getRecipeResults(
+      selectedRecipe,
+      selectedVenue,
+      ingredients,
+      profile
+    );
+
+    console.log('recipeResults', recipeResults);
+
     this.setState({
-      selectedRecipe: recipeData
+      selectedRecipe: recipeData,
+      recipeResults: recipeResults
     });
   }
+
+  componentDidUpdate = prevProps => {
+    const {
+      selectedRecipe,
+      selectedVenue,
+      ingredients,
+      profile
+    } = this.props;
+
+    if (
+      prevProps.selectedRecipe !== selectedRecipe ||
+      prevProps.selectedVenue !== selectedVenue ||
+      prevProps.ingredients !== ingredients ||
+      prevProps.profile !== profile
+    ) {
+      const recipeData = {
+        ...selectedRecipe,
+        salePricePerServe: selectedRecipe.salePricePerServe
+          ? selectedRecipe.salePricePerServe.toString()
+          : ''
+      };
+
+      const recipeResults = getRecipeResults(
+        selectedRecipe,
+        selectedVenue,
+        ingredients,
+        profile
+      );
+
+      console.log('recipeResults', recipeResults);
+
+      this.setState({
+        selectedRecipe: recipeData,
+        recipeResults: recipeResults
+      });
+    }
+  };
 
   handleRecipeNumberChange = e => {
     if (!isEmpty(this.props.selectedRecipe)) {
@@ -53,6 +112,7 @@ class RecipeResults extends Component {
 
   render() {
     const { salePricePerServe } = this.state.selectedRecipe;
+    const { recipeResults } = this.state;
     const { selectedRecipe } = this.props;
 
     // console.log('selectedRecipe', selectedRecipe);
@@ -141,11 +201,19 @@ class RecipeResults extends Component {
               </li>
               <li>
                 <p>Ingredient Cost</p>
-                <p>$7.42</p>
+                <p>
+                  {recipeResults.totalIngredientCost &&
+                    `$${roundNumber(
+                      recipeResults.totalIngredientCost
+                    )}`}
+                </p>
               </li>
               <li>
                 <p>Staff Cost</p>
-                <p>$7.42</p>
+                <p>
+                  {recipeResults.totalIngredientCost &&
+                    `$${roundNumber(recipeResults.staffCost)}`}
+                </p>
               </li>
               <li>
                 <p>Rent Cost</p>
@@ -212,7 +280,10 @@ class RecipeResults extends Component {
 }
 
 const mapState = state => ({
-  selectedRecipe: state.recipe.selectedRecipe
+  selectedRecipe: state.recipe.selectedRecipe,
+  selectedVenue: state.venues.selectedVenue,
+  ingredients: state.ingredient.ingredients,
+  profile: state.profile.profile
 });
 
 export default connect(mapState)(RecipeResults);

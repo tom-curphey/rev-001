@@ -59,6 +59,7 @@ module.exports.addOrEditRecipe = async (req, res) => {
         const newItem = {
           description: item.description,
           order: item.order,
+          staffTime: item.staffTime,
           quantity: item.quantity,
           total: item.total,
           unit: item.unit

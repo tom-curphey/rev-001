@@ -159,7 +159,7 @@ section.recipe {
 
       ul.recipeProcessButtons {
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: repeat(3, 1fr);
         border-bottom: 1px solid $cFaded;
         border-top: 1px solid $cFaded;
         height: 50px;
@@ -168,10 +168,11 @@ section.recipe {
           display: flex;
           align-items: center;
           justify-content: center;
+          border-left: 1px solid $cFaded;
           cursor: pointer;
 
           &:last-child {
-            border-left: 1px solid $cFaded;
+            border-right: 0px solid $cFaded;
           }
 
           &:hover {

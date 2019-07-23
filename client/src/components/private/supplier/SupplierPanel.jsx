@@ -6,6 +6,7 @@ import {
   roundNumber,
   convert100gInto1Kg,
   compareSupplierPacketCostToProfilePacketCost,
+  convertProfilePacketCostIntoCostPer1kg,
   isEmpty
 } from '../../../utils/utils';
 
@@ -33,33 +34,43 @@ const SupplierPanel = ({
           <div>Supplier</div>
           <div>100g</div>
           <div>1 Kg</div>
-          <div>You Pay</div>
+          <div>You Pay (kg)</div>
         </li>
         <li>
           <div>Industry Average Price</div>
           <div>
+            $
             {selectedIngredient.packetCost
               ? roundNumber(selectedIngredient.packetCost)
               : '-'}
           </div>
           <div>
+            $
             {selectedIngredient.packetCost
               ? roundNumber(
                   convert100gInto1Kg(selectedIngredient.packetCost)
                 )
               : '-'}
           </div>
-          <div
-            className={compareSupplierPacketCostToProfilePacketCost(
-              selectedIngredient.packetCost,
-              pSupplier[0].profilePacketCost,
-              pSupplier[0].profilePacketGrams
-            )}
-          >
-            {!isEmpty(pSupplier)
-              ? roundNumber(pSupplier[0].profilePacketCost)
-              : '-'}
-          </div>
+          {!isEmpty(pSupplier) ? (
+            <div
+              className={compareSupplierPacketCostToProfilePacketCost(
+                selectedIngredient.packetCost,
+                pSupplier[0].profilePacketCost,
+                pSupplier[0].profilePacketGrams
+              )}
+            >
+              $
+              {roundNumber(
+                convertProfilePacketCostIntoCostPer1kg(
+                  pSupplier[0].profilePacketCost,
+                  pSupplier[0].profilePacketGrams
+                )
+              )}
+            </div>
+          ) : (
+            <div>-</div>
+          )}
         </li>
       </ul>
     );
@@ -84,21 +95,29 @@ const SupplierPanel = ({
               )}
               {selectedSupplier.supplier.displayName}
             </div>
-            <div>{roundNumber(si.packetCost)}</div>
+            <div>${roundNumber(si.packetCost)}</div>
             <div>
-              {roundNumber(convert100gInto1Kg(si.packetCost))}
+              ${roundNumber(convert100gInto1Kg(si.packetCost))}
             </div>
-            <div
-              className={compareSupplierPacketCostToProfilePacketCost(
-                selectedSupplier.packetCost,
-                selectedSupplier.profilePacketCost,
-                selectedSupplier.profilePacketGrams
-              )}
-            >
-              {selectedSupplier.profilePacketCost
-                ? roundNumber(selectedSupplier.profilePacketCost)
-                : '-'}
-            </div>
+            {!isEmpty(selectedSupplier.profilePacketCost) ? (
+              <div
+                className={compareSupplierPacketCostToProfilePacketCost(
+                  selectedSupplier.packetCost,
+                  selectedSupplier.profilePacketCost,
+                  selectedSupplier.profilePacketGrams
+                )}
+              >
+                $
+                {roundNumber(
+                  convertProfilePacketCostIntoCostPer1kg(
+                    selectedSupplier.profilePacketCost,
+                    selectedSupplier.profilePacketGrams
+                  )
+                )}
+              </div>
+            ) : (
+              <div>-</div>
+            )}
           </li>
         );
       } else {
@@ -119,21 +138,30 @@ const SupplierPanel = ({
               )}
               {si.supplier.displayName}
             </div>
-            <div>{roundNumber(si.packetCost)}</div>
+            <div>${roundNumber(si.packetCost)}</div>
             <div>
-              {roundNumber(convert100gInto1Kg(si.packetCost))}
+              ${roundNumber(convert100gInto1Kg(si.packetCost))}
             </div>
-            <div
-              className={compareSupplierPacketCostToProfilePacketCost(
-                si.packetCost,
-                si.profilePacketCost,
-                si.profilePacketGrams
-              )}
-            >
-              {si.profilePacketCost
-                ? roundNumber(si.profilePacketCost)
-                : '-'}
-            </div>
+
+            {!isEmpty(si.profilePacketCost) ? (
+              <div
+                className={compareSupplierPacketCostToProfilePacketCost(
+                  si.packetCost,
+                  si.profilePacketCost,
+                  si.profilePacketGrams
+                )}
+              >
+                $
+                {roundNumber(
+                  convertProfilePacketCostIntoCostPer1kg(
+                    si.profilePacketCost,
+                    si.profilePacketGrams
+                  )
+                )}
+              </div>
+            ) : (
+              <div>-</div>
+            )}
           </li>
         );
       }

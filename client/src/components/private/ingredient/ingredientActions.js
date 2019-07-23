@@ -45,6 +45,8 @@ export const getSelectedIngredient = (
     !isEmpty(rawSelectedIngredient._id) &&
     rawSelectedIngredient.suppliers.length !== 0
   ) {
+    console.log('In here');
+
     // // Check if profile has ingredients
     if (!isEmpty(profile.ingredients)) {
       // Filter profile ingredients to get selected ingredient from profile ingredients
@@ -165,9 +167,11 @@ export const getSelectedIngredient = (
         console.log('Profile does not have the selected ingredient');
         dispatch(removeSelectedSupplier());
         dispatch(removePreferredSupplier());
+        dispatch(setSelectedIngredient(rawSelectedIngredient));
       }
     } else {
       console.log('Profile has no ingredients');
+      dispatch(setSelectedIngredient(rawSelectedIngredient));
     }
   } else {
     console.log('Overhere - 1', rawSelectedSupplier);

@@ -11,6 +11,7 @@ import AccordionBox from '../../layout/AccordionBox';
 
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
+import chefIcon from '../../../images/chef.svg';
 import {
   getSelectedRecipe,
   updateReduxSelectedRecipe
@@ -276,6 +277,34 @@ class RecipeDetails extends Component {
         quantity: '',
         unit: 'sec',
         total: 0,
+        staffTime: false,
+        order: processTime.length + ingredients.length + 1
+      };
+
+      processTime.push(step);
+
+      this.setState(prevState => ({
+        updated: true,
+        selectedRecipe: {
+          ...prevState.selectedRecipe,
+          processTime: processTime
+        }
+      }));
+    } else {
+      this.selectRecipeError();
+    }
+  };
+
+  addStaffTime = () => {
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      const { processTime, ingredients } = this.state.selectedRecipe;
+      const step = {
+        _id: '__isNew__',
+        description: '',
+        quantity: '',
+        unit: 'sec',
+        total: 0,
+        staffTime: true,
         order: processTime.length + ingredients.length + 1
       };
 
@@ -315,6 +344,32 @@ class RecipeDetails extends Component {
 
       let updatedProcessTime = recipeData.processTime.filter(item => {
         return item.order !== itemOrder;
+      });
+
+      console.log('over here');
+
+      recipeData.processTime = updatedProcessTime;
+      const updatedRecipeData = updateRecipeItemsOrder(recipeData);
+
+      this.setState({
+        updated: true,
+        selectedRecipe: updatedRecipeData
+      });
+    } else {
+      this.selectRecipeError();
+    }
+  };
+
+  changeProcessTimeType = itemOrder => e => {
+    if (!isEmpty(this.props.recipe.selectedRecipe)) {
+      const { selectedRecipe } = this.state;
+      const recipeData = { ...selectedRecipe };
+
+      let updatedProcessTime = recipeData.processTime.map(item => {
+        if (item.order == itemOrder) {
+          item.staffTime = !item.staffTime;
+        }
+        return item;
       });
 
       console.log('over here');
@@ -419,6 +474,7 @@ class RecipeDetails extends Component {
               key={i}
               item={item}
               deleteProcessTime={this.deleteProcessTime}
+              changeProcessTimeType={this.changeProcessTimeType}
               updateSelectedRecipeProcessTime={
                 this.updateSelectedRecipeProcessTime
               }
@@ -486,6 +542,15 @@ class RecipeDetails extends Component {
                     />
                   </div>
                   <span> Add Process Time</span>
+                </li>
+                <li onClick={this.addStaffTime}>
+                  <div className="buttonIcon">
+                    <img
+                      src={chefIcon}
+                      alt="Time icon to represent the recipe process item"
+                    />
+                  </div>
+                  <span> Add Staff Input Time</span>
                 </li>
                 <li onClick={this.addRecipeIngredient}>
                   <div className="buttonIcon">

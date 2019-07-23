@@ -86,6 +86,8 @@ export class Ingredient extends Component {
     const { ingredient, supplier } = this.props;
     const { selectedIngredient, selectedSupplier } = this.state;
 
+    console.log('Before', selectedIngredient);
+
     // If selected ingredient changes update local state with selected ingredient
     if (
       prevProps.ingredient.selectedIngredient !==
@@ -290,6 +292,9 @@ export class Ingredient extends Component {
     if (this.props.errors) {
       this.props.removeErrors();
     }
+
+    console.log('Unmounted..');
+
     this.props.removeSelectedIngredient();
     this.props.removeSelectedSupplier();
     this.props.removePreferredSupplier();

@@ -79,6 +79,10 @@ const RecipeSchema = new Schema(
           type: Number,
           default: 0
         },
+        staffTime: {
+          type: Boolean,
+          default: false
+        },
         order: {
           type: Number,
           required: true

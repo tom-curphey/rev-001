@@ -303,6 +303,20 @@ export const convertProfilePacketCostIntoCostPer100g = (
   return (profilePacketCost / profilePacketGrams) * 100;
 };
 
+export const convertProfilePacketCostIntoCostPer1kg = (
+  profilePacketCost,
+  profilePacketGrams
+) => {
+  console.log('profilePacketCost', profilePacketCost);
+  console.log('profilePacketGrams', profilePacketGrams);
+  console.log(
+    '.....',
+    (profilePacketCost / profilePacketGrams) * 1000
+  );
+
+  return (profilePacketCost / profilePacketGrams) * 1000;
+};
+
 export const calculateRecipeItemTotal = (quantity, unit, item) => {
   let total = '0.00';
 
@@ -325,7 +339,7 @@ export const calculateRecipeItemTotal = (quantity, unit, item) => {
         total = quantity;
         break;
       case 'kilo':
-        total = quantity / 1000;
+        total = quantity * 1000;
         break;
       case 'tablespoon':
         console.log('--> tablespoon');
@@ -369,7 +383,7 @@ export const roundRecipeItemTotal = (quantity, unit) => {
         total = quantity;
         break;
       case 'kilo':
-        total = quantity / 1000;
+        total = quantity * 1000;
         break;
       case 'tablespoon':
         console.log('--> tablespoon');
@@ -463,4 +477,140 @@ export const compareItems = (a, b) => {
     comparison = -1;
   }
   return comparison;
+};
+
+export const mergeIngredientsWithProfileIngredientCosts = (
+  ingredients,
+  profile
+) => {
+  // Check if ingredient is in profile ingredients
+  // If true update ingredientData
+  let ingredientData = [...ingredients];
+  const updatedIngredientData = ingredientData.map(iData => {
+    let pIngredient = profile.ingredients.filter(pi => {
+      return iData._id === pi.ingredient;
+    });
+
+    let uiData;
+    if (isEmpty(pIngredient)) {
+      uiData = {
+        ...iData,
+        profilePacketCost: iData.packetCost,
+        profilePacketGrams: iData.packetGrams
+      };
+    } else {
+      const pSupplier = pIngredient[0].suppliers.filter(ps => {
+        return ps.preferred;
+      });
+
+      if (!isEmpty(pSupplier)) {
+        uiData = {
+          ...iData,
+          profilePacketCost: pSupplier[0].packetCost,
+          profilePacketGrams: pSupplier[0].packetGrams
+        };
+      } else {
+        uiData = {
+          ...iData,
+          profilePacketCost: iData.packetCost,
+          profilePacketGrams: iData.packetGrams
+        };
+      }
+    }
+    return uiData;
+  });
+  return updatedIngredientData;
+};
+
+export const getRecipeResults = (
+  selectedRecipe,
+  selectedVenue,
+  ingredients,
+  profile
+) => {
+  // console.log('selectedRecipe', selectedRecipe);
+  // console.log('selectedVenue', selectedVenue);
+  // console.log('ingredients', ingredients);
+  // console.log('profile', profile);
+
+  // Create list of only the recipe ingredients
+  const ingredientsInRecipe = ingredients.filter(ing => {
+    return selectedRecipe.ingredients.some(ri => {
+      return ri.ingredient === ing._id;
+    });
+  });
+
+  // console.log('ingredientsInRecipe', ingredientsInRecipe);
+
+  const updatedIngredientData = mergeIngredientsWithProfileIngredientCosts(
+    ingredientsInRecipe,
+    profile
+  );
+
+  const recipeResults = {};
+
+  recipeResults.totalIngredientCost = calcTotalIngredientCost(
+    updatedIngredientData,
+    selectedRecipe
+  );
+
+  recipeResults.staffCost = calcStaffCost(
+    selectedRecipe,
+    selectedVenue
+  );
+
+  console.log('recipeResults', recipeResults);
+
+  return recipeResults;
+};
+
+export const calcTotalIngredientCost = (
+  ingredients,
+  selectedRecipe
+) => {
+  let total = 0;
+  // Check if there are ingredients
+  if (!isEmpty(ingredients)) {
+    for (let i = 0; i < selectedRecipe.ingredients.length; i++) {
+      const srIngredient = selectedRecipe.ingredients[i];
+
+      // find ingredient in ingredients
+      const ingredient = ingredients.filter(ing => {
+        return ing._id === srIngredient.ingredient;
+      });
+
+      if (!isEmpty(ingredient)) {
+        // Convert cost per 100g into cost per 1g
+        const costPer1g = ingredient[0].packetCost / 100;
+        total = total + costPer1g * srIngredient.total;
+      }
+      console.log(total);
+    }
+  } else {
+    total = null;
+  }
+  return total;
+};
+
+export const calcStaffCost = (selectedRecipe, selectedVenue) => {
+  if (selectedVenue.costs.chefCost === 0) {
+    return `-`;
+  }
+
+  let totalStaffTime = 0;
+  for (let i = 0; i < selectedRecipe.processTime.length; i++) {
+    const pTime = selectedRecipe.processTime[i];
+    console.log('pTime', pTime);
+
+    if (pTime.staffTime) {
+      totalStaffTime = totalStaffTime + pTime.total;
+    }
+  }
+
+  if (totalStaffTime === 0) {
+    return '-';
+  }
+
+  const staffCost = selectedVenue.costs.chefCost * totalStaffTime;
+  return staffCost;
 };
