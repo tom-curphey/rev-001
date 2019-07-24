@@ -42,11 +42,11 @@ class RecipeProcessTime extends Component {
 
   onChangeProcessType = e => {
     e.persist();
-
     this.setState(prevState => ({
       item: {
         ...prevState.item,
-        staffTime: !prevState.item.staffTime
+        staffTime: !prevState.item.staffTime,
+        order: prevState.item.order === 'x' ? 0 : prevState.item.order
       }
     }));
   };
@@ -105,6 +105,8 @@ class RecipeProcessTime extends Component {
 
   updateSelectedRecipeProcessTime = () => {
     if (!isEmpty(this.props.selectedRecipe._id)) {
+      console.log('this.state.item  -------- ', this.state.item);
+
       this.props.updateSelectedRecipeProcessTime(this.state.item);
     } else {
       this.props.selectRecipeError();

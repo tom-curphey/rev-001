@@ -53,7 +53,7 @@ class Recipe extends Component {
               <div>Edit the venue</div>
             </AccordionBoxWithOpenHeader>
             <RecipeDetails />
-            {/* {!isEmpty(recipe.selectedRecipe) && <RecipeResults />} */}
+            {!isEmpty(recipe.selectedRecipe) && <RecipeResults />}
           </Fragment>
         );
       }

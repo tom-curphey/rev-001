@@ -34,12 +34,11 @@ class RecipeDetails extends Component {
       processTime: [
         {
           _id: '__isNew__',
-          type: 'processTime',
           description: '',
           quantity: '',
           unit: 'sec',
-          order: 1
-          // total: 0
+          order: 'x',
+          total: 0
         }
       ],
       ingredients: [],
@@ -90,11 +89,12 @@ class RecipeDetails extends Component {
           ) {
             recipeData.processTime = [
               {
-                type: 'processTime',
+                _id: '__isNew__',
                 description: '',
                 quantity: '',
                 unit: 'sec',
-                order: '1'
+                order: 'x',
+                totalTime: 0
               }
             ];
           }
@@ -118,11 +118,12 @@ class RecipeDetails extends Component {
           expectedSales: '',
           processTime: [
             {
+              id: '__isNew__',
               type: 'processTime',
               description: '',
               quantity: '',
               unit: 'sec',
-              order: '1'
+              order: 'x'
             }
           ],
           ingredients: []
@@ -175,12 +176,14 @@ class RecipeDetails extends Component {
       ) {
         recipeData.processTime = [
           {
+            id: '__isNew__',
             type: 'processTime',
             description: '',
             quantity: '',
             unit: 'sec',
-            order: '1',
-            staffTime: false
+            order: 'x',
+            staffTime: false,
+            total: 0
           }
         ];
         recipeData.totalGrams = totalGrams;
@@ -189,9 +192,6 @@ class RecipeDetails extends Component {
         if (!isEmpty(recipeData.processTime)) {
           const updatedProcessTime = recipeData.processTime.map(
             pt => {
-              // console.log('totalTime', totalTime);
-              // console.log('pt.total', pt.total);
-
               totalTime = totalTime + pt.total;
               pt.quantity = pt.quantity ? pt.quantity.toString() : '';
               return pt;
@@ -204,7 +204,7 @@ class RecipeDetails extends Component {
             recipeData.totalTime !==
             this.props.recipe.selectedRecipe.totalTime
           ) {
-            // updateReduxState = true;
+            updateReduxState = true;
           }
         }
         if (!isEmpty(recipeData.ingredients)) {
@@ -219,16 +219,13 @@ class RecipeDetails extends Component {
             recipeData.totalGrams !==
             this.props.recipe.selectedRecipe.totalGrams
           ) {
-            // updateReduxState = true;
+            updateReduxState = true;
           }
         }
       }
-
-      // console.log('recipeData', recipeData);
       // updateReduxState is a boolean that alternates if the redux state needs to be updated
       this.setState({
-        updated: false,
-        // updated: updateReduxState,
+        updated: updateReduxState,
         selectRecipeError: false,
         selectedRecipe: recipeData
       });
@@ -246,12 +243,13 @@ class RecipeDetails extends Component {
 
         recipeData.processTime = [
           {
+            id: '__isNew__',
             type: 'processTime',
             description: '',
             quantity: '',
             unit: 'sec',
-            order: 0
-            // total: 0
+            order: 'x',
+            total: 0
           }
         ];
         recipeData.ingredients = [];
@@ -263,7 +261,6 @@ class RecipeDetails extends Component {
 
     if (prevState.selectedRecipe !== this.state.selectedRecipe) {
       if (this.state.updated) {
-        console.log('checking 1', this.state.selectedRecipe);
         this.props.updateReduxSelectedRecipe(
           this.state.selectedRecipe
         );
@@ -281,6 +278,9 @@ class RecipeDetails extends Component {
   addProcessTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
+      if (processTime[0].order === 'x') {
+        processTime.shift();
+      }
       const step = {
         _id: '__isNew__',
         description: '',
@@ -308,6 +308,9 @@ class RecipeDetails extends Component {
   addStaffTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
+      if (processTime[0].order === 'x') {
+        processTime.shift();
+      }
       const step = {
         _id: '__isNew__',
         description: '',
@@ -338,14 +341,14 @@ class RecipeDetails extends Component {
 
     let updatedProcessTime = recipeData.processTime.map(item => {
       if (item.order === updatedItem.order) {
+        updatedItem.order =
+          updatedItem.order === 'x' ? 1 : updatedItem.order;
         item = updatedItem;
       }
       return item;
     });
 
     recipeData.processTime = updatedProcessTime;
-    console.log('hit', recipeData.processTime);
-
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
@@ -403,6 +406,9 @@ class RecipeDetails extends Component {
   addRecipeIngredient = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
+      if (processTime[0].order === 'x') {
+        processTime.shift();
+      }
       const ingredient = {
         ingredient: '__isNew__',
         quantity: '',
@@ -459,6 +465,7 @@ class RecipeDetails extends Component {
 
   render() {
     const { selectRecipeError, selectedRecipe } = this.state;
+    const { errors } = this.props;
 
     let ri = [];
     if (
@@ -527,6 +534,9 @@ class RecipeDetails extends Component {
                 {selectRecipeError && (
                   <span>Please select a recipe to start</span>
                 )}
+                {errors && errors.recipeIngredients && (
+                  <span>{errors.recipeIngredients}</span>
+                )}
               </div>
             </div>
             <RecipeDetailsHeader
@@ -592,7 +602,9 @@ class RecipeDetails extends Component {
                   <span>Recipe Time</span>
                   <span>
                     {selectedRecipe.totalTime
-                      ? `${roundNumber(selectedRecipe.totalTime)} sec`
+                      ? `${roundNumber(
+                          selectedRecipe.totalTime / 60
+                        )} min`
                       : '0.00 min'}
                   </span>
                 </li>

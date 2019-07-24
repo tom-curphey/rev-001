@@ -561,10 +561,16 @@ export const getRecipeResults = (
     selectedVenue
   );
 
-  recipeResults.recipeCost =
-    recipeResults.ingredientCost +
-    recipeResults.staffCost +
-    recipeResults.venueCosts.venueCost;
+  recipeResults.recipeCost = 0;
+  if (recipeResults.ingredientCost)
+    recipeResults.recipeCost =
+      recipeResults.recipeCost + recipeResults.ingredientCost;
+  if (recipeResults.staffCost)
+    recipeResults.recipeCost =
+      recipeResults.recipeCost + recipeResults.staffCost;
+  if (recipeResults.venueCosts.venueCost)
+    recipeResults.recipeCost =
+      recipeResults.recipeCost + recipeResults.venueCosts.venueCost;
 
   recipeResults.stats = calcRecipeStats(
     selectedRecipe,
@@ -598,14 +604,14 @@ export const calcTotalIngredientCost = (
       }
     }
   } else {
-    total = null;
+    total = 0;
   }
   return total;
 };
 
 export const calcStaffCost = (selectedRecipe, selectedVenue) => {
   if (selectedVenue.costs.chefCost === 0) {
-    return `-`;
+    return 0;
   }
 
   let totalStaffTime = 0;
@@ -619,7 +625,7 @@ export const calcStaffCost = (selectedRecipe, selectedVenue) => {
   }
 
   if (totalStaffTime === 0) {
-    return '-';
+    return 0;
   }
 
   const staffCost = selectedVenue.costs.chefCost * totalStaffTime;
@@ -627,8 +633,11 @@ export const calcStaffCost = (selectedRecipe, selectedVenue) => {
 };
 
 export const calcVenueCosts = (selectedRecipe, selectedVenue) => {
+  const venueCosts = {
+    venueCost: 0
+  };
   if (selectedVenue.costs.chefPayPerHour === 0) {
-    return '-';
+    return venueCosts;
   }
 
   let totalRecipeTime = 0;
@@ -638,11 +647,10 @@ export const calcVenueCosts = (selectedRecipe, selectedVenue) => {
   }
 
   if (totalRecipeTime === 0) {
-    return '-';
+    return venueCosts;
   }
 
   let totalVenueCost = 0;
-  const venueCosts = {};
 
   if (selectedVenue.costs.rentCost !== 0) {
     totalVenueCost = totalVenueCost + selectedVenue.costs.rentCost;
@@ -678,8 +686,8 @@ export const calcVenueCosts = (selectedRecipe, selectedVenue) => {
 
   venueCosts.venueCost = totalRecipeTime * totalVenueCost;
 
-  // console.log('totalRecipeTime', totalRecipeTime);
-  // console.log('totalVenueCost', totalVenueCost);
+  console.log('totalRecipeTime', totalRecipeTime);
+  console.log('totalVenueCost', totalVenueCost);
 
   return venueCosts;
 };
@@ -692,14 +700,18 @@ export const calcRecipeStats = (
 ) => {
   const recipeStats = {};
   if (selectedRecipe.serves === 0) {
-    return `-`;
+    return recipeStats;
   }
   if (
     !selectedRecipe.salePricePerServe ||
     selectedRecipe.salePricePerServe === 0
   ) {
-    return `-`;
+    return recipeStats;
   }
+
+  console.log('selectedRecipe', selectedRecipe);
+  console.log('recipeCost', recipeCost);
+  console.log('ingredientCost', ingredientCost);
 
   // Calculate Recipe Revenue
   recipeStats.recipeRevenue =
@@ -731,7 +743,12 @@ export const calcRecipeStats = (
 
   // Markup = Gross profit / Cogs
   recipeStats.markup =
-    (recipeStats.grossProfit / ingredientCost) * 100;
+    ingredientCost !== 0
+      ? (recipeStats.grossProfit / ingredientCost) * 100
+      : 0;
+
+  console.log('recipeStats.grossProfit', recipeStats.grossProfit);
+  console.log('ingredientCost', ingredientCost);
 
   recipeStats.grossProfitPerWeek =
     selectedRecipe.expectedSales * recipeStats.grossProfitPerServe;

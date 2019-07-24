@@ -52,6 +52,10 @@ const RecipeSchema = new Schema(
       type: Number,
       default: 0
     },
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
     venues: [
       {
         venue: {

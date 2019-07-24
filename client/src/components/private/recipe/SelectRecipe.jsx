@@ -89,16 +89,17 @@ class SelectRecipe extends Component {
       // this.props.removeSelectedIngredient();
       // this.props.removeSelectedSupplier();
       // addIngredient = true;
-      const newRecipe = {};
-      newRecipe._id = '__isNew__';
-      newRecipe.displayName = capitalizeFirstLetter(
-        selectedValue.label
-      );
+      const newRecipe = {
+        _id: '__isNew__',
+        displayName: capitalizeFirstLetter(selectedValue.label),
+
+        processTime: [],
+        ingredients: []
+      };
       newRecipe.urlName = newRecipe.displayName
         .trim()
         .replace(/\s+/g, '-')
         .toLowerCase();
-
       // newRecipe.new = true;
       selectedRecipe.push(newRecipe);
     } else {

@@ -103,6 +103,7 @@ class RecipeDetailsHeader extends Component {
       salePricePerServe,
       expectedSales
     } = this.state.selectedRecipe;
+    const { errors } = this.props;
 
     return (
       <form onBlur={this.updateReduxSelectedRecipeHeader}>
@@ -112,7 +113,7 @@ class RecipeDetailsHeader extends Component {
           name="serves"
           onChange={this.handleRecipeNumberChange}
           type="text"
-          // error={errors.serves && errors.serves}
+          error={errors.serves && errors.serves}
           labelClass="alignTitleRight"
           inputClass="number"
         />
@@ -122,7 +123,7 @@ class RecipeDetailsHeader extends Component {
           name="salePricePerServe"
           onChange={this.handleRecipeNumberChange}
           type="text"
-          // error={errors.salePricePerServe && errors.salePricePerServe}
+          error={errors.salePricePerServe && errors.salePricePerServe}
           labelClass="alignTitleRight"
           inputClass="number"
         />
@@ -132,7 +133,7 @@ class RecipeDetailsHeader extends Component {
           name="expectedSales"
           onChange={this.handleRecipeNumberChange}
           type="text"
-          // error={errors.expectedSales && errors.expectedSales}
+          error={errors.expectedSales && errors.expectedSales}
           labelClass="alignTitleRight"
           inputClass="number"
         />
@@ -146,7 +147,8 @@ const actions = {
 };
 
 const mapState = state => ({
-  selectedRecipe: state.recipe.selectedRecipe
+  selectedRecipe: state.recipe.selectedRecipe,
+  errors: state.errors
 });
 
 export default connect(

@@ -65,6 +65,14 @@ section.recipe {
           font-weight: 400;
         }
       }
+
+      form label.textInputHorizontal {
+        grid-template-areas: 'label input' 'message message';
+
+        span.errorMsg {
+          text-align: right;
+        }
+      }
     }
 
     div.recipeProcess {

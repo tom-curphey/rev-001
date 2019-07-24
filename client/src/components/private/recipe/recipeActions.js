@@ -11,6 +11,7 @@ import {
 } from '../../../redux/types';
 import { displayErrors } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
+import { removeErrors } from '../../../redux/errorActions';
 
 // Load Profile
 export const loadRecipes = () => async dispatch => {
@@ -54,6 +55,7 @@ export const addOrEditRecipe = selectedRecipe => async dispatch => {
     const res = await axios.post('/api/recipe', body, config);
     // console.log('RES', res);
     dispatch(setSelectedRecipe(res.data));
+    dispatch(removeErrors());
     dispatch(setAlert('Recipe Saved', 'success'));
   } catch (err) {
     console.log('err', err);

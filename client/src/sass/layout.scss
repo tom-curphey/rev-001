@@ -774,12 +774,12 @@ Form Inputs
 ********************************/
 
 span.errorMsg {
-  font-size: 13px;
-  color: #fb8800;
+  font-size: 14px;
+  color: $cOrangeError;
   display: block;
   padding-top: 5px;
   padding-left: 5px;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 span.errorMsg.pageError {

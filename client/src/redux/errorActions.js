@@ -1,4 +1,5 @@
-import { REMOVE_ERRORS, GET_ERRORS } from './types';
+import { REMOVE_ERRORS, GET_ERRORS, SET_ERRORS } from './types';
+import { isEmpty } from '../utils/utils';
 
 export const removeErrors = () => async dispatch => {
   dispatch({
@@ -21,5 +22,17 @@ export const displayErrors = err => async dispatch => {
     });
   } else {
     console.log('ERR: ', err);
+  }
+};
+
+export const setErrors = err => async dispatch => {
+  // Object of errors that are set from the user directly
+  console.log('err', err);
+
+  if (!isEmpty(err)) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: err
+    });
   }
 };

@@ -6,6 +6,7 @@ import {
   addOrEditRecipe,
   updateReduxSelectedRecipe
 } from './recipeActions';
+import { setErrors } from '../../../redux/errorActions';
 import TextInput from '../../layout/input/TextInput';
 import Button from '../../layout/menu/Button';
 
@@ -79,6 +80,31 @@ class RecipeHeader extends Component {
     }
   };
 
+  handleCalculateRecipe = () => {
+    const { selectedRecipe } = this.props.recipe;
+    console.log('Header Recipe', selectedRecipe);
+    let errors = {};
+
+    if (isEmpty(selectedRecipe.serves))
+      errors.serves = 'Please enter total recipe serves';
+    if (isEmpty(selectedRecipe.salePricePerServe))
+      errors.salePricePerServe =
+        'Please enter the sales price per serve';
+    if (isEmpty(selectedRecipe.expectedSales))
+      errors.expectedSales =
+        'Please enter the expected weekly sales per serve';
+    if (isEmpty(selectedRecipe.ingredients))
+      errors.recipeIngredients =
+        'All recipes need atleast 1 ingredient to be calculated..';
+
+    if (!isEmpty(errors)) {
+      this.props.setErrors(errors);
+    } else {
+      console.log('All good');
+      this.props.addOrEditRecipe(selectedRecipe);
+    }
+  };
+
   render() {
     const { recipe, errors } = this.props;
     const { displayRecipeNameForm, selectedRecipe } = this.state;
@@ -124,6 +150,7 @@ class RecipeHeader extends Component {
             buttonColour="orange"
           />
           <Button
+            onClick={this.handleCalculateRecipe}
             buttonTitle="Calculate Revenue"
             buttonColour="green"
           />
@@ -134,12 +161,14 @@ class RecipeHeader extends Component {
 }
 
 RecipeHeader.propTypes = {
-  addOrEditRecipe: PropTypes.func.isRequired
+  addOrEditRecipe: PropTypes.func.isRequired,
+  setErrors: PropTypes.func.isRequired
 };
 
 const actions = {
   addOrEditRecipe,
-  updateReduxSelectedRecipe
+  updateReduxSelectedRecipe,
+  setErrors
 };
 
 const mapState = state => ({

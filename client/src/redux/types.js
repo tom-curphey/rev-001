@@ -5,6 +5,7 @@ export const CLEAR_INGREDIENTS = 'CLEAR_INGREDIENTS';
 export const CLEAR_SUPPLIERS = 'CLEAR_SUPPLIERS';
 
 export const GET_ERRORS = 'GET_ERRORS';
+export const SET_ERRORS = 'SET_ERRORS';
 export const REMOVE_ERRORS = 'REMOVE_ERRORS';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';

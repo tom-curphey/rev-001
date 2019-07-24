@@ -133,7 +133,8 @@ class RecipeResults extends Component {
     const { recipeResults } = this.state;
     const { selectedRecipe } = this.props;
 
-    // console.log('recipeResults', recipeResults);
+    console.log('recipeResults', recipeResults);
+    console.log('selectedRecipe-->', selectedRecipe);
 
     // console.log('selectedRecipe - render from redux', selectedRecipe);
 
@@ -214,23 +215,32 @@ class RecipeResults extends Component {
                   <p className="resultSectionTitle">Gross</p>
                 </li>
                 <li>
+                  <p>Total Recipe Profit</p>
+                  <p>
+                    {recipeResults.stats.grossProfit
+                      ? `$${roundNumber(
+                          recipeResults.stats.grossProfit
+                        )}`
+                      : '-'}
+                  </p>
+                </li>
+                <li>
                   <p>Profit Per Serve</p>
                   <p>
-                    {recipeResults.stats.markup
+                    {recipeResults.stats.grossProfitPerServe
                       ? `$${roundNumber(
                           recipeResults.stats.grossProfitPerServe
                         )}`
                       : '-'}
                   </p>
                 </li>
-
                 <li>
                   <p>Profit Margin</p>
                   <p>
-                    {recipeResults.stats.markup
-                      ? `$${roundNumber(
+                    {recipeResults.stats.grossProfitMargin
+                      ? `${roundNumber(
                           recipeResults.stats.grossProfitMargin
-                        )}`
+                        )}%`
                       : '-'}
                   </p>
                 </li>
@@ -240,23 +250,32 @@ class RecipeResults extends Component {
                   <p className="resultSectionTitle">Net</p>
                 </li>
                 <li>
+                  <p>Total Recipe Profit</p>
+                  <p>
+                    {recipeResults.stats.netProfit
+                      ? `$${roundNumber(
+                          recipeResults.stats.netProfit
+                        )}`
+                      : '-'}
+                  </p>
+                </li>
+                <li>
                   <p>Profit Per Serve</p>
                   <p>
-                    {recipeResults.stats.markup
+                    {recipeResults.stats.netProfitPerServe
                       ? `$${roundNumber(
                           recipeResults.stats.netProfitPerServe
                         )}`
                       : '-'}
                   </p>
                 </li>
-
                 <li>
                   <p>Profit Margin</p>
                   <p>
-                    {recipeResults.stats.markup
-                      ? `$${roundNumber(
+                    {recipeResults.stats.netProfitMargin
+                      ? `${roundNumber(
                           recipeResults.stats.netProfitMargin
-                        )}`
+                        )}%`
                       : '-'}
                   </p>
                 </li>
@@ -286,8 +305,10 @@ class RecipeResults extends Component {
                   <p>Recipe Time</p>
                   <p>
                     {selectedRecipe.totalTime
-                      ? `${roundNumber(selectedRecipe.totalTime)} sec`
-                      : '0.00 min'}
+                      ? `${roundNumber(
+                          selectedRecipe.totalTime / 60
+                        )} min`
+                      : '-'}
                   </p>
                 </li>
               </ul>
@@ -302,21 +323,23 @@ class RecipeResults extends Component {
               <li>
                 <p>Cost Of Goods Sold</p>
                 <p>
-                  {recipeResults.ingredientCost &&
-                    `$${roundNumber(recipeResults.ingredientCost)}`}
+                  {recipeResults.ingredientCost
+                    ? `$${roundNumber(recipeResults.ingredientCost)}`
+                    : '-'}
                 </p>
               </li>
               <li>
                 <p>Total Recipe Cost</p>
                 <p>
-                  {recipeResults.recipeCost &&
-                    `$${roundNumber(recipeResults.recipeCost)}`}
+                  {recipeResults.recipeCost
+                    ? `$${roundNumber(recipeResults.recipeCost)}`
+                    : '-'}
                 </p>
               </li>
               <li>
                 <p>Cost Per Serve</p>
                 <p>
-                  {recipeResults.stats.markup
+                  {recipeResults.recipeCost
                     ? `$${roundNumber(
                         recipeResults.recipeCost /
                           selectedRecipe.serves
@@ -329,24 +352,29 @@ class RecipeResults extends Component {
                 <li>
                   <p>Ingredient Cost</p>
                   <p>
-                    {recipeResults.ingredientCost &&
-                      `$${roundNumber(recipeResults.ingredientCost)}`}
+                    {recipeResults.ingredientCost
+                      ? `$${roundNumber(
+                          recipeResults.ingredientCost
+                        )}`
+                      : '-'}
                   </p>
                 </li>
                 <li>
                   <p>Staff Cost</p>
                   <p>
-                    {recipeResults.staffCost &&
-                      `$${roundNumber(recipeResults.staffCost)}`}
+                    {recipeResults.staffCost
+                      ? `$${roundNumber(recipeResults.staffCost)}`
+                      : '-'}
                   </p>
                 </li>
                 <li>
                   <p>Venue Cost</p>
                   <p>
-                    {recipeResults.venueCosts.venueCost &&
-                      `$${roundNumber(
-                        recipeResults.venueCosts.venueCost
-                      )}`}
+                    {recipeResults.venueCosts.venueCost
+                      ? `$${roundNumber(
+                          recipeResults.venueCosts.venueCost
+                        )}`
+                      : '-'}
                   </p>
                 </li>
               </ul>
@@ -354,10 +382,11 @@ class RecipeResults extends Component {
                 <li>
                   <p>Rent Cost</p>
                   <p>
-                    {recipeResults.venueCosts.rentCost &&
-                      `$${roundNumber(
-                        recipeResults.venueCosts.rentCost
-                      )}`}
+                    {recipeResults.venueCosts.rentCost
+                      ? `$${roundNumber(
+                          recipeResults.venueCosts.rentCost
+                        )}`
+                      : '-'}
                   </p>
                 </li>
                 <li>
