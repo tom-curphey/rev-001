@@ -62,12 +62,15 @@ class RecipeHeader extends Component {
   };
 
   updateReduxSelectedRecipeName = () => {
+    console.log('checking2', this.state.selectedRecipe);
     this.props.updateReduxSelectedRecipe(this.state.selectedRecipe);
     this.setState({ displayRecipeNameForm: false });
   };
 
   handleSaveRecipe = () => {
     const { selectedRecipe } = this.props.recipe;
+
+    console.log('Header Recipe', selectedRecipe);
 
     if (selectedRecipe !== null) {
       this.props.addOrEditRecipe(selectedRecipe);

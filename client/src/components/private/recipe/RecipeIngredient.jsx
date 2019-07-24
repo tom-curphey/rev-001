@@ -188,7 +188,6 @@ class RecipeIngredient extends Component {
             getSelectedValue={this.getSelectedIngredientValue}
             placeholder="Type ingredient name to start.."
             createLabel="+ Add Ingredient"
-            data={item.order}
             styles={{ fontWeight: '400' }}
             onBlur={this.updateSelectedRecipeIngredient}
           />
@@ -216,7 +215,6 @@ class RecipeIngredient extends Component {
             getSelectedValue={this.getSelectedUnitMetricValue}
             // error={errors.ingredientUnit && errors.ingredientUnit}
             value={item.unit}
-            data={item.order}
             onBlur={this.updateSelectedRecipeIngredient}
             // value={ingredientUnit}
           />

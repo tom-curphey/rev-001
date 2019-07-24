@@ -279,6 +279,10 @@ export const getNewVenueData = () => {
   return venueData;
 };
 
+export const convertSecondsToMinutes = time => {
+  return time / 60;
+};
+
 export const convert100gInto1Kg = value => value * 10;
 
 export const compareSupplierPacketCostToProfilePacketCost = (
@@ -323,13 +327,13 @@ export const calculateRecipeItemTotal = (quantity, unit, item) => {
   if (quantity) {
     switch (unit) {
       case 'sec':
-        total = quantity / 60;
-        break;
-      case 'min':
         total = quantity;
         break;
-      case 'hour':
+      case 'min':
         total = quantity * 60;
+        break;
+      case 'hour':
+        total = quantity * 60 * 60;
         break;
       case 'cup':
         console.log('--> cup');
@@ -362,22 +366,23 @@ export const calculateRecipeItemTotal = (quantity, unit, item) => {
   return Number(total);
 };
 
-export const roundRecipeItemTotal = (quantity, unit) => {
+export const roundRecipeItemTotal = (quantity, unit, item) => {
   let total = '0.00';
 
   if (quantity) {
     switch (unit) {
       case 'sec':
-        total = roundNumberAsString(quantity / 60);
+        total = roundNumberAsString(quantity);
         break;
       case 'min':
-        total = quantity;
+        total = roundNumberAsString(quantity * 60);
         break;
       case 'hour':
-        total = roundNumberAsString(quantity * 60);
+        total = roundNumberAsString(quantity * 60 * 60);
         break;
       case 'cup':
         console.log('--> cup');
+        total = quantity * item.cup;
         break;
       case 'gram':
         total = quantity;
@@ -387,9 +392,11 @@ export const roundRecipeItemTotal = (quantity, unit) => {
         break;
       case 'tablespoon':
         console.log('--> tablespoon');
+        total = (quantity * item.cup) / 16;
         break;
       case 'teaspoon':
         console.log('--> teaspoon');
+        total = (quantity * item.cup) / 48;
         break;
       default:
         total = '0.00';
@@ -418,8 +425,6 @@ export const updateRecipeItemsOrder = recipeData => {
 
   // Sort Recipe items in order
   const recipeItemsInOrder = reOrderItems.sort(compareItems);
-
-  console.log('recipeItemsInOrder', recipeItemsInOrder);
   let updatedRecipeItemOrderValues = recipeItemsInOrder.map(
     (item, index) => {
       const updatedItem = {
@@ -429,10 +434,6 @@ export const updateRecipeItemsOrder = recipeData => {
       };
       return updatedItem;
     }
-  );
-  console.log(
-    'updatedRecipeItemOrderValues',
-    updatedRecipeItemOrderValues
   );
 
   let totalGrams = 0;
@@ -457,12 +458,13 @@ export const updateRecipeItemsOrder = recipeData => {
     }
   );
 
+  console.log('totalGrams', totalGrams);
+  console.log('totalTime', totalTime);
+
   recipeData.totalGrams = totalGrams;
   recipeData.totalTime = totalTime;
 
   // Update Recipe totals to add to recipeData
-
-  console.log('recipeData', recipeData);
   return recipeData;
 };
 
@@ -528,11 +530,6 @@ export const getRecipeResults = (
   ingredients,
   profile
 ) => {
-  // console.log('selectedRecipe', selectedRecipe);
-  // console.log('selectedVenue', selectedVenue);
-  // console.log('ingredients', ingredients);
-  // console.log('profile', profile);
-
   // Create list of only the recipe ingredients
   const ingredientsInRecipe = ingredients.filter(ing => {
     return selectedRecipe.ingredients.some(ri => {
@@ -549,7 +546,7 @@ export const getRecipeResults = (
 
   const recipeResults = {};
 
-  recipeResults.totalIngredientCost = calcTotalIngredientCost(
+  recipeResults.ingredientCost = calcTotalIngredientCost(
     updatedIngredientData,
     selectedRecipe
   );
@@ -559,7 +556,22 @@ export const getRecipeResults = (
     selectedVenue
   );
 
-  console.log('recipeResults', recipeResults);
+  recipeResults.venueCosts = calcVenueCosts(
+    selectedRecipe,
+    selectedVenue
+  );
+
+  recipeResults.recipeCost =
+    recipeResults.ingredientCost +
+    recipeResults.staffCost +
+    recipeResults.venueCosts.venueCost;
+
+  recipeResults.stats = calcRecipeStats(
+    selectedRecipe,
+    recipeResults.recipeCost,
+    recipeResults.ingredientCost,
+    selectedVenue.weeksOpen
+  );
 
   return recipeResults;
 };
@@ -584,7 +596,6 @@ export const calcTotalIngredientCost = (
         const costPer1g = ingredient[0].packetCost / 100;
         total = total + costPer1g * srIngredient.total;
       }
-      console.log(total);
     }
   } else {
     total = null;
@@ -600,7 +611,7 @@ export const calcStaffCost = (selectedRecipe, selectedVenue) => {
   let totalStaffTime = 0;
   for (let i = 0; i < selectedRecipe.processTime.length; i++) {
     const pTime = selectedRecipe.processTime[i];
-    console.log('pTime', pTime);
+    // console.log('pTime', pTime);
 
     if (pTime.staffTime) {
       totalStaffTime = totalStaffTime + pTime.total;
@@ -613,4 +624,135 @@ export const calcStaffCost = (selectedRecipe, selectedVenue) => {
 
   const staffCost = selectedVenue.costs.chefCost * totalStaffTime;
   return staffCost;
+};
+
+export const calcVenueCosts = (selectedRecipe, selectedVenue) => {
+  if (selectedVenue.costs.chefPayPerHour === 0) {
+    return '-';
+  }
+
+  let totalRecipeTime = 0;
+  for (let i = 0; i < selectedRecipe.processTime.length; i++) {
+    totalRecipeTime =
+      totalRecipeTime + selectedRecipe.processTime[i].total;
+  }
+
+  if (totalRecipeTime === 0) {
+    return '-';
+  }
+
+  let totalVenueCost = 0;
+  const venueCosts = {};
+
+  if (selectedVenue.costs.rentCost !== 0) {
+    totalVenueCost = totalVenueCost + selectedVenue.costs.rentCost;
+    venueCosts.rentCost =
+      selectedVenue.costs.rentCost * totalRecipeTime;
+  }
+  if (selectedVenue.costs.waterCost !== 0) {
+    totalVenueCost = totalVenueCost + selectedVenue.costs.waterCost;
+    venueCosts.waterCost =
+      selectedVenue.costs.waterCost * totalRecipeTime;
+  }
+  if (selectedVenue.costs.powerCost !== 0) {
+    totalVenueCost = totalVenueCost + selectedVenue.costs.powerCost;
+    venueCosts.powerCost =
+      selectedVenue.costs.powerCost * totalRecipeTime;
+  }
+  if (selectedVenue.costs.insuranceCost !== 0) {
+    totalVenueCost =
+      totalVenueCost + selectedVenue.costs.insuranceCost;
+    venueCosts.insuranceCost =
+      selectedVenue.costs.insuranceCost * totalRecipeTime;
+  }
+  if (selectedVenue.costs.councilCost !== 0) {
+    totalVenueCost = totalVenueCost + selectedVenue.costs.councilCost;
+    venueCosts.councilCost =
+      selectedVenue.costs.councilCost * totalRecipeTime;
+  }
+  if (selectedVenue.costs.wastageCost !== 0) {
+    totalVenueCost = totalVenueCost + selectedVenue.costs.wastageCost;
+    venueCosts.wastageCost =
+      selectedVenue.costs.wastageCost * totalRecipeTime;
+  }
+
+  venueCosts.venueCost = totalRecipeTime * totalVenueCost;
+
+  // console.log('totalRecipeTime', totalRecipeTime);
+  // console.log('totalVenueCost', totalVenueCost);
+
+  return venueCosts;
+};
+
+export const calcRecipeStats = (
+  selectedRecipe,
+  recipeCost,
+  ingredientCost,
+  weeksOpen
+) => {
+  const recipeStats = {};
+  if (selectedRecipe.serves === 0) {
+    return `-`;
+  }
+  if (
+    !selectedRecipe.salePricePerServe ||
+    selectedRecipe.salePricePerServe === 0
+  ) {
+    return `-`;
+  }
+
+  // Calculate Recipe Revenue
+  recipeStats.recipeRevenue =
+    selectedRecipe.serves * selectedRecipe.salePricePerServe;
+
+  // Gross Profit = Revenue - COGS
+  recipeStats.grossProfit =
+    recipeStats.recipeRevenue - ingredientCost;
+  // Net Profit = Revenue - total recipe cost
+  recipeStats.netProfit = recipeStats.recipeRevenue - recipeCost;
+  // Gross Profit per serve = Revenue - COGS / serves
+  recipeStats.grossProfitPerServe =
+    (recipeStats.recipeRevenue - ingredientCost) /
+    selectedRecipe.serves;
+  // Net Profit per serve = Revenue - total recipe cost / serve
+  recipeStats.netProfitPerServe =
+    (recipeStats.recipeRevenue - recipeCost) / selectedRecipe.serves;
+
+  // Gross Profit Margin = Revenue - ingredient Costs / revenue
+  recipeStats.grossProfitMargin =
+    ((recipeStats.recipeRevenue - ingredientCost) /
+      recipeStats.recipeRevenue) *
+    100;
+  // Net Profit Margin = Revenue - recipe Costs / revenue
+  recipeStats.netProfitMargin =
+    ((recipeStats.recipeRevenue - recipeCost) /
+      recipeStats.recipeRevenue) *
+    100;
+
+  // Markup = Gross profit / Cogs
+  recipeStats.markup =
+    (recipeStats.grossProfit / ingredientCost) * 100;
+
+  recipeStats.grossProfitPerWeek =
+    selectedRecipe.expectedSales * recipeStats.grossProfitPerServe;
+
+  recipeStats.grossProfitPerMonth =
+    (recipeStats.grossProfitPerWeek * weeksOpen) / 12;
+
+  recipeStats.grossProfitPerYear =
+    recipeStats.grossProfitPerWeek * weeksOpen;
+
+  recipeStats.netProfitPerWeek =
+    selectedRecipe.expectedSales * recipeStats.netProfitPerServe;
+
+  recipeStats.netProfitPerMonth =
+    (recipeStats.netProfitPerWeek * weeksOpen) / 12;
+
+  recipeStats.netProfitPerYear =
+    recipeStats.netProfitPerWeek * weeksOpen;
+
+  recipeStats.recommendedSalesPrice =
+    (recipeCost / selectedRecipe.serves) * 2;
+
+  return recipeStats;
 };

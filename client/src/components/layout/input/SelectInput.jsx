@@ -23,7 +23,7 @@ const SelectInput = ({
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, data);
+      getSelectedValue(newValue, name);
     }
   };
 

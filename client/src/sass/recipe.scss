@@ -240,15 +240,15 @@ section.recipe {
       border-bottom: 1px solid $cFaded;
       padding: 16px 2px;
       color: $cGrey;
-      margin: 50px 0px;
+      margin: 30px 0px;
     }
 
     div.resultsData {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      padding: 15px;
+      padding: 15px 15px 40px;
       ul {
-        li:first-child {
+        li.resultsHeaderIcon {
           display: flex;
           justify-content: center;
           padding-bottom: 30px;
@@ -257,12 +257,29 @@ section.recipe {
           }
         }
 
+        ul {
+          margin-top: 15px;
+        }
+
         li {
           display: grid;
-          grid-template-columns: auto 60px;
+          grid-template-columns: auto auto;
           grid-gap: 20px;
           max-width: 230px;
           margin: 0px auto;
+
+          p:first-child {
+            color: $cGrey;
+          }
+          p:last-child {
+            text-align: right;
+            color: $cBlack;
+          }
+          p.resultSectionTitle {
+            text-align: left;
+            font-weight: 400;
+            color: $cBlack;
+          }
         }
       }
     }

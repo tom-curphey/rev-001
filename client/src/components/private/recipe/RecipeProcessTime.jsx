@@ -4,7 +4,8 @@ import SelectInput from '../../layout/input/SelectInput';
 import {
   isEmpty,
   calculateRecipeItemTotal,
-  roundNumberAsString
+  roundNumber,
+  convertSecondsToMinutes
 } from '../../../utils/utils';
 import timerIcon from '../../../images/timer.svg';
 import chefIcon from '../../../images/chef.svg';
@@ -51,11 +52,6 @@ class RecipeProcessTime extends Component {
   };
 
   updateProcessTimeDescription = e => {
-    console.log(
-      'this.props.selectedRecipe.urlName',
-      this.props.selectedRecipe
-    );
-
     if (!isEmpty(this.props.selectedRecipe._id)) {
       e.persist();
       this.setState(prevState => ({
@@ -174,13 +170,14 @@ class RecipeProcessTime extends Component {
             getSelectedValue={this.getSelectedUnitTimeValue}
             // error={errors.processUnit && errors.processUnit}
             value={item.unit}
-            data={item.order}
             onBlur={this.updateSelectedRecipeProcessTime}
             // value={processUnit}
           />
         </div>
         <div className="processTotal">
-          {item.total && roundNumberAsString(item.total)} min
+          {item.total &&
+            roundNumber(convertSecondsToMinutes(item.total))}{' '}
+          min
         </div>
         <div
           className="processIcon delete"

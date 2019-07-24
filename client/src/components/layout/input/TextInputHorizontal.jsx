@@ -10,6 +10,7 @@ const TextInputHorizontal = ({
   info,
   type,
   onChange,
+  onBlur,
   disabled,
   id,
   style,
@@ -24,6 +25,7 @@ const TextInputHorizontal = ({
       <span className="label">{label} </span>
       <input
         onChange={onChange}
+        onBlur={onBlur}
         type={type}
         name={name}
         value={value}

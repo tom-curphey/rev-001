@@ -38,8 +38,8 @@ class RecipeDetails extends Component {
           description: '',
           quantity: '',
           unit: 'sec',
-          order: 1,
-          total: 0
+          order: 1
+          // total: 0
         }
       ],
       ingredients: [],
@@ -72,21 +72,16 @@ class RecipeDetails extends Component {
           );
         }
       } else {
-        console.log('HIT');
-
         if (
           this.props.recipe.selectedRecipe.urlName !==
           this.props.match.params.recipe_name
         ) {
           console.log('get recipe params name');
         } else {
-          console.log('Set selected recipe');
-
           const { selectedRecipe } = this.props.recipe;
 
           const recipeData = {
             ...selectedRecipe
-            // serves: selectedRecipe.serves.toString()
           };
 
           if (
@@ -148,21 +143,14 @@ class RecipeDetails extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    // console.log('prevProps', prevProps.recipe.selectedRecipe);
-    // console.log('thisProps', this.props.recipe.selectedRecipe);
-    // console.log('prevState', prevState);
-    // console.log('thisState', this.state);
-
     if (
       prevProps.recipe.selectedRecipe !==
       this.props.recipe.selectedRecipe
     ) {
       const { selectedRecipe } = this.props.recipe;
-
+      let updateReduxState = false;
       const recipeData = {
-        _id: selectedRecipe._id,
-        displayName: selectedRecipe.displayName,
-        // serves: selectedRecipe.serves.toString(),
+        ...selectedRecipe,
         serves: selectedRecipe.serves
           ? selectedRecipe.serves.toString()
           : '',
@@ -179,7 +167,8 @@ class RecipeDetails extends Component {
           ? selectedRecipe.ingredients
           : []
       };
-
+      let totalGrams = 0;
+      let totalTime = 0;
       if (
         isEmpty(recipeData.processTime) &&
         isEmpty(recipeData.ingredients)
@@ -190,14 +179,19 @@ class RecipeDetails extends Component {
             description: '',
             quantity: '',
             unit: 'sec',
-            order: '1'
+            order: '1',
+            staffTime: false
           }
         ];
+        recipeData.totalGrams = totalGrams;
+        recipeData.totalTime = totalTime;
       } else {
         if (!isEmpty(recipeData.processTime)) {
-          let totalTime = 0;
           const updatedProcessTime = recipeData.processTime.map(
             pt => {
+              // console.log('totalTime', totalTime);
+              // console.log('pt.total', pt.total);
+
               totalTime = totalTime + pt.total;
               pt.quantity = pt.quantity ? pt.quantity.toString() : '';
               return pt;
@@ -205,9 +199,15 @@ class RecipeDetails extends Component {
           );
           recipeData.totalTime = totalTime;
           recipeData.processTime = updatedProcessTime;
+
+          if (
+            recipeData.totalTime !==
+            this.props.recipe.selectedRecipe.totalTime
+          ) {
+            // updateReduxState = true;
+          }
         }
         if (!isEmpty(recipeData.ingredients)) {
-          let totalGrams = 0;
           const updatedIngredients = recipeData.ingredients.map(i => {
             totalGrams = totalGrams + i.total;
             i.quantity = i.quantity ? i.quantity.toString() : '';
@@ -215,11 +215,20 @@ class RecipeDetails extends Component {
           });
           recipeData.totalGrams = totalGrams;
           recipeData.ingredients = updatedIngredients;
+          if (
+            recipeData.totalGrams !==
+            this.props.recipe.selectedRecipe.totalGrams
+          ) {
+            // updateReduxState = true;
+          }
         }
       }
 
+      // console.log('recipeData', recipeData);
+      // updateReduxState is a boolean that alternates if the redux state needs to be updated
       this.setState({
         updated: false,
+        // updated: updateReduxState,
         selectRecipeError: false,
         selectedRecipe: recipeData
       });
@@ -241,12 +250,11 @@ class RecipeDetails extends Component {
             description: '',
             quantity: '',
             unit: 'sec',
-            order: 0,
-            total: 0
+            order: 0
+            // total: 0
           }
         ];
         recipeData.ingredients = [];
-
         this.setState({
           selectedRecipe: recipeData
         });
@@ -255,9 +263,11 @@ class RecipeDetails extends Component {
 
     if (prevState.selectedRecipe !== this.state.selectedRecipe) {
       if (this.state.updated) {
+        console.log('checking 1', this.state.selectedRecipe);
         this.props.updateReduxSelectedRecipe(
           this.state.selectedRecipe
         );
+        this.setState({ updated: false });
       }
     }
   };
@@ -334,6 +344,8 @@ class RecipeDetails extends Component {
     });
 
     recipeData.processTime = updatedProcessTime;
+    console.log('hit', recipeData.processTime);
+
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
@@ -351,6 +363,8 @@ class RecipeDetails extends Component {
       recipeData.processTime = updatedProcessTime;
       const updatedRecipeData = updateRecipeItemsOrder(recipeData);
 
+      console.log('updatedRecipeData ----->>>', updatedRecipeData);
+
       this.setState({
         updated: true,
         selectedRecipe: updatedRecipeData
@@ -366,7 +380,7 @@ class RecipeDetails extends Component {
       const recipeData = { ...selectedRecipe };
 
       let updatedProcessTime = recipeData.processTime.map(item => {
-        if (item.order == itemOrder) {
+        if (item.order === itemOrder) {
           item.staffTime = !item.staffTime;
         }
         return item;
@@ -578,7 +592,7 @@ class RecipeDetails extends Component {
                   <span>Recipe Time</span>
                   <span>
                     {selectedRecipe.totalTime
-                      ? `${roundNumber(selectedRecipe.totalTime)} min`
+                      ? `${roundNumber(selectedRecipe.totalTime)} sec`
                       : '0.00 min'}
                   </span>
                 </li>

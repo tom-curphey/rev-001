@@ -55,6 +55,7 @@ class SelectRecipe extends Component {
         this.props.recipe.selectedRecipe
     ) {
       const { selectedRecipe } = this.props.recipe;
+
       // console.log('selectedIngredient - UP', selectedIngredient);sss
       // if (!selectedIngredient.new) {
       let selectedValue = {};
@@ -70,9 +71,8 @@ class SelectRecipe extends Component {
       if (
         !isEmpty(prevProps.recipe.selectedRecipe) &&
         prevProps.recipe.selectedRecipe.urlName !==
-          this.props.recipe.selectedRecipe.urlName
+          selectedRecipe.urlName
       ) {
-        // console.log('Yep');
         this.props.history.push(`/recipes/${selectedRecipe.urlName}`);
       }
     }
@@ -113,6 +113,7 @@ class SelectRecipe extends Component {
         selectedRecipe[0],
         this.props.profile.profile
       );
+
       this.props.history.push(
         `/recipes/${selectedRecipe[0].urlName}`
       );

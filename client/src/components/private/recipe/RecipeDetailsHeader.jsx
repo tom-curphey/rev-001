@@ -90,6 +90,8 @@ class RecipeDetailsHeader extends Component {
   };
 
   updateReduxSelectedRecipeHeader = () => {
+    console.log('checking', this.state.selectedRecipe);
+
     if (!isEmpty(this.props.selectedRecipe)) {
       this.props.updateReduxSelectedRecipe(this.state.selectedRecipe);
     }
