@@ -105,6 +105,13 @@ class RecipeHeader extends Component {
     }
   };
 
+  handleEnterKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.updateReduxSelectedRecipeName();
+    }
+  };
+
   render() {
     const { recipe, errors } = this.props;
     const { displayRecipeNameForm, selectedRecipe } = this.state;
@@ -129,6 +136,7 @@ class RecipeHeader extends Component {
                     type="text"
                     autoFocus={true}
                     error={errors.displayName && errors.displayName}
+                    onKeyDown={this.handleEnterKeyDown}
                   />
                 </form>
               ) : (

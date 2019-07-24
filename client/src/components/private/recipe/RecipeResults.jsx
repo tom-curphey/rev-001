@@ -128,6 +128,13 @@ class RecipeResults extends Component {
     }
   };
 
+  handleEnterKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      console.log('do validate');
+    }
+  };
+
   render() {
     const { salePricePerServe } = this.state.selectedRecipe;
     const { recipeResults } = this.state;
@@ -157,10 +164,11 @@ class RecipeResults extends Component {
                 // labelClass="alignTitleRight"
                 inputClass="number"
                 // onBlur={this.updateReduxSelectedRecipe}
+                onKeyDown={this.handleEnterKeyDown}
               />
             </form>
             <p>
-              {recipeResults.stats.markup
+              {recipeResults.stats.recommendedSalesPrice
                 ? `Cost Base Recomended Sales Price $${roundNumber(
                     recipeResults.stats.recommendedSalesPrice
                   )}`

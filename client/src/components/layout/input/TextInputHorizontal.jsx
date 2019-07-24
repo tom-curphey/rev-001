@@ -15,7 +15,8 @@ const TextInputHorizontal = ({
   id,
   style,
   labelClass,
-  inputClass
+  inputClass,
+  onKeyDown
 }) => {
   return (
     <label
@@ -26,6 +27,7 @@ const TextInputHorizontal = ({
       <input
         onChange={onChange}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
         type={type}
         name={name}
         value={value}
