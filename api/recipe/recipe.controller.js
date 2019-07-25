@@ -42,7 +42,8 @@ module.exports.addOrEditRecipe = async (req, res) => {
     processTime,
     ingredients,
     totalGrams,
-    totalTime
+    totalTime,
+    confirmed
   } = req.body;
 
   const recipeData = {};
@@ -85,6 +86,7 @@ module.exports.addOrEditRecipe = async (req, res) => {
   }
   recipeData.totalGrams = totalGrams ? totalGrams : 0;
   recipeData.totalTime = totalTime ? totalTime : 0;
+  if (confirmed) recipeData.confirmed = confirmed;
 
   try {
     if (_id && _id !== '__isNew__') {

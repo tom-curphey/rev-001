@@ -101,6 +101,7 @@ class RecipeHeader extends Component {
       this.props.setErrors(errors);
     } else {
       console.log('All good');
+      selectedRecipe.confirmed = true;
       this.props.addOrEditRecipe(selectedRecipe);
     }
   };

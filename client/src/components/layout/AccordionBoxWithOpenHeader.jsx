@@ -3,12 +3,15 @@ import arrow from '../../images/arrow.svg';
 
 class AccordionBoxWithOpenHeader extends Component {
   state = {
-    status: 'open'
+    status: 'closed'
   };
 
   componentDidMount = () => {
     const { isOpen } = this.props;
     const { status } = this.state;
+
+    console.log('isOpen', isOpen);
+
     if (isOpen && status === 'closed') {
       this.setState({ status: 'open' });
     }
