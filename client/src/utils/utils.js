@@ -311,12 +311,12 @@ export const convertProfilePacketCostIntoCostPer1kg = (
   profilePacketCost,
   profilePacketGrams
 ) => {
-  console.log('profilePacketCost', profilePacketCost);
-  console.log('profilePacketGrams', profilePacketGrams);
-  console.log(
-    '.....',
-    (profilePacketCost / profilePacketGrams) * 1000
-  );
+  // console.log('profilePacketCost', profilePacketCost);
+  // console.log('profilePacketGrams', profilePacketGrams);
+  // console.log(
+  //   '.....',
+  //   (profilePacketCost / profilePacketGrams) * 1000
+  // );
 
   return (profilePacketCost / profilePacketGrams) * 1000;
 };

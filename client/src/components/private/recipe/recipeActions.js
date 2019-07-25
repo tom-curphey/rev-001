@@ -17,6 +17,7 @@ import { removeErrors } from '../../../redux/errorActions';
 export const loadRecipes = () => async dispatch => {
   try {
     const res = await axios.get('/api/recipe/all');
+
     dispatch({
       type: RECIPES_LOADED,
       payload: res.data

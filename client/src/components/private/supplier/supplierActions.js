@@ -9,9 +9,14 @@ import {
   REMOVE_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 import axios from 'axios';
+import { updateSelectedIngredientSupplier } from '../ingredient/ingredientActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
+import {
+  isEmpty,
+  capitalizeFirstLetter,
+  convertProfilePacketCostIntoCostPer1kg
+} from '../../../utils/utils';
 
 export const loadSuppliers = () => async dispatch => {
   try {
@@ -42,8 +47,7 @@ export const setSelectedSupplier = selectedSupplier => async dispatch => {
 export const getSelectedSupplier = (
   selectedSupplier,
   suppliers,
-  selectedIngredient,
-  isStatePreferredSupplier
+  selectedIngredient
 ) => async dispatch => {
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
@@ -55,8 +59,8 @@ export const getSelectedSupplier = (
       },
       packetCost: '',
       packetGrams: '',
-      profilePacketCost: null,
-      profilePacketGrams: null,
+      profilePacketCost: '',
+      profilePacketGrams: '',
       preferred: false
     };
     dispatch(setSelectedSupplier(updatedSelectedSupplier));
@@ -66,6 +70,8 @@ export const getSelectedSupplier = (
       return ss._id === selectedSupplier.value;
     });
     if (!isEmpty(sSupplier)) {
+      console.log('sSupplier', sSupplier);
+
       // Check if selected ingredient has suppliers
       if (!isEmpty(selectedIngredient)) {
         // Check if selected supplier is in the selected ingredient supplier list
@@ -78,8 +84,16 @@ export const getSelectedSupplier = (
         if (!isEmpty(siSupplier)) {
           // Create new object combining the selected suppliers
 
+          console.log('Before UPDate', siSupplier);
+
           const updatedSelectedSupplier = {
             ...siSupplier[0],
+            // Changed -->
+            // profilePacketCost: convertProfilePacketCostIntoCostPer1kg(
+            //   siSupplier[0].packetCost,
+            //   siSupplier[0].packetGrams
+            // ),
+            // profilePacketGrams: 1000,
             supplier: {
               ...siSupplier[0].supplier,
               address: sSupplier[0].address,
@@ -90,7 +104,18 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
+          console.log('siSupplier', updatedSelectedSupplier);
+          console.log(
+            'selectedIngredient',
+            selectedIngredient.suppliers
+          );
 
+          // dispatch(
+          //   updateSelectedIngredientSupplier(
+          //     selectedIngredient,
+          //     updatedSelectedSupplier
+          //   )
+          // );
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
           // Create new object combining the selected supplier from the suppliers list and the extra data as blank for formatting
@@ -112,6 +137,7 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
+          console.log('new Object', newSelectedSupplier);
           dispatch(setSelectedSupplier(newSelectedSupplier));
         }
       } else {
@@ -191,6 +217,9 @@ export const addOrEditSupplier = supplierData => async dispatch => {
         'Content-Type': 'application/json'
       }
     };
+    supplierData.displayName = capitalizeFirstLetter(
+      supplierData.displayName
+    );
     const body = JSON.stringify(supplierData);
     const res = await axios.post('/api/supplier', body, config);
     const formattedSupplier = {

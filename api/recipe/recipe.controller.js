@@ -5,7 +5,9 @@ const { validationResult } = require('express-validator/check');
 module.exports.getRecipes = async (req, res) => {
   console.log('Recipe Controller');
   try {
-    const recipes = await Recipe.find({ user: req.user.id });
+    const recipes = await Recipe.find({ user: req.user.id }).sort({
+      urlName: 1
+    });
     if (!recipes) {
       return res.status(400).json({
         errors: [

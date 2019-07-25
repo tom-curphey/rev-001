@@ -42,8 +42,8 @@ export class Ingredient extends Component {
       },
       packetCost: '',
       packetGrams: '',
-      profilePacketCost: null,
-      profilePacketGrams: null,
+      profilePacketCost: '',
+      profilePacketGrams: '',
       preferred: false
     },
     readyToSave: false

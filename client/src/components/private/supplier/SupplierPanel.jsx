@@ -23,6 +23,11 @@ const SupplierPanel = ({
   if (selectedIngredient.suppliers.length !== 0) {
     // console.log('Ingredient has suppliers');
 
+    console.log(
+      'selectedIngredient.suppliers',
+      selectedIngredient.suppliers
+    );
+
     // Find the preferred supplier
     const pSupplier = selectedIngredient.suppliers.filter(si => {
       return preferredIngredientSupplierId === si.supplier._id;
@@ -187,8 +192,6 @@ const SupplierPanel = ({
       </div>
     );
   }
-
-  console.log('SI ', selectedIngredient);
 
   return (
     <section className="supplierPanel">

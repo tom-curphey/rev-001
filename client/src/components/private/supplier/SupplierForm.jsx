@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
 import CreatableSelectInputHorizontal from '../../layout/input/CreatableSelectInputHorizontal';
-import { isEmpty, roundNumberAsString } from '../../../utils/utils';
+import {
+  isEmpty,
+  roundNumberAsString,
+  convert100gInto1Kg
+} from '../../../utils/utils';
 
 const SupplierForm = ({
   supplier,
@@ -46,16 +50,14 @@ const SupplierForm = ({
     selectedValue.value = _id;
   }
 
-  // console.log('profilePacketCost', profilePacketCost);
+  console.log('profilePacketCost', typeof profilePacketCost);
 
-  const iPacketCost =
-    profilePacketCost === null
-      ? roundNumberAsString(packetCost)
-      : profilePacketCost.toString();
-  const iPacketGrams =
-    profilePacketGrams === null
-      ? roundNumberAsString(packetGrams)
-      : profilePacketGrams.toString();
+  // const iPacketCost = isEmpty(profilePacketCost)
+  //   ? ''
+  //   : profilePacketCost.toString();
+  // const iPacketGrams = isEmpty(profilePacketGrams)
+  //   ? ''
+  //   : profilePacketGrams.toString();
 
   return (
     <section className="supplierForm">
@@ -72,7 +74,7 @@ const SupplierForm = ({
         />
         <TextInputHorizontal
           label="Supplier Packet Cost"
-          value={iPacketCost}
+          value={profilePacketCost.toString()}
           name="profilePacketCost"
           labelClass="smallTextField"
           onChange={handleSupplierNumberChange}
@@ -80,7 +82,7 @@ const SupplierForm = ({
         />
         <TextInputHorizontal
           label="Supplier Packet Grams"
-          value={iPacketGrams}
+          value={profilePacketGrams.toString()}
           name="profilePacketGrams"
           labelClass="smallTextField"
           onChange={handleSupplierNumberChange}

@@ -14,7 +14,10 @@ import {
 } from '../supplier/supplierActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import { isEmpty } from '../../../utils/utils';
+import {
+  isEmpty,
+  convertProfilePacketCostIntoCostPer1kg
+} from '../../../utils/utils';
 
 export const loadIngredients = () => async dispatch => {
   try {

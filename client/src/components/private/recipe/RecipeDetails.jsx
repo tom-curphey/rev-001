@@ -8,6 +8,7 @@ import RecipeDetailsHeader from './RecipeDetailsHeader';
 import RecipeProcessTime from './RecipeProcessTime';
 import RecipeIngredient from './RecipeIngredient';
 import AccordionBox from '../../layout/AccordionBox';
+import Button from '../../layout/menu/Button';
 
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
@@ -22,6 +23,7 @@ import {
   compareItems,
   roundNumber
 } from '../../../utils/utils';
+import { empty } from 'rxjs';
 
 class RecipeDetails extends Component {
   state = {
@@ -278,8 +280,11 @@ class RecipeDetails extends Component {
   addProcessTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
-      if (processTime[0].order === 'x') {
-        processTime.shift();
+      console.log();
+      if (!isEmpty(processTime)) {
+        if (processTime[0].order === 'x') {
+          processTime.shift();
+        }
       }
       const step = {
         _id: '__isNew__',
@@ -308,8 +313,10 @@ class RecipeDetails extends Component {
   addStaffTime = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
-      if (processTime[0].order === 'x') {
-        processTime.shift();
+      if (!isEmpty(processTime)) {
+        if (processTime[0].order === 'x') {
+          processTime.shift();
+        }
       }
       const step = {
         _id: '__isNew__',
@@ -406,8 +413,10 @@ class RecipeDetails extends Component {
   addRecipeIngredient = () => {
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
       const { processTime, ingredients } = this.state.selectedRecipe;
-      if (processTime[0].order === 'x') {
-        processTime.shift();
+      if (!isEmpty(processTime)) {
+        if (processTime[0].order === 'x') {
+          processTime.shift();
+        }
       }
       const ingredient = {
         ingredient: '__isNew__',
@@ -576,7 +585,15 @@ class RecipeDetails extends Component {
                   </div>
                   <span> Add Staff Input Time</span>
                 </li>
-                <li onClick={this.addRecipeIngredient}>
+                <li
+                  onClick={this.addRecipeIngredient}
+                  className={
+                    selectedRecipe._id === '__isNew__' &&
+                    isEmpty(selectedRecipe.ingredients)
+                      ? 'highlight'
+                      : ''
+                  }
+                >
                   <div className="buttonIcon">
                     <img
                       src={appleIcon}
@@ -586,29 +603,31 @@ class RecipeDetails extends Component {
                   <span> Add Ingredient</span>
                 </li>
               </ul>
-              <ul className="recipeProcessTotal">
-                <li>
-                  <span>Recipe Grams</span>
-                  <span>
-                    {selectedRecipe.totalGrams
-                      ? `${roundNumber(
-                          selectedRecipe.totalGrams,
-                          4
-                        )}g`
-                      : '0.00g'}
-                  </span>
-                </li>
-                <li>
-                  <span>Recipe Time</span>
-                  <span>
-                    {selectedRecipe.totalTime
-                      ? `${roundNumber(
-                          selectedRecipe.totalTime / 60
-                        )} min`
-                      : '0.00 min'}
-                  </span>
-                </li>
-              </ul>
+              <div className="recipeDetailsFooter">
+                <ul className="recipeProcessTotal">
+                  <li>
+                    <span>Recipe Grams</span>
+                    <span>
+                      {selectedRecipe.totalGrams
+                        ? `${roundNumber(
+                            selectedRecipe.totalGrams,
+                            4
+                          )}g`
+                        : '0.00g'}
+                    </span>
+                  </li>
+                  <li>
+                    <span>Recipe Time</span>
+                    <span>
+                      {selectedRecipe.totalTime
+                        ? `${roundNumber(
+                            selectedRecipe.totalTime / 60
+                          )} min`
+                        : '0.00 min'}
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </form>
         </section>

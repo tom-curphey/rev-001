@@ -19,10 +19,10 @@ router.post(
     check('displayName', 'Supplier name is required')
       .not()
       .isEmpty(),
+    check('email', 'Email is not valid').isEmail(),
     check('email', 'Supplier email is required')
       .not()
       .isEmpty(),
-    check('email', 'Email is not valid').isEmail(),
     check('phone', 'Supplier phone is required')
       .not()
       .isEmpty(),

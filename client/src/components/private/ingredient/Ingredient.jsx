@@ -22,7 +22,10 @@ import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from './IngredientForm';
 import SupplierPanel from '../supplier/SupplierPanel';
-import { isEmpty } from '../../../utils/utils';
+import {
+  isEmpty,
+  convertProfilePacketCostIntoCostPer1kg
+} from '../../../utils/utils';
 
 export class Ingredient extends Component {
   state = {
@@ -40,8 +43,8 @@ export class Ingredient extends Component {
       },
       packetCost: '',
       packetGrams: '',
-      profilePacketCost: null,
-      profilePacketGrams: null,
+      profilePacketCost: '',
+      profilePacketGrams: '',
       preferred: false
     },
     readyToSave: false
@@ -49,7 +52,6 @@ export class Ingredient extends Component {
 
   componentDidMount() {
     this.props.loadIngredients();
-    this.props.loadSuppliers();
 
     const { ingredient, supplier } = this.props;
     if (!isEmpty(ingredient.selectedIngredient)) {
@@ -85,8 +87,9 @@ export class Ingredient extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { ingredient, supplier } = this.props;
     const { selectedIngredient, selectedSupplier } = this.state;
-
-    console.log('Before', selectedIngredient);
+    if (isEmpty(supplier.suppliers)) {
+      this.props.loadSuppliers();
+    }
 
     // If selected ingredient changes update local state with selected ingredient
     if (
@@ -103,9 +106,12 @@ export class Ingredient extends Component {
       prevProps.supplier.selectedSupplier !==
       supplier.selectedSupplier
     ) {
+      console.log('***UPDATED HERE 1***');
+
       // Check if props selected supplier !== null
-      if (supplier.selectedSupplier !== null) {
+      if (!isEmpty(supplier.selectedSupplier)) {
         console.log('You caught me', supplier.selectedSupplier);
+        console.log('***UPDATED HERE 2***', selectedIngredient);
 
         if (!isEmpty(selectedIngredient.suppliers)) {
           const statePreferredSupplier = this.state.selectedIngredient.suppliers.filter(
@@ -113,10 +119,12 @@ export class Ingredient extends Component {
               return sis.preferred === true;
             }
           );
-
-          // Check is state has a preferred supplier
+          console.log('***UPDATED HERE 3***');
+          // Check is selected ingredient has a preferred supplier
           if (!isEmpty(statePreferredSupplier)) {
+            console.log('***UPDATED HERE 4***');
             if (!isEmpty(supplier.preferredIngredientSupplierId)) {
+              console.log('***UPDATED HERE 5***');
               if (
                 supplier.selectedSupplier.supplier._id ===
                 supplier.preferredIngredientSupplierId
@@ -161,15 +169,116 @@ export class Ingredient extends Component {
               });
             }
           } else {
-            console.log('state had no preferred supplier');
+            console.log(
+              'state had no preferred supplier',
+              supplier.selectedSupplier
+            );
+
+            const usSupplier = {
+              ...supplier.selectedSupplier,
+              profilePacketCost: !isEmpty(
+                supplier.selectedSupplier.profilePacketCost
+              )
+                ? supplier.selectedSupplier.profilePacketCost.toString()
+                : convertProfilePacketCostIntoCostPer1kg(
+                    supplier.selectedSupplier.packetCost,
+                    supplier.selectedSupplier.packetGrams
+                  ).toString(),
+              profilePacketGrams: !isEmpty(
+                supplier.selectedSupplier.profilePacketGrams
+              )
+                ? supplier.selectedSupplier.profilePacketGrams.toString()
+                : '1000'
+            };
+
+            const usiSuppliers = selectedIngredient.suppliers.map(
+              sis => {
+                if (sis.supplier._id === usSupplier.supplier._id) {
+                  if (!sis.profilePacketCost) {
+                    sis.profilePacketCost = convertProfilePacketCostIntoCostPer1kg(
+                      usSupplier.profilePacketCost,
+                      usSupplier.profilePacketGrams
+                    ).toString();
+                    sis.profilePacketGrams = '1000';
+                    return sis;
+                  }
+                }
+                return sis;
+              }
+            );
+
+            const updatedSelectedIngredient = {
+              ...selectedIngredient,
+              suppliers: usiSuppliers
+            };
+
+            console.log(
+              'state had no preferred supplier **',
+              usSupplier
+            );
+            console.log(
+              'state had no preferred supplier **',
+              updatedSelectedIngredient
+            );
+
             this.setState({
-              selectedSupplier: supplier.selectedSupplier
+              selectedSupplier: usSupplier,
+              selectedIngredient: updatedSelectedIngredient
+              // selectedSupplier: supplier.selectedSupplier
             });
           }
         } else {
+          // Selected ingredient has no suppliers for this profile
           console.log('You slipt past me', supplier.selectedSupplier);
+
+          const usSupplier = {
+            ...supplier.selectedSupplier,
+            profilePacketCost: !isEmpty(
+              supplier.selectedSupplier.profilePacketCost
+            )
+              ? supplier.selectedSupplier.profilePacketCost
+              : convertProfilePacketCostIntoCostPer1kg(
+                  supplier.selectedSupplier.packetCost,
+                  supplier.selectedSupplier.packetGrams
+                ).toString(),
+            profilePacketGrams: !isEmpty(
+              supplier.selectedSupplier.profilePacketGrams
+            )
+              ? supplier.selectedSupplier.profilePacketGrams.toString()
+              : '1000'
+          };
+
+          const usiSuppliers = selectedIngredient.suppliers.map(
+            sis => {
+              if (sis.supplier._id === usSupplier.supplier._id) {
+                if (!sis.profilePacketCost) {
+                  sis.profilePacketCost = convertProfilePacketCostIntoCostPer1kg(
+                    usSupplier.profilePacketCost,
+                    usSupplier.profilePacketGrams
+                  ).toString();
+                  sis.profilePacketGrams = '1000';
+                  return sis;
+                }
+              }
+              return sis;
+            }
+          );
+
+          const updatedSelectedIngredient = {
+            ...selectedIngredient,
+            suppliers: usiSuppliers
+          };
+
+          console.log('You slipt past me **>', usSupplier);
+          console.log(
+            'You slipt past me **>',
+            updatedSelectedIngredient
+          );
+
           this.setState({
-            selectedSupplier: supplier.selectedSupplier
+            selectedSupplier: usSupplier
+            // selectedIngredient: updatedSelectedIngredient
+            // selectedSupplier: supplier.selectedSupplier
           });
         }
 
@@ -197,8 +306,8 @@ export class Ingredient extends Component {
             },
             packetCost: '',
             packetGrams: '',
-            profilePacketCost: null,
-            profilePacketGrams: null,
+            profilePacketCost: '',
+            profilePacketGrams: '',
             preferred: false
           }
         });
@@ -275,6 +384,7 @@ export class Ingredient extends Component {
       }
 
       console.log('Right here', usIngredient);
+      console.log('Right here', usSupplier);
 
       this.setState({
         selectedIngredient: usIngredient,
@@ -283,6 +393,8 @@ export class Ingredient extends Component {
     }
 
     if (prevState.selectedSupplier !== this.state.selectedSupplier) {
+      console.log('CHECKED---->', this.state.selectedSupplier);
+
       // Check if ingredient is ready to be saved
       this.checkReadyToSave();
     }
@@ -475,6 +587,8 @@ export class Ingredient extends Component {
       selectedSupplier,
       readyToSave
     } = this.state;
+
+    console.log('STATE selectedSupplier ----***', selectedSupplier);
 
     const readyToSaveClass = readyToSave ? 'readyToSave' : '';
 
