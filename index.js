@@ -36,9 +36,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 
   // Check for re rendering issues
-  const { whyDidYouUpdate } = require('why-did-you-update');
-  whyDidYouUpdate(React);
-}
+//   const { whyDidYouUpdate } = require('why-did-you-update');
+//   whyDidYouUpdate(React);
+// }
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
