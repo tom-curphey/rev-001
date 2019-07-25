@@ -50,7 +50,7 @@ const SupplierForm = ({
     selectedValue.value = _id;
   }
 
-  console.log('profilePacketCost', typeof profilePacketCost);
+  console.log('preferred}}}}', preferred);
 
   // const iPacketCost = isEmpty(profilePacketCost)
   //   ? ''

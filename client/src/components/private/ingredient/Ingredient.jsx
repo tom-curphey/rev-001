@@ -163,10 +163,36 @@ export class Ingredient extends Component {
                 }
               }
             } else {
-              console.log('Just trying to run here');
-              this.setState({
-                selectedSupplier: supplier.selectedSupplier
-              });
+              // console.log(
+              //   'Just trying to run here***',
+              //   prevProps.ingredient.selectedIngredient
+              // );
+              // console.log(
+              //   'Just trying to run here***',
+              //   ingredient.selectedIngredient
+              // );
+              // console.log(
+              //   'Just trying to run here',
+              //   selectedIngredient
+              // );
+              console.log(
+                'Just trying to run here',
+                supplier.selectedSupplier
+              );
+
+              if (
+                prevProps.ingredient.selectedIngredient !==
+                ingredient.selectedIngredient
+              ) {
+                this.setState({
+                  selectedIngredient: ingredient.selectedIngredient,
+                  selectedSupplier: supplier.selectedSupplier
+                });
+              } else {
+                this.setState({
+                  selectedSupplier: supplier.selectedSupplier
+                });
+              }
             }
           } else {
             console.log(
@@ -176,6 +202,7 @@ export class Ingredient extends Component {
 
             const usSupplier = {
               ...supplier.selectedSupplier,
+              preferred: false,
               profilePacketCost: !isEmpty(
                 supplier.selectedSupplier.profilePacketCost
               )
@@ -195,6 +222,7 @@ export class Ingredient extends Component {
               sis => {
                 if (sis.supplier._id === usSupplier.supplier._id) {
                   if (!sis.profilePacketCost) {
+                    sis.preferred = false;
                     sis.profilePacketCost = convertProfilePacketCostIntoCostPer1kg(
                       usSupplier.profilePacketCost,
                       usSupplier.profilePacketGrams
@@ -364,11 +392,27 @@ export class Ingredient extends Component {
 
       let usSupplier;
 
+      console.log('Right here 1', selectedSupplier); // state
+      console.log('Right here 2', supplier); // props
+
       if (!isEmpty(selectedSupplier.supplier._id)) {
         usSupplier = {
           ...selectedSupplier
+          // ...supplier.selectedSupplier
         };
       } else {
+        usSupplier = {
+          ...supplier.selectedSupplier
+        };
+      }
+
+      if (
+        selectedSupplier.supplier._id !==
+        supplier.selectedSupplier.supplier._id
+      ) {
+        console.log('ERROR HERE');
+        console.log('Right here 1 STATE', selectedSupplier); // state
+        console.log('Right here 2 PROPS', supplier); // props
         usSupplier = {
           ...supplier.selectedSupplier
         };
