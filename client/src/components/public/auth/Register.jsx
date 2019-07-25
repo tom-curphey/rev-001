@@ -19,6 +19,7 @@ class Register extends Component {
   };
 
   componentDidMount() {
+    // if
     // Redirect if logged in
     const { auth, history } = this.props;
 
@@ -157,7 +158,7 @@ Register.propTypes = {
 const actions = { register, removeErrors };
 
 const mapState = state => ({
-  // profile: state.profile,
+  profile: state.profile,
   errors: state.errors,
   auth: state.auth
 });
