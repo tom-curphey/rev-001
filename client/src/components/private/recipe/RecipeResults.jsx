@@ -150,7 +150,7 @@ class RecipeResults extends Component {
         headerText={`Recipe Results + Complete analysis of the ${
           selectedRecipe.displayName
         } recipe`}
-        isOpen={true}
+        // isOpen={true}
       >
         <section className="recipeResults">
           <div className="resultsForm">

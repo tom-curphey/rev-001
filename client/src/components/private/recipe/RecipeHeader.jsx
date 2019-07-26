@@ -73,7 +73,7 @@ class RecipeHeader extends Component {
 
     console.log('Header Recipe', selectedRecipe);
 
-    if (selectedRecipe !== null) {
+    if (!isEmpty(selectedRecipe)) {
       this.props.addOrEditRecipe(selectedRecipe);
     } else {
       console.log('Direct user to select a recipe');
@@ -83,26 +83,27 @@ class RecipeHeader extends Component {
   handleCalculateRecipe = () => {
     const { selectedRecipe } = this.props.recipe;
     console.log('Header Recipe', selectedRecipe);
-    let errors = {};
+    if (!isEmpty(selectedRecipe)) {
+      let errors = {};
+      if (isEmpty(selectedRecipe.serves))
+        errors.serves = 'Please enter total recipe serves';
+      if (isEmpty(selectedRecipe.salePricePerServe))
+        errors.salePricePerServe =
+          'Please enter the sales price per serve';
+      if (isEmpty(selectedRecipe.expectedSales))
+        errors.expectedSales =
+          'Please enter the expected weekly sales per serve';
+      if (isEmpty(selectedRecipe.ingredients))
+        errors.recipeIngredients =
+          'All recipes need atleast 1 ingredient to be calculated..';
 
-    if (isEmpty(selectedRecipe.serves))
-      errors.serves = 'Please enter total recipe serves';
-    if (isEmpty(selectedRecipe.salePricePerServe))
-      errors.salePricePerServe =
-        'Please enter the sales price per serve';
-    if (isEmpty(selectedRecipe.expectedSales))
-      errors.expectedSales =
-        'Please enter the expected weekly sales per serve';
-    if (isEmpty(selectedRecipe.ingredients))
-      errors.recipeIngredients =
-        'All recipes need atleast 1 ingredient to be calculated..';
-
-    if (!isEmpty(errors)) {
-      this.props.setErrors(errors);
-    } else {
-      console.log('All good');
-      selectedRecipe.confirmed = true;
-      this.props.addOrEditRecipe(selectedRecipe);
+      if (!isEmpty(errors)) {
+        this.props.setErrors(errors);
+      } else {
+        console.log('All good');
+        selectedRecipe.confirmed = true;
+        this.props.addOrEditRecipe(selectedRecipe);
+      }
     }
   };
 
@@ -153,15 +154,26 @@ class RecipeHeader extends Component {
           <h1>Add New Recipe</h1>
         )}
         <div className="twoButtons">
+          {isEmpty(recipe.selectedRecipe) ? (
+            <Button
+              onClick={this.handleCalculateRecipe}
+              buttonTitle="Calculate Revenue"
+              buttonColour="green"
+            />
+          ) : (
+            !recipe.selectedRecipe.confirmed && (
+              <Button
+                onClick={this.handleCalculateRecipe}
+                buttonTitle="Calculate Revenue"
+                buttonColour="green"
+              />
+            )
+          )}
           <Button
             onClick={this.handleSaveRecipe}
             buttonTitle="Save Recipe"
             buttonColour="orange"
-          />
-          <Button
-            onClick={this.handleCalculateRecipe}
-            buttonTitle="Calculate Revenue"
-            buttonColour="green"
+            buttonClass="save"
           />
         </div>
       </div>

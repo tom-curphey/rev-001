@@ -169,6 +169,10 @@ div.btn {
   justify-content: center;
   align-items: center;
 
+  &.center {
+    margin: 30px auto;
+  }
+
   span {
     color: $cWhite;
   }

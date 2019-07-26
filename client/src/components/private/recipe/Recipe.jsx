@@ -7,8 +7,12 @@ import Spinner from '../../layout/Spinner';
 import { isEmpty } from '../../../utils/utils';
 import RecipeHeader from './RecipeHeader';
 import RecipeResults from './RecipeResults';
+import RecipeIngredients from './RecipeIngredients';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
+import Button from '../../layout/menu/Button';
+import { setErrors } from '../../../redux/errorActions';
+import { addOrEditRecipe } from './recipeActions';
 
 class Recipe extends Component {
   componentDidMount = () => {
@@ -26,6 +30,32 @@ class Recipe extends Component {
           // return this.props.history.push('/onboarding');
         }
       }
+    }
+  };
+
+  handleCalculateRecipe = () => {
+    const { selectedRecipe } = this.props.recipe;
+    console.log('Header Recipe', selectedRecipe);
+    let errors = {};
+
+    if (isEmpty(selectedRecipe.serves))
+      errors.serves = 'Please enter total recipe serves';
+    if (isEmpty(selectedRecipe.salePricePerServe))
+      errors.salePricePerServe =
+        'Please enter the sales price per serve';
+    if (isEmpty(selectedRecipe.expectedSales))
+      errors.expectedSales =
+        'Please enter the expected weekly sales per serve';
+    if (isEmpty(selectedRecipe.ingredients))
+      errors.recipeIngredients =
+        'All recipes need atleast 1 ingredient to be calculated..';
+
+    if (!isEmpty(errors)) {
+      this.props.setErrors(errors);
+    } else {
+      console.log('All good');
+      selectedRecipe.confirmed = true;
+      this.props.addOrEditRecipe(selectedRecipe);
     }
   };
 
@@ -55,6 +85,19 @@ class Recipe extends Component {
             <RecipeDetails />
             {!isEmpty(recipe.selectedRecipe) &&
               recipe.selectedRecipe.confirmed && <RecipeResults />}
+            {!isEmpty(recipe.selectedRecipe) &&
+              !recipe.selectedRecipe.confirmed && (
+                <Button
+                  onClick={this.handleCalculateRecipe}
+                  buttonTitle="Calculate Revenue"
+                  buttonColour="green"
+                  buttonClass="center"
+                />
+              )}
+            {!isEmpty(recipe.selectedRecipe) &&
+              recipe.selectedRecipe.confirmed && (
+                <RecipeIngredients />
+              )}
           </Fragment>
         );
       }
@@ -71,8 +114,14 @@ class Recipe extends Component {
 Recipe.propTypes = {
   recipe: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  setErrors: PropTypes.func.isRequired
   // venues: PropTypes.object.isRequired
+};
+
+const actions = {
+  setErrors,
+  addOrEditRecipe
 };
 
 const mapState = state => ({
@@ -81,4 +130,7 @@ const mapState = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapState)(withRouter(Recipe));
+export default connect(
+  mapState,
+  actions
+)(withRouter(Recipe));
