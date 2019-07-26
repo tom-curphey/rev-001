@@ -15,8 +15,7 @@ const RecipeSchema = new Schema(
     },
     urlName: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     serves: {
       type: Number,

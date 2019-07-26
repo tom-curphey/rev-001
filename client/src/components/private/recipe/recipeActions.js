@@ -54,7 +54,7 @@ export const addOrEditRecipe = selectedRecipe => async dispatch => {
 
     const body = JSON.stringify(selectedRecipe);
     const res = await axios.post('/api/recipe', body, config);
-    // console.log('RES', res);
+    console.log('RES', res);
     dispatch(setSelectedRecipe(res.data));
     dispatch(removeErrors());
     dispatch(setAlert('Recipe Saved', 'success'));

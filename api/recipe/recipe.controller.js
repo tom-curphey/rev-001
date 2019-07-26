@@ -27,6 +27,7 @@ module.exports.getRecipes = async (req, res) => {
 
 module.exports.addOrEditRecipe = async (req, res) => {
   console.log('RECIPE REQ', req.body);
+  console.log('RECIPE REQ', req.user.id);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -103,7 +104,8 @@ module.exports.addOrEditRecipe = async (req, res) => {
       console.log('Create new recipe', recipeData);
 
       let recipe = await Recipe.findOne({
-        displayName: displayName
+        urlName: recipeData.urlName,
+        user: req.user.id
       });
       if (recipe) {
         return res.status(400).json({

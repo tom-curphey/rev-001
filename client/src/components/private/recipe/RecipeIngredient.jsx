@@ -34,13 +34,10 @@ class RecipeIngredient extends Component {
 
   componentDidUpdate = prevState => {
     if (prevState.item !== this.state.item) {
-      console.log('this.state.item', this.state.item);
     }
   };
 
   getSelectedIngredientValue = selectedIngredientValue => {
-    console.log('selectedIngredientValue', selectedIngredientValue);
-
     const ingredientData = this.props.ingredient.ingredients.filter(
       ing => {
         return ing._id === selectedIngredientValue.value;
