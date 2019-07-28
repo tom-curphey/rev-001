@@ -118,6 +118,8 @@ class RecipeHeader extends Component {
     const { recipe, errors } = this.props;
     const { displayRecipeNameForm, selectedRecipe } = this.state;
 
+    console.log('selectedRecipe', selectedRecipe);
+
     return (
       <div className="recipeHeader">
         {recipe.selectedRecipe !== null ? (
@@ -132,7 +134,9 @@ class RecipeHeader extends Component {
               {displayRecipeNameForm ? (
                 <form onBlur={this.updateReduxSelectedRecipeName}>
                   <TextInput
-                    value={selectedRecipe.displayName}
+                    value={
+                      selectedRecipe && selectedRecipe.displayName
+                    }
                     name="recipeName"
                     onChange={this.editRecipeName}
                     type="text"
@@ -142,7 +146,7 @@ class RecipeHeader extends Component {
                   />
                 </form>
               ) : (
-                <h1 onClick={this.getRecipeNameForm}>
+                <h1>
                   {selectedRecipe && selectedRecipe.displayName}
                 </h1>
               )}

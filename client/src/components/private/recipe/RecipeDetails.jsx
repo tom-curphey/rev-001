@@ -9,6 +9,7 @@ import RecipeProcessTime from './RecipeProcessTime';
 import RecipeIngredient from './RecipeIngredient';
 import AccordionBox from '../../layout/AccordionBox';
 import Button from '../../layout/menu/Button';
+import TextInput from '../../layout/input/TextInput';
 
 import timerIcon from '../../../images/timer.svg';
 import appleIcon from '../../../images/apple.svg';
@@ -29,6 +30,7 @@ class RecipeDetails extends Component {
   state = {
     updated: false,
     selectRecipeError: false,
+    displayRecipeNameForm: false,
     selectedRecipe: {
       serves: '',
       salePricePerServe: '',
@@ -148,7 +150,8 @@ class RecipeDetails extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (
       prevProps.recipe.selectedRecipe !==
-      this.props.recipe.selectedRecipe
+        this.props.recipe.selectedRecipe &&
+      this.props.recipe.selectedRecipe !== null
     ) {
       const { selectedRecipe } = this.props.recipe;
       let updateReduxState = false;
@@ -473,7 +476,11 @@ class RecipeDetails extends Component {
   };
 
   render() {
-    const { selectRecipeError, selectedRecipe } = this.state;
+    const {
+      selectRecipeError,
+      selectedRecipe,
+      displayRecipeNameForm
+    } = this.state;
     const { errors } = this.props;
 
     let ri = [];
@@ -536,23 +543,9 @@ class RecipeDetails extends Component {
         onClick="handleAccordianClick"
       >
         <section className="recipeDetails">
-          <div className="recipeDetailsHeader">
-            <div>
-              <div className="selectRecipe">
-                <SelectRecipe />
-                {selectRecipeError && (
-                  <span>Please select a recipe to start</span>
-                )}
-                {errors && errors.recipeIngredients && (
-                  <span>{errors.recipeIngredients}</span>
-                )}
-              </div>
-            </div>
-            <RecipeDetailsHeader
-              // selectedRecipe={selectedRecipe}
-              selectRecipeError={this.selectRecipeError}
-            />
-          </div>
+          <RecipeDetailsHeader
+            selectRecipeError={selectRecipeError}
+          />
           <form>
             <div className="recipeProcess">
               <ul className="recipeProcessHeader">

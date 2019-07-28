@@ -56,6 +56,99 @@ section.recipe {
     }
   }
 
+  section.recipeDetailsHeader {
+    display: grid;
+    grid-template-columns: auto 350px;
+    padding: 15px 15px 5px 0px;
+
+    div.recipeName {
+      max-width: 380px;
+
+      div.createtableSelectInputBox {
+        padding-left: 15px;
+      }
+
+      div.recipeNameForm {
+        display: grid;
+        grid-template-columns: 50px auto;
+        cursor: pointer;
+        img {
+          opacity: 0.5;
+          width: 22px;
+          display: flex;
+          justify-self: center;
+          align-self: center;
+        }
+      }
+
+      h1 {
+        cursor: pointer;
+        padding: 4px;
+        padding: 10px 11px 6px;
+        display: inline-block;
+
+        &:hover {
+          background: $cFaded;
+          border-radius: 5px;
+        }
+      }
+
+      input {
+        font-size: 2em;
+        font-weight: bold;
+        max-width: 350px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        height: 50px;
+      }
+
+      div.recipeMessages {
+        display: grid;
+        grid-template-columns: 350px;
+
+        div.recipeIcons {
+          display: none;
+          cursor: pointer;
+
+          grid-gap: 15px;
+
+          img {
+            opacity: 0.5;
+            width: 25px;
+            margin: auto;
+            display: block;
+          }
+        }
+
+        div:last-child {
+          padding-top: 10px;
+        }
+
+        span.errorMsg {
+          padding-left: 15px;
+          font-size: 16px;
+        }
+      }
+
+      div.recipeMessages.showIcons {
+        grid-template-columns: 50px 350px;
+
+        div.recipeIcons {
+          display: grid;
+        }
+
+        div:last-child {
+          padding-top: 0px;
+        }
+
+        span.errorMsg {
+          padding-left: 15px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
   section.recipeDetails {
     div.recipeDetailsHeader {
       padding: 15px;

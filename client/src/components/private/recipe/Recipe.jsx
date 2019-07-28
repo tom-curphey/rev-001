@@ -110,9 +110,9 @@ class Recipe extends Component {
                 />
               )}
             {!isEmpty(recipe.selectedRecipe) &&
-              recipe.selectedRecipe.confirmed && (
-                <RecipeIngredients />
-              )}
+              recipe.selectedRecipe.confirmed
+            // <RecipeIngredients />
+            }
           </Fragment>
         );
       }
