@@ -59,6 +59,21 @@ class Recipe extends Component {
     }
   };
 
+  updateSelectedRecipeIngredient = updatedItem => {
+    const { selectedRecipe } = this.state;
+    const recipeData = { ...selectedRecipe };
+
+    let updatedIngredients = recipeData.ingredients.map(item => {
+      if (item.order === updatedItem.order) {
+        item = updatedItem;
+      }
+      return item;
+    });
+
+    recipeData.ingredients = updatedIngredients;
+    this.setState({ updated: true, selectedRecipe: recipeData });
+  };
+
   render() {
     const { recipe } = this.props;
 

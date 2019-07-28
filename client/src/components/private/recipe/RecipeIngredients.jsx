@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
+import editIcon from '../../../images/edit.svg';
+import { isEmpty } from '../../../utils/utils';
+import RecipeIngredient from './RecipeIngredient';
+import RecipeIngredientForm from './RecipeIngredientForm';
 
 class RecipeIngredients extends Component {
   state = {
@@ -21,8 +25,37 @@ class RecipeIngredients extends Component {
     }
   };
 
+  updateSelectedRecipeIngredient = updatedItem => {
+    const { selectedRecipe } = this.state;
+    const recipeData = { ...selectedRecipe };
+
+    let updatedIngredients = recipeData.ingredients.map(item => {
+      if (item.order === updatedItem.order) {
+        item = updatedItem;
+      }
+      return item;
+    });
+
+    recipeData.ingredients = updatedIngredients;
+    this.setState({ updated: true, selectedRecipe: recipeData });
+  };
+
   render() {
     const { selectedRecipe } = this.state;
+
+    let recipeIngredients = [];
+    if (!isEmpty(selectedRecipe.ingredients)) {
+      recipeIngredients = selectedRecipe.ingredients.map(ri => {
+        return (
+          <RecipeIngredientForm
+            ingredient={ri}
+            updateSelectedRecipeIngredient={
+              this.updateSelectedRecipeIngredient
+            }
+          />
+        );
+      });
+    }
 
     return (
       <section className="recipeIngredients">
@@ -33,12 +66,20 @@ class RecipeIngredients extends Component {
           isOpen={true}
         >
           <ul>
-            <li>e</li>
-            <li>Ingredient Name</li>
-            <li>Recipe Cost</li>
-            <li>Recipe Grams</li>
-            <li>Contribution</li>
-            <li>Packet Cost (kg)</li>
+            <li>
+              <div>
+                <img
+                  src={editIcon}
+                  alt="Editing icon to indicate that you can edit the ingredient"
+                />
+              </div>
+              <div>Ingredient Name</div>
+              <div>Recipe Cost</div>
+              <div>Recipe Grams</div>
+              <div>Contribution</div>
+              <div>Packet Cost (kg)</div>
+            </li>
+            {recipeIngredients && recipeIngredients}
           </ul>
         </AccordionBoxWithOpenHeader>
       </section>

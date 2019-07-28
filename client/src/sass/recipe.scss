@@ -329,16 +329,30 @@ section.recipe {
   }
 
   section.recipeIngredients {
-    ul {
-      display: grid;
-      grid-template-columns: 30px 155px 112px 130px 120px 150px;
-      padding: 0px 15px;
-    }
     li {
-      font-weight: 400;
-      color: $cGrey;
-      padding: 15px 8px;
-      border-right: 1px solid $cGreyLight;
+      display: grid;
+      grid-template-columns: 40px 155px 112px 130px 120px 150px;
+      padding-right: 15px;
+    }
+
+    li:first-child {
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 400;
+        color: $cGrey;
+        padding: 15px 8px;
+        border-right: 1px solid $cGreyLight;
+      }
+      div:first-child {
+        border-right: 0;
+      }
+    }
+
+    img {
+      width: 20px;
+      opacity: 0.4;
     }
   }
 }

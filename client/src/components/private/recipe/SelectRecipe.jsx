@@ -121,6 +121,53 @@ class SelectRecipe extends Component {
     }
   };
 
+  onBlurGetTypedValue = e => {
+    console.log('e.target', e.target.value);
+    const { selectedValue } = this.state;
+
+    if (
+      selectedValue.value === 'no-recipe-selected' ||
+      e.target.value !== selectedValue.value
+    ) {
+      let selectedRecipe = [];
+
+      // Find recipe name
+      selectedRecipe = this.props.recipe.recipes.filter(r => {
+        return r.displayName
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase());
+      });
+
+      console.log('selectedRecipe ->', selectedRecipe);
+
+      if (isEmpty(selectedRecipe)) {
+        const newRecipe = {
+          _id: '__isNew__',
+          displayName: capitalizeFirstLetter(e.target.value),
+
+          processTime: [],
+          ingredients: []
+        };
+        newRecipe.urlName = newRecipe.displayName
+          .trim()
+          .replace(/\s+/g, '-')
+          .toLowerCase();
+        // newRecipe.new = true;
+        selectedRecipe.push(newRecipe);
+      }
+
+      console.log('selectedRecipe', selectedRecipe);
+
+      this.props.getSelectedRecipe(
+        selectedRecipe[0],
+        this.props.profile.profile
+      );
+      this.props.history.push(
+        `/recipes/${selectedRecipe[0].urlName}`
+      );
+    }
+  };
+
   render() {
     const { recipes } = this.props.recipe;
     const { selectedValue } = this.state;
@@ -144,6 +191,7 @@ class SelectRecipe extends Component {
           placeholder="Type recipe name to start.."
           createLabel="+ Add Recipe"
           largeSelect={true}
+          onBlur={this.onBlurGetTypedValue}
         />
       );
     } else {
@@ -155,6 +203,7 @@ class SelectRecipe extends Component {
           placeholder="Type recipe name to start.."
           createLabel="+ Add Recipe"
           largeSelect={true}
+          onBlur={this.onBlurGetTypedValue}
         />
       );
     }
