@@ -88,7 +88,7 @@ class RecipeDetailsHeader extends Component {
   };
 
   editRecipeName = e => {
-    console.log('e.t', e.target.value);
+    // console.log('e.t', e.target.value);
     e.persist();
     this.setState(prevState => ({
       selectedRecipe: {
@@ -122,7 +122,7 @@ class RecipeDetailsHeader extends Component {
   };
 
   updateReduxSelectedRecipeHeader = () => {
-    console.log('checking', this.state.selectedRecipe);
+    // console.log('checking', this.state.selectedRecipe);
 
     if (!isEmpty(this.props.selectedRecipe)) {
       this.setState({ displayRecipeNameForm: false });
@@ -163,7 +163,7 @@ class RecipeDetailsHeader extends Component {
     } = this.state;
     const { errors, selectRecipeError } = this.props;
 
-    console.log('selectRecipeError', selectRecipeError);
+    // console.log('selectRecipeError', selectRecipeError);
 
     return (
       <section className="recipeDetailsHeader">

@@ -3,6 +3,7 @@ import {
   INGREDIENTS_ERROR,
   REMOVE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENT,
+  SET_INGREDIENTS_LOADING,
   STOP_INGREDIENTS_LOADING,
   PROFILE_LOADED
 } from '../../../redux/types';
@@ -12,7 +13,10 @@ import {
   removeSelectedSupplier,
   removePreferredSupplier
 } from '../supplier/supplierActions';
-import { displayErrors } from '../../../redux/errorActions';
+import {
+  displayErrors,
+  removeErrors
+} from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
 import {
   isEmpty,
@@ -201,6 +205,7 @@ export const addOrEditIngredientAndSupplier = (
 ) => async dispatch => {
   // console.log('ID', ingredientData);
   // console.log('SD', supplierData);
+  dispatch(setIngredientsLoading());
 
   try {
     // dispatch(setVenueLoading());
@@ -232,14 +237,24 @@ export const addOrEditIngredientAndSupplier = (
       )
     );
     dispatch(setAlert('Ingredient Saved', 'success'));
+    dispatch(removeErrors());
   } catch (err) {
     dispatch(displayErrors(err));
     dispatch(setAlert('Ingredient Error', 'error'));
+    dispatch({
+      type: STOP_INGREDIENTS_LOADING
+    });
   }
 };
 
 export const removeSelectedIngredient = () => async dispatch => {
   dispatch({
     type: REMOVE_SELECTED_INGREDIENT
+  });
+};
+
+export const setIngredientsLoading = () => async dispatch => {
+  dispatch({
+    type: SET_INGREDIENTS_LOADING
   });
 };

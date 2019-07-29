@@ -12,6 +12,38 @@ class RecipeIngredients extends Component {
   };
 
   componentDidMount() {
+    const { selectedRecipe, ingredient } = this.props;
+    if (
+      !isEmpty(selectedRecipe.ingredients) &&
+      !isEmpty(ingredient.ingredients)
+    ) {
+      let updatedRecipeIngredients = selectedRecipe.ingredients.map(
+        rIngredient => {
+          let foundIngredient = ingredient.ingredients.filter(ing => {
+            return rIngredient.ingredient === ing._id;
+          });
+          console.log('foundIngredient', foundIngredient);
+          console.log('rIngredient', rIngredient);
+          if (!isEmpty(foundIngredient)) {
+            let updatedIngredient = {
+              ...rIngredient,
+              ingredient: {
+                _id: foundIngredient._id,
+                displayName: foundIngredient.displayName,
+                displayName: foundIngredient.displayName,
+                displayName: foundIngredient.displayName
+              }
+            };
+            return updatedIngredient;
+          }
+          return;
+        }
+      );
+      console.log(
+        'updatedRecipeIngredients',
+        updatedRecipeIngredients
+      );
+    }
     this.setState({
       selectedRecipe: { ...this.props.selectedRecipe }
     });
@@ -23,6 +55,29 @@ class RecipeIngredients extends Component {
         selectedRecipe: { ...this.props.selectedRecipe }
       });
     }
+
+    // if (
+    //   !isEmpty(selectedRecipe.ingredients) &&
+    //   !isEmpty(ingredient.ingredients)
+    // ) {
+    //   let updatedRecipeIngredients = selectedRecipe.ingredients.map(
+    //     rIngredient => {
+    //       let foundIngredient = ingredient.ingredients.filter(ing => {
+    //         return rIngredient.ingredient === ing._id;
+    //       });
+    //       console.log('foundIngredient', foundIngredient);
+    //       if (!isEmpty(foundIngredient)) {
+    //         let updatedIngredient = {};
+    //         return updatedIngredient;
+    //       }
+    //       return;
+    //     }
+    //   );
+    //   console.log(
+    //     'updatedRecipeIngredients',
+    //     updatedRecipeIngredients
+    //   );
+    // }
   };
 
   updateSelectedRecipeIngredient = updatedItem => {
@@ -48,7 +103,7 @@ class RecipeIngredients extends Component {
       recipeIngredients = selectedRecipe.ingredients.map(ri => {
         return (
           <RecipeIngredientForm
-            ingredient={ri}
+            item={ri}
             updateSelectedRecipeIngredient={
               this.updateSelectedRecipeIngredient
             }
@@ -88,7 +143,8 @@ class RecipeIngredients extends Component {
 }
 
 const mapState = state => ({
-  selectedRecipe: state.recipe.selectedRecipe
+  selectedRecipe: state.recipe.selectedRecipe,
+  ingredient: state.ingredient
 });
 
 export default connect(mapState)(RecipeIngredients);

@@ -108,11 +108,9 @@ section.recipe {
 
         div.recipeIcons {
           display: none;
-          cursor: pointer;
-
-          grid-gap: 15px;
 
           img {
+            cursor: pointer;
             opacity: 0.5;
             width: 25px;
             margin: auto;
@@ -132,13 +130,14 @@ section.recipe {
 
       div.recipeMessages.showIcons {
         grid-template-columns: 50px 350px;
+        grid-template-rows: 98px;
 
         div.recipeIcons {
           display: grid;
         }
 
         div:last-child {
-          padding-top: 0px;
+          padding-top: px;
         }
 
         span.errorMsg {

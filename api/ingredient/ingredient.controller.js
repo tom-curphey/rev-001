@@ -58,7 +58,8 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
     });
   }
 
-  // console.log('REQ.BODY', req.body);
+  console.log('REQ.BODY', req.body);
+  console.log('DISPLAY NAME', displayName);
 
   const ingredientData = {};
   ingredientData.metrics = {};
@@ -121,6 +122,30 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
             }
           ]
         });
+      }
+
+      if (ingredient.displayName !== ingredientData.displayName) {
+        let ingredientNameCheck = await Ingredient.find({
+          urlName: ingredientData.urlName
+        });
+
+        // console.log('ingredient', ingredient);
+
+        if (ingredientNameCheck.length !== 0) {
+          // Error - There is already an ingredient by this name
+          return res.status(400).json({
+            errors: [
+              {
+                param: 'ingredient',
+                msg: 'Ingredient name already exists..'
+              }
+            ]
+          });
+        }
+
+        ingredient.ingredient.displayName =
+          ingredientData.displayName;
+        ingredient.urlName = ingredientData.urlName;
       }
     }
 
@@ -341,6 +366,8 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
       // Add supplier to ingredient suppliers list
       supplier.ingredients.push({ ingredient: ingredient._id });
     }
+
+    displayName;
 
     // Save to database
     await profile.save();

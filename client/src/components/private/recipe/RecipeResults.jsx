@@ -47,7 +47,7 @@ class RecipeResults extends Component {
         : ''
     };
 
-    console.log('selectedRecipe', selectedRecipe);
+    // console.log('selectedRecipe', selectedRecipe);
     const recipeResults = getRecipeResults(
       selectedRecipe,
       selectedVenue,
@@ -92,7 +92,7 @@ class RecipeResults extends Component {
         profile
       );
 
-      console.log('recipeResults', recipeResults);
+      // console.log('recipeResults', recipeResults);
 
       this.setState({
         selectedRecipe: recipeData,
@@ -104,7 +104,7 @@ class RecipeResults extends Component {
       prevState.selectedRecipe !== this.state.selectedRecipe &&
       this.state.updated === true
     ) {
-      console.log('checking3', this.state.selectedRecipe);
+      // console.log('checking3', this.state.selectedRecipe);
       this.props.updateReduxSelectedRecipe(this.state.selectedRecipe);
       this.setState({ updated: false });
     }
@@ -131,7 +131,7 @@ class RecipeResults extends Component {
   handleEnterKeyDown = e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      console.log('do validate');
+      // console.log('do validate');
     }
   };
 
@@ -140,8 +140,8 @@ class RecipeResults extends Component {
     const { recipeResults } = this.state;
     const { selectedRecipe } = this.props;
 
-    console.log('recipeResults', recipeResults);
-    console.log('selectedRecipe-->', selectedRecipe);
+    // console.log('recipeResults', recipeResults);
+    // console.log('selectedRecipe-->', selectedRecipe);
 
     // console.log('selectedRecipe - render from redux', selectedRecipe);
 

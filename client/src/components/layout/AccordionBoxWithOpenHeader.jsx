@@ -10,7 +10,7 @@ class AccordionBoxWithOpenHeader extends Component {
     const { isOpen } = this.props;
     const { status } = this.state;
 
-    console.log('isOpen', isOpen);
+    // console.log('isOpen', isOpen);
 
     if (isOpen && status === 'closed') {
       this.setState({ status: 'open' });

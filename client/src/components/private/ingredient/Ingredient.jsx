@@ -18,14 +18,18 @@ import {
   removeSelectedSupplier,
   removePreferredSupplier
 } from '../supplier/supplierActions';
+import { removeErrors } from '../../../redux/errorActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from './IngredientForm';
 import SupplierPanel from '../supplier/SupplierPanel';
+import TextInput from '../../layout/input/TextInput';
 import {
   isEmpty,
   convertProfilePacketCostIntoCostPer1kg
 } from '../../../utils/utils';
+import editIcon from '../../../images/edit.svg';
+import checkedGreenIcon from '../../../images/checkedGreen.svg';
 
 export class Ingredient extends Component {
   state = {
@@ -47,7 +51,8 @@ export class Ingredient extends Component {
       profilePacketGrams: '',
       preferred: false
     },
-    readyToSave: false
+    readyToSave: false,
+    displayRecipeNameForm: false
   };
 
   componentDidMount() {
@@ -85,8 +90,12 @@ export class Ingredient extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { ingredient, supplier } = this.props;
-    const { selectedIngredient, selectedSupplier } = this.state;
+    const { ingredient, supplier, errors } = this.props;
+    const {
+      selectedIngredient,
+      selectedSupplier,
+      displayRecipeNameForm
+    } = this.state;
     if (isEmpty(supplier.suppliers)) {
       this.props.loadSuppliers();
     }
@@ -96,9 +105,18 @@ export class Ingredient extends Component {
       prevProps.ingredient.selectedIngredient !==
       ingredient.selectedIngredient
     ) {
-      this.setState({
-        selectedIngredient: ingredient.selectedIngredient
-      });
+      console.log('selectedIngredient', selectedIngredient);
+      console.log('ERRORS', errors);
+      if (isEmpty(errors)) {
+        this.setState({
+          selectedIngredient: ingredient.selectedIngredient,
+          displayRecipeNameForm: false
+        });
+      }
+    }
+
+    if (prevState.displayRecipeNameForm !== displayRecipeNameForm) {
+      if (displayRecipeNameForm) console.log('UPDATE');
     }
 
     // If selected supplier changes update local state with selected supplier
@@ -163,18 +181,6 @@ export class Ingredient extends Component {
                 }
               }
             } else {
-              // console.log(
-              //   'Just trying to run here***',
-              //   prevProps.ingredient.selectedIngredient
-              // );
-              // console.log(
-              //   'Just trying to run here***',
-              //   ingredient.selectedIngredient
-              // );
-              // console.log(
-              //   'Just trying to run here',
-              //   selectedIngredient
-              // );
               console.log(
                 'Just trying to run here',
                 supplier.selectedSupplier
@@ -548,6 +554,46 @@ export class Ingredient extends Component {
     this.getSelectedSupplier(selectedValue);
   };
 
+  displayEditRecipeNameForm = () => {
+    console.log(
+      'displayEditRecipeNameForm',
+      this.state.displayRecipeNameForm
+    );
+
+    this.setState({
+      displayRecipeNameForm: true
+    });
+  };
+
+  handleIngredientNameChange = e => {
+    console.log(e.target.value);
+    e.persist();
+    this.setState(prevState => ({
+      selectedIngredient: {
+        ...prevState.selectedIngredient,
+        displayName: e.target.value
+      }
+    }));
+  };
+
+  updateIngredientName = () => {
+    // this.setState({
+    //   displayRecipeNameForm: false
+    // });
+    if (this.state.readyToSave) {
+      this.handleSubmit();
+    }
+  };
+
+  handleEnterKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (this.state.readyToSave) {
+        this.handleSubmit();
+      }
+    }
+  };
+
   checkReadyToSave = () => {
     const {
       selectedIngredient: {
@@ -625,11 +671,12 @@ export class Ingredient extends Component {
   };
 
   render() {
-    const { ingredient } = this.props;
+    const { ingredient, errors } = this.props;
     const {
       selectedIngredient,
       selectedSupplier,
-      readyToSave
+      readyToSave,
+      displayRecipeNameForm
     } = this.state;
 
     console.log('STATE selectedSupplier ----***', selectedSupplier);
@@ -646,10 +693,68 @@ export class Ingredient extends Component {
         </div>
       );
     } else {
-      if (!isEmpty(selectedIngredient.displayName)) {
+      // Thanks for much for indicating that this Ingredient's name is incorrect
+      // This ingredient has been used by other Recipe Revenue Chefs chefs in their recipes
+      // To ensure the ingredient names are consistent for every one your suggestion will be reviewed
+      // We will email you promptly informing you of the outcome.
+
+      // Please note Ingredient names are only reserved for the ingredients name
+      // any branding, price labeling or measurement declaration can be changed below
+
+      if (!isEmpty(ingredient.selectedIngredient)) {
         ingredientForm = (
           <Fragment>
-            <SelectIngredient />
+            <div className="editIngredientName">
+              {displayRecipeNameForm ? (
+                <Fragment>
+                  <form>
+                    <TextInput
+                      label="Ingredient Name"
+                      value={selectedIngredient.displayName}
+                      name="displayName"
+                      onChange={this.handleIngredientNameChange}
+                      onBlur={this.updateIngredientName}
+                      type="text"
+                      error={errors.displayName && errors.displayName}
+                      autoFocus={true}
+                      onKeyDown={this.handleEnterKeyDown}
+                    />
+                  </form>
+                  <div
+                    className="ingredientNameEditIcon fullColor"
+                    // onClick={this.setIngredientLoading}
+                  >
+                    <img
+                      src={checkedGreenIcon}
+                      alt="Edit icon to represent the changing the ingredient name"
+
+                      // onMouseOver={this.onChangeRecipeHover}
+                      // onMouseOut={this.onChangeRecipeHover}
+                    />
+                  </div>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <SelectIngredient />
+                  <div
+                    className="ingredientNameEditIcon"
+                    onClick={this.displayEditRecipeNameForm}
+                  >
+                    <img
+                      src={editIcon}
+                      alt="Edit icon to represent the changing the ingredient name"
+
+                      // onMouseOver={this.onChangeRecipeHover}
+                      // onMouseOut={this.onChangeRecipeHover}
+                    />
+                  </div>
+                </Fragment>
+              )}
+              {errors.ingredient && (
+                <span className="errorMsg">{errors.ingredient}</span>
+              )}
+            </div>
+
             {isEmpty(selectedIngredient._id) && (
               <IngredientForm
                 selectedIngredient={selectedIngredient}
@@ -738,6 +843,7 @@ const actions = {
   getSelectedSupplier,
   setPreferredSupplier,
   updatePreferredSupplier,
+  removeErrors,
   removeSelectedIngredient,
   removeSelectedSupplier,
   removePreferredSupplier
@@ -746,7 +852,8 @@ const actions = {
 const mapState = state => ({
   ingredient: state.ingredient,
   supplier: state.supplier,
-  profile: state.profile
+  profile: state.profile,
+  errors: state.errors
 });
 
 export default connect(

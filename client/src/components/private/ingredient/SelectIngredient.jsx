@@ -115,6 +115,8 @@ class SelectIngredient extends Component {
         return selectData;
       });
 
+      console.log('selectedValue', selectedValue);
+
       formContent = (
         <CreatableSelectInput
           value={selectedValue}
@@ -123,6 +125,7 @@ class SelectIngredient extends Component {
           getSelectedValue={this.getSelectedValue}
           placeholder="Type ingredient name to select ingredient.."
           createLabel="+ Add Ingredient"
+          largeSelect={true}
         />
       );
     } else {
@@ -133,6 +136,7 @@ class SelectIngredient extends Component {
           getSelectedValue={this.getSelectedValue}
           placeholder="Type ingredient name to select ingredient.."
           createLabel="+ Add Ingredient"
+          largeSelect={true}
         />
       );
     }

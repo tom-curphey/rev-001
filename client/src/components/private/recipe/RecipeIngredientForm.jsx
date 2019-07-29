@@ -12,10 +12,11 @@ import {
 import editIcon from '../../../images/edit.svg';
 import binIcon from '../../../images/bin.svg';
 
-class RecipeIngredient extends Component {
+class RecipeIngredientForm extends Component {
   state = {
     item: {
       ingredient: '',
+      displayName: '',
       quantity: '',
       unit: 'gram',
       total: 0,
@@ -177,18 +178,7 @@ class RecipeIngredient extends Component {
             alt="Editing icon to indicate that you can edit the ingredient"
           />
         </div>
-        <div className="ingredientSelect">
-          <CreatableSelectInput
-            value={item.ingredient}
-            name="ingredient"
-            options={ingredientOptions}
-            getSelectedValue={this.getSelectedIngredientValue}
-            placeholder="Type ingredient name to start.."
-            createLabel="+ Add Ingredient"
-            styles={{ fontWeight: '400' }}
-            onBlur={this.updateSelectedRecipeIngredient}
-          />
-        </div>
+        <div className="ingredientSelect">{item.displayName}</div>
         <div className="ingredientQuantity">
           <TextInput
             value={item.quantity}
@@ -245,4 +235,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(RecipeIngredient);
+)(RecipeIngredientForm);

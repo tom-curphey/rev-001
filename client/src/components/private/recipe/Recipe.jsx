@@ -97,6 +97,10 @@ class Recipe extends Component {
             >
               <div>Edit the venue</div>
             </AccordionBoxWithOpenHeader>
+            {!isEmpty(recipe.selectedRecipe) &&
+              recipe.selectedRecipe.confirmed && (
+                <RecipeIngredients />
+              )}
             <RecipeDetails />
             {!isEmpty(recipe.selectedRecipe) &&
               recipe.selectedRecipe.confirmed && <RecipeResults />}
@@ -109,10 +113,6 @@ class Recipe extends Component {
                   buttonClass="center"
                 />
               )}
-            {!isEmpty(recipe.selectedRecipe) &&
-              recipe.selectedRecipe.confirmed
-            // <RecipeIngredients />
-            }
           </Fragment>
         );
       }

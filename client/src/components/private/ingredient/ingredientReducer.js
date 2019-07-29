@@ -3,6 +3,7 @@ import {
   CLEAR_INGREDIENTS,
   REMOVE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENT,
+  SET_INGREDIENTS_LOADING,
   STOP_INGREDIENTS_LOADING
 } from '../../../redux/types';
 
@@ -45,6 +46,12 @@ export default function(state = initialState, actions) {
         selectedIngredient: null,
         loading: false,
         errors: null
+      };
+
+    case SET_INGREDIENTS_LOADING:
+      return {
+        ...state,
+        loading: true
       };
 
     case STOP_INGREDIENTS_LOADING:

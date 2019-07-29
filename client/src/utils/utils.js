@@ -154,7 +154,7 @@ export const setVenueData = venue => {
   const venueData = {};
   venueData.costs = {};
 
-  console.log('venueData', venueData);
+  // console.log('venueData', venueData);
 
   venueData._id = venue._id ? venue._id : '';
   venueData.displayName =
@@ -336,7 +336,7 @@ export const calculateRecipeItemTotal = (quantity, unit, item) => {
         total = quantity * 60 * 60;
         break;
       case 'cup':
-        console.log('--> cup');
+        // console.log('--> cup');
         total = quantity * item.cup;
         break;
       case 'gram':
@@ -346,15 +346,15 @@ export const calculateRecipeItemTotal = (quantity, unit, item) => {
         total = quantity * 1000;
         break;
       case 'tablespoon':
-        console.log('--> tablespoon');
+        // console.log('--> tablespoon');
         total = (quantity * item.cup) / 16;
         break;
       case 'teaspoon':
-        console.log('--> teaspoon');
+        // console.log('--> teaspoon');
         total = (quantity * item.cup) / 48;
         break;
       case 'whole':
-        console.log('--> whole');
+        // console.log('--> whole');
         total = quantity * item.whole;
         break;
       default:
@@ -381,7 +381,7 @@ export const roundRecipeItemTotal = (quantity, unit, item) => {
         total = roundNumberAsString(quantity * 60 * 60);
         break;
       case 'cup':
-        console.log('--> cup');
+        // console.log('--> cup');
         total = quantity * item.cup;
         break;
       case 'gram':
@@ -391,11 +391,11 @@ export const roundRecipeItemTotal = (quantity, unit, item) => {
         total = quantity * 1000;
         break;
       case 'tablespoon':
-        console.log('--> tablespoon');
+        // console.log('--> tablespoon');
         total = (quantity * item.cup) / 16;
         break;
       case 'teaspoon':
-        console.log('--> teaspoon');
+        // console.log('--> teaspoon');
         total = (quantity * item.cup) / 48;
         break;
       default:
@@ -458,8 +458,8 @@ export const updateRecipeItemsOrder = recipeData => {
     }
   );
 
-  console.log('totalGrams', totalGrams);
-  console.log('totalTime', totalTime);
+  // console.log('totalGrams', totalGrams);
+  // console.log('totalTime', totalTime);
 
   recipeData.totalGrams = totalGrams;
   recipeData.totalTime = totalTime;
@@ -686,8 +686,8 @@ export const calcVenueCosts = (selectedRecipe, selectedVenue) => {
 
   venueCosts.venueCost = totalRecipeTime * totalVenueCost;
 
-  console.log('totalRecipeTime', totalRecipeTime);
-  console.log('totalVenueCost', totalVenueCost);
+  // console.log('totalRecipeTime', totalRecipeTime);
+  // console.log('totalVenueCost', totalVenueCost);
 
   return venueCosts;
 };
@@ -709,9 +709,9 @@ export const calcRecipeStats = (
     return recipeStats;
   }
 
-  console.log('selectedRecipe', selectedRecipe);
-  console.log('recipeCost', recipeCost);
-  console.log('ingredientCost', ingredientCost);
+  // console.log('selectedRecipe', selectedRecipe);
+  // console.log('recipeCost', recipeCost);
+  // console.log('ingredientCost', ingredientCost);
 
   // Calculate Recipe Revenue
   recipeStats.recipeRevenue =
@@ -747,8 +747,8 @@ export const calcRecipeStats = (
       ? (recipeStats.grossProfit / ingredientCost) * 100
       : 0;
 
-  console.log('recipeStats.grossProfit', recipeStats.grossProfit);
-  console.log('ingredientCost', ingredientCost);
+  // console.log('recipeStats.grossProfit', recipeStats.grossProfit);
+  // console.log('ingredientCost', ingredientCost);
 
   recipeStats.grossProfitPerWeek =
     selectedRecipe.expectedSales * recipeStats.grossProfitPerServe;

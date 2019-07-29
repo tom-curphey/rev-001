@@ -118,7 +118,7 @@ class RecipeHeader extends Component {
     const { recipe, errors } = this.props;
     const { displayRecipeNameForm, selectedRecipe } = this.state;
 
-    console.log('selectedRecipe', selectedRecipe);
+    // console.log('selectedRecipe', selectedRecipe);
 
     return (
       <div className="recipeHeader">
