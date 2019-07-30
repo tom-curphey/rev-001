@@ -32,8 +32,29 @@ export const loadRecipes = () => async dispatch => {
 export const getSelectedRecipe = (
   rawSelectedRecipe,
   profile
-) => dispatch => {
+) => async dispatch => {
+  // console.log('rawSelectedRecipe', rawSelectedRecipe);
+  // if (rawSelectedRecipe._id !== '__isNew__') {
+  //   try {
+  //     const res = await axios.get(
+  //       `/api/recipe/${rawSelectedRecipe._id}`
+  //     );
+  //     console.log('RES', res);
+  //     dispatch(setSelectedRecipe(res.data));
+  //     dispatch(removeErrors());
+  //   } catch (err) {
+  //     console.log('err', err);
+  //     dispatch({
+  //       type: RECIPES_ERROR
+  //     });
+  //     dispatch({
+  //       type: STOP_RECIPES_LOADING
+  //     });
+  //     dispatch(displayErrors(err));
+  //   }
+  // } else {
   dispatch(setSelectedRecipe(rawSelectedRecipe));
+  // }
 };
 
 export const setSelectedRecipe = selectedRecipe => dispatch => {

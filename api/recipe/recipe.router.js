@@ -9,6 +9,11 @@ const { check } = require('express-validator/check');
 // @access Private
 router.get('/all', auth, recipeController.getRecipes);
 
+// @router GET api/recipe/:recipe_id
+// @desc Add or Edit Recipe
+// @access Private
+router.get('/:recipe_id', auth, recipeController.getRecipeById);
+
 // @router POST api/recipe
 // @desc Add or Edit Recipe
 // @access Private

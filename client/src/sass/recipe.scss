@@ -421,13 +421,31 @@ section.recipe {
   }
 
   section.recipeIngredients {
+    ul {
+      padding: 15px 0px;
+    }
+
+    // li {
+
+    //   div {
+    //     display: flex;
+    //     align-items: center;
+    //     padding: 15px 8px;
+    //     border-right: 1px solid $cGreyLight;
+
+    //     &.ingredientNumber {
+    //       justify-self: flex-end;
+    //     }
+    //   }
+    //   div:first-child {
+    //     border-right: 0;
+    //   }
+    // }
+
     li {
       display: grid;
       grid-template-columns: 40px 155px 112px 130px 120px 150px;
       padding-right: 15px;
-    }
-
-    li:first-child {
       div {
         display: flex;
         justify-content: center;
@@ -435,10 +453,17 @@ section.recipe {
         font-weight: 400;
         color: $cGrey;
         padding: 15px 8px;
-        border-right: 1px solid $cGreyLight;
+        border-left: 1px solid $cGreyLight;
+        &.ingredientNumber {
+          justify-content: flex-end;
+        }
       }
       div:first-child {
         border-right: 0;
+      }
+      div:nth-child(2) {
+        justify-self: flex-start;
+        border-left: 0;
       }
     }
 

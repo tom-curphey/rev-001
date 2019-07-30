@@ -7,7 +7,8 @@ import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
 import {
   isEmpty,
   calculateRecipeItemTotal,
-  roundNumber
+  roundNumber,
+  calculateRecipeIngredientContribution
 } from '../../../utils/utils';
 import editIcon from '../../../images/edit.svg';
 import binIcon from '../../../images/bin.svg';
@@ -35,6 +36,7 @@ class RecipeIngredientForm extends Component {
 
   componentDidUpdate = prevState => {
     if (prevState.item !== this.state.item) {
+      this.setState({ item: this.props.item });
     }
   };
 
@@ -170,6 +172,8 @@ class RecipeIngredientForm extends Component {
       });
     }
 
+    console.log('ITEM', item);
+
     return (
       <li>
         <div className="ingredientIcon">
@@ -178,46 +182,20 @@ class RecipeIngredientForm extends Component {
             alt="Editing icon to indicate that you can edit the ingredient"
           />
         </div>
-        <div className="ingredientSelect">{item.displayName}</div>
-        <div className="ingredientQuantity">
-          <TextInput
-            value={item.quantity}
-            name="quantity"
-            onChange={this.updateIngredientQuantity}
-            inputClass="number"
-            onBlur={this.updateSelectedRecipeIngredient}
-            // error={
-            //   errors.processQuantity && errors.processQuantity
-            // }
-          />
+        <div className="ingredientName">
+          <span>{item.ingredient.displayName}</span>
         </div>
-        <div className="ingredientUnit">
-          <SelectInput
-            name="ingredientUnit"
-            options={
-              item.quantity >= 2
-                ? ingredientMetricOptionsPlural
-                : ingredientMetricOptions
-            }
-            getSelectedValue={this.getSelectedUnitMetricValue}
-            // error={errors.ingredientUnit && errors.ingredientUnit}
-            value={item.unit}
-            onBlur={this.updateSelectedRecipeIngredient}
-            // value={ingredientUnit}
-          />
+        <div className="ingredientNumber">
+          <span>$0.00</span>
         </div>
-        <div className="ingredientTotal">
-          {item.total && roundNumber(item.total, 3)} g
+        <div className="ingredientNumber">
+          <span>{item.total}g</span>
         </div>
-        <div
-          className="ingredientIcon delete"
-          // onClick={this.props.deleteRecipeIngredient(item.order)}
-          // onClick={this.deleteProcessTime(item.order)}
-        >
-          <img
-            src={binIcon}
-            alt="Bin icon to represent the ability to delete a recipe ingredient item"
-          />
+        <div className="ingredientNumber">
+          <span>{calculateRecipeIngredientContribution(item)}%</span>
+        </div>
+        <div className="ingredientNumber">
+          <span>$0.00</span>
         </div>
       </li>
     );

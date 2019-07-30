@@ -773,3 +773,11 @@ export const calcRecipeStats = (
 
   return recipeStats;
 };
+
+// percentage = 100 * part / whole
+export const calculateRecipeIngredientContribution = recipeIngredientCustomItem => {
+  return roundNumber(
+    (100 * recipeIngredientCustomItem.total) /
+      recipeIngredientCustomItem.totalRecipeGrams
+  );
+};

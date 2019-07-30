@@ -25,6 +25,35 @@ module.exports.getRecipes = async (req, res) => {
   }
 };
 
+module.exports.getRecipeById = async (req, res) => {
+  console.log('REQ.BODY', req.body);
+  console.log('____________________', req.params.recipe_id);
+
+  let selectedRecipe = await Recipe.findOne({
+    _id: req.params.recipe_id
+  }).populate('ingredients.ingredient', [
+    'displayName'
+    // 'metrics',
+    // 'packetCost',
+    // 'packetGrams'
+    // 'suppliers'
+  ]);
+
+  if (!selectedRecipe) {
+    return res.status(400).json({
+      errors: [
+        {
+          param: 'recipe',
+          msg: 'Selected Recipe Could Not Be Found'
+        }
+      ]
+    });
+  }
+  console.log('selectedRecipe', selectedRecipe);
+
+  res.status(200).json(selectedRecipe);
+};
+
 module.exports.addOrEditRecipe = async (req, res) => {
   console.log('RECIPE REQ', req.body);
   console.log('RECIPE REQ', req.user.id);
