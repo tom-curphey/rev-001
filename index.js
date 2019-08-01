@@ -1,8 +1,6 @@
 // This is the serve.js page
 // Add all the serve configurations here
 const express = require('express');
-const fs = require('fs');
-const https = require('https');
 const path = require('path');
 const connectDB = require('./config/db');
 
@@ -35,11 +33,6 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
   });
-
-  const httpsOptions = {
-    cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
-    key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt'))
-  };
 }
 
 const PORT = process.env.PORT || 5000;
