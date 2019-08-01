@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import editIcon from '../../../images/edit.svg';
-import { isEmpty } from '../../../utils/utils';
-import RecipeIngredient from './RecipeIngredient';
+import {
+  isEmpty,
+  convert100gInto1Kg,
+  convertProfilePacketCostIntoCostPer1kg,
+  conver
+} from '../../../utils/utils';
 import RecipeIngredientForm from './RecipeIngredientForm';
 
 // Look up the supplier to get the ingredient price
@@ -15,7 +19,7 @@ class RecipeIngredients extends Component {
   };
 
   componentDidMount() {
-    const { selectedRecipe, ingredient } = this.props;
+    const { selectedRecipe, ingredient, profile } = this.props;
     if (
       !isEmpty(selectedRecipe.ingredients) &&
       !isEmpty(ingredient.ingredients)
@@ -27,15 +31,77 @@ class RecipeIngredients extends Component {
         let foundIngredient = ingredient.ingredients.filter(ing => {
           return rIngredient.ingredient === ing._id;
         });
-        console.log('rIngredient', rIngredient);
+        // console.log('rIngredient', rIngredient);
         if (!isEmpty(foundIngredient)) {
+          // Find ingredient cost in recipe & packet cost per 1kg
+          let profilePacketCostPer1kg = 0;
+          let packetCostPerkg = 0;
+          console.log('ingredient', ingredient);
+          console.log('rIngredient', rIngredient);
+
+          if (!isEmpty(profile.profile.ingredients)) {
+            console.log('profile', profile.profile.ingredients);
+            // Check if profile has ingredient
+            let profileIngredient = profile.profile.ingredients.filter(
+              pIngredient => {
+                return (
+                  pIngredient.ingredient === foundIngredient[0]._id
+                );
+              }
+            );
+
+            // Check is user profile has ingredient
+            if (!isEmpty(profileIngredient)) {
+              console.log('Profile has the ingredient');
+
+              // Check if profile ingredient has prefered supplier
+              let preferedSupplier = profileIngredient[0].suppliers.filter(
+                piSupplier => {
+                  return piSupplier.preferred === true;
+                }
+              );
+
+              // Check if prefered supplier was found
+              if (!isEmpty(preferedSupplier)) {
+                console.log('preferedSupplier', preferedSupplier);
+                profilePacketCostPer1kg = convertProfilePacketCostIntoCostPer1kg(
+                  preferedSupplier[0].packetCost,
+                  preferedSupplier[0].packetGrams
+                );
+                packetCostPerkg = 1000;
+              } else {
+                console.log(
+                  'Profile didnt have a preferred ingredient supplier'
+                );
+                profilePacketCostPer1kg = convertProfilePacketCostIntoCostPer1kg(
+                  foundIngredient[0].packetCost,
+                  foundIngredient[0].packetGrams
+                );
+                packetCostPerkg = convert100gInto1Kg(
+                  foundIngredient[0].packetGrams
+                );
+              }
+            } else {
+              console.log('Profile didnt have the ingredient');
+              profilePacketCostPer1kg = convertProfilePacketCostIntoCostPer1kg(
+                foundIngredient[0].packetCost,
+                foundIngredient[0].packetGrams
+              );
+              packetCostPerkg = convert100gInto1Kg(
+                foundIngredient[0].packetGrams
+              );
+            }
+          }
+
           let updatedIngredient = {
             ...rIngredient,
             totalRecipeGrams: selectedRecipe.totalGrams,
             ingredient: {
               _id: foundIngredient[0]._id,
               displayName: foundIngredient[0].displayName,
-              suppliers: foundIngredient[0].suppliers
+              suppliers: foundIngredient[0].suppliers,
+              profilePacketCostPer1kg: profilePacketCostPer1kg,
+              packetCostPerkg: packetCostPerkg
             }
           };
           updatedRecipeIngredients.push(updatedIngredient);
@@ -118,7 +184,7 @@ class RecipeIngredients extends Component {
   render() {
     const { selectedRecipe } = this.state;
 
-    console.log('selectedRecipe', selectedRecipe);
+    // console.log('selectedRecipe', selectedRecipe);
 
     let recipeIngredients = [];
     if (!isEmpty(selectedRecipe.ingredients)) {
@@ -170,7 +236,8 @@ class RecipeIngredients extends Component {
 
 const mapState = state => ({
   selectedRecipe: state.recipe.selectedRecipe,
-  ingredient: state.ingredient
+  ingredient: state.ingredient,
+  profile: state.profile
 });
 
 export default connect(mapState)(RecipeIngredients);
