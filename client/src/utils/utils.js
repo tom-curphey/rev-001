@@ -582,6 +582,10 @@ export const getRecipeResults = (
   return recipeResults;
 };
 
+export const calcCostPer1Gram = (packetCost, packetGrams) => {
+  return packetCost / packetGrams;
+};
+
 export const calcTotalIngredientCost = (
   ingredients,
   selectedRecipe
@@ -776,8 +780,37 @@ export const calcRecipeStats = (
 
 // percentage = 100 * part / whole
 export const calculateRecipeIngredientContribution = recipeIngredientCustomItem => {
+  console.log(
+    'recipeIngredientCustomItem -->',
+    recipeIngredientCustomItem.totalRecipeGrams
+  );
+
   return roundNumber(
     (100 * recipeIngredientCustomItem.total) /
       recipeIngredientCustomItem.totalRecipeGrams
+  );
+};
+
+export const calclulateRecipeIngredientCost = recipeIngredientCustomItem => {
+  console.log(
+    'recipeIngredientCustomItem',
+    recipeIngredientCustomItem
+  );
+
+  let result =
+    recipeIngredientCustomItem.total *
+    calcCostPer1Gram(
+      recipeIngredientCustomItem.ingredient.profilePacketCost,
+      recipeIngredientCustomItem.ingredient.profilePacketGrams
+    );
+
+  console.log('result', result);
+
+  return (
+    recipeIngredientCustomItem.total *
+    calcCostPer1Gram(
+      recipeIngredientCustomItem.ingredient.profilePacketCost,
+      recipeIngredientCustomItem.ingredient.profilePacketGrams
+    )
   );
 };

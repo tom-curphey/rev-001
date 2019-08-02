@@ -425,45 +425,47 @@ section.recipe {
       padding: 15px 0px;
     }
 
-    // li {
-
-    //   div {
-    //     display: flex;
-    //     align-items: center;
-    //     padding: 15px 8px;
-    //     border-right: 1px solid $cGreyLight;
-
-    //     &.ingredientNumber {
-    //       justify-self: flex-end;
-    //     }
-    //   }
-    //   div:first-child {
-    //     border-right: 0;
-    //   }
-    // }
-
     li {
       display: grid;
-      grid-template-columns: 40px 155px 112px 130px 120px 150px;
+      grid-template-columns: 40px 230px 115px 115px 130px 195px;
       padding-right: 15px;
-      div {
+
+      div.ingredientIcon,
+      div.ingredientHeader,
+      div.ingredientName,
+      div.ingredientNumber {
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: 400;
         color: $cGrey;
-        padding: 15px 8px;
-        border-left: 1px solid $cGreyLight;
-        &.ingredientNumber {
-          justify-content: flex-end;
+        padding: 15px 15px;
+      }
+      div.ingredientHeader {
+        padding: 8px 0px;
+        &:nth-child(2) {
+          padding-left: 0px;
+          justify-content: flex-start;
+        }
+        &:nth-child(6) {
+          justify-content: flex-start;
+          padding-left: 10px;
         }
       }
-      div:first-child {
-        border-right: 0;
+      div.ingredientIcon {
+        padding: 0px;
       }
-      div:nth-child(2) {
-        justify-self: flex-start;
-        border-left: 0;
+      div.ingredientName {
+        padding-left: 0px;
+        justify-content: flex-start;
+      }
+      div.ingredientNumber {
+        border-left: 1px solid $cGreyLight;
+        justify-content: flex-end;
+      }
+      div.ingredientSuppler {
+        padding-left: 10px;
+        padding-top: 5px;
       }
     }
 
