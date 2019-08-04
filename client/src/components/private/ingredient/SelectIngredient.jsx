@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
+import CreatableSelectInputBorder from '../../layout/input/CreatableSelectInputBorder';
 import {
   setSelectedIngredient,
   getSelectedIngredient,
@@ -118,7 +118,7 @@ class SelectIngredient extends Component {
       console.log('selectedValue', selectedValue);
 
       formContent = (
-        <CreatableSelectInput
+        <CreatableSelectInputBorder
           value={selectedValue}
           name="ingredient"
           options={options}
@@ -130,7 +130,7 @@ class SelectIngredient extends Component {
       );
     } else {
       formContent = (
-        <CreatableSelectInput
+        <CreatableSelectInputBorder
           value={selectedValue}
           name="ingredient"
           getSelectedValue={this.getSelectedValue}

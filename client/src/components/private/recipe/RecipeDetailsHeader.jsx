@@ -5,6 +5,7 @@ import { isEmpty } from '../../../utils/utils';
 import { updateReduxSelectedRecipe } from './recipeActions';
 import SelectRecipe from './SelectRecipe';
 import TextInput from '../../layout/input/TextInput';
+import { setErrors } from '../../../redux/errorActions';
 import HoverTextInput from '../../layout/input/HoverTextInput';
 import editIcon from '../../../images/edit.svg';
 import sortIcon from '../../../images/sort.svg';
@@ -88,7 +89,7 @@ class RecipeDetailsHeader extends Component {
   };
 
   editRecipeName = e => {
-    // console.log('e.t', e.target.value);
+    console.log('e.t', e.target.value);
     e.persist();
     this.setState(prevState => ({
       selectedRecipe: {
@@ -122,12 +123,28 @@ class RecipeDetailsHeader extends Component {
   };
 
   updateReduxSelectedRecipeHeader = () => {
-    // console.log('checking', this.state.selectedRecipe);
+    const { selectedRecipe } = this.state;
+    let errors = {};
 
-    if (!isEmpty(this.props.selectedRecipe)) {
+    if (isEmpty(selectedRecipe.displayName)) {
+      console.log('checking', selectedRecipe);
+      if (isEmpty(selectedRecipe.displayName))
+        errors.recipeDisplayName = 'Please enter recipe name above';
+      this.setState({ displayRecipeNameForm: true });
+    } else {
+      console.log('checking2', selectedRecipe);
       this.setState({ displayRecipeNameForm: false });
-      this.props.updateReduxSelectedRecipe(this.state.selectedRecipe);
     }
+    this.props.updateReduxSelectedRecipe(selectedRecipe);
+    this.props.setErrors(errors);
+
+    if (!isEmpty(errors)) {
+      console.log('Header Recipe', errors);
+    }
+    console.log(
+      'selectedRecipe.displayName',
+      selectedRecipe.displayName
+    );
   };
 
   onChangeRecipeHover = () => {
@@ -168,7 +185,7 @@ class RecipeDetailsHeader extends Component {
     return (
       <section className="recipeDetailsHeader">
         <div className="recipeName">
-          {displayName ? (
+          {displayName || displayName === '' ? (
             <div className="recipeNameForm">
               <img
                 src={editIcon}
@@ -193,7 +210,7 @@ class RecipeDetailsHeader extends Component {
           )}
           <div
             className={`recipeMessages ${
-              displayName ? 'showIcons' : ''
+              displayName || displayName === '' ? 'showIcons' : ''
             }`}
           >
             <div className="recipeIcons">
@@ -217,8 +234,15 @@ class RecipeDetailsHeader extends Component {
                   Please select a recipe to start
                 </span>
               )}
+              {errors && errors.recipeDisplayName && (
+                <span className="errorMsg">
+                  {errors.recipeDisplayName}
+                </span>
+              )}
               {errors && errors.recipeIngredients && (
-                <span>{errors.recipeIngredients}</span>
+                <span className="errorMsg">
+                  {errors.recipeIngredients}
+                </span>
               )}
               {changeRecipeHover && (
                 <span className="errorMsg">
@@ -281,7 +305,8 @@ class RecipeDetailsHeader extends Component {
 }
 
 const actions = {
-  updateReduxSelectedRecipe
+  updateReduxSelectedRecipe,
+  setErrors
 };
 
 const mapState = state => ({

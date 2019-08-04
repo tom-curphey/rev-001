@@ -16,8 +16,6 @@ class HoverTextInput extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
-      console.log('HIT', this.props.isForm);
-      console.log('HIT', prevProps.isForm);
       if (this.props.isForm === true) {
         this.setState({
           displayRecipeNameForm: this.props.isForm

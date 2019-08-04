@@ -780,11 +780,6 @@ export const calcRecipeStats = (
 
 // percentage = 100 * part / whole
 export const calculateRecipeIngredientContribution = recipeIngredientCustomItem => {
-  console.log(
-    'recipeIngredientCustomItem -->',
-    recipeIngredientCustomItem.totalRecipeGrams
-  );
-
   return roundNumber(
     (100 * recipeIngredientCustomItem.total) /
       recipeIngredientCustomItem.totalRecipeGrams
@@ -792,20 +787,6 @@ export const calculateRecipeIngredientContribution = recipeIngredientCustomItem 
 };
 
 export const calclulateRecipeIngredientCost = recipeIngredientCustomItem => {
-  console.log(
-    'recipeIngredientCustomItem',
-    recipeIngredientCustomItem
-  );
-
-  let result =
-    recipeIngredientCustomItem.total *
-    calcCostPer1Gram(
-      recipeIngredientCustomItem.ingredient.profilePacketCost,
-      recipeIngredientCustomItem.ingredient.profilePacketGrams
-    );
-
-  console.log('result', result);
-
   return (
     recipeIngredientCustomItem.total *
     calcCostPer1Gram(

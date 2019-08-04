@@ -821,7 +821,7 @@ form {
 
   label.textInputHorizontal {
     display: grid;
-    grid-template-areas: 'label input' '... message';
+    grid-template-areas: 'label input' 'message message';
     grid-template-columns: 160px auto;
     grid-template-rows: 40px;
     margin-bottom: 10px;
@@ -848,6 +848,7 @@ form {
 
     span.message {
       grid-area: message;
+      text-align: right;
     }
 
     div.button {

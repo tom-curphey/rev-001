@@ -18,15 +18,15 @@ const CreatableSelectInputBorder = ({
   name,
   value,
   label,
-  createLabel,
-  largeSelect,
-  data,
-  onBlur
+  labelClass,
+  info,
+  createLabel
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, data);
+      getSelectedValue(newValue, name);
+      // console.log('NEW');
     }
   };
 
@@ -66,7 +66,6 @@ const CreatableSelectInputBorder = ({
       // color: state.data.__isNew__ && '#343434',
       // backgroundColor: state.data.__isNew__ && '#f1ede7',
       padding: 12,
-      fontWeight: 400,
       fontSize: '16px',
       '&:hover': {
         color: '#343434',
@@ -79,30 +78,29 @@ const CreatableSelectInputBorder = ({
     }),
     control: (base, state) => ({
       ...base,
-      height: largeSelect ? '60px' : '38px',
-      fontSize: largeSelect ? '19px' : '16px',
-      backgroundColor: largeSelect ? '#fbf6ee' : '',
-      // fontSize: '16px',
+      fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
-      // borderColor: '#cdc0b2',
-      borderColor: '#fff',
+      borderColor: '#cdc0b2',
+      // borderColor: '#fff',
       '&:hover': {
-        backgroundColor: '#f1ede7'
-        // borderColor: '#cdc0b2'
+        // backgroundColor: '#f1ede7',
+        borderColor: '#cdc0b2'
       }
     })
   };
 
   return (
-    <div className="createtableSelectInputBox">
-      {label && <span>{label}</span>}
+    <label
+      htmlFor={name}
+      className={`textInputHorizontal ${labelClass}`}
+    >
+      <span className="label">{label} </span>
       <CreatableSelect
         // isClearable
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
-        onBlur={onBlur}
         options={options && options}
         className={`borderSelectInput ${className}`}
         value={selectedValue}
@@ -114,14 +112,17 @@ const CreatableSelectInputBorder = ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#343434', //'#666',
+            neutral80: '#343434',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
         })}
       />
-      {error && <span className="errorMsg">{error}</span>}
-    </div>
+      <span className="message">
+        {info && <small>{info}</small>}
+        {error && <span className="errorMsg">{error}</span>}
+      </span>
+    </label>
   );
 };
 

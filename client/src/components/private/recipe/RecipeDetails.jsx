@@ -371,12 +371,8 @@ class RecipeDetails extends Component {
         return item.order !== itemOrder;
       });
 
-      console.log('over here');
-
       recipeData.processTime = updatedProcessTime;
       const updatedRecipeData = updateRecipeItemsOrder(recipeData);
-
-      console.log('updatedRecipeData ----->>>', updatedRecipeData);
 
       this.setState({
         updated: true,

@@ -433,9 +433,6 @@ export class Ingredient extends Component {
         usSupplier.preferred = false;
       }
 
-      console.log('Right here', usIngredient);
-      console.log('Right here', usSupplier);
-
       this.setState({
         selectedIngredient: usIngredient,
         selectedSupplier: usSupplier
@@ -443,8 +440,6 @@ export class Ingredient extends Component {
     }
 
     if (prevState.selectedSupplier !== this.state.selectedSupplier) {
-      console.log('CHECKED---->', this.state.selectedSupplier);
-
       // Check if ingredient is ready to be saved
       this.checkReadyToSave();
     }

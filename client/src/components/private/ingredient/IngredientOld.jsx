@@ -389,7 +389,6 @@ class Ingredient extends Component {
         }
       } else {
         console.log('Profile does not have the selected ingredient');
-        console.log('selectedIngredient -->', selectedIngredient);
 
         this.setState(prevState => ({
           selectedIngredient: selectedIngredient,

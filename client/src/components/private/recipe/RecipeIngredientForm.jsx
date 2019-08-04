@@ -49,7 +49,6 @@ class RecipeIngredientForm extends Component {
 
   render() {
     const { item } = this.state;
-    console.log('ITEM --->', item);
 
     let options;
     let selectedValue = {

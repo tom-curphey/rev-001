@@ -102,9 +102,6 @@ class IngredientForm extends Component {
     ) {
       // Check if preferred supplier ID is === to the state selected supplier id
 
-      // --> Do we need this check?
-      // You are trying to unselect the supplier if the props ID is null
-
       const updateSelectedIngredientSuppliersState = selectedIngredient.suppliers.map(
         sis => {
           if (

@@ -139,12 +139,6 @@ class RecipeResults extends Component {
     const { salePricePerServe } = this.state.selectedRecipe;
     const { recipeResults } = this.state;
     const { selectedRecipe } = this.props;
-
-    // console.log('recipeResults', recipeResults);
-    // console.log('selectedRecipe-->', selectedRecipe);
-
-    // console.log('selectedRecipe - render from redux', selectedRecipe);
-
     return (
       <AccordionBoxWithOpenHeader
         headerText={`Recipe Results + Complete analysis of the ${

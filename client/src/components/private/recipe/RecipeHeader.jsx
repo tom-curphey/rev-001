@@ -72,9 +72,16 @@ class RecipeHeader extends Component {
     const { selectedRecipe } = this.props.recipe;
 
     console.log('Header Recipe', selectedRecipe);
-
+    let errors = {};
     if (!isEmpty(selectedRecipe)) {
-      this.props.addOrEditRecipe(selectedRecipe);
+      if (isEmpty(selectedRecipe.displayName))
+        errors.recipeDisplayName = 'Please enter recipe name above';
+
+      if (!isEmpty(errors)) {
+        this.props.setErrors(errors);
+      } else {
+        this.props.addOrEditRecipe(selectedRecipe);
+      }
     } else {
       console.log('Direct user to select a recipe');
     }
@@ -82,9 +89,15 @@ class RecipeHeader extends Component {
 
   handleCalculateRecipe = () => {
     const { selectedRecipe } = this.props.recipe;
-    console.log('Header Recipe', selectedRecipe);
     if (!isEmpty(selectedRecipe)) {
       let errors = {};
+      console.log(
+        'selectedRecipe.displayName',
+        selectedRecipe.displayName
+      );
+
+      if (isEmpty(selectedRecipe.displayName))
+        errors.recipeDisplayName = 'Please enter recipe name above';
       if (isEmpty(selectedRecipe.serves))
         errors.serves = 'Please enter total recipe serves';
       if (isEmpty(selectedRecipe.salePricePerServe))
@@ -98,6 +111,7 @@ class RecipeHeader extends Component {
           'All recipes need atleast 1 ingredient to be calculated..';
 
       if (!isEmpty(errors)) {
+        console.log('Header Recipe', errors);
         this.props.setErrors(errors);
       } else {
         console.log('All good');

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { loadIngredients } from '../ingredient/ingredientActions';
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
-import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
+import CreatableSelectInputBorder from '../../layout/input/CreatableSelectInputBorder';
 import {
   isEmpty,
   calculateRecipeItemTotal,
@@ -178,7 +178,7 @@ class RecipeIngredient extends Component {
           />
         </div>
         <div className="ingredientSelect">
-          <CreatableSelectInput
+          <CreatableSelectInputBorder
             value={item.ingredient}
             name="ingredient"
             options={ingredientOptions}

@@ -70,8 +70,6 @@ export const getSelectedSupplier = (
       return ss._id === selectedSupplier.value;
     });
     if (!isEmpty(sSupplier)) {
-      console.log('sSupplier', sSupplier);
-
       // Check if selected ingredient has suppliers
       if (!isEmpty(selectedIngredient)) {
         // Check if selected supplier is in the selected ingredient supplier list
@@ -84,16 +82,8 @@ export const getSelectedSupplier = (
         if (!isEmpty(siSupplier)) {
           // Create new object combining the selected suppliers
 
-          console.log('Before UPDate', siSupplier);
-
           const updatedSelectedSupplier = {
             ...siSupplier[0],
-            // Changed -->
-            // profilePacketCost: convertProfilePacketCostIntoCostPer1kg(
-            //   siSupplier[0].packetCost,
-            //   siSupplier[0].packetGrams
-            // ),
-            // profilePacketGrams: 1000,
             supplier: {
               ...siSupplier[0].supplier,
               address: sSupplier[0].address,

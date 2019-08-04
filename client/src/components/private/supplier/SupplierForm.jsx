@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
-import CreatableSelectInputHorizontal from '../../layout/input/CreatableSelectInputHorizontal';
+import CreatableSelectInputBorderHorizontal from '../../layout/input/CreatableSelectInputBorderHorizontal';
 import {
   isEmpty,
   roundNumberAsString,
@@ -62,7 +62,7 @@ const SupplierForm = ({
   return (
     <section className="supplierForm">
       <form onSubmit={handleOnSubmit}>
-        <CreatableSelectInputHorizontal
+        <CreatableSelectInputBorderHorizontal
           label="Supplier Name"
           name="type"
           placeholder="Type supplier name.."

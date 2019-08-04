@@ -29,10 +29,8 @@ export const setErrors = err => async dispatch => {
   // Object of errors that are set from the user directly
   console.log('err', err);
 
-  if (!isEmpty(err)) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: err
-    });
-  }
+  dispatch({
+    type: SET_ERRORS,
+    payload: err
+  });
 };

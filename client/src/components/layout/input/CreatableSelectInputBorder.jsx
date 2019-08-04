@@ -9,7 +9,7 @@ import { isEmpty } from '../../../utils/utils';
 //
 // ============================
 
-const CreatableSelectInput = ({
+const CreatableSelectInputBorder = ({
   options,
   getSelectedValue,
   placeholder,
@@ -18,15 +18,15 @@ const CreatableSelectInput = ({
   name,
   value,
   label,
-  labelClass,
-  info,
-  createLabel
+  createLabel,
+  largeSelect,
+  data,
+  onBlur
 }) => {
   const handleChange = (newValue, actionMeta) => {
     if (newValue) {
       // Pass the selected value to the parent component
-      getSelectedValue(newValue, name);
-      // console.log('NEW');
+      getSelectedValue(newValue, data);
     }
   };
 
@@ -66,6 +66,7 @@ const CreatableSelectInput = ({
       // color: state.data.__isNew__ && '#343434',
       // backgroundColor: state.data.__isNew__ && '#f1ede7',
       padding: 12,
+      fontWeight: 400,
       fontSize: '16px',
       '&:hover': {
         color: '#343434',
@@ -78,7 +79,10 @@ const CreatableSelectInput = ({
     }),
     control: (base, state) => ({
       ...base,
-      fontSize: '16px',
+      height: largeSelect ? '60px' : '38px',
+      fontSize: largeSelect ? '19px' : '16px',
+      backgroundColor: largeSelect ? '#fbf6ee' : '',
+      // fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
       borderColor: '#cdc0b2',
@@ -91,16 +95,14 @@ const CreatableSelectInput = ({
   };
 
   return (
-    <label
-      htmlFor={name}
-      className={`textInputHorizontal ${labelClass}`}
-    >
-      <span className="label">{label} </span>
+    <div className="createtableSelectInputBox">
+      {label && <span>{label}</span>}
       <CreatableSelect
         // isClearable
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
+        onBlur={onBlur}
         options={options && options}
         className={`borderSelectInput ${className}`}
         value={selectedValue}
@@ -112,25 +114,22 @@ const CreatableSelectInput = ({
           ...theme,
           colors: {
             ...theme.colors,
-            neutral80: '#343434',
+            neutral80: '#343434', //'#666',
             primary25: '#f1ede7',
             primary: '#e8e1d7'
           }
         })}
       />
-      <span className="message">
-        {info && <small>{info}</small>}
-        {error && <span className="errorMsg">{error}</span>}
-      </span>
-    </label>
+      {error && <span className="errorMsg">{error}</span>}
+    </div>
   );
 };
 
-CreatableSelectInput.propTypes = {
+CreatableSelectInputBorder.propTypes = {
   options: PropTypes.array,
   getSelectedValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   className: PropTypes.string
 };
 
-export default CreatableSelectInput;
+export default CreatableSelectInputBorder;

@@ -37,7 +37,6 @@ class RecipeIngredients extends Component {
           let profilePacketGrams = 0;
           let preferedSupplier = null;
           if (!isEmpty(profile.profile.ingredients)) {
-            console.log('profile', profile.profile.ingredients);
             // Check if profile has ingredient
             let profileIngredient = profile.profile.ingredients.filter(
               pIngredient => {
@@ -49,16 +48,6 @@ class RecipeIngredients extends Component {
 
             // Check is user profile has ingredient
             if (!isEmpty(profileIngredient)) {
-              console.log(
-                'Profile has the ingredient',
-                foundIngredient[0]
-              );
-              console.log('foundIngredient[0]', foundIngredient[0]);
-              console.log(
-                'profileIngredient[0]',
-                profileIngredient[0]
-              );
-
               // Check if profile ingredient has prefered supplier
               let preferedSupplierFound = profileIngredient[0].suppliers.filter(
                 piSupplier => {
@@ -68,27 +57,14 @@ class RecipeIngredients extends Component {
 
               // Check if prefered supplier was found
               if (!isEmpty(preferedSupplierFound)) {
-                console.log(
-                  'preferedSupplier',
-                  preferedSupplierFound[0].supplier
-                );
                 profilePacketCost =
                   preferedSupplierFound[0].packetCost;
                 profilePacketGrams =
                   preferedSupplierFound[0].packetGrams;
                 preferedSupplier = preferedSupplierFound[0].supplier;
-
-                console.log(
-                  'preferedSupplier1---->',
-                  preferedSupplier
-                );
               } else {
                 console.log(
                   'Profile didnt have a preferred ingredient supplier'
-                );
-                console.log(
-                  'preferedSupplier2---->',
-                  preferedSupplier
                 );
                 profilePacketCost = convertProfilePacketCostIntoCostPer1kg(
                   foundIngredient[0].packetCost,
@@ -100,8 +76,6 @@ class RecipeIngredients extends Component {
                 preferedSupplier = null;
               }
             } else {
-              console.log('preferedSupplier3---->', preferedSupplier);
-              console.log('Profile didnt have the ingredient');
               profilePacketCost = convertProfilePacketCostIntoCostPer1kg(
                 foundIngredient[0].packetCost,
                 foundIngredient[0].packetGrams
@@ -111,10 +85,7 @@ class RecipeIngredients extends Component {
               );
               preferedSupplier = null;
             }
-            console.log('preferedSupplier5---->', preferedSupplier);
           }
-
-          console.log('preferedSupplier4---->', preferedSupplier);
 
           let updatedIngredient = {
             ...rIngredient,
@@ -153,7 +124,6 @@ class RecipeIngredients extends Component {
 
         for (let i = 0; i < selectedRecipe.ingredients.length; i++) {
           const rIngredient = selectedRecipe.ingredients[i];
-          console.log('rIngredient **', rIngredient);
           let foundIngredient = ingredient.ingredients.filter(ing => {
             return rIngredient.ingredient === ing._id;
           });
@@ -162,11 +132,8 @@ class RecipeIngredients extends Component {
             let profilePacketCost = 0;
             let profilePacketGrams = 0;
             let preferedSupplier = null;
-            console.log('ingredient', ingredient);
-            console.log('rIngredient', rIngredient);
 
             if (!isEmpty(profile.profile.ingredients)) {
-              console.log('profile', profile.profile.ingredients);
               // Check if profile has ingredient
               let profileIngredient = profile.profile.ingredients.filter(
                 pIngredient => {
@@ -189,10 +156,6 @@ class RecipeIngredients extends Component {
 
                 // Check if prefered supplier was found
                 if (!isEmpty(preferedSupplierFound)) {
-                  console.log(
-                    'preferedSupplier',
-                    preferedSupplierFound
-                  );
                   profilePacketCost =
                     preferedSupplierFound[0].packetCost;
                   profilePacketGrams =
@@ -245,10 +208,7 @@ class RecipeIngredients extends Component {
           ...selectedRecipe,
           ingredients: updatedRecipeIngredients
         };
-        console.log(
-          'updatedRecipeIngredients',
-          updatedRecipeIngredients
-        );
+
         this.setState({
           selectedRecipe: updatedRecipe
         });
@@ -275,8 +235,6 @@ class RecipeIngredients extends Component {
     const { selectedRecipe } = this.state;
     let content = null;
     let isOpen = false;
-
-    console.log('selectedRecipe', selectedRecipe);
 
     if (!isEmpty(selectedRecipe)) {
       let recipeIngredients = [];
@@ -325,7 +283,6 @@ class RecipeIngredients extends Component {
           isOpen={isOpen}
         >
           {!isEmpty(content) && content}
-          {console.log(isOpen)}
         </AccordionBoxWithOpenHeader>
       </section>
     );
