@@ -18,7 +18,7 @@ class RecipeDetailsHeader extends Component {
       salePricePerServe: '',
       expectedSales: ''
     },
-    displayRecipeNameForm: false,
+    displayRecipeNameForm: true,
     changeRecipeHover: false,
     printRecipeHover: false,
     editRecipeHover: false

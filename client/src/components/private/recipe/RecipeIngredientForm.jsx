@@ -4,6 +4,7 @@ import { loadIngredients } from '../ingredient/ingredientActions';
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
+import HoverTextInput from '../../layout/input/HoverTextInput';
 import {
   isEmpty,
   calculateRecipeItemTotal,
@@ -24,7 +25,8 @@ class RecipeIngredientForm extends Component {
       total: 0,
       totalRecipeGrams: 0,
       order: 0
-    }
+    },
+    displayPacketCostForm: false
   };
 
   componentDidMount() {
@@ -48,7 +50,7 @@ class RecipeIngredientForm extends Component {
   };
 
   render() {
-    const { item } = this.state;
+    const { item, displayPacketCostForm } = this.state;
 
     let options;
     let selectedValue = {
@@ -96,9 +98,16 @@ class RecipeIngredientForm extends Component {
             <span>${calclulateRecipeIngredientCost(item)}</span>
           </div>
           <div className="ingredientNumber">
-            <span>
-              ${roundNumber(item.ingredient.profilePacketCost)}
-            </span>
+            <HoverTextInput
+              value={roundNumber(item.ingredient.profilePacketCost)}
+              name="recipeName"
+              onChange={this.editRecipeName}
+              onBlur={this.props.updateSelectedRecipeIngredient}
+              type="text"
+              // error={errors.displayName && errors.displayName}
+              onKeyDown={this.handleEnterKeyDown}
+              isForm={displayPacketCostForm}
+            />
           </div>
           <div className="ingredientNumber">
             <span>

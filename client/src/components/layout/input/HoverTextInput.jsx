@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TextInput from '../input/TextInput';
+import TextInputNoLabel from '../input/TextInputNoLabel';
 
 class HoverTextInput extends Component {
   state = {
@@ -62,7 +62,7 @@ class HoverTextInput extends Component {
       >
         {displayRecipeNameForm ? (
           <form onBlur={this.handleOnBlur}>
-            <TextInput
+            <TextInputNoLabel
               value={value}
               name={name}
               onChange={onChange}
@@ -73,7 +73,9 @@ class HoverTextInput extends Component {
             />
           </form>
         ) : (
-          <h1 onClick={this.getRecipeNameForm}>{value && value}</h1>
+          <span onClick={this.getRecipeNameForm}>
+            {value && value}
+          </span>
         )}
       </div>
     );
