@@ -13,7 +13,6 @@ import {
   calclulateRecipeIngredientCost
 } from '../../../utils/utils';
 import editIcon from '../../../images/edit.svg';
-import binIcon from '../../../images/bin.svg';
 
 class RecipeIngredientForm extends Component {
   state = {
@@ -42,7 +41,13 @@ class RecipeIngredientForm extends Component {
   };
 
   updateSelectedRecipeIngredient = () => {
+    console.log('this.state.item', this.state.item);
+
     this.props.updateSelectedRecipeIngredient(this.state.item);
+  };
+
+  editRecipeIngredientPacketCost = e => {
+    console.log('ONCHANGE', e.target);
   };
 
   getSelectedSupplier = selectedValue => {
@@ -94,15 +99,17 @@ class RecipeIngredientForm extends Component {
               {calculateRecipeIngredientContribution(item)}%
             </span>
           </div>
-          <div className="ingredientNumber">
+          <div className="ingredientNumberCost">
             <span>${calclulateRecipeIngredientCost(item)}</span>
           </div>
           <div className="ingredientNumber">
             <HoverTextInput
-              value={roundNumber(item.ingredient.profilePacketCost)}
-              name="recipeName"
-              onChange={this.editRecipeName}
-              onBlur={this.props.updateSelectedRecipeIngredient}
+              value={roundNumber(
+                item.ingredient.profilePacketCost
+              ).toString()}
+              name="packetCost"
+              onChange={this.editRecipeIngredientPacketCost}
+              onBlur={this.updateSelectedRecipeIngredient}
               type="text"
               // error={errors.displayName && errors.displayName}
               onKeyDown={this.handleEnterKeyDown}
@@ -110,9 +117,18 @@ class RecipeIngredientForm extends Component {
             />
           </div>
           <div className="ingredientNumber">
-            <span>
-              {roundNumber(item.ingredient.profilePacketGrams)}g
-            </span>
+            <HoverTextInput
+              value={roundNumber(
+                item.ingredient.profilePacketGrams
+              ).toString()}
+              name="packetGrams"
+              onChange={this.editRecipeIngredientPacketCost}
+              onBlur={this.updateSelectedRecipeIngredient}
+              type="text"
+              // error={errors.displayName && errors.displayName}
+              onKeyDown={this.handleEnterKeyDown}
+              isForm={displayPacketCostForm}
+            />
           </div>
           <div className="ingredientSuppler">
             <span>

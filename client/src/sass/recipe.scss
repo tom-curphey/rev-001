@@ -79,19 +79,18 @@ section.recipe {
           justify-self: center;
           align-self: center;
         }
-      }
+        span {
+          cursor: pointer;
+          padding: 4px;
+          padding: 8px 11px 6px;
+          display: inline-block;
+          font-size: 2em;
+          font-weight: bold;
 
-      span {
-        cursor: pointer;
-        padding: 4px;
-        padding: 8px 11px 6px;
-        display: inline-block;
-        font-size: 2em;
-        font-weight: bold;
-
-        &:hover {
-          background: $cFaded;
-          border-radius: 5px;
+          &:hover {
+            background: $cFaded;
+            border-radius: 5px;
+          }
         }
       }
 
@@ -435,13 +434,14 @@ section.recipe {
       div.ingredientIcon,
       div.ingredientHeader,
       div.ingredientName,
+      div.ingredientNumberCost,
       div.ingredientNumber {
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: 400;
         color: $cGrey;
-        padding: 15px 15px;
+        padding: 0px 15px;
       }
       div.ingredientHeader {
         padding: 8px 0px;
@@ -461,9 +461,33 @@ section.recipe {
         padding-left: 0px;
         justify-content: flex-start;
       }
+      div.ingredientNumberCost {
+        border-left: 1px solid $cGreyLight;
+        justify-content: flex-end;
+      }
+
       div.ingredientNumber {
         border-left: 1px solid $cGreyLight;
         justify-content: flex-end;
+
+        div.changeText {
+          width: 100%;
+
+          input {
+            text-align: right;
+          }
+        }
+
+        span {
+          cursor: pointer;
+          padding: 11px 11px 11px 0px;
+          text-align: right;
+          font-weight: 400;
+          &:hover {
+            border-radius: 5px;
+            background-color: $cFaded;
+          }
+        }
       }
       div.ingredientSuppler {
         padding-left: 10px;

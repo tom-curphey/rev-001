@@ -9,7 +9,7 @@ import {
   UPDATE_SELECTED_RECIPE_STATE
   // GET_ERRORS
 } from '../../../redux/types';
-import { displayErrors } from '../../../utils/utils';
+import { displayErrors, isEmpty } from '../../../utils/utils';
 import { setAlert } from '../../layout/alert/alertActions';
 import { removeErrors } from '../../../redux/errorActions';
 
@@ -92,7 +92,7 @@ export const addOrEditRecipe = selectedRecipe => async dispatch => {
 };
 
 export const updateReduxSelectedRecipe = selectedRecipe => dispatch => {
-  // console.log('recipe', selectedRecipe);
+  console.log('recipe ------>>', selectedRecipe);
   dispatch({
     type: UPDATE_SELECTED_RECIPE_STATE,
     payload: selectedRecipe

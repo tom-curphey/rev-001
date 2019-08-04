@@ -130,7 +130,9 @@ class RecipeDetails extends Component {
               order: 'x'
             }
           ],
-          ingredients: []
+          ingredients: [],
+          totalGrams: 0,
+          totalTime: 0
         };
       } else {
         recipeData = {
@@ -150,90 +152,134 @@ class RecipeDetails extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (
       prevProps.recipe.selectedRecipe !==
-        this.props.recipe.selectedRecipe &&
-      this.props.recipe.selectedRecipe !== null
+      this.props.recipe.selectedRecipe
     ) {
-      const { selectedRecipe } = this.props.recipe;
-      let updateReduxState = false;
-      const recipeData = {
-        ...selectedRecipe,
-        serves: selectedRecipe.serves
-          ? selectedRecipe.serves.toString()
-          : '',
-        salePricePerServe: selectedRecipe.salePricePerServe
-          ? selectedRecipe.salePricePerServe.toString()
-          : '',
-        expectedSales: selectedRecipe.expectedSales
-          ? selectedRecipe.expectedSales.toString()
-          : '',
-        processTime: selectedRecipe.processTime
-          ? selectedRecipe.processTime
-          : [],
-        ingredients: selectedRecipe.ingredients
-          ? selectedRecipe.ingredients
-          : []
-      };
-      let totalGrams = 0;
-      let totalTime = 0;
-      if (
-        isEmpty(recipeData.processTime) &&
-        isEmpty(recipeData.ingredients)
-      ) {
-        recipeData.processTime = [
-          {
-            id: '__isNew__',
-            type: 'processTime',
-            description: '',
-            quantity: '',
-            unit: 'sec',
-            order: 'x',
-            staffTime: false,
-            total: 0
-          }
-        ];
-        recipeData.totalGrams = totalGrams;
-        recipeData.totalTime = totalTime;
-      } else {
-        if (!isEmpty(recipeData.processTime)) {
-          const updatedProcessTime = recipeData.processTime.map(
-            pt => {
-              totalTime = totalTime + pt.total;
-              pt.quantity = pt.quantity ? pt.quantity.toString() : '';
-              return pt;
+      if (this.props.recipe.selectedRecipe !== null) {
+        const { selectedRecipe } = this.props.recipe;
+        let updateReduxState = false;
+        const recipeData = {
+          ...selectedRecipe,
+          serves: selectedRecipe.serves
+            ? selectedRecipe.serves.toString()
+            : '',
+          salePricePerServe: selectedRecipe.salePricePerServe
+            ? selectedRecipe.salePricePerServe.toString()
+            : '',
+          expectedSales: selectedRecipe.expectedSales
+            ? selectedRecipe.expectedSales.toString()
+            : '',
+          processTime: selectedRecipe.processTime
+            ? selectedRecipe.processTime
+            : [],
+          ingredients: selectedRecipe.ingredients
+            ? selectedRecipe.ingredients
+            : []
+        };
+        let totalGrams = 0;
+        let totalTime = 0;
+        let totalProcessTime = 0;
+        let totalStaffTime = 0;
+        if (
+          isEmpty(recipeData.processTime) &&
+          isEmpty(recipeData.ingredients)
+        ) {
+          recipeData.processTime = [
+            {
+              id: '__isNew__',
+              type: 'processTime',
+              description: '',
+              quantity: '',
+              unit: 'sec',
+              order: 'x',
+              staffTime: false,
+              total: 0
             }
-          );
-          recipeData.totalTime = totalTime;
-          recipeData.processTime = updatedProcessTime;
-
-          if (
-            recipeData.totalTime !==
-            this.props.recipe.selectedRecipe.totalTime
-          ) {
-            updateReduxState = true;
-          }
-        }
-        if (!isEmpty(recipeData.ingredients)) {
-          const updatedIngredients = recipeData.ingredients.map(i => {
-            totalGrams = totalGrams + i.total;
-            i.quantity = i.quantity ? i.quantity.toString() : '';
-            return i;
-          });
+          ];
           recipeData.totalGrams = totalGrams;
-          recipeData.ingredients = updatedIngredients;
-          if (
-            recipeData.totalGrams !==
-            this.props.recipe.selectedRecipe.totalGrams
-          ) {
-            updateReduxState = true;
+          recipeData.totalTime = totalTime;
+          recipeData.totalProcessTime = totalProcessTime;
+          recipeData.totalStaffTime = totalStaffTime;
+        } else {
+          if (!isEmpty(recipeData.processTime)) {
+            const updatedProcessTime = recipeData.processTime.map(
+              pt => {
+                console.log('PT', pt);
+
+                totalTime = totalTime + pt.total;
+                if (pt.staffTime === false) {
+                  totalProcessTime = totalProcessTime + pt.total;
+                }
+                if (pt.staffTime === true) {
+                  totalStaffTime = totalStaffTime + pt.total;
+                }
+
+                pt.quantity = pt.quantity
+                  ? pt.quantity.toString()
+                  : '';
+                return pt;
+              }
+            );
+            recipeData.totalTime = totalTime;
+            recipeData.totalProcessTime = totalTime;
+            recipeData.totalProcessTime = totalProcessTime;
+            recipeData.totalStaffTime = totalStaffTime;
+
+            if (
+              recipeData.totalTime !==
+              this.props.recipe.selectedRecipe.totalTime
+            ) {
+              updateReduxState = true;
+            }
+          }
+          if (!isEmpty(recipeData.ingredients)) {
+            const updatedIngredients = recipeData.ingredients.map(
+              i => {
+                totalGrams = totalGrams + i.total;
+                i.quantity = i.quantity ? i.quantity.toString() : '';
+                return i;
+              }
+            );
+            recipeData.totalGrams = totalGrams;
+            recipeData.ingredients = updatedIngredients;
+            if (
+              recipeData.totalGrams !==
+              this.props.recipe.selectedRecipe.totalGrams
+            ) {
+              updateReduxState = true;
+            }
           }
         }
+        // updateReduxState is a boolean that alternates if the redux state needs to be updated
+        this.setState({
+          updated: updateReduxState,
+          selectRecipeError: false,
+          selectedRecipe: recipeData
+        });
+      } else {
+        let recipeData = {
+          // displayName: '',
+          serves: '',
+          salePricePerServe: '',
+          expectedSales: '',
+          processTime: [
+            {
+              id: '__isNew__',
+              type: 'processTime',
+              description: '',
+              quantity: '',
+              unit: 'sec',
+              order: 'x'
+            }
+          ],
+          ingredients: [],
+          totalGrams: 0,
+          totalTime: 0
+        };
+
+        this.setState(prevState => ({
+          selectedRecipe: recipeData
+        }));
       }
-      // updateReduxState is a boolean that alternates if the redux state needs to be updated
-      this.setState({
-        updated: updateReduxState,
-        selectRecipeError: false,
-        selectedRecipe: recipeData
-      });
     }
 
     if (!isEmpty(this.props.recipe.selectedRecipe)) {
@@ -606,11 +652,21 @@ class RecipeDetails extends Component {
                     </span>
                   </li>
                   <li>
-                    <span>Recipe Time</span>
+                    <span>Process Time</span>
                     <span>
-                      {selectedRecipe.totalTime
+                      {selectedRecipe.totalProcessTime
                         ? `${roundNumber(
-                            selectedRecipe.totalTime / 60
+                            selectedRecipe.totalProcessTime / 60
+                          )} min`
+                        : '0.00 min'}
+                    </span>
+                  </li>
+                  <li>
+                    <span>Staff Time</span>
+                    <span>
+                      {selectedRecipe.totalStaffTime
+                        ? `${roundNumber(
+                            selectedRecipe.totalStaffTime / 60
                           )} min`
                         : '0.00 min'}
                     </span>
