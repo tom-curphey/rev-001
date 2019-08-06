@@ -30,13 +30,39 @@ class RecipeIngredientForm extends Component {
 
   componentDidMount() {
     if (!isEmpty(this.props.item)) {
-      this.setState({ item: this.props.item });
+      let updateItem = {
+        ...this.props.item
+      };
+      if (!isEmpty(updateItem.ingredient)) {
+        updateItem.ingredient.profilePacketCost = roundNumber(
+          updateItem.ingredient.profilePacketCost,
+          3
+        ).toString();
+        updateItem.ingredient.profilePacketGrams = roundNumber(
+          updateItem.ingredient.profilePacketGrams,
+          3
+        ).toString();
+      }
+      this.setState({ item: updateItem });
     }
   }
 
   componentDidUpdate = prevProps => {
     if (prevProps.item !== this.props.item) {
-      this.setState({ item: this.props.item });
+      let updateItem = {
+        ...this.props.item
+      };
+      if (!isEmpty(updateItem.ingredient)) {
+        updateItem.ingredient.profilePacketCost = roundNumber(
+          updateItem.ingredient.profilePacketCost,
+          3
+        ).toString();
+        updateItem.ingredient.profilePacketGrams = roundNumber(
+          updateItem.ingredient.profilePacketGrams,
+          3
+        ).toString();
+      }
+      this.setState({ item: updateItem });
     }
   };
 
@@ -46,8 +72,31 @@ class RecipeIngredientForm extends Component {
     this.props.updateSelectedRecipeIngredient(this.state.item);
   };
 
-  editRecipeIngredientPacketCost = e => {
-    console.log('ONCHANGE', e.target);
+  editRecipeIngredient = e => {
+    console.log('ONCHANGE', e.target.value);
+    const { name, value } = e.target;
+    console.log('this.state.item', this.state.item);
+
+    // this.setState(prevState => ({
+    //   selectedIngredient: {
+    //     ...prevState.selectedIngredient,
+    //     metrics: {
+    //       ...prevState.selectedIngredient.metrics,
+    //       [e.target.name]: value
+    //     }
+    //   }
+    // }));
+    if (!isNaN(value) || value === '') {
+      this.setState(prevState => ({
+        item: {
+          ...prevState.item,
+          ingredient: {
+            ...prevState.item.ingredient,
+            [name]: value
+          }
+        }
+      }));
+    }
   };
 
   getSelectedSupplier = selectedValue => {
@@ -81,6 +130,7 @@ class RecipeIngredientForm extends Component {
     }
 
     console.log('options', options);
+    console.log('item', item);
     console.log('selectedValue', selectedValue);
 
     let content = null;
@@ -100,15 +150,15 @@ class RecipeIngredientForm extends Component {
             </span>
           </div>
           <div className="ingredientNumberCost">
-            <span>${calclulateRecipeIngredientCost(item)}</span>
+            <span>
+              ${roundNumber(calclulateRecipeIngredientCost(item), 3)}
+            </span>
           </div>
           <div className="ingredientNumber">
             <HoverTextInput
-              value={roundNumber(
-                item.ingredient.profilePacketCost
-              ).toString()}
-              name="packetCost"
-              onChange={this.editRecipeIngredientPacketCost}
+              value={item.ingredient.profilePacketCost}
+              name="profilePacketCost"
+              onChange={this.editRecipeIngredient}
               onBlur={this.updateSelectedRecipeIngredient}
               type="text"
               // error={errors.displayName && errors.displayName}
@@ -118,11 +168,9 @@ class RecipeIngredientForm extends Component {
           </div>
           <div className="ingredientNumber">
             <HoverTextInput
-              value={roundNumber(
-                item.ingredient.profilePacketGrams
-              ).toString()}
-              name="packetGrams"
-              onChange={this.editRecipeIngredientPacketCost}
+              value={item.ingredient.profilePacketGrams}
+              name="profilePacketGrams"
+              onChange={this.editRecipeIngredient}
               onBlur={this.updateSelectedRecipeIngredient}
               type="text"
               // error={errors.displayName && errors.displayName}

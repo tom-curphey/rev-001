@@ -641,7 +641,7 @@ class RecipeDetails extends Component {
               <div className="recipeDetailsFooter">
                 <ul className="recipeProcessTotal">
                   <li>
-                    <span>Recipe Grams</span>
+                    <span>Total Grams</span>
                     <span>
                       {selectedRecipe.totalGrams
                         ? `${roundNumber(

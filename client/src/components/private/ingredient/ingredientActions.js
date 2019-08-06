@@ -203,8 +203,8 @@ export const addOrEditIngredientAndSupplier = (
   ingredientData,
   supplierData
 ) => async dispatch => {
-  // console.log('ID', ingredientData);
-  // console.log('SD', supplierData);
+  console.log('ID', ingredientData);
+  console.log('SD', supplierData);
   dispatch(setIngredientsLoading());
 
   try {
@@ -246,6 +246,39 @@ export const addOrEditIngredientAndSupplier = (
     });
   }
 };
+
+// export const editMultipleIngredients = ingredientsData => async dispatch => {
+//   console.log('ID', ingredientsData);
+//   // console.log('SD', supplierData);
+//   // dispatch(setIngredientsLoading());
+
+//   try {
+//     // dispatch(setVenueLoading());
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     };
+
+//     // const data = {
+//     //   ...ingredientData,
+//     //   ...supplierData,
+//     //   ingredientID: ingredientData._id,
+//     //   supplierID: supplierData._id
+//     // };
+
+//     const body = JSON.stringify(ingredientsData);
+//     const res = await axios.post(
+//       '/api/ingredient/edit-multiple',
+//       body,
+//       config
+//     );
+
+//     console.log('****** res', res.data);
+//   } catch (err) {
+//     console.log('err', err);
+//   }
+// };
 
 export const removeSelectedIngredient = () => async dispatch => {
   dispatch({

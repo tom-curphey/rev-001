@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import editIcon from '../../../images/edit.svg';
+import { updateReduxSelectedRecipe } from './recipeActions';
+import { addOrEditIngredientAndSupplier } from '../ingredient/ingredientActions';
 import {
   isEmpty,
   convert100gInto1Kg,
@@ -14,11 +16,15 @@ import RecipeIngredientForm from './RecipeIngredientForm';
 
 class RecipeIngredients extends Component {
   state = {
-    selectedRecipe: {}
+    selectedRecipe: {},
+    updated: false
   };
 
   componentDidMount() {
     const { selectedRecipe, ingredient, profile } = this.props;
+
+    console.log('PROPS ****', selectedRecipe);
+
     if (
       !isEmpty(selectedRecipe.ingredients) &&
       !isEmpty(ingredient.ingredients)
@@ -113,9 +119,16 @@ class RecipeIngredients extends Component {
     }
   }
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps, prevState) => {
     const { selectedRecipe, ingredient, profile } = this.props;
+
+    console.log('profile', profile);
+    console.log('selectedRecipe', selectedRecipe);
+    console.log('ingredient', ingredient);
+
     if (prevProps.selectedRecipe !== selectedRecipe) {
+      console.log('HIT');
+
       if (
         !isEmpty(selectedRecipe.ingredients) &&
         !isEmpty(ingredient.ingredients)
@@ -214,9 +227,73 @@ class RecipeIngredients extends Component {
         });
       }
     }
+
+    if (
+      prevState.selectedRecipe !== this.state.selectedRecipe &&
+      this.state.updated === true
+    ) {
+      console.log('HIT1');
+      // console.log('HIT', prevState.selectedRecipe);
+      // console.log('HIT', this.state.selectedRecipe);
+
+      // Update profile ingredient cost
+      if (
+        !isEmpty(
+          prevState.selectedRecipe && this.state.selectedRecipe
+        )
+      ) {
+        const { selectedRecipe } = this.state;
+        if (
+          !isEmpty(
+            prevState.selectedRecipe.ingredients &&
+              selectedRecipe.ingredients
+          )
+        ) {
+          const updatedIngredient = {
+            _id: selectedRecipe.ingredients[0].ingredient._id,
+            displayName:
+              selectedRecipe.ingredients[0].ingredient.displayName,
+            suppliers:
+              selectedRecipe.ingredients[0].ingredient.suppliers,
+            metrics: {
+              cup: selectedRecipe.ingredients[0].cup,
+              whole: selectedRecipe.ingredients[0].whole
+            }
+          };
+
+          const updatedSupplier = {
+            packetCost:
+              selectedRecipe.ingredients[0].ingredient
+                .profilePacketCost,
+            packetGrams:
+              selectedRecipe.ingredients[0].ingredient
+                .profilePacketGrams,
+            preferred: true,
+            _id:
+              selectedRecipe.ingredients[0].ingredient
+                .preferedSupplier
+          };
+
+          console.log('updatedIngredients', updatedIngredient);
+          console.log('updatedSupplier', updatedSupplier);
+
+          this.props.addOrEditIngredientAndSupplier(
+            updatedIngredient,
+            updatedSupplier
+          );
+          this.setState({ updated: false });
+        }
+      }
+    }
+
+    if (prevProps.profile !== profile) {
+      console.log('HIT3');
+    }
   };
 
   updateSelectedRecipeIngredient = updatedItem => {
+    console.log('updatedItem', updatedItem);
+
     const { selectedRecipe } = this.state;
     const recipeData = { ...selectedRecipe };
 
@@ -228,6 +305,9 @@ class RecipeIngredients extends Component {
     });
 
     recipeData.ingredients = updatedIngredients;
+
+    console.log('recipeData --->', recipeData);
+
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
@@ -289,10 +369,17 @@ class RecipeIngredients extends Component {
   }
 }
 
+const actions = {
+  addOrEditIngredientAndSupplier
+};
+
 const mapState = state => ({
   selectedRecipe: state.recipe.selectedRecipe,
   ingredient: state.ingredient,
   profile: state.profile
 });
 
-export default connect(mapState)(RecipeIngredients);
+export default connect(
+  mapState,
+  actions
+)(RecipeIngredients);

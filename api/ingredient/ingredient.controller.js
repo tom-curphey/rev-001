@@ -58,7 +58,7 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
     });
   }
 
-  console.log('REQ.BODY', req.body);
+  console.log('REQ.BODY ***', req.body);
   console.log('DISPLAY NAME', displayName);
 
   const ingredientData = {};
