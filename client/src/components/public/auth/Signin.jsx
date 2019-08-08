@@ -58,7 +58,7 @@ class Signin extends Component {
       password: password
     };
 
-    console.log('USER', user);
+    // console.log('USER', user);
 
     this.props.signin(user);
   };

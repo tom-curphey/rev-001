@@ -123,10 +123,13 @@ class RecipeIngredients extends Component {
     const { selectedRecipe, ingredient, profile } = this.props;
 
     console.log('profile', profile);
-    console.log('selectedRecipe', selectedRecipe);
-    console.log('ingredient', ingredient);
+    // console.log('selectedRecipe', selectedRecipe);
+    // console.log('ingredient', ingredient);
 
-    if (prevProps.selectedRecipe !== selectedRecipe) {
+    if (
+      prevProps.selectedRecipe !== selectedRecipe ||
+      prevProps.profile !== profile
+    ) {
       console.log('HIT');
 
       if (
@@ -249,6 +252,11 @@ class RecipeIngredients extends Component {
               selectedRecipe.ingredients
           )
         ) {
+          console.log(
+            'Problem',
+            selectedRecipe.ingredients[0].ingredient.displayName
+          );
+
           const updatedIngredient = {
             _id: selectedRecipe.ingredients[0].ingredient._id,
             displayName:
@@ -287,7 +295,7 @@ class RecipeIngredients extends Component {
     }
 
     if (prevProps.profile !== profile) {
-      console.log('HIT3');
+      console.log('HIT3', profile);
     }
   };
 
@@ -311,6 +319,10 @@ class RecipeIngredients extends Component {
     this.setState({ updated: true, selectedRecipe: recipeData });
   };
 
+  checkToSaveIngredient = updatedItem => {
+    console.log('FOCUSED updatedItem', updatedItem);
+  };
+
   render() {
     const { selectedRecipe } = this.state;
     let content = null;
@@ -328,6 +340,7 @@ class RecipeIngredients extends Component {
                 updateSelectedRecipeIngredient={
                   this.updateSelectedRecipeIngredient
                 }
+                checkToSaveIngredient={this.checkToSaveIngredient}
               />
             );
           }

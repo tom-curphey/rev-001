@@ -122,7 +122,7 @@ class SelectRecipe extends Component {
   };
 
   onBlurGetTypedValue = e => {
-    console.log('e.target', e.target.value);
+    // console.log('e.target', e.target.value);
     const { selectedValue } = this.state;
 
     if (
@@ -138,7 +138,7 @@ class SelectRecipe extends Component {
           .includes(e.target.value.toLowerCase());
       });
 
-      console.log('selectedRecipe ->', selectedRecipe);
+      // console.log('selectedRecipe ->', selectedRecipe);
 
       if (isEmpty(selectedRecipe)) {
         const newRecipe = {
@@ -156,7 +156,7 @@ class SelectRecipe extends Component {
         selectedRecipe.push(newRecipe);
       }
 
-      console.log('selectedRecipe', selectedRecipe);
+      // console.log('selectedRecipe', selectedRecipe);
 
       this.props.getSelectedRecipe(
         selectedRecipe[0],

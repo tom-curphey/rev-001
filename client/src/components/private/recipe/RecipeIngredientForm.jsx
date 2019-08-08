@@ -25,7 +25,9 @@ class RecipeIngredientForm extends Component {
       totalRecipeGrams: 0,
       order: 0
     },
-    displayPacketCostForm: false
+    displayPacketCostForm: false,
+    errors: {},
+    updated: false
   };
 
   componentDidMount() {
@@ -47,7 +49,9 @@ class RecipeIngredientForm extends Component {
     }
   }
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps, prevState) => {
+    console.log('PREVSTATE:', this.state);
+
     if (prevProps.item !== this.props.item) {
       let updateItem = {
         ...this.props.item
@@ -64,12 +68,14 @@ class RecipeIngredientForm extends Component {
       }
       this.setState({ item: updateItem });
     }
-  };
 
-  updateSelectedRecipeIngredient = () => {
-    console.log('this.state.item', this.state.item);
-
-    this.props.updateSelectedRecipeIngredient(this.state.item);
+    if (prevState.item !== this.state.item) {
+      if (this.state.updated === true) {
+        console.log('YESY');
+        this.setState({ updated: false });
+        this.updateSelectedRecipeIngredient();
+      }
+    }
   };
 
   editRecipeIngredient = e => {
@@ -101,14 +107,39 @@ class RecipeIngredientForm extends Component {
 
   getSelectedSupplier = selectedValue => {
     console.log('sv', selectedValue);
+    this.setState(prevState => ({
+      item: {
+        ...prevState.item,
+        ingredient: {
+          ...prevState.item.ingredient,
+          preferedSupplier: selectedValue.value
+        }
+      },
+      updated: true
+    }));
+  };
+
+  updateSelectedRecipeIngredient = () => {
+    const { item } = this.state;
+
+    if (!isEmpty(item.ingredient.preferedSupplier)) {
+      console.log('this.state.item', this.state.item);
+      this.props.updateSelectedRecipeIngredient(this.state.item);
+    } else {
+      console.log('NO SUPPLIER SELECTED');
+      let errors = {
+        selectedSupplier: 'Select Supplier to save ingredient changes'
+      };
+      this.setState({ errors: errors });
+    }
   };
 
   render() {
-    const { item, displayPacketCostForm } = this.state;
+    const { item, displayPacketCostForm, errors } = this.state;
 
     let options;
     let selectedValue = {
-      label: 'Select Supplier..',
+      label: 'Type Supplier..',
       value: 'no-supplier-selected'
     };
     if (!isEmpty(item.ingredient.suppliers)) {
@@ -187,6 +218,9 @@ class RecipeIngredientForm extends Component {
                 options={options}
                 getSelectedValue={this.getSelectedSupplier}
                 createLabel="+ Add Supplier"
+                error={
+                  errors.selectedSupplier && errors.selectedSupplier
+                }
               />
             </span>
           </div>

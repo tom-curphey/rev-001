@@ -3,13 +3,13 @@ import TextInputNoLabel from '../input/TextInputNoLabel';
 
 class HoverTextInput extends Component {
   state = {
-    displayRecipeNameForm: false
+    displayForm: false
   };
 
   componentDidMount() {
     if (this.props.isForm === true) {
       this.setState({
-        displayRecipeNameForm: true
+        displayForm: true
       });
     }
   }
@@ -18,21 +18,22 @@ class HoverTextInput extends Component {
     if (prevProps !== this.props) {
       if (this.props.isForm === true) {
         this.setState({
-          displayRecipeNameForm: this.props.isForm
+          displayForm: this.props.isForm
         });
       }
     }
   }
 
-  displayRecipeNameForm = () => {
+  displayForm = () => {
+    // this.props.onFocus();
     this.setState({
-      displayRecipeNameForm: true
+      displayForm: true
     });
   };
 
   handleOnBlur = () => {
     this.props.onBlur();
-    this.setState({ displayRecipeNameForm: false });
+    this.setState({ displayForm: false });
   };
 
   handleEnterKeyDown = e => {
@@ -45,10 +46,11 @@ class HoverTextInput extends Component {
   };
 
   render() {
-    const { displayRecipeNameForm } = this.state;
+    const { displayForm } = this.state;
     const {
       onBlur,
       onChange,
+      onFocus,
       onKeyDown,
       value,
       name,
@@ -56,11 +58,8 @@ class HoverTextInput extends Component {
     } = this.props;
 
     return (
-      <div
-        className="changeText"
-        onClick={this.displayRecipeNameForm}
-      >
-        {displayRecipeNameForm ? (
+      <div className="changeText" onClick={this.displayForm}>
+        {displayForm ? (
           <form onBlur={this.handleOnBlur}>
             <TextInputNoLabel
               value={value}

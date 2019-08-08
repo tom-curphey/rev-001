@@ -438,7 +438,7 @@ section.recipe {
       div.ingredientNumber {
         display: flex;
         justify-content: center;
-        align-items: center;
+        // align-items: center;
         font-weight: 400;
         color: $cGrey;
         padding: 0px 15px;
@@ -456,12 +456,16 @@ section.recipe {
       }
       div.ingredientIcon {
         padding: 0px;
+        align-items: flex-start;
+        padding-top: 9px;
       }
       div.ingredientName {
         padding-left: 0px;
+        padding-top: 11px;
         justify-content: flex-start;
       }
       div.ingredientNumberCost {
+        padding-top: 11px;
         border-left: 1px solid $cGreyLight;
         justify-content: flex-end;
       }
@@ -491,7 +495,7 @@ section.recipe {
       }
       div.ingredientSuppler {
         padding-left: 10px;
-        padding-top: 5px;
+        padding-top: 1px;
         border-left: 1px solid $cGreyLight;
       }
     }

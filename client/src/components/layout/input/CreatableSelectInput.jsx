@@ -82,6 +82,7 @@ const CreatableSelectInputBorder = ({
       height: largeSelect ? '60px' : '38px',
       fontSize: largeSelect ? '19px' : '16px',
       backgroundColor: largeSelect ? '#fbf6ee' : '',
+      backgroundColor: error ? '#f1ede7' : '',
       // fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
