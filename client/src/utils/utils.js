@@ -317,8 +317,11 @@ export const convertProfilePacketCostIntoCostPer1kg = (
   //   '.....',
   //   (profilePacketCost / profilePacketGrams) * 1000
   // );
-
-  return (profilePacketCost / profilePacketGrams) * 1000;
+  if (!isEmpty(profilePacketCost) && !isEmpty(profilePacketGrams)) {
+    return (profilePacketCost / profilePacketGrams) * 1000;
+  } else {
+    return '';
+  }
 };
 
 export const calculateRecipeItemTotal = (quantity, unit, item) => {

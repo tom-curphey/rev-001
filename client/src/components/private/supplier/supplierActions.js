@@ -94,17 +94,10 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
-          console.log('siSupplier', updatedSelectedSupplier);
-          console.log(
-            'selectedIngredient',
-            selectedIngredient.suppliers
-          );
-
-          // dispatch(
-          //   updateSelectedIngredientSupplier(
-          //     selectedIngredient,
-          //     updatedSelectedSupplier
-          //   )
+          // console.log('siSupplier', updatedSelectedSupplier);
+          // console.log(
+          //   'selectedIngredient',
+          //   selectedIngredient.suppliers
           // );
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {

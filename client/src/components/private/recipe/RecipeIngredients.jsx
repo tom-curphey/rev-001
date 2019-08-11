@@ -122,7 +122,7 @@ class RecipeIngredients extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     const { selectedRecipe, ingredient, profile } = this.props;
 
-    console.log('profile', profile);
+    // console.log('profile', profile);
     // console.log('selectedRecipe', selectedRecipe);
     // console.log('ingredient', ingredient);
 
@@ -130,7 +130,7 @@ class RecipeIngredients extends Component {
       prevProps.selectedRecipe !== selectedRecipe ||
       prevProps.profile !== profile
     ) {
-      console.log('HIT');
+      // console.log('HIT');
 
       if (
         !isEmpty(selectedRecipe.ingredients) &&

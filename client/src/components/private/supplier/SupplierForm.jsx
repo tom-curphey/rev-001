@@ -50,14 +50,14 @@ const SupplierForm = ({
     selectedValue.value = _id;
   }
 
-  console.log('preferred}}}}', preferred);
+  // console.log('preferred}}}}', preferred);
 
-  // const iPacketCost = isEmpty(profilePacketCost)
-  //   ? ''
-  //   : profilePacketCost.toString();
-  // const iPacketGrams = isEmpty(profilePacketGrams)
-  //   ? ''
-  //   : profilePacketGrams.toString();
+  const iPacketCost = isEmpty(profilePacketCost)
+    ? ''
+    : profilePacketCost.toString();
+  const iPacketGrams = isEmpty(profilePacketGrams)
+    ? ''
+    : profilePacketGrams.toString();
 
   return (
     <section className="supplierForm">
@@ -74,7 +74,7 @@ const SupplierForm = ({
         />
         <TextInputHorizontal
           label="Supplier Packet Cost"
-          value={profilePacketCost.toString()}
+          value={iPacketCost}
           name="profilePacketCost"
           labelClass="smallTextField"
           onChange={handleSupplierNumberChange}
@@ -82,7 +82,7 @@ const SupplierForm = ({
         />
         <TextInputHorizontal
           label="Supplier Packet Grams"
-          value={profilePacketGrams.toString()}
+          value={iPacketGrams}
           name="profilePacketGrams"
           labelClass="smallTextField"
           onChange={handleSupplierNumberChange}

@@ -32,7 +32,7 @@ const CreatableSelectInputBorder = ({
   };
 
   const handleInputChange = (inputValue, actionMeta) => {
-    console.log('inputValue', inputValue);
+    // console.log('inputValue', inputValue);
     if (getSelectInputChange) {
       getSelectInputChange(inputValue);
     }
@@ -42,7 +42,7 @@ const CreatableSelectInputBorder = ({
   if (value) {
     // console.log('VALUE', value);
 
-    console.log('options CSI', options);
+    // console.log('options CSI', options);
 
     let selectedOption;
     if (options) {

@@ -18,15 +18,8 @@ class AddSupplierModal extends Component {
     website: ''
   };
 
-  componentDidMount() {
-    if (
-      this.props.selectedSupplier
-      // &&
-      // this.props.supplier.selectedSupplier._id
-    ) {
-      console.log('true');
-    }
-  }
+  componentDidMount() {}
+
   componentDidUpdate(prevProps) {
     if (
       prevProps.selectedSupplier !== this.props.selectedSupplier &&
@@ -122,7 +115,9 @@ class AddSupplierModal extends Component {
       address,
       website
     } = this.state;
-    const { errors } = this.props;
+    const { errors, selectedIngredient } = this.props;
+
+    // console.log('SI ---> ', selectedIngredient);
 
     let modalContent;
     if (showModal) {
@@ -133,7 +128,9 @@ class AddSupplierModal extends Component {
               X
             </span>
             <h2>Add Ingredient Supplier</h2>
-            <p>For Chickpeas</p>
+            {selectedIngredient && (
+              <p>For {selectedIngredient.displayName}</p>
+            )}
             <form onSubmit={this.handleOnSubmit}>
               <TextInput
                 label="Supplier Name"
@@ -210,6 +207,7 @@ const actions = {
 
 const mapState = state => ({
   selectedSupplier: state.supplier.selectedSupplier,
+  selectedIngredient: state.ingredient.selectedIngredient,
   errors: state.errors
 });
 

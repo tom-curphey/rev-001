@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loadIngredients } from '../ingredient/ingredientActions';
+import {
+  loadIngredients,
+  addOrEditIngredientAndSupplier,
+  setSelectedIngredient
+} from '../ingredient/ingredientActions';
+import { getSelectedSupplier } from '../supplier/supplierActions';
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
 import CreatableSelectInput from '../../layout/input/CreatableSelectInput';
@@ -13,7 +18,6 @@ import {
   calclulateRecipeIngredientCost
 } from '../../../utils/utils';
 import editIcon from '../../../images/edit.svg';
-import { addOrEditIngredientAndSupplier } from '../ingredient/ingredientActions';
 
 class RecipeIngredientForm extends Component {
   constructor(props) {
@@ -35,7 +39,9 @@ class RecipeIngredientForm extends Component {
       stateUpdated: false,
       isOn: false,
       saveLoading: false,
-      addSupplierOption: true
+      addSupplierOption: true,
+      stopSave: false,
+      addNewSuppplier: false
     };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
@@ -63,30 +69,28 @@ class RecipeIngredientForm extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (
-      prevProps.item !== this.props.item &&
-      this.state.saveLoading === false
-    ) {
-      console.log('this.state.stateUpdated', this.state.stateUpdated);
-      console.log('saveLoading', this.state.saveLoading);
-
-      let updateItem = {
-        ...this.props.item
-      };
-      if (!isEmpty(updateItem.ingredient)) {
-        updateItem.ingredient.profilePacketCost = roundNumber(
-          updateItem.ingredient.profilePacketCost,
-          3
-        ).toString();
-        updateItem.ingredient.profilePacketGrams = roundNumber(
-          updateItem.ingredient.profilePacketGrams,
-          3
-        ).toString();
+    if (prevProps.item !== this.props.item) {
+      if (this.state.saveLoading === false) {
+        let updateItem = {
+          ...this.props.item
+        };
+        if (!isEmpty(updateItem.ingredient)) {
+          updateItem.ingredient.profilePacketCost = roundNumber(
+            updateItem.ingredient.profilePacketCost,
+            3
+          ).toString();
+          updateItem.ingredient.profilePacketGrams = roundNumber(
+            updateItem.ingredient.profilePacketGrams,
+            3
+          ).toString();
+        }
+        this.setState({ item: updateItem });
+      } else {
+        this.setState({ saveLoading: false });
       }
-      this.setState({ item: updateItem });
     }
 
-    if (this.state.time >= 2000 && this.state.isOn === true) {
+    if (this.state.time >= 10000 && this.state.isOn === true) {
       console.log('STOPPED');
       this.stopTimer();
     }
@@ -111,8 +115,7 @@ class RecipeIngredientForm extends Component {
     this.setState({
       time: 0,
       start: Date.now() - 0,
-      isOn: true,
-      saveLoading: false
+      isOn: true
     });
     this.timer = setInterval(
       () =>
@@ -123,10 +126,21 @@ class RecipeIngredientForm extends Component {
     );
   }
   stopTimer() {
-    this.setState({ isOn: false, stateUpdated: false });
+    this.setState({
+      isOn: false,
+      stateUpdated: false,
+      stopSave: false
+    });
     clearInterval(this.timer);
-    console.log('timer', this.timer);
-    this.updateSelectedRecipeIngredient();
+    console.log('stopSave', this.state.stopSave);
+    if (
+      this.state.stopSave === false &&
+      this.state.addNewSuppplier === false
+    ) {
+      this.updateSelectedRecipeIngredient();
+    } else {
+      this.resetTimer();
+    }
   }
   resetTimer() {
     this.setState({ time: 0 });
@@ -154,19 +168,41 @@ class RecipeIngredientForm extends Component {
     }
   };
 
+  stopSave = () => {
+    this.setState({ stopSave: true, time: 0 });
+  };
+  startSave = () => {
+    this.setState({ stopSave: false });
+    clearInterval(this.timer);
+    this.startTimer();
+    // this.updateSelectedRecipeIngredient();
+  };
+
   getSelectedSupplier = selectedValue => {
     console.log('sv', selectedValue);
-    this.setState(prevState => ({
-      item: {
-        ...prevState.item,
-        ingredient: {
-          ...prevState.item.ingredient,
-          preferedSupplier: selectedValue.value
-        }
-      },
-      isOn: true,
-      stateUpdated: true
-    }));
+    this.props.setSelectedIngredient({
+      displayName: this.state.item.ingredient.displayName
+    });
+    if (selectedValue.__isNew__) {
+      // dontSaveIngredient
+      console.log('NEW DONT SAVE ING');
+      this.setState({
+        addNewSuppplier: true
+      });
+      this.props.getSelectedSupplier(selectedValue);
+    } else {
+      this.setState(prevState => ({
+        item: {
+          ...prevState.item,
+          ingredient: {
+            ...prevState.item.ingredient,
+            preferedSupplier: selectedValue.value
+          }
+        },
+        isOn: true,
+        stateUpdated: true
+      }));
+    }
     clearInterval(this.timer);
     this.startTimer();
   };
@@ -208,7 +244,7 @@ class RecipeIngredientForm extends Component {
 
       console.log('updatedIngredients', updatedIngredient);
       console.log('updatedSupplier', updatedSupplier);
-      this.setState({ saveLoading: true });
+      this.setState({ saveLoading: true, time: 0 });
       this.props.addOrEditIngredientAndSupplier(
         updatedIngredient,
         updatedSupplier
@@ -256,19 +292,17 @@ class RecipeIngredientForm extends Component {
     if (addSupplierOption === true) {
       let addSupplierOption = {
         label: '+ Add Supplier',
-        value: 'add-supplier'
+        value: '',
+        __isNew__: true
       };
-      console.log('options', options);
       options.push(addSupplierOption);
     } else {
       options = options.filter(o => {
-        console.log('o.value', o.value);
-        return o.value !== 'add-supplier';
+        return o.value !== '';
       });
-      console.log('FILTERED OPTIONS', options);
     }
 
-    console.log('options', options);
+    // console.log('options', options);
     // console.log('item', item);
     // console.log('selectedValue', selectedValue);
 
@@ -316,7 +350,7 @@ class RecipeIngredientForm extends Component {
             />
           </div>
           <div className="ingredientSuppler">
-            <span>
+            <span onClick={this.stopSave}>
               <CreatableSelectInput
                 name="type"
                 placeholder="Type supplier name.."
@@ -325,6 +359,7 @@ class RecipeIngredientForm extends Component {
                 getSelectedValue={this.getSelectedSupplier}
                 getSelectInputChange={this.getSelectInputChange}
                 createLabel="+ Add Supplier"
+                onBlur={this.startSave}
                 error={
                   errors.selectedSupplier && errors.selectedSupplier
                 }
@@ -341,7 +376,9 @@ class RecipeIngredientForm extends Component {
 
 const actions = {
   loadIngredients,
-  addOrEditIngredientAndSupplier
+  addOrEditIngredientAndSupplier,
+  setSelectedIngredient,
+  getSelectedSupplier
 };
 
 const mapState = state => ({
