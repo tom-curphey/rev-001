@@ -12,6 +12,7 @@ import { isEmpty } from '../../../utils/utils';
 const CreatableSelectInputBorder = ({
   options,
   getSelectedValue,
+  getSelectInputChange,
   placeholder,
   className,
   error,
@@ -30,9 +31,18 @@ const CreatableSelectInputBorder = ({
     }
   };
 
+  const handleInputChange = (inputValue, actionMeta) => {
+    console.log('inputValue', inputValue);
+    if (getSelectInputChange) {
+      getSelectInputChange(inputValue);
+    }
+  };
+
   let selectedValue;
   if (value) {
     // console.log('VALUE', value);
+
+    console.log('options CSI', options);
 
     let selectedOption;
     if (options) {
@@ -82,7 +92,7 @@ const CreatableSelectInputBorder = ({
       height: largeSelect ? '60px' : '38px',
       fontSize: largeSelect ? '19px' : '16px',
       backgroundColor: largeSelect ? '#fbf6ee' : '',
-      backgroundColor: error ? '#f1ede7' : '',
+      backgroundColor: error ? '#fbf6ee' : '',
       // fontSize: '16px',
       // color: state.isSelected ? 'red' : '#343434',
       boxShadow: state.isFocused ? 0 : 0,
@@ -103,6 +113,7 @@ const CreatableSelectInputBorder = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
+        onInputChange={handleInputChange}
         onBlur={onBlur}
         options={options && options}
         className={`borderSelectInput ${className}`}

@@ -32,7 +32,7 @@ class HoverTextInput extends Component {
   };
 
   handleOnBlur = () => {
-    this.props.onBlur();
+    // this.props.onBlur();
     this.setState({ displayForm: false });
   };
 

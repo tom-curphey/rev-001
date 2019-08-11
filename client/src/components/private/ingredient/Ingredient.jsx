@@ -59,12 +59,18 @@ export class Ingredient extends Component {
     this.props.loadIngredients();
 
     const { ingredient, supplier } = this.props;
+    if (isEmpty(supplier.suppliers)) {
+      this.props.loadSuppliers();
+    }
     if (!isEmpty(ingredient.selectedIngredient)) {
       this.setState({
         selectedIngredient: ingredient.selectedIngredient
       });
     }
-    if (!isEmpty(supplier.selectedSupplier)) {
+    if (
+      !isEmpty(supplier.selectedSupplier) &&
+      !isEmpty(supplier.suppliers)
+    ) {
       setPreferredSupplier(supplier.selectedSupplier.supplier._id);
 
       const slSupplier = supplier.suppliers.filter(sls => {

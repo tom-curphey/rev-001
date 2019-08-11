@@ -17,7 +17,7 @@ import RecipeIngredientForm from './RecipeIngredientForm';
 class RecipeIngredients extends Component {
   state = {
     selectedRecipe: {},
-    updated: false
+    timerRunning: false
   };
 
   componentDidMount() {
@@ -230,73 +230,6 @@ class RecipeIngredients extends Component {
         });
       }
     }
-
-    if (
-      prevState.selectedRecipe !== this.state.selectedRecipe &&
-      this.state.updated === true
-    ) {
-      console.log('HIT1');
-      // console.log('HIT', prevState.selectedRecipe);
-      // console.log('HIT', this.state.selectedRecipe);
-
-      // Update profile ingredient cost
-      if (
-        !isEmpty(
-          prevState.selectedRecipe && this.state.selectedRecipe
-        )
-      ) {
-        const { selectedRecipe } = this.state;
-        if (
-          !isEmpty(
-            prevState.selectedRecipe.ingredients &&
-              selectedRecipe.ingredients
-          )
-        ) {
-          console.log(
-            'Problem',
-            selectedRecipe.ingredients[0].ingredient.displayName
-          );
-
-          const updatedIngredient = {
-            _id: selectedRecipe.ingredients[0].ingredient._id,
-            displayName:
-              selectedRecipe.ingredients[0].ingredient.displayName,
-            suppliers:
-              selectedRecipe.ingredients[0].ingredient.suppliers,
-            metrics: {
-              cup: selectedRecipe.ingredients[0].cup,
-              whole: selectedRecipe.ingredients[0].whole
-            }
-          };
-
-          const updatedSupplier = {
-            packetCost:
-              selectedRecipe.ingredients[0].ingredient
-                .profilePacketCost,
-            packetGrams:
-              selectedRecipe.ingredients[0].ingredient
-                .profilePacketGrams,
-            preferred: true,
-            _id:
-              selectedRecipe.ingredients[0].ingredient
-                .preferedSupplier
-          };
-
-          console.log('updatedIngredients', updatedIngredient);
-          console.log('updatedSupplier', updatedSupplier);
-
-          this.props.addOrEditIngredientAndSupplier(
-            updatedIngredient,
-            updatedSupplier
-          );
-          this.setState({ updated: false });
-        }
-      }
-    }
-
-    if (prevProps.profile !== profile) {
-      console.log('HIT3', profile);
-    }
   };
 
   updateSelectedRecipeIngredient = updatedItem => {
@@ -316,7 +249,13 @@ class RecipeIngredients extends Component {
 
     console.log('recipeData --->', recipeData);
 
-    this.setState({ updated: true, selectedRecipe: recipeData });
+    this.setState({ timerRunning: true });
+    // setTimeout(() => {
+    //   this.setState({
+    //     selectedRecipe: recipeData,
+    //     timerRunning: false
+    //   });
+    // }, 5000);
   };
 
   checkToSaveIngredient = updatedItem => {
@@ -335,7 +274,7 @@ class RecipeIngredients extends Component {
           if (ri.ingredient._id) {
             return (
               <RecipeIngredientForm
-                key={ri.ingredient._id}
+                key={ri.ingredient._id + ri.order}
                 item={ri}
                 updateSelectedRecipeIngredient={
                   this.updateSelectedRecipeIngredient
