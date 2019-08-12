@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import {
   setSelectedSupplier,
+  setPreferredSupplier,
   removeSelectedSupplier,
   removePreferredSupplier
 } from '../supplier/supplierActions';
@@ -46,13 +47,13 @@ export const getSelectedIngredient = (
   profile,
   rawSelectedSupplier
 ) => async dispatch => {
-  console.log('rawSelectedSupplier', rawSelectedSupplier);
+  // console.log('rawSelectedSupplier', rawSelectedSupplier);
 
   if (
     !isEmpty(rawSelectedIngredient._id) &&
     rawSelectedIngredient.suppliers.length !== 0
   ) {
-    console.log('In here');
+    // console.log('In here');
 
     // // Check if profile has ingredients
     if (!isEmpty(profile.ingredients)) {
@@ -129,6 +130,15 @@ export const getSelectedIngredient = (
             suppliers: updatedSelectedIngredientSuppliers
           };
 
+          console.log(
+            'updatedSelectedIngredient -----K----->',
+            updatedSelectedIngredient
+          );
+          console.log(
+            'preferredSupplier -----K----->',
+            preferredSupplier
+          );
+
           // dispatch updated selected ingredient
           dispatch(setSelectedIngredient(updatedSelectedIngredient));
 
@@ -138,16 +148,16 @@ export const getSelectedIngredient = (
             isEmpty(rawSelectedSupplier)
           ) {
             console.log('Preferred supplier was not found', profile);
-            console.log('Overhere - 3', rawSelectedSupplier);
+            // console.log('Overhere - 3', rawSelectedSupplier);
             dispatch(removeSelectedSupplier());
             dispatch(removePreferredSupplier());
           } else {
             console.log('Overhere - 4', rawSelectedSupplier);
             console.log('preferredSupplier - 4', preferredSupplier);
 
-            console.log(
-              '---- Needs to trigger when there is a profile preferred supplier'
-            );
+            // console.log(
+            //   '---- Needs to trigger when there is a profile preferred supplier'
+            // );
             // Check if there is a preferred supplier
             if (!isEmpty(preferredSupplier)) {
               dispatch(setSelectedSupplier(preferredSupplier));

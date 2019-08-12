@@ -52,7 +52,8 @@ export class Ingredient extends Component {
       preferred: false
     },
     readyToSave: false,
-    displayRecipeNameForm: false
+    displayIngredientNameForm: false,
+    selectedIngredientChanged: false
   };
 
   componentDidMount() {
@@ -100,7 +101,8 @@ export class Ingredient extends Component {
     const {
       selectedIngredient,
       selectedSupplier,
-      displayRecipeNameForm
+      displayIngredientNameForm,
+      selectedIngredientChanged
     } = this.state;
     if (isEmpty(supplier.suppliers)) {
       this.props.loadSuppliers();
@@ -111,18 +113,26 @@ export class Ingredient extends Component {
       prevProps.ingredient.selectedIngredient !==
       ingredient.selectedIngredient
     ) {
-      console.log('selectedIngredient', selectedIngredient);
-      console.log('ERRORS', errors);
+      console.log(
+        'chnaged selectedIngredient ***',
+        selectedIngredient
+      );
+      // console.log('ERRORS', errors);
       if (isEmpty(errors)) {
         this.setState({
           selectedIngredient: ingredient.selectedIngredient,
-          displayRecipeNameForm: false
+          displayIngredientNameForm: false,
+          selectedIngredientChanged: true
         });
       }
     }
 
-    if (prevState.displayRecipeNameForm !== displayRecipeNameForm) {
-      if (displayRecipeNameForm) console.log('UPDATE');
+    if (
+      prevState.displayIngredientNameForm !==
+      displayIngredientNameForm
+    ) {
+      if (displayIngredientNameForm)
+        console.log('UPDATE displayIngredientNameForm');
     }
 
     // If selected supplier changes update local state with selected supplier
@@ -143,10 +153,14 @@ export class Ingredient extends Component {
               return sis.preferred === true;
             }
           );
-          console.log('***UPDATED HERE 3***');
+          console.log('***UPDATED HERE 3***', statePreferredSupplier);
           // Check is selected ingredient has a preferred supplier
           if (!isEmpty(statePreferredSupplier)) {
-            console.log('***UPDATED HERE 4***');
+            console.log('***UPDATED HERE 4***', supplier);
+            console.log(
+              '***UPDATED HERE 4***',
+              supplier.preferredIngredientSupplierId
+            );
             if (!isEmpty(supplier.preferredIngredientSupplierId)) {
               console.log('***UPDATED HERE 5***');
               if (
@@ -229,6 +243,8 @@ export class Ingredient extends Component {
                 ? supplier.selectedSupplier.profilePacketGrams.toString()
                 : '1000'
             };
+
+            console.log('usSupplier ***', usSupplier);
 
             const usiSuppliers = selectedIngredient.suppliers.map(
               sis => {
@@ -330,6 +346,10 @@ export class Ingredient extends Component {
             supplier.preferredIngredientSupplierId ===
               supplier.selectedSupplier.supplier._id
           ) {
+            console.log(
+              '**** This set the prefered supplier id correctly'
+            );
+
             this.props.setPreferredSupplier(
               supplier.selectedSupplier.supplier._id
             );
@@ -406,8 +426,15 @@ export class Ingredient extends Component {
 
       console.log('Right here 1', selectedSupplier); // state
       console.log('Right here 2', supplier); // props
+      console.log(
+        'selectedIngredientChanged',
+        this.state.selectedIngredientChanged
+      );
 
-      if (!isEmpty(selectedSupplier.supplier._id)) {
+      if (
+        !isEmpty(selectedSupplier.supplier._id) &&
+        selectedIngredientChanged === false
+      ) {
         usSupplier = {
           ...selectedSupplier
           // ...supplier.selectedSupplier
@@ -416,6 +443,7 @@ export class Ingredient extends Component {
         usSupplier = {
           ...supplier.selectedSupplier
         };
+        this.setState({ selectedIngredientChanged: false });
       }
 
       if (
@@ -558,11 +586,11 @@ export class Ingredient extends Component {
   displayEditRecipeNameForm = () => {
     console.log(
       'displayEditRecipeNameForm',
-      this.state.displayRecipeNameForm
+      this.state.displayIngredientNameForm
     );
 
     this.setState({
-      displayRecipeNameForm: true
+      displayIngredientNameForm: true
     });
   };
 
@@ -579,7 +607,7 @@ export class Ingredient extends Component {
 
   updateIngredientName = () => {
     // this.setState({
-    //   displayRecipeNameForm: false
+    //   displayIngredientNameForm: false
     // });
     if (this.state.readyToSave) {
       this.handleSubmit();
@@ -677,7 +705,7 @@ export class Ingredient extends Component {
       selectedIngredient,
       selectedSupplier,
       readyToSave,
-      displayRecipeNameForm
+      displayIngredientNameForm
     } = this.state;
 
     console.log('STATE selectedSupplier ----***', selectedSupplier);
@@ -706,7 +734,7 @@ export class Ingredient extends Component {
         ingredientForm = (
           <Fragment>
             <div className="editIngredientName">
-              {displayRecipeNameForm ? (
+              {displayIngredientNameForm ? (
                 <Fragment>
                   <form>
                     <TextInput
