@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loadIngredients } from '../ingredient/ingredientActions';
+import { withRouter } from 'react-router-dom';
+import {
+  loadIngredients,
+  removeSelectedIngredient,
+  getSelectedIngredient
+} from '../ingredient/ingredientActions';
+import { removeSelectedSupplier } from '../supplier/supplierActions';
 import TextInput from '../../layout/input/TextInput';
 import SelectInput from '../../layout/input/SelectInput';
 import CreatableSelectInputBorder from '../../layout/input/CreatableSelectInputBorder';
 import {
   isEmpty,
   calculateRecipeItemTotal,
-  roundNumber
+  roundNumber,
+  capitalizeFirstLetter
 } from '../../../utils/utils';
 import appleIcon from '../../../images/apple.svg';
 import binIcon from '../../../images/bin.svg';
@@ -20,7 +27,8 @@ class RecipeIngredient extends Component {
       unit: 'gram',
       total: 0,
       order: 0
-    }
+    },
+    addIngredientOption: true
   };
 
   componentDidMount() {
@@ -37,39 +45,67 @@ class RecipeIngredient extends Component {
     }
   };
 
+  getSelectIngredientInputChange = inputValue => {
+    console.log('inputValue', inputValue);
+    if (!isEmpty(inputValue)) {
+      this.setState({ addIngredientOption: false });
+    } else {
+      this.setState({ addIngredientOption: true });
+    }
+  };
+
   getSelectedIngredientValue = selectedIngredientValue => {
-    const ingredientData = this.props.ingredient.ingredients.filter(
-      ing => {
-        return ing._id === selectedIngredientValue.value;
-      }
-    );
+    if (selectedIngredientValue.__isNew__) {
+      this.props.removeSelectedIngredient();
+      this.props.removeSelectedSupplier();
+      // addIngredient = true;
+      const newIngredient = {};
+      newIngredient.metrics = {};
+      newIngredient.displayName =
+        selectedIngredientValue.label !== '+ Add Ingredient'
+          ? capitalizeFirstLetter(selectedIngredientValue.label)
+          : '';
 
-    console.log('ingredientData', ingredientData);
+      // newIngredient.new = true;
+      newIngredient.metrics.cup = '';
+      newIngredient.metrics.whole = '';
+      newIngredient.suppliers = [];
+      this.props.getSelectedIngredient(newIngredient);
+      this.props.history.push('/ingredients');
+    } else {
+      const ingredientData = this.props.ingredient.ingredients.filter(
+        ing => {
+          return ing._id === selectedIngredientValue.value;
+        }
+      );
 
-    const updatedItem = {
-      ...this.state.item,
-      ingredient: selectedIngredientValue.value,
-      cup: ingredientData[0].metrics.cup
-        ? ingredientData[0].metrics.cup
-        : null,
-      whole: ingredientData[0].metrics.whole
-        ? ingredientData[0].metrics.whole
-        : null
-    };
+      console.log('ingredientData', ingredientData);
 
-    this.setState(prevState => ({
-      item: {
-        ...prevState.item,
-        ingredient: updatedItem.ingredient,
-        cup: updatedItem.cup,
-        whole: updatedItem.whole,
-        total: calculateRecipeItemTotal(
-          Number(updatedItem.quantity),
-          updatedItem.unit,
-          updatedItem
-        )
-      }
-    }));
+      const updatedItem = {
+        ...this.state.item,
+        ingredient: selectedIngredientValue.value,
+        cup: ingredientData[0].metrics.cup
+          ? ingredientData[0].metrics.cup
+          : null,
+        whole: ingredientData[0].metrics.whole
+          ? ingredientData[0].metrics.whole
+          : null
+      };
+
+      this.setState(prevState => ({
+        item: {
+          ...prevState.item,
+          ingredient: updatedItem.ingredient,
+          cup: updatedItem.cup,
+          whole: updatedItem.whole,
+          total: calculateRecipeItemTotal(
+            Number(updatedItem.quantity),
+            updatedItem.unit,
+            updatedItem
+          )
+        }
+      }));
+    }
   };
 
   updateIngredientQuantity = e => {
@@ -110,7 +146,7 @@ class RecipeIngredient extends Component {
   };
 
   render() {
-    const { item } = this.state;
+    const { item, addIngredientOption } = this.state;
     const { ingredient } = this.props;
 
     let ingredientOptions = [];
@@ -122,6 +158,21 @@ class RecipeIngredient extends Component {
         return selectData;
       });
     }
+
+    if (addIngredientOption === true) {
+      let addNewIngredientOption = {
+        label: '+ Add Ingredient',
+        value: '',
+        __isNew__: true
+      };
+      ingredientOptions.push(addNewIngredientOption);
+    } else {
+      ingredientOptions = ingredientOptions.filter(o => {
+        return o.value !== '';
+      });
+    }
+
+    console.log('ingredientOptions', ingredientOptions);
 
     let ingredientMetricOptions = [];
     if (isEmpty(item.cup)) {
@@ -183,6 +234,7 @@ class RecipeIngredient extends Component {
             name="ingredient"
             options={ingredientOptions}
             getSelectedValue={this.getSelectedIngredientValue}
+            getSelectInputChange={this.getSelectIngredientInputChange}
             placeholder="Type ingredient name to start.."
             createLabel="+ Add Ingredient"
             styles={{ fontWeight: '400' }}
@@ -235,7 +287,10 @@ class RecipeIngredient extends Component {
 }
 
 const actions = {
-  loadIngredients
+  loadIngredients,
+  removeSelectedIngredient,
+  removeSelectedSupplier,
+  getSelectedIngredient
 };
 
 const mapState = state => ({
@@ -245,4 +300,4 @@ const mapState = state => ({
 export default connect(
   mapState,
   actions
-)(RecipeIngredient);
+)(withRouter(RecipeIngredient));

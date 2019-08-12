@@ -290,12 +290,12 @@ class RecipeIngredientForm extends Component {
     }
 
     if (addSupplierOption === true) {
-      let addSupplierOption = {
+      let addNewSupplierOption = {
         label: '+ Add Supplier',
         value: '',
         __isNew__: true
       };
-      options.push(addSupplierOption);
+      options.push(addNewSupplierOption);
     } else {
       options = options.filter(o => {
         return o.value !== '';

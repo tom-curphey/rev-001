@@ -12,6 +12,7 @@ import { isEmpty } from '../../../utils/utils';
 const CreatableSelectInputBorder = ({
   options,
   getSelectedValue,
+  getSelectInputChange,
   placeholder,
   className,
   error,
@@ -27,6 +28,13 @@ const CreatableSelectInputBorder = ({
     if (newValue) {
       // Pass the selected value to the parent component
       getSelectedValue(newValue, data);
+    }
+  };
+
+  const handleInputChange = (inputValue, actionMeta) => {
+    // console.log('inputValue', inputValue);
+    if (getSelectInputChange) {
+      getSelectInputChange(inputValue);
     }
   };
 
@@ -102,6 +110,7 @@ const CreatableSelectInputBorder = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
+        onInputChange={handleInputChange}
         onBlur={onBlur}
         options={options && options}
         className={`borderSelectInput ${className}`}

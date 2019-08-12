@@ -18,7 +18,7 @@ import {
   removeSelectedSupplier,
   removePreferredSupplier
 } from '../supplier/supplierActions';
-import { removeErrors } from '../../../redux/errorActions';
+import { removeErrors, setErrors } from '../../../redux/errorActions';
 import SelectIngredient from './SelectIngredient';
 import SupplierForm from '../supplier/SupplierForm';
 import IngredientForm from './IngredientForm';
@@ -64,9 +64,16 @@ export class Ingredient extends Component {
       this.props.loadSuppliers();
     }
     if (!isEmpty(ingredient.selectedIngredient)) {
-      this.setState({
-        selectedIngredient: ingredient.selectedIngredient
-      });
+      if (isEmpty(ingredient.selectedIngredient.displayName)) {
+        this.setState({
+          displayIngredientNameForm: true,
+          selectedIngredient: ingredient.selectedIngredient
+        });
+      } else {
+        this.setState({
+          selectedIngredient: ingredient.selectedIngredient
+        });
+      }
     }
     if (
       !isEmpty(supplier.selectedSupplier) &&
@@ -609,6 +616,15 @@ export class Ingredient extends Component {
     // this.setState({
     //   displayIngredientNameForm: false
     // });
+    if (isEmpty(this.state.selectedIngredient.displayName)) {
+      console.log('setErrors', setErrors);
+
+      this.props.setErrors({
+        displayName: 'Ingredient name is required'
+      });
+    } else {
+      this.props.removeErrors();
+    }
     if (this.state.readyToSave) {
       this.handleSubmit();
     }
@@ -872,6 +888,7 @@ const actions = {
   getSelectedSupplier,
   setPreferredSupplier,
   updatePreferredSupplier,
+  setErrors,
   removeErrors,
   removeSelectedIngredient,
   removeSelectedSupplier,
