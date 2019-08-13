@@ -172,7 +172,7 @@ class RecipeIngredient extends Component {
       });
     }
 
-    console.log('ingredientOptions', ingredientOptions);
+    // console.log('ingredientOptions', ingredientOptions);
 
     let ingredientMetricOptions = [];
     if (isEmpty(item.cup)) {

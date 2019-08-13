@@ -180,8 +180,17 @@ class RecipeIngredientForm extends Component {
 
   getSelectedSupplier = selectedValue => {
     console.log('sv', selectedValue);
+    console.log('state s', this.state.item);
     this.props.setSelectedIngredient({
-      displayName: this.state.item.ingredient.displayName
+      ingredient: this.state.item.ingredient._id,
+      displayName: this.state.item.ingredient.displayName,
+      packetCost: this.state.item.ingredient.profilePacketCost,
+      packetGrams: this.state.item.ingredient.profilePacketGrams,
+      suppliers: this.state.item.ingredient.suppliers,
+      metrics: {
+        cup: this.state.item.ingredient.cup,
+        whole: this.state.item.ingredient.whole
+      }
     });
     if (selectedValue.__isNew__) {
       // dontSaveIngredient

@@ -232,6 +232,30 @@ export const addOrEditSupplier = supplierData => async dispatch => {
   }
 };
 
+export const addNewSupplierWithIngredientData = (
+  supplierData,
+  ingredientData
+) => async dispatch => {
+  try {
+    // dispatch(setVenueLoading());
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    supplierData.displayName = capitalizeFirstLetter(
+      supplierData.displayName
+    );
+    const body = JSON.stringify(supplierData, ingredientData);
+    const res = await axios.post('/api/supplier', body, config);
+
+    console.log('RES.DATA', res.data);
+  } catch (err) {
+    dispatch(displayErrors(err));
+    dispatch(setAlert('Supplier Error', 'error'));
+  }
+};
+
 export const removeSelectedSupplier = () => async dispatch => {
   dispatch({
     type: REMOVE_SELECTED_SUPPLIER

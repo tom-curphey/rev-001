@@ -11,6 +11,7 @@ import RecipeIngredients from './RecipeIngredients';
 import AccordionBoxWithOpenHeader from '../../layout/AccordionBoxWithOpenHeader';
 import RecipeDetails from './RecipeDetails';
 import Button from '../../layout/menu/Button';
+import { removeSelectedIngredient } from '../ingredient/ingredientActions';
 import { setErrors } from '../../../redux/errorActions';
 import { addOrEditRecipe } from './recipeActions';
 
@@ -32,6 +33,12 @@ class Recipe extends Component {
       }
     }
   };
+
+  componentWillUnmount() {
+    if (!isEmpty(this.props.ingredient.selectedIngredient)) {
+      this.props.removeSelectedIngredient();
+    }
+  }
 
   handleCalculateRecipe = () => {
     const { selectedRecipe } = this.props.recipe;
@@ -128,19 +135,23 @@ class Recipe extends Component {
 
 Recipe.propTypes = {
   recipe: PropTypes.object.isRequired,
+  ingredient: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool,
-  setErrors: PropTypes.func.isRequired
+  setErrors: PropTypes.func.isRequired,
+  removeSelectedIngredient: PropTypes.func.isRequired
   // venues: PropTypes.object.isRequired
 };
 
 const actions = {
   setErrors,
-  addOrEditRecipe
+  addOrEditRecipe,
+  removeSelectedIngredient
 };
 
 const mapState = state => ({
   recipe: state.recipe,
+  ingredient: state.ingredient,
   profile: state.profile,
   isAuthenticated: state.auth.isAuthenticated
 });
