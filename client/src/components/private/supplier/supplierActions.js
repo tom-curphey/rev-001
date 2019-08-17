@@ -192,7 +192,10 @@ export const removePreferredSupplier = () => async dispatch => {
   dispatch({ type: REMOVE_PREFERRED_SUPPLIER });
 };
 
-export const addOrEditSupplier = supplierData => async dispatch => {
+export const addOrEditSupplier = (
+  supplierData,
+  ingredientData
+) => async dispatch => {
   try {
     // dispatch(setVenueLoading());
     const config = {
@@ -203,7 +206,17 @@ export const addOrEditSupplier = supplierData => async dispatch => {
     supplierData.displayName = capitalizeFirstLetter(
       supplierData.displayName
     );
-    const body = JSON.stringify(supplierData);
+
+    const data = {
+      ...supplierData,
+      ingredient: ingredientData.ingredient
+        ? ingredientData.ingredient
+        : null,
+      packetCost: ingredientData.packetCost,
+      packetGrams: ingredientData.packetGrams
+    };
+
+    const body = JSON.stringify(data);
     const res = await axios.post('/api/supplier', body, config);
     const formattedSupplier = {
       supplier: {
@@ -232,29 +245,29 @@ export const addOrEditSupplier = supplierData => async dispatch => {
   }
 };
 
-export const addNewSupplierWithIngredientData = (
-  supplierData,
-  ingredientData
-) => async dispatch => {
-  try {
-    // dispatch(setVenueLoading());
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    supplierData.displayName = capitalizeFirstLetter(
-      supplierData.displayName
-    );
-    const body = JSON.stringify(supplierData, ingredientData);
-    const res = await axios.post('/api/supplier', body, config);
+// export const addNewSupplierWithIngredientData = (
+//   supplierData,
+//   ingredientData
+// ) => async dispatch => {
+//   try {
+//     // dispatch(setVenueLoading());
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     };
+//     supplierData.displayName = capitalizeFirstLetter(
+//       supplierData.displayName
+//     );
+//     const body = JSON.stringify(supplierData, ingredientData);
+//     const res = await axios.post('/api/supplier', body, config);
 
-    console.log('RES.DATA', res.data);
-  } catch (err) {
-    dispatch(displayErrors(err));
-    dispatch(setAlert('Supplier Error', 'error'));
-  }
-};
+//     console.log('RES.DATA', res.data);
+//   } catch (err) {
+//     dispatch(displayErrors(err));
+//     dispatch(setAlert('Supplier Error', 'error'));
+//   }
+// };
 
 export const removeSelectedSupplier = () => async dispatch => {
   dispatch({

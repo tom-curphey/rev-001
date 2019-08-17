@@ -270,6 +270,11 @@ class RecipeIngredients extends Component {
     if (!isEmpty(selectedRecipe)) {
       let recipeIngredients = [];
       if (!isEmpty(selectedRecipe.ingredients)) {
+        console.log(
+          'selectedRecipe.ingredients',
+          selectedRecipe.ingredients
+        );
+
         recipeIngredients = selectedRecipe.ingredients.map(ri => {
           if (ri.ingredient._id) {
             return (

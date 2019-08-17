@@ -99,7 +99,15 @@ class AddSupplierModal extends Component {
       website
     };
 
-    this.props.addOrEditSupplier(newSupplier);
+    console.log(
+      'this.props.selectedIngredient',
+      this.props.selectedIngredient
+    );
+
+    this.props.addOrEditSupplier(
+      newSupplier,
+      this.props.selectedIngredient
+    );
   };
 
   handleFormCancel = () => {

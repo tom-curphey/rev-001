@@ -184,12 +184,13 @@ class RecipeIngredientForm extends Component {
     this.props.setSelectedIngredient({
       ingredient: this.state.item.ingredient._id,
       displayName: this.state.item.ingredient.displayName,
+      urlName: null,
       packetCost: this.state.item.ingredient.profilePacketCost,
       packetGrams: this.state.item.ingredient.profilePacketGrams,
       suppliers: this.state.item.ingredient.suppliers,
       metrics: {
-        cup: this.state.item.ingredient.cup,
-        whole: this.state.item.ingredient.whole
+        cup: this.state.item.cup,
+        whole: this.state.item.whole
       }
     });
     if (selectedValue.__isNew__) {
@@ -281,6 +282,11 @@ class RecipeIngredientForm extends Component {
       value: 'no-supplier-selected'
     };
     if (!isEmpty(item.ingredient.suppliers)) {
+      console.log(
+        'item.ingredient.suppliers',
+        item.ingredient.suppliers
+      );
+
       options = item.ingredient.suppliers.map(supplier => {
         let selectData = {};
         selectData.label = supplier.supplier.displayName;
