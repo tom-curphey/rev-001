@@ -13,7 +13,7 @@ const NewComponent = ({ match }) => {
       title = 'Notifications Section';
       intro = 'Curious about your email notifications?';
       feature =
-        "Right now you won't be emailed unless you contact us directly, these feature is where you will be able to control email notifications in the future. Just like you we hate spam emails & will be very respectful when emailing you about any new features. If you never want emails from us please let us know.";
+        "Right now you won't be emailed unless you contact us directly, this section is where you will be able to control email notifications in the future. Just like you we hate spam emails & will be very respectful when emailing you about any new features. If you never want emails from us please let us know.";
       break;
     default:
       title = 'Coming soon..';

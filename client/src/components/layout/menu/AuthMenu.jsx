@@ -20,7 +20,7 @@ const AdminMenu = ({ auth, profile, children, history }) => {
     } else {
       console.log('ppp', profile);
 
-      if (isEmpty(profile.profile.venues)) {
+      if (isEmpty(profile.profile)) {
         console.log('I was touching it');
 
         return <Redirect to="onboarding" />;

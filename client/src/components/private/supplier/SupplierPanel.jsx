@@ -23,11 +23,6 @@ const SupplierPanel = ({
   if (selectedIngredient.suppliers.length !== 0) {
     // console.log('Ingredient has suppliers');
 
-    console.log(
-      'selectedIngredient.suppliers',
-      selectedIngredient.suppliers
-    );
-
     // Find the preferred supplier
     const pSupplier = selectedIngredient.suppliers.filter(si => {
       return preferredIngredientSupplierId === si.supplier._id;
@@ -175,15 +170,15 @@ const SupplierPanel = ({
       <div className="supplierList">
         <ul>{supplierRow}</ul>
         <p>
-          Prices provided for Apple suppliers are the avarage prices
-          chefs have paid for this ingredient in the past. They are to
-          be used for guidance & do not reflect the current market
-          price.
+          Prices provided for {selectedIngredient.displayName}{' '}
+          suppliers are the avarage prices chefs have paid for this
+          ingredient in the past. They are to be used for guidance &
+          do not reflect the current market price.
         </p>
       </div>
     );
   } else {
-    console.log('Ingredient has no suppliers');
+    // console.log('Ingredient has no suppliers');
     supplierList = (
       <div className="supplierList">
         <h4>

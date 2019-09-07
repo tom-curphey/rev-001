@@ -1,11 +1,11 @@
 import React from 'react';
 import TextInput from '../components/layout/input/TextInput';
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-];
+// const options = [
+//   { value: 'chocolate', label: 'Chocolate' },
+//   { value: 'strawberry', label: 'Strawberry' },
+//   { value: 'vanilla', label: 'Vanilla' }
+// ];
 
 class Test extends React.Component {
   constructor(props) {
@@ -76,18 +76,18 @@ class Test extends React.Component {
     const { displayForm, name } = this.state;
 
     let start =
-      this.state.time == 0 ? (
+      this.state.time === 0 ? (
         <button onClick={this.startTimer}>start</button>
       ) : null;
     let stop = this.state.isOn ? (
       <button onClick={this.stopTimer}>stop</button>
     ) : null;
     let reset =
-      this.state.time != 0 && !this.state.isOn ? (
+      this.state.time !== 0 && !this.state.isOn ? (
         <button onClick={this.resetTimer}>reset</button>
       ) : null;
     let resume =
-      this.state.time != 0 && !this.state.isOn ? (
+      this.state.time !== 0 && !this.state.isOn ? (
         <button onClick={this.startTimer}>resume</button>
       ) : null;
     return (

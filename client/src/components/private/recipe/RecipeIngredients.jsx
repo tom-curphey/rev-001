@@ -314,9 +314,7 @@ class RecipeIngredients extends Component {
     return (
       <section className="recipeIngredients">
         <AccordionBoxWithOpenHeader
-          headerText={`Ingredient Results + Analyse ingredients to optimise the profitability of ${
-            selectedRecipe.displayName
-          }`}
+          headerText={`Ingredient Results + Analyse ingredients to optimise the profitability of ${selectedRecipe.displayName}`}
           isOpen={isOpen}
         >
           {!isEmpty(content) && content}

@@ -58,8 +58,8 @@ export class Ingredient extends Component {
 
   componentDidMount() {
     this.props.loadIngredients();
-
     const { ingredient, supplier } = this.props;
+
     if (isEmpty(supplier.suppliers)) {
       this.props.loadSuppliers();
     }
@@ -111,7 +111,10 @@ export class Ingredient extends Component {
       displayIngredientNameForm,
       selectedIngredientChanged
     } = this.state;
-    if (isEmpty(supplier.suppliers)) {
+    if (
+      prevProps.supplier.suppliers !== supplier.suppliers &&
+      isEmpty(supplier.suppliers)
+    ) {
       this.props.loadSuppliers();
     }
 

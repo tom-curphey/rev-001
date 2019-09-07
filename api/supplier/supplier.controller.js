@@ -126,7 +126,7 @@ module.exports.addOrEditSupplier = async (req, res) => {
         };
 
         await ingredient.suppliers.push(ingredientSupplierData);
-        await console.log('ingredient___>', ingredient);
+        // await console.log('ingredient___>', ingredient);
 
         //  Profile was found
         let newProfileIngredientSupplierData = {
@@ -149,7 +149,7 @@ module.exports.addOrEditSupplier = async (req, res) => {
           }
         });
 
-        console.log('pIngredient XXXX', pIngredient[0]);
+        // console.log('pIngredient XXXX', pIngredient[0]);
         let upIngredientSuppliers = [];
         // add ingredient to profile if pIngredient was not found
         if (pIngredient.length !== 0) {

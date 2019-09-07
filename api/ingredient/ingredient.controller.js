@@ -10,14 +10,15 @@ module.exports.getIngredients = async (req, res) => {
       .sort({ urlName: 1 })
       .populate('suppliers.supplier', ['displayName']);
     if (ingredients.length === 0) {
-      return res.status(400).json({
-        errors: [
-          {
-            param: 'ingredient',
-            msg: 'You have no ingredients'
-          }
-        ]
-      });
+      return res.status(400).json();
+      // ({
+      //   errors: [
+      //     {
+      //       param: 'ingredient',
+      //       msg: 'You have no ingredients'
+      //     }
+      //   ]
+      // });
     }
 
     // console.log(ingredients[0].suppliers);
