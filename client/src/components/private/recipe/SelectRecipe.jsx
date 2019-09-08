@@ -12,6 +12,7 @@ import {
   removePreferredSupplier,
   removeSelectedSupplier
 } from '../supplier/supplierActions';
+import { removeErrors } from '../../../redux/errorActions';
 import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 class SelectRecipe extends Component {
@@ -109,6 +110,7 @@ class SelectRecipe extends Component {
       }
     }
     if (!isEmpty(selectedRecipe)) {
+      this.props.removeErrors();
       this.props.getSelectedRecipe(
         selectedRecipe[0],
         this.props.profile.profile
@@ -228,7 +230,8 @@ const actions = {
   getSelectedRecipe,
   removeSelectedRecipe,
   removePreferredSupplier,
-  removeSelectedSupplier
+  removeSelectedSupplier,
+  removeErrors
 };
 
 const mapState = state => ({

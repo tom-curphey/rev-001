@@ -74,6 +74,17 @@ class RecipeHeader extends Component {
       if (isEmpty(selectedRecipe.displayName))
         errors.recipeDisplayName = 'Please enter recipe name above';
 
+      if (!isEmpty(selectedRecipe.processTime)) {
+        const ptCheck = selectedRecipe.processTime.filter(pt => {
+          return isEmpty(pt.description);
+        });
+        if (!isEmpty(ptCheck)) {
+          console.log('No Description');
+          errors.recipeDisplayName =
+            'Please compete all recipe descriptions';
+        }
+      }
+
       if (!isEmpty(errors)) {
         this.props.setErrors(errors);
       } else {
@@ -81,11 +92,16 @@ class RecipeHeader extends Component {
       }
     } else {
       console.log('Direct user to select a recipe');
+      errors.recipeDisplayName = 'Please select a recipe';
+      if (!isEmpty(errors)) {
+        this.props.setErrors(errors);
+      }
     }
   };
 
   handleCalculateRecipe = () => {
     const { selectedRecipe } = this.state;
+    let errors = {};
     if (!isEmpty(selectedRecipe)) {
       let errors = {};
       console.log(
@@ -114,6 +130,12 @@ class RecipeHeader extends Component {
         console.log('All good');
         selectedRecipe.confirmed = true;
         this.props.addOrEditRecipe(selectedRecipe);
+      }
+    } else {
+      console.log('Direct user to select a recipe');
+      errors.recipeDisplayName = 'Please select a recipe';
+      if (!isEmpty(errors)) {
+        this.props.setErrors(errors);
       }
     }
   };
