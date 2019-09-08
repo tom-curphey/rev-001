@@ -92,15 +92,14 @@ class SelectRecipe extends Component {
       const newRecipe = {
         _id: '__isNew__',
         displayName: capitalizeFirstLetter(selectedValue.label),
-
         processTime: [],
-        ingredients: []
+        ingredients: [],
+        isNew: true
       };
       newRecipe.urlName = newRecipe.displayName
         .trim()
         .replace(/\s+/g, '-')
         .toLowerCase();
-      // newRecipe.new = true;
       selectedRecipe.push(newRecipe);
     } else {
       if (this.props.recipe.recipes !== null) {

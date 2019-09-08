@@ -1241,6 +1241,10 @@ section.accordion {
   position: relative;
   transition: 300ms ease-in-out;
 
+  &:first-child {
+    margin-top: 0px;
+  }
+
   &:hover {
     border: 1px solid $cGreyBorderShadow;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);

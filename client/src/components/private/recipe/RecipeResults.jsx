@@ -138,13 +138,11 @@ class RecipeResults extends Component {
   render() {
     const { salePricePerServe } = this.state.selectedRecipe;
     const { recipeResults } = this.state;
-    const { selectedRecipe } = this.props;
+    const { selectedRecipe, showRecipeResults } = this.props;
     return (
       <AccordionBoxWithOpenHeader
-        headerText={`Recipe Results + Complete analysis of the ${
-          selectedRecipe.displayName
-        } recipe`}
-        // isOpen={true}
+        headerText={`Recipe Results + Complete analysis of the ${selectedRecipe.displayName} recipe`}
+        isOpen={true}
       >
         <section className="recipeResults">
           <div className="resultsForm">
@@ -171,9 +169,7 @@ class RecipeResults extends Component {
             </p>
           </div>
           <h3>
-            {`Recipe Results are based off selling ${
-              selectedRecipe.expectedSales
-            } serves per week at
+            {`Recipe Results are based off selling ${selectedRecipe.expectedSales} serves per week at
             $${selectedRecipe.salePricePerServe}`}
           </h3>
           <div className="resultsData">

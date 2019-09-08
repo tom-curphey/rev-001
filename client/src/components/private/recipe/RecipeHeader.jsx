@@ -18,24 +18,21 @@ class RecipeHeader extends Component {
   };
 
   componentDidMount = () => {
-    const { recipe } = this.props;
-    if (!isEmpty(recipe.selectedRecipe)) {
+    const { selectedRecipe } = this.props.recipe;
+    if (!isEmpty(selectedRecipe)) {
       this.setState({
-        selectedRecipe: recipe.selectedRecipe
+        selectedRecipe: selectedRecipe
       });
     }
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    const { recipe } = this.props;
+    const { selectedRecipe } = this.props.recipe;
     // console.log('recipe', recipe);
-    if (
-      prevProps.recipe.selectedRecipe !==
-      this.props.recipe.selectedRecipe
-    ) {
-      if (!isEmpty(recipe.selectedRecipe)) {
+    if (prevProps.recipe.selectedRecipe !== selectedRecipe) {
+      if (!isEmpty(selectedRecipe)) {
         this.setState({
-          selectedRecipe: recipe.selectedRecipe
+          selectedRecipe: selectedRecipe
         });
       }
     }
@@ -88,7 +85,7 @@ class RecipeHeader extends Component {
   };
 
   handleCalculateRecipe = () => {
-    const { selectedRecipe } = this.props.recipe;
+    const { selectedRecipe } = this.state;
     if (!isEmpty(selectedRecipe)) {
       let errors = {};
       console.log(

@@ -91,7 +91,7 @@ class RecipeIngredientForm extends Component {
     }
 
     if (this.state.time >= 10000 && this.state.isOn === true) {
-      console.log('STOPPED');
+      console.log('STOPPED TIMER');
       this.stopTimer();
     }
 
@@ -213,6 +213,9 @@ class RecipeIngredientForm extends Component {
         stateUpdated: true
       }));
     }
+    console.log('STATE', this.state.ingredient);
+    console.log('SV STATE', selectedValue);
+
     clearInterval(this.timer);
     this.startTimer();
   };
@@ -282,10 +285,7 @@ class RecipeIngredientForm extends Component {
       value: 'no-supplier-selected'
     };
     if (!isEmpty(item.ingredient.suppliers)) {
-      console.log(
-        'item.ingredient.suppliers',
-        item.ingredient.suppliers
-      );
+      console.log('RENDER');
 
       options = item.ingredient.suppliers.map(supplier => {
         let selectData = {};

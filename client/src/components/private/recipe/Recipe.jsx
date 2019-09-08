@@ -16,10 +16,21 @@ import { setErrors } from '../../../redux/errorActions';
 import { addOrEditRecipe } from './recipeActions';
 
 class Recipe extends Component {
+  state = {
+    selectedRecipe: {
+      isNew: false
+    },
+    showRecipeResults: false
+  };
   componentDidMount = () => {
-    // console.log('Recipe Page Loaded', this.props.venues);
+    const {
+      selectedRecipe,
+      profile,
+      isAuthenticated
+    } = this.props.recipe;
 
-    const { profile, isAuthenticated } = this.props;
+    this.setState({ selectedRecipe: selectedRecipe });
+
     if (isAuthenticated === null || isAuthenticated === false) {
       return <Redirect to="/signin" />;
     }
@@ -34,6 +45,55 @@ class Recipe extends Component {
     }
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    const { selectedRecipe } = this.props.recipe;
+    if (prevProps.recipe.selectedRecipe !== selectedRecipe) {
+      this.setState({ selectedRecipe: selectedRecipe });
+    }
+
+    console.log('prevCon', prevProps.recipe.selectedRecipe);
+    console.log('stateCheck', this.state);
+
+    if (
+      prevState.selectedRecipe !== null &&
+      this.state.selectedRecipe !== null
+    ) {
+      console.log('HIT**', prevState);
+      console.log('HIT**', this.state);
+
+      if (
+        prevState.selectedRecipe.isNew !==
+        this.state.selectedRecipe.isNew
+      ) {
+        console.log('Show Recipe Results');
+        this.setState(prevState => ({
+          ...prevState,
+          showRecipeResults: true
+        }));
+      }
+    }
+
+    console.log(
+      'prev-showRecipeResults',
+      prevState.showRecipeResults
+    );
+    console.log(
+      'props-showRecipeResults',
+      this.state.showRecipeResults
+    );
+
+    if (
+      prevState.showRecipeResults !== this.state.showRecipeResults
+    ) {
+      console.log('displayRecipeResults');
+      if (this.state.showRecipeResults === true) {
+        document
+          .getElementById('recipeResults')
+          .scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   componentWillUnmount() {
     if (!isEmpty(this.props.ingredient.selectedIngredient)) {
       this.props.removeSelectedIngredient();
@@ -41,7 +101,7 @@ class Recipe extends Component {
   }
 
   handleCalculateRecipe = () => {
-    const { selectedRecipe } = this.props.recipe;
+    const { selectedRecipe } = this.state;
     console.log('Header Recipe', selectedRecipe);
     let errors = {};
 
@@ -98,16 +158,16 @@ class Recipe extends Component {
         content = (
           <Fragment>
             <RecipeHeader />
-            <AccordionBoxWithOpenHeader
+            {/* <AccordionBoxWithOpenHeader
               headerText="Venue Details + Edit form for operating costs"
               id="venueAccordion"
             >
               <div>Edit the venue</div>
-            </AccordionBoxWithOpenHeader>
-            {!isEmpty(recipe.selectedRecipe) &&
+            </AccordionBoxWithOpenHeader> */}
+            {/* {!isEmpty(recipe.selectedRecipe) &&
               recipe.selectedRecipe.confirmed && (
                 <RecipeIngredients />
-              )}
+              )} */}
             <RecipeDetails />
             {!isEmpty(recipe.selectedRecipe) &&
               recipe.selectedRecipe.confirmed && <RecipeResults />}

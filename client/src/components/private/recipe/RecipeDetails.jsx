@@ -675,6 +675,7 @@ class RecipeDetails extends Component {
               </div>
             </div>
           </form>
+          <div id="recipeResults" />
         </section>
       </AccordionBox>
     );
