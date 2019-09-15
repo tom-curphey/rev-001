@@ -95,7 +95,8 @@ class SelectRecipe extends Component {
         displayName: capitalizeFirstLetter(selectedValue.label),
         processTime: [],
         ingredients: [],
-        isNew: true
+        isNew: true,
+        confirmed: false
       };
       newRecipe.urlName = newRecipe.displayName
         .trim()

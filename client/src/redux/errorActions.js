@@ -8,7 +8,7 @@ export const removeErrors = () => async dispatch => {
 };
 
 export const displayErrors = err => async dispatch => {
-  console.log('err.response.data.errors', err.response.data.errors);
+  // console.log('err.response.data.errors', err.response.data.errors);
 
   if (err.response.data.errors) {
     var errObj = err.response.data.errors.reduce((obj, item) => {

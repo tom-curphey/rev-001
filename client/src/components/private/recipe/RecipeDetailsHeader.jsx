@@ -125,17 +125,17 @@ class RecipeDetailsHeader extends Component {
 
   updateReduxSelectedRecipeHeader = () => {
     const { selectedRecipe } = this.state;
+    console.log('selectedRecipe -->', selectedRecipe);
     let errors = {};
 
     if (isEmpty(selectedRecipe.displayName)) {
-      console.log('checking', selectedRecipe);
-      if (isEmpty(selectedRecipe.displayName))
-        errors.recipeDisplayName = 'Please enter recipe name above';
+      errors.recipeDisplayName = 'Please enter recipe name above';
       this.setState({ displayRecipeNameForm: true });
     } else {
       console.log('checking2', selectedRecipe);
       this.setState({ displayRecipeNameForm: false });
     }
+
     this.props.updateReduxSelectedRecipe(selectedRecipe);
     this.props.setErrors(errors);
 
@@ -195,16 +195,18 @@ class RecipeDetailsHeader extends Component {
                 onMouseOver={this.onEditRecipeHover}
                 onMouseOut={this.onEditRecipeHover}
               />
-              <HoverTextInput
-                value={displayName}
-                name="recipeName"
-                onChange={this.editRecipeName}
-                onBlur={this.updateReduxSelectedRecipeHeader}
-                type="text"
-                // error={errors.displayName && errors.displayName}
-                onKeyDown={this.handleEnterKeyDown}
-                isForm={displayRecipeNameForm}
-              />
+              <form onBlur={this.updateReduxSelectedRecipeHeader}>
+                <HoverTextInput
+                  value={displayName}
+                  name="recipeName"
+                  onChange={this.editRecipeName}
+                  // onBlur={() => alert('hit')}
+                  type="text"
+                  // error={errors.displayName && errors.displayName}
+                  onKeyDown={this.handleEnterKeyDown}
+                  isForm={displayRecipeNameForm}
+                />
+              </form>
             </div>
           ) : (
             <SelectRecipe />

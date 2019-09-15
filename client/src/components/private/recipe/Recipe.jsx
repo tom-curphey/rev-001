@@ -18,8 +18,9 @@ import { addOrEditRecipe } from './recipeActions';
 class Recipe extends Component {
   state = {
     selectedRecipe: {
-      isNew: false
+      confirmed: false
     },
+    isNew: false,
     showRecipeResults: false
   };
   componentDidMount = () => {
@@ -29,7 +30,10 @@ class Recipe extends Component {
       isAuthenticated
     } = this.props.recipe;
 
-    this.setState({ selectedRecipe: selectedRecipe });
+    this.setState(prevState => ({
+      ...prevState,
+      selectedRecipe: selectedRecipe
+    }));
 
     if (isAuthenticated === null || isAuthenticated === false) {
       return <Redirect to="/signin" />;
@@ -48,23 +52,23 @@ class Recipe extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     const { selectedRecipe } = this.props.recipe;
     if (prevProps.recipe.selectedRecipe !== selectedRecipe) {
-      this.setState({ selectedRecipe: selectedRecipe });
+      this.setState(prevState => ({
+        ...prevState,
+        selectedRecipe: selectedRecipe
+      }));
     }
 
-    console.log('prevCon', prevProps.recipe.selectedRecipe);
-    console.log('stateCheck', this.state);
-
     if (
-      prevState.selectedRecipe !== null &&
-      this.state.selectedRecipe !== null
+      !isEmpty(prevState.selectedRecipe) &&
+      !isEmpty(this.state.selectedRecipe)
     ) {
-      console.log('HIT**', prevState);
-      console.log('HIT**', this.state);
-
+      console.log('HIT**>', prevState);
+      console.log('HIT**>', this.state);
       if (
-        prevState.selectedRecipe.isNew !==
-        this.state.selectedRecipe.isNew
+        prevState.selectedRecipe.confirmed !==
+        this.state.selectedRecipe.confirmed
       ) {
+        alert('Confirm Recipe On Calculate changed');
         console.log('Show Recipe Results');
         this.setState(prevState => ({
           ...prevState,
@@ -73,25 +77,23 @@ class Recipe extends Component {
       }
     }
 
-    console.log(
-      'prev-showRecipeResults',
-      prevState.showRecipeResults
-    );
-    console.log(
-      'props-showRecipeResults',
-      this.state.showRecipeResults
-    );
+    // console.log(
+    //   'prev-showRecipeResults',
+    //   prevState.showRecipeResults
+    // );
+    // console.log(
+    //   'props-showRecipeResults',
+    //   this.state.showRecipeResults
+    // );
 
-    if (
-      prevState.showRecipeResults !== this.state.showRecipeResults
-    ) {
-      console.log('displayRecipeResults');
-      if (this.state.showRecipeResults === true) {
-        document
-          .getElementById('recipeResults')
-          .scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    // if (
+    //   prevState.showRecipeResults !== this.state.showRecipeResults
+    // ) {
+    //   console.log('displayRecipeResults');
+    //   if (this.state.showRecipeResults === true) {
+
+    //   }
+    // }
   };
 
   componentWillUnmount() {
@@ -116,13 +118,28 @@ class Recipe extends Component {
     if (isEmpty(selectedRecipe.ingredients))
       errors.recipeIngredients =
         'All recipes need atleast 1 ingredient to be calculated..';
+    if (
+      !isEmpty(selectedRecipe.ingredients) &&
+      selectedRecipe.ingredients.length === 1
+    ) {
+      const iCheck = selectedRecipe.ingredients.filter(i => {
+        return i.ingredient === '__isNew__';
+      });
+      if (!isEmpty(iCheck)) {
+        console.log('No Description');
+        errors.recipeIngredients =
+          'Please add an ingredient before calculating recipe cost';
+      }
+    }
 
     if (!isEmpty(errors)) {
       this.props.setErrors(errors);
     } else {
-      console.log('All good');
+      console.log('All good', selectedRecipe);
       selectedRecipe.confirmed = true;
       this.props.addOrEditRecipe(selectedRecipe);
+
+      this.scrollToResults();
     }
   };
 
@@ -139,6 +156,14 @@ class Recipe extends Component {
 
     recipeData.ingredients = updatedIngredients;
     this.setState({ updated: true, selectedRecipe: recipeData });
+  };
+
+  scrollToResults = () => {
+    setTimeout(() => {
+      document
+        .getElementById('recipeResults')
+        .scrollIntoView({ behavior: 'smooth' });
+    }, 1000);
   };
 
   render() {

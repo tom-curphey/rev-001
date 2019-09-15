@@ -60,17 +60,16 @@ class HoverTextInput extends Component {
     return (
       <div className="changeText" onClick={this.displayForm}>
         {displayForm ? (
-          <form onBlur={this.handleOnBlur}>
-            <TextInputNoLabel
-              value={value}
-              name={name}
-              onChange={onChange}
-              type="text"
-              autoFocus={true}
-              // error={errors.displayName && errors.displayName}
-              onKeyDown={this.handleEnterKeyDown}
-            />
-          </form>
+          <TextInputNoLabel
+            value={value}
+            name={name}
+            onChange={onChange}
+            onBlur={this.handleOnBlur}
+            type="text"
+            autoFocus={true}
+            // error={errors.displayName && errors.displayName}
+            onKeyDown={this.handleEnterKeyDown}
+          />
         ) : (
           <span onClick={this.getRecipeNameForm}>
             {value && value}
