@@ -259,3 +259,7 @@ export const setIngredientsLoading = () => async dispatch => {
     type: SET_INGREDIENTS_LOADING
   });
 };
+
+export const updateReduxIngredientState = selectedIngredient => async dispatch => {
+  dispatch(setSelectedIngredient(selectedIngredient));
+};

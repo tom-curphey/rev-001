@@ -57,43 +57,6 @@ class Recipe extends Component {
         selectedRecipe: selectedRecipe
       }));
     }
-
-    if (
-      !isEmpty(prevState.selectedRecipe) &&
-      !isEmpty(this.state.selectedRecipe)
-    ) {
-      console.log('HIT**>', prevState);
-      console.log('HIT**>', this.state);
-      if (
-        prevState.selectedRecipe.confirmed !==
-        this.state.selectedRecipe.confirmed
-      ) {
-        alert('Confirm Recipe On Calculate changed');
-        console.log('Show Recipe Results');
-        this.setState(prevState => ({
-          ...prevState,
-          showRecipeResults: true
-        }));
-      }
-    }
-
-    // console.log(
-    //   'prev-showRecipeResults',
-    //   prevState.showRecipeResults
-    // );
-    // console.log(
-    //   'props-showRecipeResults',
-    //   this.state.showRecipeResults
-    // );
-
-    // if (
-    //   prevState.showRecipeResults !== this.state.showRecipeResults
-    // ) {
-    //   console.log('displayRecipeResults');
-    //   if (this.state.showRecipeResults === true) {
-
-    //   }
-    // }
   };
 
   componentWillUnmount() {

@@ -60,7 +60,6 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
   }
 
   console.log('REQ.BODY ***', req.body);
-  console.log('DISPLAY NAME', displayName);
 
   const ingredientData = {};
   ingredientData.metrics = {};
@@ -144,8 +143,8 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
           });
         }
 
-        ingredient.ingredient.displayName =
-          ingredientData.displayName;
+        console.log('ingredient: ', ingredient);
+        ingredient.displayName = ingredientData.displayName;
         ingredient.urlName = ingredientData.urlName;
       }
     }
@@ -368,7 +367,7 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
       supplier.ingredients.push({ ingredient: ingredient._id });
     }
 
-    displayName;
+    // displayName;
 
     // Save to database
     await profile.save();
