@@ -33,29 +33,34 @@ import editIcon from '../../../images/edit.svg';
 import checkedGreenIcon from '../../../images/checkedGreen.svg';
 
 export class Ingredient extends Component {
-  state = {
-    selectedIngredient: {
-      metrics: {
-        whole: '',
-        cup: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIngredient: {
+        metrics: {
+          whole: '',
+          cup: ''
+        },
+        suppliers: []
       },
-      suppliers: []
-    },
-    selectedSupplier: {
-      supplier: {
-        _id: '',
-        displayName: ''
+      selectedSupplier: {
+        supplier: {
+          _id: '',
+          displayName: ''
+        },
+        packetCost: '',
+        packetGrams: '',
+        profilePacketCost: '',
+        profilePacketGrams: '',
+        preferred: false
       },
-      packetCost: '',
-      packetGrams: '',
-      profilePacketCost: '',
-      profilePacketGrams: '',
-      preferred: false
-    },
-    readyToSave: false,
-    displayIngredientNameForm: false,
-    selectedIngredientChanged: false
-  };
+      readyToSave: false,
+      displayIngredientNameForm: false,
+      selectedIngredientChanged: false
+    };
+
+    this.ingredientTextBox = React.createRef();
+  }
 
   componentDidMount() {
     this.props.loadIngredients();
@@ -593,16 +598,13 @@ export class Ingredient extends Component {
   };
 
   displayEditIngredientNameForm = () => {
-    console.log(
-      'displayIngredientNameForm',
-      this.state.displayIngredientNameForm
-    );
-
-    // if (this.state.displayIngredientNameForm === false) {
     this.setState({
-      displayIngredientNameForm: !this.state.displayIngredientNameForm
+      displayIngredientNameForm: true
     });
-    // }
+
+    document
+      .getElementById('ingredientTextBox')
+      .classList.add('editIngredientNameTextBox');
   };
 
   handleIngredientNameChange = e => {
@@ -624,6 +626,9 @@ export class Ingredient extends Component {
       this.setState({
         displayIngredientNameForm: false
       });
+      document
+        .getElementById('ingredientTextBox')
+        .classList.remove('editIngredientNameTextBox');
       this.props.removeErrors();
       this.props.updateReduxIngredientState(
         this.state.selectedIngredient
@@ -749,7 +754,11 @@ export class Ingredient extends Component {
       if (!isEmpty(ingredient.selectedIngredient)) {
         ingredientForm = (
           <Fragment>
-            <div className="editIngredientName">
+            <div
+              ref={this.ingredientTextBox}
+              id="ingredientTextBox"
+              className="editIngredientName"
+            >
               {displayIngredientNameForm ? (
                 <Fragment>
                   <form>
@@ -765,19 +774,6 @@ export class Ingredient extends Component {
                       onKeyDown={this.handleEnterKeyDown}
                     />
                   </form>
-                  <div
-                    className="ingredientNameEditIcon fullColor"
-                    // onClick={this.setIngredientLoading}
-                    onClick={this.displayEditIngredientNameForm}
-                  >
-                    <img
-                      src={checkedGreenIcon}
-                      alt="Edit icon to represent changing the ingredient name"
-
-                      // onMouseOver={this.onChangeRecipeHover}
-                      // onMouseOut={this.onChangeRecipeHover}
-                    />
-                  </div>
                 </Fragment>
               ) : (
                 <Fragment>

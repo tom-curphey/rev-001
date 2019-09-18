@@ -28,12 +28,10 @@ section.ingredient {
         margin-left: 16px;
       }
     }
+  }
 
-    div.ingredientNameEditIcon.fullColor {
-      img {
-        opacity: 1;
-      }
-    }
+  div.editIngredientName.editIngredientNameTextBox {
+    grid-template-columns: auto;
   }
 
   div.button {
