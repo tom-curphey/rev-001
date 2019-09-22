@@ -13,6 +13,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import Register from './components/public/auth/Register';
 import Recipe from './components/private/recipe/Recipe';
 import Ingredient from './components/private/ingredient/Ingredient';
+import Supplier from './components/private/supplier/Supplier';
 import AccountSettings from './components/private/profile/AccountSettings';
 import OnboardingVenue from './components/private/onboarding/OnboardingVenue';
 import NewFeature from './components/public/NewFeature';
@@ -90,6 +91,11 @@ const App = () => {
             exact
             path="/packaging"
             component={NewFeature}
+          />
+          <PrivateRoute
+            exact
+            path="/suppliers"
+            component={Supplier}
           />
           <PrivateRoute
             exact

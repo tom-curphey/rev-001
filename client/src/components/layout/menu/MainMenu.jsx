@@ -12,6 +12,7 @@ import chefhat from '../../../images/chef.svg';
 import apple from '../../../images/apple.svg';
 import packaging from '../../../images/packaging.svg';
 import menuIcon from '../../../images/menuIcon.svg';
+import trolley from '../../../images/trolleyBlack.svg';
 import { isEmpty } from '../../../utils/utils';
 
 const MainMenu = ({
@@ -81,7 +82,13 @@ const MainMenu = ({
               alt="Heart to indicate the preferred supplier"
             />
           </div>
-          <span>Packaging</span>
+          <span>Packagings</span>
+        </Link>
+        <Link className="menuItem" to="/suppliers">
+          <div>
+            <img src={trolley} alt="Supplier icon" />
+          </div>
+          <span>Suppliers</span>
         </Link>
       </nav>
       <nav className="subMenu">

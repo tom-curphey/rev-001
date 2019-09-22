@@ -30,7 +30,6 @@ import {
   convertProfilePacketCostIntoCostPer1kg
 } from '../../../utils/utils';
 import editIcon from '../../../images/edit.svg';
-import checkedGreenIcon from '../../../images/checkedGreen.svg';
 
 export class Ingredient extends Component {
   constructor(props) {

@@ -9,14 +9,9 @@ import {
   REMOVE_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 import axios from 'axios';
-import { updateSelectedIngredientSupplier } from '../ingredient/ingredientActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import {
-  isEmpty,
-  capitalizeFirstLetter,
-  convertProfilePacketCostIntoCostPer1kg
-} from '../../../utils/utils';
+import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 export const loadSuppliers = () => async dispatch => {
   try {
@@ -94,11 +89,7 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
-          // console.log('siSupplier', updatedSelectedSupplier);
-          // console.log(
-          //   'selectedIngredient',
-          //   selectedIngredient.suppliers
-          // );
+
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
           // Create new object combining the selected supplier from the suppliers list and the extra data as blank for formatting
