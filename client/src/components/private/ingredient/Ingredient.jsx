@@ -57,8 +57,6 @@ export class Ingredient extends Component {
       displayIngredientNameForm: false,
       selectedIngredientChanged: false
     };
-
-    this.ingredientTextBox = React.createRef();
   }
 
   componentDidMount() {

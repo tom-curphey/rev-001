@@ -1,120 +1,24 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import AuthMenu from '../../layout/menu/AuthMenu';
+import { connect } from 'react-redux';
+import { loadSuppliers } from './supplierActions';
 import Spinner from '../../layout/Spinner';
-import TextInput from '../../layout/input/TextInput';
-import {
-  loadSuppliers,
-  setPreferredSupplier,
-  updateSelectedSupplierState,
-  getSelectedSupplier,
-  updatePreferredSupplier,
-  removeSelectedSupplier,
-  removePreferredSupplier
-} from '../supplier/supplierActions';
+import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
-import editIcon from '../../../images/edit.svg';
 import SelectSupplier from './SelectSupplier';
+import SupplierDetailsForm from './SupplierDetailsForm';
 
 class Supplier extends Component {
-  state = {
-    selectedSupplier: {
-      supplier: {
-        _id: '',
-        displayName: ''
-      },
-      packetCost: '',
-      packetGrams: '',
-      profilePacketCost: '',
-      profilePacketGrams: '',
-      preferred: false
-    },
-    readyToSave: false,
-    displaySupplierNameForm: false,
-    selectedSupplierChanged: false
-  };
+  state = {};
 
   componentDidMount() {
     this.props.loadSuppliers();
-    const { supplier } = this.props;
-
-    if (!isEmpty(supplier.selectedSupplier)) {
-      if (isEmpty(supplier.selectedSupplier.displayName)) {
-        this.setState({
-          displaySupplierNameForm: true,
-          selectedSupplier: supplier.Selectedsupplier
-        });
-      } else {
-        this.setState({
-          selectedSupplier: supplier.selectedSupplier
-        });
-      }
-    }
-
-    if (
-      !isEmpty(supplier.selectedSupplier) &&
-      !isEmpty(supplier.suppliers)
-    ) {
-      setPreferredSupplier(supplier.selectedSupplier.supplier._id);
-
-      const slSupplier = supplier.suppliers.filter(sls => {
-        return sls._id === supplier.selectedSupplier.supplier._id;
-      });
-
-      if (!isEmpty(slSupplier)) {
-        const usiSupplier = {
-          ...supplier.selectedSupplier,
-          supplier: {
-            ...supplier.selectedSupplier.supplier,
-            address: slSupplier[0].address,
-            confirmedDetails: slSupplier[0].confirmedDetails,
-            email: slSupplier[0].email,
-            phone: slSupplier[0].phone,
-            urlName: slSupplier[0].urlName,
-            website: slSupplier[0].website
-          }
-        };
-        this.props.updateSelectedSupplierState(usiSupplier);
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { supplier, errors } = this.props;
-    const {
-      selectedSupplier,
-      displaySupplierNameForm,
-      selectedSupplierChanged
-    } = this.state;
-    if (isEmpty(supplier.suppliers)) {
-      this.props.loadSuppliers();
-    }
-
-    // If selected ingredient changes update local state with selected ingredient
-    if (
-      prevProps.supplier.selectedSupplier !==
-      supplier.selectedSupplier
-    ) {
-      if (isEmpty(errors)) {
-        this.setState({
-          selectedSupplier: supplier.selectedSupplier,
-          displaySupplierNameForm: false,
-          selectedSupplierChanged: true
-        });
-      }
-    }
   }
 
   render() {
     const { supplier, errors } = this.props;
-    const {
-      selectedSupplier,
-      readyToSave,
-      displaySupplierNameForm
-    } = this.state;
+    let supplierForm;
 
-    let supplierForm = 'gere';
     if (supplier && supplier.loading) {
       supplierForm = (
         <div style={{ marginTop: '200px' }}>
@@ -122,47 +26,12 @@ class Supplier extends Component {
         </div>
       );
     } else {
+      console.log('Load supplier');
       if (!isEmpty(supplier.selectedSupplier)) {
         supplierForm = (
           <Fragment>
-            <div id="supplierTextBox" className="editSupplierName">
-              {displaySupplierNameForm ? (
-                <Fragment>
-                  <form>
-                    <TextInput
-                      label="Supplier Name"
-                      value={selectedSupplier.displayName}
-                      name="displayName"
-                      onChange={this.handleSupplierNameChange}
-                      onBlur={this.updateSupplierName}
-                      type="text"
-                      error={errors.displayName && errors.displayName}
-                      autoFocus={true}
-                      onKeyDown={this.handleEnterKeyDown}
-                    />
-                  </form>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <SelectSupplier />
-                  <div
-                    className="supplierNameEditIcon"
-                    onClick={this.displayEditSupplierNameForm}
-                  >
-                    <img
-                      src={editIcon}
-                      alt="Edit icon to represent the changing the Supplier name"
-
-                      // onMouseOver={this.onChangeRecipeHover}
-                      // onMouseOut={this.onChangeRecipeHover}
-                    />
-                  </div>
-                </Fragment>
-              )}
-              {errors.supplier && (
-                <span className="errorMsg">{errors.supplier}</span>
-              )}
-            </div>
+            <SelectSupplier />
+            <SupplierDetailsForm />
           </Fragment>
         );
       } else {
@@ -172,12 +41,13 @@ class Supplier extends Component {
 
     return (
       <AuthMenu>
-        <section className="supplier">
+        <section className="ingredient">
           <div>
-            <h1>Supplier</h1>
+            <h1>Suppliers</h1>
             <h3>Search / Create / Edit</h3>
             {supplierForm}
           </div>
+          {/* @todo would it be worth showing an overview of the supplier in a panel here for example show the ingredients & map of suppliers ditribution locations? */}
         </section>
       </AuthMenu>
     );
@@ -185,13 +55,12 @@ class Supplier extends Component {
 }
 
 Supplier.propTypes = {
-  supplier: PropTypes.object.isRequired
+  supplier: PropTypes.object.isRequired,
+  loadSuppliers: PropTypes.func.isRequired
 };
 
 const mapState = state => ({
-  supplier: state.supplier,
-  profile: state.profile,
-  errors: state.errors
+  supplier: state.supplier
 });
 
 const actions = {

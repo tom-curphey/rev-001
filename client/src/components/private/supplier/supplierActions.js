@@ -62,8 +62,9 @@ export const getSelectedSupplier = (
   } else {
     // Find selected supplier in supplier list
     const sSupplier = suppliers.filter(ss => {
-      return ss._id === selectedSupplier.value;
+      return ss._id === selectedSupplier._id;
     });
+
     if (!isEmpty(sSupplier)) {
       // Check if selected ingredient has suppliers
       if (!isEmpty(selectedIngredient)) {
@@ -116,6 +117,7 @@ export const getSelectedSupplier = (
         }
       } else {
         console.log('Selected ingredient has no suppliers');
+        dispatch(setSelectedSupplier(sSupplier[0]));
       }
     } else {
       console.log('Selected supplier could not be found');

@@ -19,10 +19,10 @@ class SelectSupplier extends Component {
   };
 
   componentDidMount() {
-    if (!isEmpty(this.props.supplier.selectedsupplier)) {
+    if (!isEmpty(this.props.supplier.selectedSupplier)) {
       const { selectedSupplier } = this.props.supplier;
 
-      // console.log('selectedSupplier', selectedSupplier);
+      console.log('selectedSupplier -->', selectedSupplier);
 
       let selectedValue = {};
       selectedValue.label = selectedSupplier.displayName;
@@ -36,17 +36,22 @@ class SelectSupplier extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      !isEmpty(this.props.supplier.selectedSupplier) &&
-      prevProps.supplier.selectedSupplier !==
-        this.props.supplier.selectedSupplier
-    ) {
-      const { selectedSupplier } = this.props.supplier;
-      // console.log('selectedSupplier - UP', selectedSupplier);sss
-      // if (!selectedSupplier.new) {
-      let selectedValue = {};
-      selectedValue.label = selectedSupplier.displayName;
+    const {
+      supplier: { selectedSupplier },
+      errors
+    } = this.props;
+    console.log(
+      'update prevProps**',
+      prevProps.supplier.selectedSupplier
+    );
+    console.log('update Props**', selectedSupplier);
 
+    // If selected ingredient changes update local state with selected ingredient
+    if (prevProps.supplier.selectedSupplier !== selectedSupplier) {
+      console.log('Selected Supplier', selectedSupplier);
+      let selectedValue = {
+        label: selectedSupplier.displayName
+      };
       if (!selectedSupplier._id) {
         selectedValue.value = 'new';
       } else {
@@ -57,26 +62,21 @@ class SelectSupplier extends Component {
   }
 
   componentWillUnmount() {
-    // console.log('SELECT Supplier UNMOUNTED');
+    console.log('SELECT Supplier UNMOUNTED');
   }
 
   getSelectedValue = selectedValue => {
     // let addSupplier = false;
     let selectedSupplier = [];
     if (selectedValue.__isNew__) {
+      // @todo
       this.props.removeSelectedSupplier();
       this.props.removeSelectedSupplier();
       // addSupplier = true;
-      const newSupplier = {};
-      newSupplier.metrics = {};
-      newSupplier.displayName = capitalizeFirstLetter(
-        selectedValue.label
-      );
-
-      // newSupplier.new = true;
-      newSupplier.metrics.cup = '';
-      newSupplier.metrics.whole = '';
-      newSupplier.suppliers = [];
+      const newSupplier = {
+        displayName: capitalizeFirstLetter(selectedValue.label),
+        __isNew__: true
+      };
       selectedSupplier.push(newSupplier);
     } else {
       if (this.props.supplier.suppliers !== null) {
@@ -87,11 +87,12 @@ class SelectSupplier extends Component {
         );
       }
     }
+
     if (!isEmpty(selectedSupplier)) {
-      this.props.removePreferredSupplier();
+      // this.props.removePreferredSupplier();
       this.props.getSelectedSupplier(
         selectedSupplier[0],
-        this.props.profile.profile
+        this.props.supplier.suppliers
       );
     }
   };
@@ -110,7 +111,8 @@ class SelectSupplier extends Component {
         return selectData;
       });
 
-      console.log('selectedValue', selectedValue);
+      console.log('RENDER selectedValue', selectedValue);
+      console.log('RENDER supplier', this.props.supplier);
 
       formContent = (
         <CreatableSelectInputBorder
