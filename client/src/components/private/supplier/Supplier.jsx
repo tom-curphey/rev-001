@@ -10,21 +10,22 @@ import SupplierDetailsForm from './SupplierDetailsForm';
 
 class Supplier extends Component {
   state = {
-    selectedSupplier: {
-      email: ''
-    }
+    selectedSupplier: {}
   };
 
   componentDidMount = () => {
     console.log('mounted');
 
-    if (this.props.supplier.selectedSupplier) {
+    if (
+      this.props.supplier.selectedSupplier &&
+      this.props.supplier.selectedSupplier.supplier
+    ) {
       console.log(
         'selectSupplier',
         this.props.supplier.selectSupplier
       );
       this.setState({
-        selectedSupplier: { email: 'hey' }
+        selectedSupplier: this.props.supplier.selectSupplier.supplier
       });
     } else {
       this.props.loadSuppliers();
@@ -42,6 +43,7 @@ class Supplier extends Component {
       ) {
         this.setState({
           selectedSupplier: this.props.supplier.selectedSupplier
+            .supplier
         });
       }
     }
@@ -75,12 +77,12 @@ class Supplier extends Component {
         </div>
       );
     } else {
-      if (!isEmpty(selectedSupplier.supplier)) {
+      if (!isEmpty(selectedSupplier)) {
         supplierForm = (
           <Fragment>
             <SelectSupplier />
             <SupplierDetailsForm
-              selectedSupplier={selectedSupplier.supplier}
+              selectedSupplier={selectedSupplier}
               errors={errors}
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
@@ -94,7 +96,7 @@ class Supplier extends Component {
 
     return (
       <AuthMenu>
-        <section className="ingredient">
+        <section className="ingredient supplier">
           <div>
             <h1>Suppliers</h1>
             <h3>Search / Create / Edit</h3>

@@ -12,6 +12,12 @@ section.supplier {
     font-weight: 400;
     margin: 10px 0px 30px;
   }
+
+  div.button {
+    nav.readyToSaveClass {
+      background-color: $cOrangeDark;
+    }
+  }
 }
 
 section.supplierForm {

@@ -20,15 +20,39 @@ const SupplierDetailsForm = ({
   console.log('selectedSupplier**', selectedSupplier);
 
   return (
-    <section className="supplierDetailsForm">
+    <section className="supplierForm supplierDetailsForm">
       {/* <h2>Add New Ingredient Metric Weight</h2> */}
       <form>
-        <TextInput
+        <TextInputHorizontal
           label="Supplier Email"
           value={selectedSupplier.email}
           name="email"
           onChange={handleChange}
           error={errors.email && errors.email}
+          autoFocus={true}
+        />
+        <TextInputHorizontal
+          label="Supplier Address"
+          value={selectedSupplier.address}
+          name="address"
+          onChange={handleChange}
+          error={errors.address && errors.address}
+          autoFocus={true}
+        />
+        <TextInputHorizontal
+          label="Supplier Phone"
+          value={selectedSupplier.phone}
+          name="phone"
+          onChange={handleChange}
+          error={errors.phone && errors.phone}
+          autoFocus={true}
+        />
+        <TextInputHorizontal
+          label="Supplier Website"
+          value={selectedSupplier.website}
+          name="website"
+          onChange={handleChange}
+          error={errors.website && errors.website}
           autoFocus={true}
         />
         <div className="button">
