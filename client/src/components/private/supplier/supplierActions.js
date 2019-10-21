@@ -117,7 +117,25 @@ export const getSelectedSupplier = (
         }
       } else {
         console.log('Selected ingredient has no suppliers');
-        dispatch(setSelectedSupplier(sSupplier[0]));
+        const formattedSupplier = {
+          packetCost: '',
+          packetGrams: '',
+          preferred: false,
+          profilePacketCost: '',
+          profilePacketGrams: '',
+          // profileSaveCount: 0,
+          supplier: {
+            _id: sSupplier[0]._id,
+            displayName: sSupplier[0].displayName,
+            address: sSupplier[0].address,
+            confirmedDetails: sSupplier[0].confirmedDetails,
+            email: sSupplier[0].email,
+            phone: sSupplier[0].phone,
+            urlName: sSupplier[0].urlName,
+            website: sSupplier[0].website
+          }
+        };
+        dispatch(setSelectedSupplier(formattedSupplier));
       }
     } else {
       console.log('Selected supplier could not be found');
@@ -189,6 +207,8 @@ export const addOrEditSupplier = (
   supplierData,
   ingredientData
 ) => async dispatch => {
+  console.log('supplierData', supplierData);
+
   try {
     // dispatch(setVenueLoading());
     const config = {
@@ -202,11 +222,9 @@ export const addOrEditSupplier = (
 
     const data = {
       ...supplierData,
-      ingredient: ingredientData.ingredient
-        ? ingredientData.ingredient
-        : null,
-      packetCost: ingredientData.packetCost,
-      packetGrams: ingredientData.packetGrams
+      ingredient: ingredientData ? ingredientData.ingredient : null,
+      packetCost: ingredientData ? ingredientData.packetCost : null,
+      packetGrams: ingredientData ? ingredientData.packetGrams : null
     };
 
     const body = JSON.stringify(data);

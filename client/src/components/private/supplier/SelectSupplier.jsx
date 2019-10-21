@@ -20,16 +20,13 @@ class SelectSupplier extends Component {
 
   componentDidMount() {
     if (!isEmpty(this.props.supplier.selectedSupplier)) {
-      const { selectedSupplier } = this.props.supplier;
-
-      console.log('selectedSupplier -->', selectedSupplier);
-
+      const { supplier } = this.props.supplier.selectedSupplier;
       let selectedValue = {};
-      selectedValue.label = selectedSupplier.displayName;
-      if (!selectedSupplier._id) {
+      selectedValue.label = supplier.displayName;
+      if (!supplier._id) {
         selectedValue.value = 'new';
       } else {
-        selectedValue.value = selectedSupplier._id;
+        selectedValue.value = supplier._id;
       }
       this.setState({ selectedValue: selectedValue });
     }
@@ -40,22 +37,16 @@ class SelectSupplier extends Component {
       supplier: { selectedSupplier },
       errors
     } = this.props;
-    console.log(
-      'update prevProps**',
-      prevProps.supplier.selectedSupplier
-    );
-    console.log('update Props**', selectedSupplier);
-
     // If selected ingredient changes update local state with selected ingredient
     if (prevProps.supplier.selectedSupplier !== selectedSupplier) {
-      console.log('Selected Supplier', selectedSupplier);
+      console.log('Selected Supplier', selectedSupplier.supplier);
       let selectedValue = {
-        label: selectedSupplier.displayName
+        label: selectedSupplier.supplier.displayName
       };
-      if (!selectedSupplier._id) {
+      if (!selectedSupplier.supplier._id) {
         selectedValue.value = 'new';
       } else {
-        selectedValue.value = selectedSupplier._id;
+        selectedValue.value = selectedSupplier.supplier._id;
       }
       this.setState({ selectedValue: selectedValue });
     }
@@ -110,10 +101,6 @@ class SelectSupplier extends Component {
         selectData.value = supplier._id;
         return selectData;
       });
-
-      console.log('RENDER selectedValue', selectedValue);
-      console.log('RENDER supplier', this.props.supplier);
-
       formContent = (
         <CreatableSelectInputBorder
           value={selectedValue}

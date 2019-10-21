@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import AuthMenu from '../../layout/menu/AuthMenu';
 import { connect } from 'react-redux';
-import { loadSuppliers } from './supplierActions';
+import { loadSuppliers, addOrEditSupplier } from './supplierActions';
 import Spinner from '../../layout/Spinner';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
@@ -9,14 +9,63 @@ import SelectSupplier from './SelectSupplier';
 import SupplierDetailsForm from './SupplierDetailsForm';
 
 class Supplier extends Component {
-  state = {};
+  state = {
+    selectedSupplier: {
+      email: ''
+    }
+  };
 
-  componentDidMount() {
-    this.props.loadSuppliers();
-  }
+  componentDidMount = () => {
+    console.log('mounted');
+
+    if (this.props.supplier.selectedSupplier) {
+      console.log(
+        'selectSupplier',
+        this.props.supplier.selectSupplier
+      );
+      this.setState({
+        selectedSupplier: { email: 'hey' }
+      });
+    } else {
+      this.props.loadSuppliers();
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (
+      prevProps.supplier.selectedSupplier !==
+      this.props.supplier.selectedSupplier
+    ) {
+      if (
+        this.props.supplier &&
+        this.props.supplier.selectedSupplier
+      ) {
+        this.setState({
+          selectedSupplier: this.props.supplier.selectedSupplier
+        });
+      }
+    }
+  };
+
+  handleChange = e => {
+    e.persist();
+    this.setState(prevState => ({
+      selectedSupplier: {
+        ...prevState.selectedSupplier,
+        [e.target.name]: e.target.value
+      }
+    }));
+    // this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = () => {
+    console.log('hit###', this.state);
+    this.props.addOrEditSupplier(this.state.selectedSupplier);
+  };
 
   render() {
     const { supplier, errors } = this.props;
+    const { selectedSupplier } = this.state;
     let supplierForm;
 
     if (supplier && supplier.loading) {
@@ -26,12 +75,16 @@ class Supplier extends Component {
         </div>
       );
     } else {
-      console.log('Load supplier');
-      if (!isEmpty(supplier.selectedSupplier)) {
+      if (!isEmpty(selectedSupplier.supplier)) {
         supplierForm = (
           <Fragment>
             <SelectSupplier />
-            <SupplierDetailsForm />
+            <SupplierDetailsForm
+              selectedSupplier={selectedSupplier.supplier}
+              errors={errors}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit}
+            />
           </Fragment>
         );
       } else {
@@ -56,15 +109,18 @@ class Supplier extends Component {
 
 Supplier.propTypes = {
   supplier: PropTypes.object.isRequired,
-  loadSuppliers: PropTypes.func.isRequired
+  loadSuppliers: PropTypes.func.isRequired,
+  addOrEditSupplier: PropTypes.func.isRequired
 };
 
 const mapState = state => ({
-  supplier: state.supplier
+  supplier: state.supplier,
+  errors: state.errors
 });
 
 const actions = {
-  loadSuppliers
+  loadSuppliers,
+  addOrEditSupplier
 };
 
 export default connect(
