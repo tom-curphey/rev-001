@@ -1,5 +1,25 @@
 @import './colours.scss';
 
+section.supplier {
+  padding: 30px 0px 0px 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 400px auto;
+  grid-gap: 30px;
+
+  h3 {
+    color: $cGrey;
+    font-weight: 400;
+    margin: 10px 0px 30px;
+  }
+
+  div.button {
+    nav.readyToSaveClass {
+      background-color: $cOrangeDark;
+    }
+  }
+}
+
 section.supplierForm {
   margin-top: 30px;
 }

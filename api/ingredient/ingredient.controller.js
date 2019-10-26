@@ -59,8 +59,6 @@ module.exports.addOrEditIngredientAndSupplier = async (req, res) => {
     });
   }
 
-  console.log('REQ.BODY ***', req.body);
-
   const ingredientData = {};
   ingredientData.metrics = {};
   if (ingredientID) ingredientData._id = ingredientID;

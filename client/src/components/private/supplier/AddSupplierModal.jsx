@@ -47,7 +47,6 @@ class AddSupplierModal extends Component {
           });
         }
       } else {
-        console.log('New supplier added');
         this.setState({
           showModal: false
         });

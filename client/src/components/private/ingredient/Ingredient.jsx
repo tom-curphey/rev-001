@@ -30,7 +30,6 @@ import {
   convertProfilePacketCostIntoCostPer1kg
 } from '../../../utils/utils';
 import editIcon from '../../../images/edit.svg';
-import checkedGreenIcon from '../../../images/checkedGreen.svg';
 
 export class Ingredient extends Component {
   constructor(props) {
@@ -58,8 +57,6 @@ export class Ingredient extends Component {
       displayIngredientNameForm: false,
       selectedIngredientChanged: false
     };
-
-    this.ingredientTextBox = React.createRef();
   }
 
   componentDidMount() {

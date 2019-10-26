@@ -28,7 +28,7 @@ module.exports.getSuppliers = async (req, res) => {
 };
 
 module.exports.addOrEditSupplier = async (req, res) => {
-  console.log('req.body ####>', req.body);
+  console.log('req.body supplier ####>', req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -40,11 +40,13 @@ module.exports.addOrEditSupplier = async (req, res) => {
     email,
     phone,
     address,
-    website
+    website,
+    ingredients,
+    confirmedDetails
   } = req.body;
 
   const supplierData = {};
-  supplierData.metrics = {};
+
   if (_id) supplierData._id = _id;
   supplierData.user = req.user.id;
   supplierData.displayName = displayName;
@@ -56,17 +58,69 @@ module.exports.addOrEditSupplier = async (req, res) => {
   supplierData.phone = phone;
   supplierData.address = address;
   supplierData.website = website;
-
+  supplierData.confirmedDetails = confirmedDetails;
+  supplierData.ingredients = ingredients;
+  if (req.body.ingredient) {
+    supplierData.metrics = {};
+  }
   const ingredientData = {
     ingredient: req.body.ingredient,
     packetCost: req.body.packetCost,
     packetGrams: req.body.packetGrams
   };
 
+  console.log('supplier DATA +++ ', supplierData);
+
   try {
     let supplier;
     if (_id) {
-      supplier = await Supplier.findById(_id);
+      supplier = await Supplier.findById(supplierData._id);
+      if (supplier.length === 0) {
+        // Error - There is already an supplier by this name
+        return res.status(400).json({
+          errors: [
+            {
+              param: 'supplier',
+              msg: 'Supplier could not be saved..'
+            }
+          ]
+        });
+      }
+
+      if (supplier.displayName !== supplierData.displayName) {
+        let supplierNameCheck = await Supplier.find({
+          urlName: supplierData.urlName
+        });
+
+        // console.log('supplier', supplier);
+
+        if (supplierNameCheck.length !== 0) {
+          // Error - There is already an supplier by this name
+          return res.status(400).json({
+            errors: [
+              {
+                param: 'supplier',
+                msg: 'Supplier name already exists..'
+              }
+            ]
+          });
+        }
+      }
+
+      console.log('supplier', supplier);
+
+      supplier.displayName = supplierData.displayName;
+      supplier.urlName = supplierData.urlName;
+      supplier.email = supplierData.email;
+      supplier.phone = supplierData.phone;
+      supplier.address = supplierData.address;
+      supplier.website = supplierData.website;
+
+      console.log('up supplier', supplier);
+
+      await supplier.save();
+      console.log('updated supplier  +++ ', supplier);
+      return res.status(200).json(supplier);
     } else {
       supplier = await Supplier.findOne({
         $or: [

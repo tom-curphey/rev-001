@@ -9,14 +9,9 @@ import {
   REMOVE_PREFERRED_SUPPLIER
 } from '../../../redux/types';
 import axios from 'axios';
-import { updateSelectedIngredientSupplier } from '../ingredient/ingredientActions';
 import { displayErrors } from '../../../redux/errorActions';
 import { setAlert } from '../../layout/alert/alertActions';
-import {
-  isEmpty,
-  capitalizeFirstLetter,
-  convertProfilePacketCostIntoCostPer1kg
-} from '../../../utils/utils';
+import { isEmpty, capitalizeFirstLetter } from '../../../utils/utils';
 
 export const loadSuppliers = () => async dispatch => {
   try {
@@ -67,8 +62,9 @@ export const getSelectedSupplier = (
   } else {
     // Find selected supplier in supplier list
     const sSupplier = suppliers.filter(ss => {
-      return ss._id === selectedSupplier.value;
+      return ss._id === selectedSupplier._id;
     });
+
     if (!isEmpty(sSupplier)) {
       // Check if selected ingredient has suppliers
       if (!isEmpty(selectedIngredient)) {
@@ -94,11 +90,7 @@ export const getSelectedSupplier = (
               website: sSupplier[0].website
             }
           };
-          // console.log('siSupplier', updatedSelectedSupplier);
-          // console.log(
-          //   'selectedIngredient',
-          //   selectedIngredient.suppliers
-          // );
+
           dispatch(setSelectedSupplier(updatedSelectedSupplier));
         } else {
           // Create new object combining the selected supplier from the suppliers list and the extra data as blank for formatting
@@ -125,6 +117,25 @@ export const getSelectedSupplier = (
         }
       } else {
         console.log('Selected ingredient has no suppliers');
+        const formattedSupplier = {
+          packetCost: '',
+          packetGrams: '',
+          preferred: false,
+          profilePacketCost: '',
+          profilePacketGrams: '',
+          // profileSaveCount: 0,
+          supplier: {
+            _id: sSupplier[0]._id,
+            displayName: sSupplier[0].displayName,
+            address: sSupplier[0].address,
+            confirmedDetails: sSupplier[0].confirmedDetails,
+            email: sSupplier[0].email,
+            phone: sSupplier[0].phone,
+            urlName: sSupplier[0].urlName,
+            website: sSupplier[0].website
+          }
+        };
+        dispatch(setSelectedSupplier(formattedSupplier));
       }
     } else {
       console.log('Selected supplier could not be found');
@@ -196,6 +207,8 @@ export const addOrEditSupplier = (
   supplierData,
   ingredientData
 ) => async dispatch => {
+  console.log('supplierData', supplierData);
+
   try {
     // dispatch(setVenueLoading());
     const config = {
@@ -209,11 +222,9 @@ export const addOrEditSupplier = (
 
     const data = {
       ...supplierData,
-      ingredient: ingredientData.ingredient
-        ? ingredientData.ingredient
-        : null,
-      packetCost: ingredientData.packetCost,
-      packetGrams: ingredientData.packetGrams
+      ingredient: ingredientData ? ingredientData.ingredient : null,
+      packetCost: ingredientData ? ingredientData.packetCost : null,
+      packetGrams: ingredientData ? ingredientData.packetGrams : null
     };
 
     const body = JSON.stringify(data);
