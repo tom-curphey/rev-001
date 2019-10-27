@@ -38,8 +38,13 @@ class Supplier extends Component {
       ) {
         this.setState({
           selectedSupplier: this.props.supplier.selectedSupplier
-            .supplier
+            .supplier,
+          displaySupplierNameForm: false
         });
+        const textbox = document.getElementById('supplierTextBox');
+        if (textbox) {
+          textbox.classList.remove('editSupplierNameTextBox');
+        }
       }
     }
 
@@ -84,7 +89,7 @@ class Supplier extends Component {
       this.props.updateReduxSupplierState(
         this.state.selectedSupplier
       );
-      this.props.removeErrors();
+      // this.props.removeErrors();
     }
     // if (this.state.readyToSave) {
     this.handleSubmit();
@@ -99,12 +104,15 @@ class Supplier extends Component {
         [e.target.name]: e.target.value
       }
     }));
-    if (this.props.errors) {
-      this.props.removeErrors();
+
+    if (!isEmpty(this.props.errors)) {
+      console.log('#### HELLO', this.props.errors);
+      // this.props.removeErrors();
     }
   };
 
   handleSubmit = () => {
+    this.props.removeErrors();
     this.props.addOrEditSupplier(this.state.selectedSupplier);
   };
 
