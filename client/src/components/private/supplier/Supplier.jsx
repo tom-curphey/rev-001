@@ -1,16 +1,24 @@
 import React, { Component, Fragment } from 'react';
 import AuthMenu from '../../layout/menu/AuthMenu';
 import { connect } from 'react-redux';
-import { loadSuppliers, addOrEditSupplier } from './supplierActions';
+import {
+  loadSuppliers,
+  addOrEditSupplier,
+  updateReduxSupplierState
+} from './supplierActions';
+import { removeErrors, setErrors } from '../../../redux/errorActions';
 import Spinner from '../../layout/Spinner';
 import PropTypes from 'prop-types';
 import { isEmpty } from '../../../utils/utils';
 import SelectSupplier from './SelectSupplier';
 import SupplierDetailsForm from './SupplierDetailsForm';
+import editIcon from '../../../images/edit.svg';
+import TextInput from '../../layout/input/TextInput';
 
 class Supplier extends Component {
   state = {
-    selectedSupplier: {}
+    selectedSupplier: {},
+    displaySupplierNameForm: false
   };
 
   componentDidMount = () => {
@@ -20,10 +28,6 @@ class Supplier extends Component {
       this.props.supplier.selectedSupplier &&
       this.props.supplier.selectedSupplier.supplier
     ) {
-      console.log(
-        'selectSupplier',
-        this.props.supplier.selectSupplier
-      );
       this.setState({
         selectedSupplier: this.props.supplier.selectSupplier.supplier
       });
@@ -47,6 +51,53 @@ class Supplier extends Component {
         });
       }
     }
+
+    if (prevProps.errors !== this.props.errors) {
+      if (this.props.errors.supplier) {
+        this.setState({
+          displaySupplierNameForm: true
+        });
+        const textbox = document.getElementById('supplierTextBox');
+
+        if (textbox) {
+          textbox.classList.add('editSupplierNameTextBox');
+        }
+      } else {
+        this.setState({
+          displaySupplierNameForm: false
+        });
+        const textbox = document.getElementById('supplierTextBox');
+        if (textbox) {
+          textbox.classList.remove('editSupplierNameTextBox');
+        }
+      }
+    }
+  };
+
+  displayEditSupplierNameForm = () => {
+    this.setState({
+      displaySupplierNameForm: true
+    });
+
+    document
+      .getElementById('supplierTextBox')
+      .classList.add('editSupplierNameTextBox');
+  };
+
+  updateSupplierName = () => {
+    if (isEmpty(this.state.selectedSupplier.displayName)) {
+      this.props.setErrors({
+        displayName: 'Supplier name is required'
+      });
+    } else {
+      this.props.updateReduxSupplierState(
+        this.state.selectedSupplier
+      );
+      this.props.removeErrors();
+    }
+    // if (this.state.readyToSave) {
+    this.handleSubmit();
+    // }
   };
 
   handleChange = e => {
@@ -57,18 +108,21 @@ class Supplier extends Component {
         [e.target.name]: e.target.value
       }
     }));
-    // this.setState({ [e.target.name]: e.target.value });
+    if (this.props.errors) {
+      this.props.removeErrors();
+    }
   };
 
   handleSubmit = () => {
-    console.log('hit###', this.state);
     this.props.addOrEditSupplier(this.state.selectedSupplier);
   };
 
   render() {
     const { supplier, errors } = this.props;
-    const { selectedSupplier } = this.state;
+    const { selectedSupplier, displaySupplierNameForm } = this.state;
     let supplierForm;
+
+    console.log('displaySupplierNameForm', displaySupplierNameForm);
 
     if (supplier && supplier.loading) {
       supplierForm = (
@@ -77,10 +131,50 @@ class Supplier extends Component {
         </div>
       );
     } else {
+      const selectSupplierForm = (
+        <div
+          ref={this.supplierTextBox}
+          id="supplierTextBox"
+          className="editSupplierName"
+        >
+          {displaySupplierNameForm ? (
+            <form>
+              <TextInput
+                label="Supplier Name"
+                value={selectedSupplier.displayName}
+                name="displayName"
+                onChange={this.handleChange}
+                onBlur={this.updateSupplierName}
+                type="text"
+                error={errors.displayName && errors.displayName}
+                autoFocus={true}
+                onKeyDown={this.handleEnterKeyDown}
+              />
+            </form>
+          ) : (
+            <Fragment>
+              <SelectSupplier />
+              <div
+                className="supplierNameEditIcon"
+                onClick={this.displayEditSupplierNameForm}
+              >
+                <img
+                  src={editIcon}
+                  alt="Edit icon to represent the changing the supplier name"
+                />
+              </div>
+            </Fragment>
+          )}
+          {errors.supplier && (
+            <span className="errorMsg">{errors.supplier}</span>
+          )}
+        </div>
+      );
+
       if (!isEmpty(selectedSupplier)) {
         supplierForm = (
           <Fragment>
-            <SelectSupplier />
+            {selectSupplierForm}
             <SupplierDetailsForm
               selectedSupplier={selectedSupplier}
               errors={errors}
@@ -122,7 +216,10 @@ const mapState = state => ({
 
 const actions = {
   loadSuppliers,
-  addOrEditSupplier
+  addOrEditSupplier,
+  setErrors,
+  removeErrors,
+  updateReduxSupplierState
 };
 
 export default connect(

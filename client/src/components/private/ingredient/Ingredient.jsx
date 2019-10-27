@@ -757,21 +757,19 @@ export class Ingredient extends Component {
               className="editIngredientName"
             >
               {displayIngredientNameForm ? (
-                <Fragment>
-                  <form>
-                    <TextInput
-                      label="Ingredient Name"
-                      value={selectedIngredient.displayName}
-                      name="displayName"
-                      onChange={this.handleIngredientNameChange}
-                      onBlur={this.updateIngredientName}
-                      type="text"
-                      error={errors.displayName && errors.displayName}
-                      autoFocus={true}
-                      onKeyDown={this.handleEnterKeyDown}
-                    />
-                  </form>
-                </Fragment>
+                <form>
+                  <TextInput
+                    label="Ingredient Name"
+                    value={selectedIngredient.displayName}
+                    name="displayName"
+                    onChange={this.handleIngredientNameChange}
+                    onBlur={this.updateIngredientName}
+                    type="text"
+                    error={errors.displayName && errors.displayName}
+                    autoFocus={true}
+                    onKeyDown={this.handleEnterKeyDown}
+                  />
+                </form>
               ) : (
                 <Fragment>
                   <SelectIngredient />

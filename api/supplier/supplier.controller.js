@@ -107,6 +107,26 @@ module.exports.addOrEditSupplier = async (req, res) => {
         }
       }
 
+      if (supplier.email !== supplierData.email) {
+        let supplierEmailCheck = await Supplier.find({
+          email: supplierData.email
+        });
+
+        // console.log('supplier', supplier);
+
+        if (supplierEmailCheck.length !== 0) {
+          // Error - There is already an supplier by this name
+          return res.status(400).json({
+            errors: [
+              {
+                param: 'email',
+                msg: 'Supplier email already exists..'
+              }
+            ]
+          });
+        }
+      }
+
       console.log('supplier', supplier);
 
       supplier.displayName = supplierData.displayName;

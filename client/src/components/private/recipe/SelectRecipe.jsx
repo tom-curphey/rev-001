@@ -57,7 +57,7 @@ class SelectRecipe extends Component {
     ) {
       const { selectedRecipe } = this.props.recipe;
 
-      // console.log('selectedIngredient - UP', selectedIngredient);sss
+      // console.log('selectedIngredient - UP', selectedIngredient);
       // if (!selectedIngredient.new) {
       let selectedValue = {};
       selectedValue.label = selectedRecipe.displayName;

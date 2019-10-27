@@ -3,6 +3,7 @@ import {
   REMOVE_SELECTED_SUPPLIER,
   SET_SELECTED_SUPPLIER,
   CLEAR_SUPPLIERS,
+  SET_SUPPLIERS_LOADING,
   STOP_SUPPLIERS_LOADING,
   SET_UPDATED_SELECTED_SUPPLIER,
   SET_PREFERRED_SUPPLIER,
@@ -20,6 +21,12 @@ const initialState = {
 export default function(state = initialState, actions) {
   const { type, payload } = actions;
   switch (type) {
+    case SET_SUPPLIERS_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+
     case SUPPLIERS_LOADED:
       return {
         ...state,
