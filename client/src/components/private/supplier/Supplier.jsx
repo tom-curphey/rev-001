@@ -23,16 +23,6 @@ class Supplier extends Component {
 
   componentDidMount = () => {
     console.log('mounted', this.props.supplier);
-
-    // if (
-    //   this.props.supplier.selectedSupplier &&
-    //   this.props.supplier.selectedSupplier.supplier
-    // ) {
-    //   this.setState({
-    //     selectedSupplier: this.props.supplier.selectedSupplier
-    //       .supplier
-    //   });
-    // } else {
     this.props.loadSuppliers();
     // }
   };
