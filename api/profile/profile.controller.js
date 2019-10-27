@@ -27,6 +27,7 @@ module.exports.updateProfile = async (req, res) => {
   console.log('REQ PROFILE :', req.user);
 
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
@@ -39,6 +40,8 @@ module.exports.updateProfile = async (req, res) => {
   if (lastName) profileData.lastName = lastName;
   if (mobile) profileData.mobile = mobile;
   if (position) profileData.position = position;
+
+  console.log('profileData +++', profileData);
 
   try {
     // Update

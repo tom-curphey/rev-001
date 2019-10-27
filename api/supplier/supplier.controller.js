@@ -55,9 +55,9 @@ module.exports.addOrEditSupplier = async (req, res) => {
     .replace(/\s+/g, '-')
     .toLowerCase();
   supplierData.email = email;
-  supplierData.phone = phone;
-  supplierData.address = address;
-  supplierData.website = website;
+  supplierData.phone = phone ? phone : '';
+  supplierData.address = address ? address : '';
+  supplierData.website = website ? website : '';
   supplierData.confirmedDetails = confirmedDetails;
   supplierData.ingredients = ingredients;
   if (req.body.ingredient) {
@@ -107,6 +107,26 @@ module.exports.addOrEditSupplier = async (req, res) => {
         }
       }
 
+      if (supplier.email !== supplierData.email) {
+        let supplierEmailCheck = await Supplier.find({
+          email: supplierData.email
+        });
+
+        // console.log('supplier', supplier);
+
+        if (supplierEmailCheck.length !== 0) {
+          // Error - There is already an supplier by this name
+          return res.status(400).json({
+            errors: [
+              {
+                param: 'email',
+                msg: 'Supplier email already exists..'
+              }
+            ]
+          });
+        }
+      }
+
       console.log('supplier', supplier);
 
       supplier.displayName = supplierData.displayName;
@@ -141,11 +161,15 @@ module.exports.addOrEditSupplier = async (req, res) => {
 
       supplier = new Supplier(supplierData);
 
+      console.log('ingredientData **', ingredientData);
+
       // Check if ingredient is not null to save supplier to ingredient
       if (ingredientData.ingredient !== null) {
         ingredient = await Ingredient.findById(
           ingredientData.ingredient
         );
+
+        console.log('ingredeint **', ingredient);
 
         if (ingredient.length === 0) {
           return res.status(400).json({
@@ -190,6 +214,11 @@ module.exports.addOrEditSupplier = async (req, res) => {
           packetGrams: ingredientData.packetCost
         };
 
+        console.log(
+          'newProfileIngredientSupplierData',
+          newProfileIngredientSupplierData
+        );
+
         let piIndex = null;
 
         // Find ingredient in profile ingredients
@@ -233,11 +262,13 @@ module.exports.addOrEditSupplier = async (req, res) => {
           piIndex
         ].suppliers = upIngredientSuppliers;
 
-        await console.log('profile___>', profile);
+        console.log('profile___>', profile);
 
         await profile.save();
         await ingredient.save();
       }
+
+      console.log('hit !!!');
 
       await supplier.save();
       return res.status(200).json(supplier);

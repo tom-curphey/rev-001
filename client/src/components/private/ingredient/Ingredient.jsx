@@ -560,17 +560,26 @@ export class Ingredient extends Component {
       }
     );
 
+    console.log('selectedValue', selectedValue);
+
+    const selectedSupplier = {
+      label: selectedValue.label,
+      _id: selectedValue.value
+        ? selectedValue.value
+        : selectedValue._id
+    };
+
     // If the state has a preferred supplier do not change the preferred supplier
     if (!isEmpty(statePreferredSupplier)) {
       this.props.getSelectedSupplier(
-        selectedValue,
+        selectedSupplier,
         this.props.supplier.suppliers,
         this.props.ingredient.selectedIngredient,
         true
       );
     } else {
       this.props.getSelectedSupplier(
-        selectedValue,
+        selectedSupplier,
         this.props.supplier.suppliers,
         this.props.ingredient.selectedIngredient
       );
@@ -580,8 +589,11 @@ export class Ingredient extends Component {
   handleSelectSupplier = (supplierID, displayName) => e => {
     const selectedValue = {
       label: displayName,
-      value: supplierID
+      _id: supplierID
     };
+
+    console.log('selectedValue ###', selectedValue);
+
     this.getSelectedSupplier(selectedValue);
   };
 
@@ -757,21 +769,19 @@ export class Ingredient extends Component {
               className="editIngredientName"
             >
               {displayIngredientNameForm ? (
-                <Fragment>
-                  <form>
-                    <TextInput
-                      label="Ingredient Name"
-                      value={selectedIngredient.displayName}
-                      name="displayName"
-                      onChange={this.handleIngredientNameChange}
-                      onBlur={this.updateIngredientName}
-                      type="text"
-                      error={errors.displayName && errors.displayName}
-                      autoFocus={true}
-                      onKeyDown={this.handleEnterKeyDown}
-                    />
-                  </form>
-                </Fragment>
+                <form>
+                  <TextInput
+                    label="Ingredient Name"
+                    value={selectedIngredient.displayName}
+                    name="displayName"
+                    onChange={this.handleIngredientNameChange}
+                    onBlur={this.updateIngredientName}
+                    type="text"
+                    error={errors.displayName && errors.displayName}
+                    autoFocus={true}
+                    onKeyDown={this.handleEnterKeyDown}
+                  />
+                </form>
               ) : (
                 <Fragment>
                   <SelectIngredient />

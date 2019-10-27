@@ -17,15 +17,13 @@ const SupplierSchema = new Schema({
     required: true
   },
   phone: {
-    type: String,
-    required: true
+    type: String
   },
   website: {
     type: String
   },
   address: {
-    type: String,
-    required: true
+    type: String
   },
   confirmedDetails: {
     type: Boolean,

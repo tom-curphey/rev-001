@@ -22,15 +22,6 @@ router.post(
     check('email', 'Email is not valid').isEmail(),
     check('email', 'Supplier email is required')
       .not()
-      .isEmpty(),
-    check('phone', 'Supplier phone is required')
-      .not()
-      .isEmpty(),
-    check('address', 'Supplier address is required')
-      .not()
-      .isEmpty(),
-    check('website', 'Supplier website is required')
-      .not()
       .isEmpty()
   ],
   supplierController.addOrEditSupplier

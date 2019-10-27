@@ -3,6 +3,7 @@ import {
   SUPPLIERS_ERROR,
   REMOVE_SELECTED_SUPPLIER,
   SET_SELECTED_SUPPLIER,
+  SET_SUPPLIERS_LOADING,
   STOP_SUPPLIERS_LOADING,
   SET_UPDATED_SELECTED_SUPPLIER,
   SET_PREFERRED_SUPPLIER,
@@ -22,10 +23,10 @@ export const loadSuppliers = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
+    dispatch(displayErrors(err));
     dispatch({
       type: SUPPLIERS_ERROR
     });
-    dispatch(displayErrors(err));
     dispatch({
       type: STOP_SUPPLIERS_LOADING
     });
@@ -44,6 +45,7 @@ export const getSelectedSupplier = (
   suppliers,
   selectedIngredient
 ) => async dispatch => {
+  console.log('selectedSupplier ##', selectedSupplier);
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
     console.log('NEW SUPPLIER', selectedSupplier);
@@ -62,6 +64,8 @@ export const getSelectedSupplier = (
   } else {
     // Find selected supplier in supplier list
     const sSupplier = suppliers.filter(ss => {
+      console.log('ss._id', ss._id);
+      console.log('selectedSupplier', selectedSupplier);
       return ss._id === selectedSupplier._id;
     });
 
@@ -87,7 +91,8 @@ export const getSelectedSupplier = (
               email: sSupplier[0].email,
               phone: sSupplier[0].phone,
               urlName: sSupplier[0].urlName,
-              website: sSupplier[0].website
+              website: sSupplier[0].website,
+              ingredients: sSupplier[0].ingredients
             }
           };
 
@@ -109,7 +114,8 @@ export const getSelectedSupplier = (
               email: sSupplier[0].email,
               phone: sSupplier[0].phone,
               urlName: sSupplier[0].urlName,
-              website: sSupplier[0].website
+              website: sSupplier[0].website,
+              ingredients: sSupplier[0].ingredients
             }
           };
           console.log('new Object', newSelectedSupplier);
@@ -132,7 +138,8 @@ export const getSelectedSupplier = (
             email: sSupplier[0].email,
             phone: sSupplier[0].phone,
             urlName: sSupplier[0].urlName,
-            website: sSupplier[0].website
+            website: sSupplier[0].website,
+            ingredients: sSupplier[0].ingredients
           }
         };
         dispatch(setSelectedSupplier(formattedSupplier));
@@ -208,6 +215,8 @@ export const addOrEditSupplier = (
   ingredientData
 ) => async dispatch => {
   console.log('supplierData', supplierData);
+  console.log('ingredientData **', ingredientData);
+  dispatch(setSupplierLoading());
 
   try {
     // dispatch(setVenueLoading());
@@ -222,7 +231,7 @@ export const addOrEditSupplier = (
 
     const data = {
       ...supplierData,
-      ingredient: ingredientData ? ingredientData.ingredient : null,
+      ingredient: ingredientData ? ingredientData._id : null,
       packetCost: ingredientData ? ingredientData.packetCost : null,
       packetGrams: ingredientData ? ingredientData.packetGrams : null
     };
@@ -238,7 +247,8 @@ export const addOrEditSupplier = (
         email: res.data.email,
         phone: res.data.phone,
         urlName: res.data.urlName,
-        website: res.data.website
+        website: res.data.website,
+        ingredients: res.data.ingredients
       },
       packetCost: '',
       packetGrams: '',
@@ -251,6 +261,9 @@ export const addOrEditSupplier = (
     dispatch(setSelectedSupplier(formattedSupplier));
     dispatch(setAlert('Supplier Saved', 'success'));
   } catch (err) {
+    dispatch({
+      type: STOP_SUPPLIERS_LOADING
+    });
     dispatch(displayErrors(err));
     dispatch(setAlert('Supplier Error', 'error'));
   }
@@ -291,3 +304,15 @@ export const removeSelectedSupplier = () => async dispatch => {
 //     type: REMOVE_SELECTED_SUPPLIER
 //   });
 // };
+
+export const updateReduxSupplierState = selectedSupplier => async dispatch => {
+  console.log('selectedSupplier --->', selectedSupplier);
+
+  // dispatch(setSelectedSupplier(selectedSupplier));
+};
+
+export const setSupplierLoading = () => async dispatch => {
+  dispatch({
+    type: SET_SUPPLIERS_LOADING
+  });
+};
