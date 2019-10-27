@@ -19,6 +19,8 @@ class SelectSupplier extends Component {
   };
 
   componentDidMount() {
+    console.log('Mounted SelectSupplier/>', this.props.supplier);
+
     if (!isEmpty(this.props.supplier.selectedSupplier)) {
       const { supplier } = this.props.supplier.selectedSupplier;
       let selectedValue = {};
@@ -33,22 +35,31 @@ class SelectSupplier extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('Updated SelectSupplier/>', this.props.supplier);
     const {
       supplier: { selectedSupplier },
       errors
     } = this.props;
     // If selected ingredient changes update local state with selected ingredient
     if (prevProps.supplier.selectedSupplier !== selectedSupplier) {
-      console.log('Selected Supplier', selectedSupplier.supplier);
-      let selectedValue = {
-        label: selectedSupplier.supplier.displayName
-      };
-      if (!selectedSupplier.supplier._id) {
-        selectedValue.value = 'new';
+      if (selectedSupplier) {
+        let selectedValue = {
+          label: selectedSupplier.supplier.displayName
+        };
+        if (!selectedSupplier.supplier._id) {
+          selectedValue.value = 'new';
+        } else {
+          selectedValue.value = selectedSupplier.supplier._id;
+        }
+        this.setState({ selectedValue: selectedValue });
       } else {
-        selectedValue.value = selectedSupplier.supplier._id;
+        this.setState({
+          selectedValue: {
+            label: 'Type supplier name to start..',
+            value: 'no-supplierselected'
+          }
+        });
       }
-      this.setState({ selectedValue: selectedValue });
     }
   }
 
