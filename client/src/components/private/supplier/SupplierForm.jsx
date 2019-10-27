@@ -4,19 +4,13 @@ import PropTypes from 'prop-types';
 import TextInputHorizontal from '../../layout/input/TextInputHorizontal';
 import ToggleInputHorizontal from '../../layout/input/ToggleInputHorizontal';
 import CreatableSelectInputBorderHorizontal from '../../layout/input/CreatableSelectInputBorderHorizontal';
-import {
-  isEmpty,
-  roundNumberAsString,
-  convert100gInto1Kg
-} from '../../../utils/utils';
+import { isEmpty, roundNumberAsString } from '../../../utils/utils';
 
 const SupplierForm = ({
   supplier,
   errors,
   selectedSupplier: {
     supplier: { _id, displayName },
-    packetCost,
-    packetGrams,
     profilePacketCost,
     profilePacketGrams,
     preferred
@@ -54,7 +48,7 @@ const SupplierForm = ({
 
   const iPacketCost = isEmpty(profilePacketCost)
     ? ''
-    : profilePacketCost.toString();
+    : roundNumberAsString(profilePacketCost);
   const iPacketGrams = isEmpty(profilePacketGrams)
     ? ''
     : profilePacketGrams.toString();

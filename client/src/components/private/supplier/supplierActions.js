@@ -45,6 +45,7 @@ export const getSelectedSupplier = (
   suppliers,
   selectedIngredient
 ) => async dispatch => {
+  console.log('selectedSupplier ##', selectedSupplier);
   // Check if a new supplier was entered
   if (selectedSupplier.__isNew__) {
     console.log('NEW SUPPLIER', selectedSupplier);
@@ -63,6 +64,8 @@ export const getSelectedSupplier = (
   } else {
     // Find selected supplier in supplier list
     const sSupplier = suppliers.filter(ss => {
+      console.log('ss._id', ss._id);
+      console.log('selectedSupplier', selectedSupplier);
       return ss._id === selectedSupplier._id;
     });
 
@@ -212,6 +215,7 @@ export const addOrEditSupplier = (
   ingredientData
 ) => async dispatch => {
   console.log('supplierData', supplierData);
+  console.log('ingredientData **', ingredientData);
   dispatch(setSupplierLoading());
 
   try {
@@ -227,7 +231,7 @@ export const addOrEditSupplier = (
 
     const data = {
       ...supplierData,
-      ingredient: ingredientData ? ingredientData.ingredient : null,
+      ingredient: ingredientData ? ingredientData._id : null,
       packetCost: ingredientData ? ingredientData.packetCost : null,
       packetGrams: ingredientData ? ingredientData.packetGrams : null
     };
