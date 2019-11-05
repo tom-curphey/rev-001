@@ -69,7 +69,7 @@ module.exports.addOrEditSupplier = async (req, res) => {
     packetGrams: req.body.packetGrams
   };
 
-  console.log('supplier DATA +++ ', supplierData);
+  // console.log('supplier DATA +++ ', supplierData);
 
   try {
     let supplier;
@@ -162,14 +162,18 @@ module.exports.addOrEditSupplier = async (req, res) => {
       supplier = new Supplier(supplierData);
 
       console.log('ingredientData **', ingredientData);
+      // console.log('supplier **', supplier);
 
       // Check if ingredient is not null to save supplier to ingredient
-      if (ingredientData.ingredient !== null) {
+      if (
+        ingredientData.ingredient !== undefined &&
+        ingredientData.ingredient !== null
+      ) {
         ingredient = await Ingredient.findById(
           ingredientData.ingredient
         );
 
-        console.log('ingredeint **', ingredient);
+        // console.log('ingredeint **', ingredient);
 
         if (ingredient.length === 0) {
           return res.status(400).json({
@@ -204,11 +208,10 @@ module.exports.addOrEditSupplier = async (req, res) => {
         };
 
         await ingredient.suppliers.push(ingredientSupplierData);
-        // await console.log('ingredient___>', ingredient);
 
         //  Profile was found
         let newProfileIngredientSupplierData = {
-          preferred: true,
+          preferred: false,
           supplier: supplier._id,
           packetCost: ingredientData.packetCost,
           packetGrams: ingredientData.packetCost
@@ -227,6 +230,11 @@ module.exports.addOrEditSupplier = async (req, res) => {
             ing.ingredient.toString() ===
             ingredientData.ingredient.toString()
           ) {
+            console.log(
+              'PROFILE INGREDIENT WAS FOUND #',
+              ing.suppliers[0]
+            );
+
             piIndex = index;
             return ing;
           }
@@ -236,7 +244,11 @@ module.exports.addOrEditSupplier = async (req, res) => {
         let upIngredientSuppliers = [];
         // add ingredient to profile if pIngredient was not found
         if (pIngredient.length !== 0) {
-          console.log('PROFILE INGREDIENT WAS FOUND');
+          console.log(
+            'PROFILE INGREDIENT WAS FOUND ##',
+            typeof pIngredient[0].suppliers[0].supplier
+          );
+
           upIngredientSuppliers = pIngredient[0].suppliers.map(
             piSupplier => {
               let uSupplier = {
@@ -254,17 +266,24 @@ module.exports.addOrEditSupplier = async (req, res) => {
               ...upIngredientSuppliers
             }
           };
+
           profile.ingredients.push(newProfileIngredient);
         }
+
+        console.log(
+          'newProfileIngredientSupplierData #',
+          typeof newProfileIngredientSupplierData.supplier
+        );
+
         upIngredientSuppliers.push(newProfileIngredientSupplierData);
 
         profile.ingredients[
           piIndex
         ].suppliers = upIngredientSuppliers;
 
-        console.log('profile___>', profile);
+        // console.log('PROFILE SAVE', profile);
 
-        await profile.save();
+        // await profile.save(); // Can't get this to work
         await ingredient.save();
       }
 
@@ -275,7 +294,7 @@ module.exports.addOrEditSupplier = async (req, res) => {
       // return res.status(500).send('Sever Error');
     }
   } catch (err) {
-    console.error(err);
+    console.error('ERR', err);
     return res.status(500).send('Sever Error');
   }
 };
