@@ -566,11 +566,14 @@ export class Ingredient extends Component {
       label: selectedValue.label,
       _id: selectedValue.value
         ? selectedValue.value
-        : selectedValue._id
+        : selectedValue._id,
+      __isNew__: selectedValue.__isNew__ ? true : false
     };
 
     // If the state has a preferred supplier do not change the preferred supplier
     if (!isEmpty(statePreferredSupplier)) {
+      console.log('in here?');
+
       this.props.getSelectedSupplier(
         selectedSupplier,
         this.props.supplier.suppliers,
@@ -578,6 +581,8 @@ export class Ingredient extends Component {
         true
       );
     } else {
+      console.log('selectedSupplier !!!!', selectedSupplier);
+
       this.props.getSelectedSupplier(
         selectedSupplier,
         this.props.supplier.suppliers,
@@ -598,9 +603,11 @@ export class Ingredient extends Component {
   };
 
   addNewSupplierButtonClicked = () => {
+    console.log('hit ****');
+
     const selectedValue = {
       label: '',
-      value: '',
+      _id: '',
       __isNew__: true
     };
     this.getSelectedSupplier(selectedValue);

@@ -101,6 +101,8 @@ class OnboardingVenue extends Component {
     });
 
   getSelectedValue = selectedValue => {
+    console.log('selectedValue.value', selectedValue.value);
+
     this.setState({
       type: selectedValue.value
     });
@@ -128,7 +130,13 @@ class OnboardingVenue extends Component {
   };
 
   render() {
-    const { displayName, email, errors, profileLoading } = this.state;
+    const {
+      displayName,
+      email,
+      type,
+      errors,
+      profileLoading
+    } = this.state;
     const { auth, profile } = this.props;
 
     const options = [
@@ -188,6 +196,7 @@ class OnboardingVenue extends Component {
                     inputLabel="Business Type"
                     label="Select venue type..."
                     options={options}
+                    value={type}
                     getSelectedValue={this.getSelectedValue}
                     error={errors.type && errors.type}
                   />

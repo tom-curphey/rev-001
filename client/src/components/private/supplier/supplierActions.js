@@ -45,14 +45,19 @@ export const getSelectedSupplier = (
   suppliers,
   selectedIngredient
 ) => async dispatch => {
-  console.log('selectedSupplier ##', selectedSupplier);
+  console.log('selectedSupplier #actions', selectedSupplier);
   // Check if a new supplier was entered
+
+  const dName = selectedSupplier.displayName
+    ? selectedSupplier.displayName
+    : selectedSupplier.label;
+
   if (selectedSupplier.__isNew__) {
     console.log('NEW SUPPLIER', selectedSupplier);
     const updatedSelectedSupplier = {
       supplier: {
         _id: '',
-        displayName: capitalizeFirstLetter(selectedSupplier.value)
+        displayName: capitalizeFirstLetter(dName)
       },
       packetCost: '',
       packetGrams: '',
@@ -60,6 +65,9 @@ export const getSelectedSupplier = (
       profilePacketGrams: '',
       preferred: false
     };
+
+    console.log('updatedSelectedSupplier', updatedSelectedSupplier);
+
     dispatch(setSelectedSupplier(updatedSelectedSupplier));
   } else {
     // Find selected supplier in supplier list

@@ -68,6 +68,8 @@ class SelectSupplier extends Component {
   }
 
   getSelectedValue = selectedValue => {
+    console.log('SELECT Supplier: ', selectedValue);
+
     // let addSupplier = false;
     let selectedSupplier = [];
     if (selectedValue.__isNew__) {
@@ -89,6 +91,8 @@ class SelectSupplier extends Component {
         );
       }
     }
+
+    console.log('new suppppppplier', selectedSupplier);
 
     if (!isEmpty(selectedSupplier)) {
       // this.props.removePreferredSupplier();
