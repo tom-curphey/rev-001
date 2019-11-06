@@ -243,7 +243,7 @@ export class Ingredient extends Component {
 
             const usSupplier = {
               ...supplier.selectedSupplier,
-              preferred: false,
+              // preferred: false,
               profilePacketCost: !isEmpty(
                 supplier.selectedSupplier.profilePacketCost
               )
@@ -455,9 +455,17 @@ export class Ingredient extends Component {
           // ...supplier.selectedSupplier
         };
       } else {
+        console.log('___YEO', selectedSupplier);
+
+        console.log('______in HERE', supplier.selectedSupplier);
         usSupplier = {
-          ...supplier.selectedSupplier
+          ...supplier.selectedSupplier,
+          profilePacketCost: selectedSupplier.profilePacketCost,
+          profilePacketGrams: selectedSupplier.profilePacketGrams
         };
+
+        console.log('CHECK', usSupplier);
+
         this.setState({ selectedIngredientChanged: false });
       }
 
@@ -481,6 +489,8 @@ export class Ingredient extends Component {
       } else {
         usSupplier.preferred = false;
       }
+
+      console.log('usSupplier', usSupplier);
 
       this.setState({
         selectedIngredient: usIngredient,
@@ -547,6 +557,8 @@ export class Ingredient extends Component {
   };
 
   handleToggleChange = e => {
+    console.log('clickckeed');
+
     this.props.updatePreferredSupplier(
       this.state.selectedSupplier,
       this.props.ingredient.selectedIngredient

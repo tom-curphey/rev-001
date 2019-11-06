@@ -193,7 +193,10 @@ export const updatePreferredSupplier = (
         ssID = pppSupplier[0].supplier._id;
       }
     } else {
-      console.log('Previous preferred supplier was not found');
+      console.log(
+        'Previous preferred supplier was not found',
+        selectedSupplierState.supplier._id
+      );
       ssID = selectedSupplierState.supplier._id;
     }
   } else {
