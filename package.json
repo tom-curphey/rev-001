@@ -20,7 +20,7 @@
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.12",
-    "nodemailer": "^6.2.1",
+    "nodemailer": "^6.4.16",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
     "redux": "^4.0.1",
